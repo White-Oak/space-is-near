@@ -4,12 +4,12 @@
  */
 package spaceisnear.world.game;
 
-import spaceisnear.world.game.components.PaintableComponent;
-import spaceisnear.world.game.components.ComponentState;
-import spaceisnear.world.game.components.Component;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.*;
+import spaceisnear.world.game.components.Component;
+import spaceisnear.world.game.components.ComponentState;
+import spaceisnear.world.game.components.PaintableComponent;
 import spaceisnear.world.game.messages.Message;
 import spaceisnear.world.game.messages.MessageTimePassed;
 
@@ -37,6 +37,8 @@ public abstract class GameObject {
     public void addComponents(Component... a) {
 	for (int i = 0; i < a.length; i++) {
 	    Component component = a[i];
+	    component.setContext(context);
+	    component.setOwner(this);
 	    if (component instanceof PaintableComponent) {
 		context.addPaintable((PaintableComponent) component);
 	    }

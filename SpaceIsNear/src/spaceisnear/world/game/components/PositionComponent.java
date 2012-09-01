@@ -14,10 +14,6 @@ public class PositionComponent extends Component {
 
     @Getter private int x, y;
 
-    public PositionComponent(GameContext context, GameObject owner) {
-	super(context, owner);
-    }
-
     @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {

@@ -4,9 +4,11 @@
  */
 package spaceisnear.world.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import spaceisnear.world.layer.TiledLayer;
 
 /**
@@ -21,12 +23,12 @@ public final class Core implements Runnable {
 
     {
 	TiledLayer tiledLayer = null;
-//	try {
-//	    tiledLayer = new TiledLayer(ImageIO.read(getClass().getResourceAsStream("/res/tiles.png")), 50, 50, 128, 128);
-//	} catch (IOException ex) {
-////	    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-//	    ex.printStackTrace();
-//	}
+	try {
+	    tiledLayer = new TiledLayer(ImageIO.read(getClass().getResourceAsStream("/res/tiles.png")), 50, 50, 128, 128);
+	} catch (IOException ex) {
+//	    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+	    ex.printStackTrace();
+	}
 	context = new GameContext(new GameMap(tiledLayer));
 	gui = new GUI(tiledLayer, context);
     }

@@ -16,17 +16,17 @@ import spaceisnear.world.game.messages.Message;
  */
 public class PlayerComponent extends PaintableComponent {
 
-    public PlayerComponent(GameContext context, GameObject owner, PositionComponent positionComponent) {
-	super(context, owner, positionComponent);
+    public PlayerComponent(PositionComponent positionComponent) {
+	super(positionComponent);
     }
 
     @Override
     public void paintComponent(Graphics g) {
 	g.setColor(Color.RED);
-	g.drawLine(0, 0, 50, 50);
-	g.drawLine(0, 1, 49, 50);
-	g.drawLine(50, 0, 0, 50);
-	g.drawLine(50, 1, 1, 50);
+	g.drawLine(0, 0, 16, 24);
+	g.drawLine(0, 1, 15, 24);
+	g.drawLine(15, 0, 0, 24);
+	g.drawLine(15, 1, 1, 24);
     }
 
     @Override

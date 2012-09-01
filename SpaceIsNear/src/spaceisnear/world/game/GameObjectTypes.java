@@ -9,5 +9,5 @@ package spaceisnear.world.game;
  * @author LPzhelud
  */
 public enum GameObjectTypes {
-    CREATURE
+    PLAYER
 }

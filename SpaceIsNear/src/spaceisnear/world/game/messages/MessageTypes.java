@@ -10,5 +10,5 @@ package spaceisnear.world.game.messages;
  */
 public enum MessageTypes {
 
-    TIME_PASSED, AGED, DIED, MOVED, TELEPORTED
+    TIME_PASSED, DIED, MOVED, TELEPORTED, CONTROLLED
 }

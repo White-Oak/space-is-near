@@ -12,8 +12,7 @@ public abstract class PaintableComponent extends Component {
 
     private PositionComponent positionComponent;
 
-    public PaintableComponent(GameContext context, GameObject owner, PositionComponent positionComponent) {
-	super(context, owner);
+    public PaintableComponent(PositionComponent positionComponent) {
 	this.positionComponent = positionComponent;
     }
 
