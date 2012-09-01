@@ -46,6 +46,7 @@ public final class Core implements Runnable {
 		for (GameObject gameObject : objects) {
 		    gameObject.process(2);
 		}
+		//Something to do with keys, dont know what exactly
 		Thread.sleep(100L);
 	    }
 	} catch (InterruptedException ex) {

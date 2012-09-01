@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import lombok.Getter;
 import spaceisnear.world.game.components.PaintableComponent;
 import spaceisnear.world.layer.TiledLayer;
 
@@ -23,6 +24,7 @@ public final class GUI extends JFrame implements Runnable, ComponentListener {
     private int clickedX, clickedY;
     private final Panel panel;
     private final GameContext context;
+    @Getter private int key;
 
     public GUI(TiledLayer tiledLayer, GameContext context) {
 	super("Space Is Near");
@@ -78,7 +80,7 @@ public final class GUI extends JFrame implements Runnable, ComponentListener {
     public void componentHidden(ComponentEvent e) {
     }
 
-    private class Panel extends JPanel implements MouseListener, MouseMotionListener {
+    private class Panel extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void update(Graphics g) {
@@ -144,6 +146,19 @@ public final class GUI extends JFrame implements Runnable, ComponentListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent ke) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent ke) {
+	    key = ke.getKeyCode();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent ke) {
 	}
     }
 }
