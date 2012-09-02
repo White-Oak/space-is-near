@@ -4,7 +4,7 @@
  */
 package spaceisnear;
 
-import spaceisnear.world.game.Core;
+import spaceisnear.game.Core;
 
 /**
  *
