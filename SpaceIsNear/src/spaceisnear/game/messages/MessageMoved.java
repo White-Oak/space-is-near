@@ -15,4 +15,14 @@ public class MessageMoved extends Message {
 	this.x = x;
 	this.y = y;
     }
+
+    /**
+     * Only for MessageTeleported subclass
+     *
+     */
+    MessageMoved(int x, int y, int unused) {
+	super(MessageTypes.TELEPORTED);
+	this.x = x;
+	this.y = y;
+    }
 }

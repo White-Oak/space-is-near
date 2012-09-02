@@ -36,6 +36,8 @@ public final class Core implements Runnable {
 	}
 	context = new GameContext(new GameMap(tiledLayer));
 	gui = new GUI(tiledLayer, context);
+	Player player = new Player(1, null, context);
+	objects.add(player);
     }
 
     public void show() {

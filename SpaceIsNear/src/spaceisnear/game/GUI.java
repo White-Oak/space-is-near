@@ -24,7 +24,7 @@ public final class GUI extends JFrame implements Runnable, ComponentListener {
     private int clickedX, clickedY;
     private final Panel panel;
     private final GameContext context;
-    @Getter private int key;
+    private int key;
 
     public GUI(TiledLayer tiledLayer, GameContext context) {
 	super("Space Is Near");
@@ -36,6 +36,8 @@ public final class GUI extends JFrame implements Runnable, ComponentListener {
 	setContentPane(panel);
 	getContentPane().addMouseListener(panel);
 	getContentPane().addMouseMotionListener(panel);
+	getContentPane().addKeyListener(panel);
+	getContentPane().setFocusable(true);
 	componentResized(null);
 	addComponentListener(this);
 	this.context = context;
@@ -78,6 +80,12 @@ public final class GUI extends JFrame implements Runnable, ComponentListener {
 
     @Override
     public void componentHidden(ComponentEvent e) {
+    }
+
+    public int getKey() {
+	int a = key;
+	key = 0;
+	return a;
     }
 
     private class Panel extends JPanel implements MouseListener, MouseMotionListener, KeyListener {

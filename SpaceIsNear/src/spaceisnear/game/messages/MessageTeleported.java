@@ -4,11 +4,9 @@
  */
 package spaceisnear.game.messages;
 
-
 public class MessageTeleported extends MessageMoved {
 
     public MessageTeleported(int x, int y) {
 	super(x, y);
     }
-    
 }

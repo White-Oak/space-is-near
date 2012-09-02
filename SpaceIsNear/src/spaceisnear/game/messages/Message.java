@@ -13,5 +13,5 @@ import lombok.Getter;
  */
 @AllArgsConstructor public abstract class Message {
 
-    @Getter private MessageTypes messageType;
+    @Getter private final MessageTypes messageType;
 }
