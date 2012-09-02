@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.layer.TiledLayer;
+import spaceisnear.game.messages.MessageTimePassed;
 
 /**
  *
@@ -27,7 +28,9 @@ public final class Core implements Runnable {
     {
 	TiledLayer tiledLayer = null;
 	try {
-	    tiledLayer = new TiledLayer(ImageIO.read(getClass().getResourceAsStream("/res/tiles.png")), 50, 50, 128, 128);
+	    tiledLayer = new TiledLayer(ImageIO.read(getClass().getResourceAsStream("/res/tiles.png")), 16, 24, 128, 128);
+	    tiledLayer.fillRectTile(0, 0, 128, 128, 1);
+	    tiledLayer.fillRectTile(64, 0, 64, 128, 2);
 	} catch (IOException ex) {
 	    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -46,11 +49,13 @@ public final class Core implements Runnable {
 	try {
 	    while (true) {
 		MessageControlled mc = checkKeys();
+		MessageTimePassed messageTimePassed = new MessageTimePassed(2);
 		for (GameObject gameObject : objects) {
 		    if (mc != null) {
 			gameObject.message(mc);
 		    }
-		    gameObject.process(2);
+		    gameObject.message(messageTimePassed);
+		    gameObject.process();
 		}
 		//1 quant of time is 50L by default
 		Thread.sleep(TWO_QUANTS_TIME);

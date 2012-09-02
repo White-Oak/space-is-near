@@ -59,11 +59,10 @@ public abstract class GameObject {
 	return new GameObjectState(states, id, type);
     }
 
-    public synchronized void process(int timeQuantsPassed) {
+    public synchronized void process() {
 	if (destroyed) {
 	    return;
 	}
-	message(new MessageTimePassed(timeQuantsPassed));
 	while (messages.size() > 0) {
 	    Message message = messages.poll();
 	    for (Iterator<Component> it = components.iterator(); it.hasNext();) {
