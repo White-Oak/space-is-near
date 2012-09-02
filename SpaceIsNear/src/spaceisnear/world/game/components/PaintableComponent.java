@@ -10,7 +10,7 @@ import spaceisnear.world.game.GameObject;
 
 public abstract class PaintableComponent extends Component {
 
-    private PositionComponent positionComponent;
+    private final PositionComponent positionComponent;
 
     public PaintableComponent(PositionComponent positionComponent) {
 	this.positionComponent = positionComponent;
@@ -18,7 +18,7 @@ public abstract class PaintableComponent extends Component {
 
     public abstract void paintComponent(Graphics g);
 
-    public void paint(Graphics g) {
+    public final void paint(Graphics g) {
 	g.translate(positionComponent.getX(), positionComponent.getY());
 	paintComponent(g);
 	g.translate(-positionComponent.getX(), -positionComponent.getY());

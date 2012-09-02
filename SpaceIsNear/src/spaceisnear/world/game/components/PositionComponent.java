@@ -23,6 +23,7 @@ public class PositionComponent extends Component {
 		y += messagem.getY();
 		break;
 	    case TELEPORTED:
+		//Note that MessageTeleported is the subclass of MessageMoved
 		MessageMoved messagetMessageMoved = (MessageMoved) message;
 		x = messagetMessageMoved.getX();
 		y = messagetMessageMoved.getY();
