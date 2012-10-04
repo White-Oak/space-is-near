@@ -23,9 +23,9 @@ public abstract class GameObject {
     @Getter private final int id;
     @Getter @Setter(AccessLevel.PROTECTED) private boolean destroyed = false;
     @Getter private final GameObject parent;
-    private LinkedList<Component> components = new LinkedList<>();
+    @Getter(AccessLevel.PROTECTED) private LinkedList<Component> components = new LinkedList<>();
     @Getter private final GameObjectTypes type;
-    private final GameContext context;
+    @Getter private final GameContext context;
 
     public GameObject(int id, GameObject parent, GameObjectTypes type, GameContext context) {
 	this.id = id;
@@ -34,7 +34,7 @@ public abstract class GameObject {
 	this.context = context;
     }
 
-    public void addComponents(Component... a) {
+    public final void addComponents(Component... a) {
 	for (int i = 0; i < a.length; i++) {
 	    Component component = a[i];
 	    component.setContext(context);
@@ -46,11 +46,11 @@ public abstract class GameObject {
 	this.components.addAll(Arrays.asList(a));
     }
 
-    public void message(Message message) {
+    public final void message(Message message) {
 	messages.add(message);
     }
 
-    public synchronized GameObjectState getState() {
+    public final synchronized GameObjectState getState() {
 	ArrayList<ComponentState> states = new ArrayList<>();
 	for (Iterator<Component> it = components.iterator(); it.hasNext();) {
 	    Component component = it.next();

@@ -4,7 +4,9 @@
  */
 package spaceisnear;
 
-import spaceisnear.game.Core;
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.SlickException;
+import spaceisnear.game.Corev2;
 
 /**
  *
@@ -12,7 +14,11 @@ import spaceisnear.game.Core;
  */
 public class Main {
 
-    public static void main(String[] args) {
-	new Core().show();
+    public static void main(String[] args) throws SlickException {
+	Corev2 corev2 = new Corev2("Space is Near");
+	AppGameContainer appGameContainer = new AppGameContainer(corev2, 800, 600, false);
+	appGameContainer.setMinimumLogicUpdateInterval(100);
+	appGameContainer.setVSync(true);
+	appGameContainer.start();
     }
 }

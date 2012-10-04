@@ -21,12 +21,14 @@ public class PlayerComponent extends PaintableComponent {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-	g.setColor(Color.RED);
-	g.drawLine(0, 0, 16, 24);
-	g.drawLine(0, 1, 15, 24);
-	g.drawLine(15, 0, 0, 24);
-	g.drawLine(15, 1, 1, 24);
+    public void paintComponent(org.newdawn.slick.Graphics g) {
+	g.setColor(org.newdawn.slick.Color.white);
+	int w = GameContext.TILE_WIDTH;
+	int h = GameContext.TILE_HEIGHT;
+	g.drawLine(0, 0, w, h);
+	g.drawLine(0, 1, w - 1, h);
+	g.drawLine(w - 1, 0, 0, h);
+	g.drawLine(w - 1, 1, 1, h);
     }
 
     @Override

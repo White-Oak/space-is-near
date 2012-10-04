@@ -14,9 +14,9 @@ import spaceisnear.game.components.PaintableComponent;
  */
 @RequiredArgsConstructor public class GameContext {
 
-    @Getter private final GameMap map;
-    public static final int YEAR_TIME = 600;
+    @Getter private final CameraMan camera;
     @Getter private ArrayList<PaintableComponent> paintables = new ArrayList<>();
+    public static final int TILE_HEIGHT = 24, TILE_WIDTH = 16;
 
     public void addPaintable(PaintableComponent paintableComponent) {
 	paintables.add(paintableComponent);

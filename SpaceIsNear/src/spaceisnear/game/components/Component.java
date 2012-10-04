@@ -16,7 +16,7 @@ import spaceisnear.game.messages.Message;
 public abstract class Component {
 
     @Getter private ComponentState state;
-    private GameContext context = null;
+    @Getter(AccessLevel.PROTECTED) private GameContext context = null;
     @Getter private GameObject owner;
 
     public abstract void processMessage(Message message);

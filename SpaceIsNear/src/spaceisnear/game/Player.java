@@ -13,6 +13,6 @@ public class Player extends GameObject {
     public Player(int id, GameObject parent, GameContext context) {
 	super(id, parent, GameObjectTypes.PLAYER, context);
 	PositionComponent pc = new PositionComponent();
-	addComponents(pc, new PlayerComponent(pc), new PlayerControllableComponent());
+	addComponents(pc, new PlayerComponent(pc));
     }
 }

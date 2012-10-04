@@ -1,11 +1,13 @@
 package spaceisnear.game.layer;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
+import org.newdawn.slick.Image;
+import spaceisnear.game.components.PositionComponent;
+import spaceisnear.game.messages.Message;
 
 /**
  *
@@ -14,12 +16,12 @@ import lombok.Getter;
 public class TiledLayer extends Layer {
 
     @Getter(AccessLevel.PROTECTED) private final int[][] map;//[x][y]
-    @Getter private final BufferedImage[] tiles;
+    @Getter private final Image[] tiles;
     @Getter private final int tileWidth, tileHeight;
     @Getter private final int horizontalTilesNumber, verticalTilesNumber;
 
-    public TiledLayer(BufferedImage image, int tileWidth, int tileHeight, int width, int height) {
-	super(width * tileWidth, height * tileHeight);
+    public TiledLayer(PositionComponent pc, Image image, int tileWidth, int tileHeight, int width, int height) {
+	super(pc, width * tileWidth, height * tileHeight);
 	if (image.getWidth() / tileWidth * tileWidth != image.getWidth()
 		|| image.getHeight() / tileHeight * tileHeight != image.getHeight()) {
 	    throw new IllegalArgumentException();
@@ -32,13 +34,13 @@ public class TiledLayer extends Layer {
 	verticalTilesNumber = height;
     }
 
-    private BufferedImage[] chopImage(BufferedImage image) {
+    private Image[] chopImage(Image image) {
 	int x = 0, y = 0;
-	List<BufferedImage> list = new ArrayList<>();
+	List<Image> list = new ArrayList<>();
 	try {
 	    while (true) {
 		while (true) {
-		    BufferedImage subImage = image.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+		    Image subImage = image.getSubImage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
 		    list.add(subImage);
 		    //x increment
 		    x++;
@@ -58,7 +60,7 @@ public class TiledLayer extends Layer {
 	    System.out.println(y);
 	    e.printStackTrace();
 	}
-	return list.toArray(new BufferedImage[list.size()]);
+	return list.toArray(new Image[list.size()]);
     }
 
     public void setTile(int x, int y, int tileId) {
@@ -78,7 +80,7 @@ public class TiledLayer extends Layer {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paintLayer(org.newdawn.slick.Graphics g) {
 	for (int i = 0; i < map.length; i++) {
 	    int[] is = map[i];
 	    for (int j = 0; j < is.length; j++) {
@@ -91,7 +93,11 @@ public class TiledLayer extends Layer {
 	}
     }
 
-    protected void paintTile(Graphics g, int x, int y, int id) {
-	g.drawImage(tiles[id], x, y, null);
+    protected void paintTile(org.newdawn.slick.Graphics g, int x, int y, int id) {
+	g.drawImage(tiles[id], x, y);
+    }
+
+    @Override
+    public void processMessage(Message message) {
     }
 }

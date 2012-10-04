@@ -4,25 +4,23 @@
  */
 package spaceisnear.game.components;
 
-import java.awt.Graphics;
-import lombok.AccessLevel;
-import lombok.Getter;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.GameObject;
 
 public abstract class PaintableComponent extends Component {
 
-     private final PositionComponent positionComponent;
+    private final PositionComponent positionComponent;
 
     public PaintableComponent(PositionComponent positionComponent) {
 	this.positionComponent = positionComponent;
     }
 
-    public abstract void paintComponent(Graphics g);
+    public abstract void paintComponent(org.newdawn.slick.Graphics g);
 
-    public final void paint(Graphics g) {
-	g.translate(positionComponent.getX() << 4, (positionComponent.getY() << 3) * 3);
+    public final void paint(org.newdawn.slick.Graphics g) {
+	int xto = positionComponent.getX() * GameContext.TILE_WIDTH;
+	int yto = positionComponent.getY() * GameContext.TILE_HEIGHT;
+	g.translate(xto, yto);
 	paintComponent(g);
-	g.translate(-positionComponent.getX() << 4, (-positionComponent.getY() << 3) * 3);
+	g.translate(-xto, -yto);
     }
 }
