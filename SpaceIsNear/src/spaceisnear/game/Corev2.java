@@ -13,6 +13,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.GameState;
+import org.newdawn.slick.state.StateBasedGame;
 import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.layer.TiledLayer;
@@ -23,19 +26,15 @@ import spaceisnear.game.messages.MessageTimePassed;
  *
  * @author LPzhelud
  */
-public class Corev2 extends BasicGame {
+public class Corev2 extends BasicGameState {
 
     private GameContext context;
     private final ArrayList<GameObject> objects = new ArrayList<>();
     private final static int QUANT_TIME = 50;
     private int key;
 
-    public Corev2(String title) {
-	super(title);
-    }
-
     @Override
-    public void init(GameContainer container) throws SlickException {
+    public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
 	TiledLayer tiledLayer = null;
 	try {
 	    tiledLayer = new TiledLayer(new PositionComponent(),
@@ -46,7 +45,7 @@ public class Corev2 extends BasicGame {
 	} catch (Exception ex) {
 	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
 	}
-	context = new GameContext(new CameraMan(tiledLayer));
+	context = new GameContext(new CameraMan(tiledLayer), objects);
 	GamerPlayer player = new GamerPlayer(1, null, context);
 	objects.add(player);
 	context.getCamera().setWindowWidth(800);
@@ -55,7 +54,7 @@ public class Corev2 extends BasicGame {
     }
 
     @Override
-    public void update(GameContainer container, int delta) throws SlickException {
+    public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
 	MessageControlled mc = checkKeys();
 	//1 quant of time is 50L by default
 	int quants = delta / QUANT_TIME;
@@ -90,7 +89,7 @@ public class Corev2 extends BasicGame {
     }
 
     @Override
-    public void render(GameContainer container, Graphics g) throws SlickException {
+    public void render(GameContainer container, StateBasedGame sbg, Graphics g) throws SlickException {
 	context.getCamera().moveCamera(g);
 	context.getCamera().paint(g);
 	for (PaintableComponent paintableComponent : context.getPaintables()) {
@@ -107,5 +106,10 @@ public class Corev2 extends BasicGame {
     @Override
     public void keyReleased(int key, char c) {
 	this.key = 0;
+    }
+
+    @Override
+    public int getID() {
+	return 2;
     }
 }

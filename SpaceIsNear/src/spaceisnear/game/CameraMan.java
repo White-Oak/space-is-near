@@ -7,7 +7,6 @@ package spaceisnear.game;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.math3.util.FastMath;
 import org.newdawn.slick.Graphics;
 import spaceisnear.game.layer.TiledLayer;
 
@@ -57,7 +56,6 @@ import spaceisnear.game.layer.TiledLayer;
 	    finaly = newy;
 	    lastx = x;
 	    lasty = y;
-	    System.out.println(finalx + " " + finaly);
 	}
 
     }
@@ -73,11 +71,11 @@ import spaceisnear.game.layer.TiledLayer;
     void paint(Graphics g) {
 	//animation
 	x += xdelta;
-	if (xdelta != 0 && FastMath.abs(x - finalx) < xdelta) {
+	if (xdelta != 0 && Math.abs(x - finalx) < xdelta) {
 	    xdelta = 0;
 	}
 	y += ydelta;
-	if (ydelta != 0 && FastMath.abs(y - finaly) < ydelta) {
+	if (ydelta != 0 && Math.abs(y - finaly) < ydelta) {
 	    ydelta = 0;
 	}
 	//
