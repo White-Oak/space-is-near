@@ -19,7 +19,7 @@ import spaceisnear.game.layer.TiledLayer;
     private int x, y;
     @Getter private final TiledLayer tiledLayer;
     //
-    private final static int FRAMES_FOR_CAMERA_TO_MOVE = 5;
+    private final static int FRAMES_FOR_CAMERA_TO_MOVE = 4;
     private int xdelta, ydelta, finalx, finaly;
     //
     private int lastx, lasty;
@@ -73,10 +73,12 @@ import spaceisnear.game.layer.TiledLayer;
 	x += xdelta;
 	if (xdelta != 0 && Math.abs(x - finalx) < xdelta) {
 	    xdelta = 0;
+	    x = finalx;
 	}
 	y += ydelta;
 	if (ydelta != 0 && Math.abs(y - finaly) < ydelta) {
 	    ydelta = 0;
+	    y = finaly;
 	}
 	//
 	tiledLayer.paint(g);

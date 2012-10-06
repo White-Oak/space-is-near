@@ -4,6 +4,7 @@
  */
 package spaceisnear.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +33,8 @@ public class Corev2 extends BasicGameState {
     private final ArrayList<GameObject> objects = new ArrayList<>();
     private final static int QUANT_TIME = 50;
     private int key;
+    public static boolean HOST;
+    public static String IP;
 
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
@@ -50,7 +53,19 @@ public class Corev2 extends BasicGameState {
 	objects.add(player);
 	context.getCamera().setWindowWidth(800);
 	context.getCamera().setWindowHeight(600);
+    }
 
+    @Override
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+	try {
+	    if (HOST) {
+		context.getNetworking().host();
+	    } else {
+		context.getNetworking().connect(IP, 54555);
+	    }
+	} catch (IOException ex) {
+	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     @Override
