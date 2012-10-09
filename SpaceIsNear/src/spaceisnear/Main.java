@@ -17,21 +17,20 @@ import spaceisnear.game.Corev2;
 public class Main extends StateBasedGame {
 
     public Main(String name) {
-	super(name);
+        super(name);
     }
 
     public static void main(String[] args) throws SlickException {
-	AppGameContainer appGameContainer = new AppGameContainer(new Main("Space is Near"), 800, 600, false);
-	appGameContainer.setMinimumLogicUpdateInterval(100);
-	appGameContainer.setVSync(true);
-	appGameContainer.start();
+        AppGameContainer appGameContainer = new AppGameContainer(new Main("Space is Near"), 800, 600, false);
+        appGameContainer.setMinimumLogicUpdateInterval(100);
+        appGameContainer.setVSync(true);
+        appGameContainer.start();
     }
 
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
 //	addState(new Splash());
-	addState(new Menu());
-	addState(new Corev2());
+        addState(new Menu());
+        addState(new Corev2());
     }
-    
 }

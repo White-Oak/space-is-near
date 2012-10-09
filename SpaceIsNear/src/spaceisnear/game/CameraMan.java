@@ -18,8 +18,8 @@ import spaceisnear.game.layer.TiledLayer;
 
     private int x, y;
     @Getter private final TiledLayer tiledLayer;
-    //
-    private final static int FRAMES_FOR_CAMERA_TO_MOVE = 4;
+    //для отладки бага с камерой выставил на 1 кадр
+    private final static int FRAMES_FOR_CAMERA_TO_MOVE = 1;
     private int xdelta, ydelta, finalx, finaly;
     //
     private int lastx, lasty;
