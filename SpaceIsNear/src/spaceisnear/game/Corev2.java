@@ -41,7 +41,7 @@ public class Corev2 extends BasicGameState {
 	TiledLayer tiledLayer = null;
 	try {
 	    tiledLayer = new TiledLayer(new PositionComponent(),
-					new Image(getClass().getResourceAsStream("/res/tiles.png"), "sprites", false), GameContext.TILE_WIDTH,
+					new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false), GameContext.TILE_WIDTH,
 					GameContext.TILE_HEIGHT, 128, 128);
 	    tiledLayer.fillRectTile(0, 0, 128, 128, 1);
 	    tiledLayer.fillRectTile(64, 0, 64, 128, 2);

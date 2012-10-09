@@ -18,7 +18,7 @@ import spaceisnear.game.messages.Message;
 
     @Getter private final CameraMan camera;
     @Getter private ArrayList<PaintableComponent> paintables = new ArrayList<>();
-    public static final int TILE_HEIGHT = 24, TILE_WIDTH = 16;
+    public static final int TILE_HEIGHT = 16, TILE_WIDTH = 16;
     @Getter private Networking networking = new Networking(this);
     private final ArrayList<GameObject> objects;
 
