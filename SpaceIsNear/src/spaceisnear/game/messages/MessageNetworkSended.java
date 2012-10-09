@@ -8,9 +8,9 @@ import lombok.Getter;
 
 public class MessageNetworkSended extends Message {
 
-    @Getter private byte[] data;
+    @Getter private Object data;
 
-    public MessageNetworkSended(byte[] data) {
+    public MessageNetworkSended(Object data) {
 	super(MessageTypes.ASKED_TO_SEND);
 	this.data = data;
     }
