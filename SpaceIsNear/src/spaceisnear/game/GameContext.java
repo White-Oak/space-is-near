@@ -4,6 +4,8 @@
  */
 package spaceisnear.game;
 
+import spaceisnear.game.objects.GameObject;
+import spaceisnear.game.objects.Networking;
 import java.util.ArrayList;
 import java.util.Iterator;
 import lombok.*;

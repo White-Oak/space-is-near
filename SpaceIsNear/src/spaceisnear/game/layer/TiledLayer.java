@@ -6,8 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.newdawn.slick.Image;
-import spaceisnear.game.components.PositionComponent;
-import spaceisnear.game.messages.Message;
 
 /**
  *
@@ -19,9 +17,27 @@ public class TiledLayer extends Layer {
     @Getter private final Image[] tiles;
     @Getter private final int tileWidth, tileHeight;
     @Getter private final int horizontalTilesNumber, verticalTilesNumber;
+    private int maxXTiles, maxYTiles;
+    private int startx, starty;
 
-    public TiledLayer(PositionComponent pc, Image image, int tileWidth, int tileHeight, int width, int height) {
-	super(pc, width * tileWidth, height * tileHeight);
+    public void setStartx(int startx) {
+	this.startx = startx < 0 ? 0 : startx;
+    }
+
+    public void setStarty(int starty) {
+	this.starty = starty < 0 ? 0 : starty;
+    }
+
+    public void setWindowWidth(int w) {
+	maxXTiles = w / tileWidth + 2;
+    }
+
+    public void setWindowHeight(int h) {
+	maxYTiles = h / tileHeight + 2;
+    }
+
+    public TiledLayer(Image image, int tileWidth, int tileHeight, int width, int height) {
+	super(width * tileWidth, height * tileHeight);
 	if (image.getWidth() / tileWidth * tileWidth != image.getWidth()
 		|| image.getHeight() / tileHeight * tileHeight != image.getHeight()) {
 	    throw new IllegalArgumentException();
@@ -81,9 +97,11 @@ public class TiledLayer extends Layer {
 
     @Override
     public void paintLayer(org.newdawn.slick.Graphics g) {
-	for (int i = 0; i < map.length; i++) {
+	int maxw = (startx + maxXTiles) > map.length ? map.length : startx + maxXTiles;
+	int maxh = (starty + maxYTiles) > map[0].length ? map[0].length : starty + maxYTiles;
+	for (int i = startx; i < maxw; i++) {
 	    int[] is = map[i];
-	    for (int j = 0; j < is.length; j++) {
+	    for (int j = starty; j < maxh; j++) {
 		int k = is[j];
 		k--;
 		if (k != -1) {
@@ -95,9 +113,5 @@ public class TiledLayer extends Layer {
 
     protected void paintTile(org.newdawn.slick.Graphics g, int x, int y, int id) {
 	g.drawImage(tiles[id], x, y);
-    }
-
-    @Override
-    public void processMessage(Message message) {
     }
 }

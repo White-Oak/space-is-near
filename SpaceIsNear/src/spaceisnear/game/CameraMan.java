@@ -14,24 +14,32 @@ import spaceisnear.game.layer.TiledLayer;
  *
  * @author LPzhelud
  */
-@RequiredArgsConstructor public class CameraMan {
+public class CameraMan {
 
     private int x, y;
     @Getter private final TiledLayer tiledLayer;
-    //для отладки бага с камерой выставил на 1 кадр
-    private final static int FRAMES_FOR_CAMERA_TO_MOVE = 1;
+    private final static int FRAMES_FOR_CAMERA_TO_MOVE = 4;
     private int xdelta, ydelta, finalx, finaly;
     //
     private int lastx, lasty;
     //
     @Setter private int windowWidth, windowHeight;//halfs
 
+    public CameraMan(TiledLayer tiledLayer) {
+	this.tiledLayer = tiledLayer;
+    }
+
+    public void delegateWidth() {
+	tiledLayer.setWindowHeight(windowHeight);
+	tiledLayer.setWindowWidth(windowWidth);
+    }
+
     public void setGamerPosition(int x, int y) {
 	if (xdelta == 0 && ydelta == 0) {
 //	x *= GameContext.TILE_WIDTH;
 	    x = x << 4;
 //	y *= GameContext.TILE_HEIGHT;
-	    y = (y << 3) * 3;
+	    y = y << 4;
 	    if (lastx == x && lasty == y) {
 		return;
 	    }
@@ -54,6 +62,8 @@ import spaceisnear.game.layer.TiledLayer;
 	    ydelta = (newy - this.y) / FRAMES_FOR_CAMERA_TO_MOVE;
 	    finalx = newx;
 	    finaly = newy;
+	    tiledLayer.setStartx((finalx >> 4) - 1);
+	    tiledLayer.setStarty((finaly >> 4) - 1);
 	    lastx = x;
 	    lasty = y;
 	}
@@ -81,6 +91,6 @@ import spaceisnear.game.layer.TiledLayer;
 	    y = finaly;
 	}
 	//
-	tiledLayer.paint(g);
+	tiledLayer.paintLayer(g);
     }
 }

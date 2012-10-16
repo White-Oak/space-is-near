@@ -24,7 +24,6 @@ import spaceisnear.game.Corev2;
 public class Menu extends BasicGameState implements ComponentListener {
 
     private int state;
-    private StringBuilder input = new StringBuilder();
     private boolean hostresult;
     private TextField ip;
 

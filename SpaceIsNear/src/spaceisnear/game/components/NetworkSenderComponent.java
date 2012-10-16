@@ -14,7 +14,7 @@ public class NetworkSenderComponent extends Component {
     public void processMessage(Message message) {
 	if (message.getMessageType() == MessageTypes.ASKED_TO_SEND) {
 	    MessageNetworkSended mns = (MessageNetworkSended) message;
-	    getContext().getNetworking().send(mns.getData());
+//	    getContext().getNetworking().send(mns.getData());
 	}
     }
 }

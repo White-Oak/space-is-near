@@ -2,11 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game;
+package spaceisnear.game.objects;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.*;
+import spaceisnear.game.GameContext;
+import spaceisnear.game.GameObjectState;
+import spaceisnear.game.GameObjectTypes;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.PaintableComponent;

@@ -6,7 +6,7 @@ package spaceisnear.game.components;
 
 import lombok.Getter;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.GameObject;
+import spaceisnear.game.objects.GameObject;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 

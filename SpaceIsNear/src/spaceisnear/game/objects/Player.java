@@ -1,5 +1,7 @@
-package spaceisnear.game;
+package spaceisnear.game.objects;
 
+import spaceisnear.game.GameContext;
+import spaceisnear.game.GameObjectTypes;
 import spaceisnear.game.components.PlayerComponent;
 import spaceisnear.game.components.PlayerControllableComponent;
 import spaceisnear.game.components.PositionComponent;

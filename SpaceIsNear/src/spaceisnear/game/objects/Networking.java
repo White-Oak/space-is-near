@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game;
+package spaceisnear.game.objects;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -11,7 +11,11 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 import javax.print.attribute.standard.Severity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import spaceisnear.game.GameContext;
+import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageNetworkReceived;
 import spaceisnear.game.messages.MessageNetworkState;
 
@@ -39,11 +43,12 @@ import spaceisnear.game.messages.MessageNetworkState;
 	client.connect(5000, host, tcpPort);
     }
 
-    public void send(Object data) {
+    public void send(Object data, Class objectType, int id) {
+	Bundle bundle = new Bundle(objectType, id, data);
 	if (server != null) {
-	    server.sendToAllTCP(data);
+	    server.sendToAllTCP(bundle);
 	} else if (client != null) {
-	    client.sendTCP(data);
+	    client.sendTCP(bundle);
 	}
     }
 
@@ -84,5 +89,12 @@ import spaceisnear.game.messages.MessageNetworkState;
 	    kryo = client.getKryo();
 	}
 	kryo.register(classs);
+    }
+
+    @AllArgsConstructor private class Bundle {
+
+	@Getter private Class objectType;
+	@Getter private int id;
+	@Getter private Object message;
     }
 }

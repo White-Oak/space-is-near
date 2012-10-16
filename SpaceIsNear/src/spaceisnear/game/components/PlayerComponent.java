@@ -7,7 +7,7 @@ package spaceisnear.game.components;
 import java.awt.Color;
 import java.awt.Graphics;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.GameObject;
+import spaceisnear.game.objects.GameObject;
 import spaceisnear.game.messages.Message;
 
 /**

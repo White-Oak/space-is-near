@@ -21,10 +21,11 @@ public class Main extends StateBasedGame {
     }
 
     public static void main(String[] args) throws SlickException {
-        AppGameContainer appGameContainer = new AppGameContainer(new Main("Space is Near"), 800, 600, false);
-        appGameContainer.setMinimumLogicUpdateInterval(100);
-        appGameContainer.setVSync(true);
-        appGameContainer.start();
+	AppGameContainer appGameContainer = new AppGameContainer(new Main("Space is Near"), 800, 600, false);
+	appGameContainer.setMinimumLogicUpdateInterval(100);
+	appGameContainer.setVSync(true);
+	appGameContainer.setTargetFrameRate(60);
+	appGameContainer.start();
     }
 
     @Override

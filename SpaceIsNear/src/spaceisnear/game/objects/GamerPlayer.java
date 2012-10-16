@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game;
+package spaceisnear.game.objects;
 
 import java.util.Iterator;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.PlayerControllableComponent;
