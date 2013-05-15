@@ -4,7 +4,6 @@
  */
 package spaceisnear.game.components;
 
-import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
