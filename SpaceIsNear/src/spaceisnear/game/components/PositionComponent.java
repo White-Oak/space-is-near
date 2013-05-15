@@ -5,8 +5,6 @@
 package spaceisnear.game.components;
 
 import lombok.Getter;
-import spaceisnear.game.GameContext;
-import spaceisnear.game.objects.GameObject;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 
@@ -21,6 +19,7 @@ public class PositionComponent extends Component {
 		MessageMoved messagem = (MessageMoved) message;
 		x += messagem.getX();
 		y += messagem.getY();
+		getContext().getCamera().setNewCameraPositionFor(x, y);
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
