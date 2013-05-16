@@ -7,27 +7,32 @@ package spaceisnear.game.components;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
-import spaceisnear.game.messages.MessageTypes;
+import spaceisnear.game.messages.MessageType;
 
 public class PlayerControllableComponent extends Component {
 
     @Override
     public void processMessage(Message message) {
-	if (message.getMessageType() == MessageTypes.CONTROLLED) {
+	if (message.getMessageType() == MessageType.CONTROLLED) {
 	    MessageControlled mc = (MessageControlled) message;
+	    MessageMoved mm = null;
 	    switch (mc.getType()) {
 		case UP:
-		    getOwner().message(new MessageMoved(0, -1));
+		    mm = new MessageMoved(0, -1, getOwner().getId());
 		    break;
 		case DOWN:
-		    getOwner().message(new MessageMoved(0, 1));
+		    mm = new MessageMoved(0, 1, getOwner().getId());
 		    break;
 		case LEFT:
-		    getOwner().message(new MessageMoved(-1, 0));
+		    mm = new MessageMoved(-1, 0, getOwner().getId());
 		    break;
 		case RIGHT:
-		    getOwner().message(new MessageMoved(1, 0));
+		    mm = new MessageMoved(1, 0, getOwner().getId());
 		    break;
+	    }
+	    if (mm != null) {
+		getOwner().message(mm);
+		getContext().getNetworking().send(mm);
 	    }
 	}
     }

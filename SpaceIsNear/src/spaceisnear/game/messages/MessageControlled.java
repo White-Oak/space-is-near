@@ -15,7 +15,7 @@ public class MessageControlled extends Message {
     @Getter private final Type type;
 
     public MessageControlled(Type type) {
-	super(MessageTypes.CONTROLLED);
+	super(MessageType.CONTROLLED);
 	this.type = type;
     }
 

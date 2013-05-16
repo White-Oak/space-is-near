@@ -11,4 +11,5 @@ package spaceisnear.game.messages;
 public interface NetworkableMessage {
 
     public byte[] getBytes();
+    public MessageType getMessageType();
 }

@@ -5,7 +5,6 @@
 package spaceisnear.game.objects;
 
 import spaceisnear.game.GameContext;
-import spaceisnear.game.components.NetworkControllableComponent;
 
 /**
  *
@@ -15,6 +14,5 @@ public class TheOtherPlayer extends Player {
 
     public TheOtherPlayer(GameObject parent, GameContext context) {
 	super(parent, context);
-	addComponents(new NetworkControllableComponent());
     }
 }

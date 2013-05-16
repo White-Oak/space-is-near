@@ -11,7 +11,7 @@ public class MessageTimePassed extends Message {
     @Getter private int timePassed;
 
     public MessageTimePassed(int time) {
-	super(MessageTypes.TIME_PASSED);
+	super(MessageType.TIME_PASSED);
 	this.timePassed = time;
     }
 }

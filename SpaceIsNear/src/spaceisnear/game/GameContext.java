@@ -5,7 +5,6 @@
 package spaceisnear.game;
 
 import spaceisnear.game.objects.GameObject;
-import spaceisnear.Networking;
 import java.util.ArrayList;
 import java.util.Iterator;
 import lombok.*;

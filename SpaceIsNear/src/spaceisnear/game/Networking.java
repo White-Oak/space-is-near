@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package spaceisnear;
+package spaceisnear.game;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -11,11 +7,8 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import spaceisnear.game.GameContext;
-import spaceisnear.game.messages.MessageNetworkReceived;
-import spaceisnear.game.messages.MessageNetworkState;
+import spaceisnear.game.messages.*;
 
 /**
  *
@@ -29,6 +22,7 @@ import spaceisnear.game.messages.MessageNetworkState;
 
     public void host() throws IOException {
 	server = new Server();
+	registerEverything();
 	server.start();
 	server.addListener(this);
 	server.bind(54555);
@@ -36,18 +30,24 @@ import spaceisnear.game.messages.MessageNetworkState;
 
     public void connect(String host, int tcpPort) throws IOException {
 	client = new Client();
+	registerEverything();
 	client.start();
 	client.addListener(this);
 	client.connect(5000, host, tcpPort);
     }
 
-    public void send(Object data, Class objectType, int id) {
-	Bundle bundle = new Bundle(objectType, id, data);
+    public void send(NetworkableMessage message) {
+	MessageType mt = message.getMessageType();
+	byte[] b = message.getBytes();
+	Bundle bundle = new Bundle();
+	bundle.bytes = b;
+	bundle.messageType = mt;
 	if (server != null) {
 	    server.sendToAllTCP(bundle);
 	} else if (client != null) {
 	    client.sendTCP(bundle);
 	}
+	System.out.println("Message sent");
     }
 
     @Override
@@ -68,7 +68,19 @@ import spaceisnear.game.messages.MessageNetworkState;
 
     @Override
     public void received(Connection connection, Object object) {
-	gameContext.sendThemAll(new MessageNetworkReceived(object));
+	if (object instanceof Bundle) {
+	    Bundle bundle = (Bundle) object;
+	    MessageType mt = bundle.messageType;
+	    byte[] b = bundle.bytes;
+	    switch (mt) {
+		case MOVED:
+		    MessageMoved mm = MessageMoved.getInstance(b);
+		    gameContext.sendToID(mm, mm.getId());
+		    break;
+	    }
+
+	    System.out.println("Message received");
+	}
     }
 
     public void close() {
@@ -78,9 +90,13 @@ import spaceisnear.game.messages.MessageNetworkState;
 	    server.close();
 	}
     }
-public void registerEverything(){
-    
-}
+
+    public void registerEverything() {
+	register(MessageType.class);
+	register(Bundle.class);
+	register(byte[].class);
+    }
+
     private void register(Class classs) {
 	Kryo kryo = null;
 	if (server != null) {
@@ -89,12 +105,5 @@ public void registerEverything(){
 	    kryo = client.getKryo();
 	}
 	kryo.register(classs);
-    }
-
-    @AllArgsConstructor private class Bundle {
-
-	@Getter private Class objectType;
-	@Getter private int id;
-	@Getter private Object message;
     }
 }

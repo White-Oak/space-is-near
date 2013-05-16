@@ -8,7 +8,7 @@ package spaceisnear.game.messages;
  *
  * @author LPzhelud
  */
-public enum MessageTypes {
+public enum MessageType {
 
-    TIME_PASSED, DIED, MOVED, TELEPORTED, CONTROLLED, ASKED_TO_SEND, NETWORK_STATE, NETWORK_RECEIVED
+    TIME_PASSED, DIED, MOVED, TELEPORTED, CONTROLLED, NETWORK_STATE
 }

@@ -19,7 +19,7 @@ public class MessageNetworkState extends Message {
 //3 - idle
 
     public MessageNetworkState(int state) {
-	super(MessageTypes.NETWORK_STATE);
+	super(MessageType.NETWORK_STATE);
 	this.state = state;
     }
 }
