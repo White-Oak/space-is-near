@@ -19,29 +19,34 @@ public class TiledLayer extends Layer {
     @Getter private final int horizontalTilesNumber, verticalTilesNumber;
     private int maxXTiles, maxYTiles;
     private int startx, starty;
+    private int startx_absolute, starty_absolute;
 
     public void setStartx(int startx) {
 	this.startx = startx < 0 ? 0 : startx;
     }
 
+    public void setStarty(int starty) {
+	this.starty = starty < 0 ? 0 : starty;
+    }
+
     public void moveLeft() {
-	setStartx(startx - 1);
+	startx_absolute--;
+	setStartx(startx_absolute);
     }
 
     public void moveRight() {
-	setStartx(startx + 1);
+	startx_absolute++;
+	setStartx(startx_absolute);
     }
 
     public void moveUp() {
-	setStarty(starty - 1);
+	starty_absolute--;
+	setStarty(starty_absolute);
     }
 
     public void moveDown() {
-	setStarty(starty + 1);
-    }
-
-    public void setStarty(int starty) {
-	this.starty = starty < 0 ? 0 : starty;
+	starty_absolute++;
+	setStarty(starty_absolute);
     }
 
     public void setWindowWidth(int w) {

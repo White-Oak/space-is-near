@@ -51,8 +51,6 @@ public class Corev2 extends BasicGameState {
 
 	    //генерируем по 12500 тайлов с землёй для более КРАСИВОГО ПЕЙЗАЖА
 	    Random rnd = new Random();
-	    
-
 	    //тут сделаем 200 "островков" с землёй по четыре тайла для ещё более КРАСИВОГО ПЕЙЗАЖА
 	    for (int i = 0; i < 200; i++) {
 		int blockx = rnd.nextInt(124);
