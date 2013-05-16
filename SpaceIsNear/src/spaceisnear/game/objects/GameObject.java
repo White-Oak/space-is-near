@@ -23,18 +23,23 @@ import spaceisnear.game.messages.MessageTimePassed;
 public abstract class GameObject {
 
     private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
-    @Getter private final int id;
+    @Getter private int id = -1;
     @Getter @Setter(AccessLevel.PROTECTED) private boolean destroyed = false;
     @Getter private final GameObject parent;
     @Getter(AccessLevel.PROTECTED) private LinkedList<Component> components = new LinkedList<>();
     @Getter private final GameObjectTypes type;
     @Getter private final GameContext context;
 
-    public GameObject(int id, GameObject parent, GameObjectTypes type, GameContext context) {
-	this.id = id;
+    public GameObject(GameObject parent, GameObjectTypes type, GameContext context) {
 	this.parent = parent;
 	this.type = type;
 	this.context = context;
+    }
+
+    public void setId(int id) {
+	if (this.id == -1) {
+	    this.id = id;
+	}
     }
 
     public final void addComponents(Component... a) {

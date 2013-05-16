@@ -17,7 +17,6 @@ public class CameraMan {
 
     private int x, y;
     @Getter private final TiledLayer tiledLayer;
-    private final static int FRAMES_FOR_CAMERA_TO_MOVE = 4;
     @Setter private int windowWidth, windowHeight;
 
     public CameraMan(TiledLayer tiledLayer) {
@@ -47,18 +46,22 @@ public class CameraMan {
 
     private void cameraUp() {
 	y--;
+	tiledLayer.moveUp();
     }
 
     private void cameraDown() {
 	y++;
+	tiledLayer.moveDown();
     }
 
     private void cameraLeft() {
 	x--;
+	tiledLayer.moveLeft();
     }
 
     private void cameraRight() {
 	x++;
+	tiledLayer.moveRight();
     }
 
     public void moveCamera(Graphics g) {
@@ -70,18 +73,6 @@ public class CameraMan {
     }
 
     void paint(Graphics g) {
-//	//animation
-//	x += xdelta;
-//	if (xdelta != 0 && Math.abs(x - finalx) < xdelta) {
-//	    xdelta = 0;
-//	    x = finalx;
-//	}
-//	y += ydelta;
-//	if (ydelta != 0 && Math.abs(y - finaly) < ydelta) {
-//	    ydelta = 0;
-//	    y = finaly;
-//	}
-//	//
 	tiledLayer.paintLayer(g);
     }
 }

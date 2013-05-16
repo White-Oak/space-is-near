@@ -9,8 +9,8 @@ import spaceisnear.game.components.PlayerControllableComponent;
 
 public class GamerPlayer extends Player {
 
-    public GamerPlayer(int id, GameObject parent, GameContext context) {
-	super(id, parent, context);
+    public GamerPlayer(GameObject parent, GameContext context) {
+	super(parent, context);
 	addComponents(new PlayerControllableComponent());
     }
 }

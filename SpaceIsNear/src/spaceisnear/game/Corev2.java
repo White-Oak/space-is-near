@@ -7,8 +7,7 @@ package spaceisnear.game;
 import spaceisnear.game.objects.GameObject;
 import spaceisnear.game.objects.GamerPlayer;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
@@ -19,7 +18,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import spaceisnear.game.components.PaintableComponent;
-import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.layer.TiledLayer;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageTimePassed;
@@ -40,9 +38,10 @@ public class Corev2 extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
 	TiledLayer tiledLayer = null;
+	//<editor-fold defaultstate="collapsed" desc="map generating">
 	try {
 	    tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false), GameContext.TILE_WIDTH,
-					GameContext.TILE_HEIGHT, 2048, 2048);
+		    GameContext.TILE_HEIGHT, 2048, 2048);
 	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
 	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
 
@@ -71,9 +70,11 @@ public class Corev2 extends BasicGameState {
 	} catch (Exception ex) {
 	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
 	}
+	//</editor-fold>
 	context = new GameContext(new CameraMan(tiledLayer), objects);
-	GamerPlayer player = new GamerPlayer(1, null, context);
-	objects.add(player);
+	GamerPlayer player = new GamerPlayer(null, context);
+	context.addObject(player);
+	context.setPlayerID(player.getId());
 	context.getCamera().setWindowWidth(800);
 	context.getCamera().setWindowHeight(600);
 	context.getCamera().delegateWidth();
@@ -98,14 +99,17 @@ public class Corev2 extends BasicGameState {
 	//1 quant of time is 50L by default
 	int quants = delta / QUANT_TIME;
 	MessageTimePassed messageTimePassed = new MessageTimePassed(quants);
-	for (GameObject gameObject : objects) {
-	    if (mc != null) {
-		gameObject.message(mc);
-	    }
-	    gameObject.message(messageTimePassed);
+	context.sendThemAll(messageTimePassed);
+	//
+	int playerID = context.getPlayerID();
+	if (mc != null && playerID != -1) {
+	    context.sendToID(mc, playerID);
+	}
+	//
+	for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
+	    GameObject gameObject = it.next();
 	    gameObject.process();
 	}
-
     }
 
     private MessageControlled checkKeys() {

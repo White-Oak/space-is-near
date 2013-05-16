@@ -24,6 +24,22 @@ public class TiledLayer extends Layer {
 	this.startx = startx < 0 ? 0 : startx;
     }
 
+    public void moveLeft() {
+	setStartx(startx - 1);
+    }
+
+    public void moveRight() {
+	setStartx(startx + 1);
+    }
+
+    public void moveUp() {
+	setStarty(starty - 1);
+    }
+
+    public void moveDown() {
+	setStarty(starty + 1);
+    }
+
     public void setStarty(int starty) {
 	this.starty = starty < 0 ? 0 : starty;
     }

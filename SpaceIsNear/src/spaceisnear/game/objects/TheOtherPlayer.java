@@ -11,11 +11,10 @@ import spaceisnear.game.components.NetworkControllableComponent;
  *
  * @author LPzhelud
  */
-public class TheOtherPlayer extends Player{
+public class TheOtherPlayer extends Player {
 
-    public TheOtherPlayer(int id, GameObject parent, GameContext context) {
-	super(id, parent, context);
+    public TheOtherPlayer(GameObject parent, GameContext context) {
+	super(parent, context);
 	addComponents(new NetworkControllableComponent());
     }
-    
 }

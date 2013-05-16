@@ -5,7 +5,7 @@
 package spaceisnear.game;
 
 import spaceisnear.game.objects.GameObject;
-import spaceisnear.game.objects.Networking;
+import spaceisnear.Networking;
 import java.util.ArrayList;
 import java.util.Iterator;
 import lombok.*;
@@ -23,6 +23,7 @@ import spaceisnear.game.messages.Message;
     public static final int TILE_HEIGHT = 16, TILE_WIDTH = 16;
     @Getter private Networking networking = new Networking(this);
     private final ArrayList<GameObject> objects;
+    @Getter @Setter private int playerID = -1;
 
     public void addPaintable(PaintableComponent paintableComponent) {
 	paintables.add(paintableComponent);
@@ -33,5 +34,14 @@ import spaceisnear.game.messages.Message;
 	    GameObject gameObject = it.next();
 	    gameObject.message(m);
 	}
+    }
+
+    public void sendToID(Message m, int id) {
+	objects.get(id).message(m);
+    }
+
+    public synchronized void addObject(GameObject gameObject) {
+	objects.add(gameObject);
+	gameObject.setId(objects.size() - 1);
     }
 }
