@@ -1,5 +1,6 @@
 package spaceisnear.game;
 
+import spaceisnear.game.bundles.MessageBundle;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -8,6 +9,7 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.messages.*;
 
 /**
@@ -37,11 +39,7 @@ import spaceisnear.game.messages.*;
     }
 
     public void send(NetworkableMessage message) {
-	MessageType mt = message.getMessageType();
-	byte[] b = message.getBytes();
-	Bundle bundle = new Bundle();
-	bundle.bytes = b;
-	bundle.messageType = mt;
+	Bundle bundle = message.getBundle();
 	if (server != null) {
 	    server.sendToAllTCP(bundle);
 	} else if (client != null) {
@@ -68,9 +66,9 @@ import spaceisnear.game.messages.*;
 
     @Override
     public void received(Connection connection, Object object) {
-	if (object instanceof Bundle) {
-	    Bundle bundle = (Bundle) object;
-	    MessageType mt = bundle.messageType;
+	if (object instanceof MessageBundle) {
+	    MessageBundle bundle = (MessageBundle) object;
+	    MessageType mt = MessageType.values()[bundle.messageType];
 	    byte[] b = bundle.bytes;
 	    switch (mt) {
 		case MOVED:
@@ -92,8 +90,8 @@ import spaceisnear.game.messages.*;
     }
 
     public void registerEverything() {
-	register(MessageType.class);
 	register(Bundle.class);
+	register(MessageBundle.class);
 	register(byte[].class);
     }
 

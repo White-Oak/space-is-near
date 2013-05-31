@@ -2,14 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game;
+package spaceisnear.server;
 
-import spaceisnear.game.objects.GameObject;
-import java.util.ArrayList;
+import spaceisnear.server.objects.GameObject;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.*;
-import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.Message;
+import spaceisnear.server.objects.Player;
 
 /**
  *
@@ -17,30 +18,32 @@ import spaceisnear.game.messages.Message;
  */
 @RequiredArgsConstructor public class GameContext {
 
-    @Getter private final CameraMan camera;
-    @Getter private ArrayList<PaintableComponent> paintables = new ArrayList<>();
     public static final int TILE_HEIGHT = 16, TILE_WIDTH = 16;
-    @Getter private Networking networking = new Networking(this);
-    @Getter private final ArrayList<GameObject> objects;
-    @Getter @Setter private int playerID = -1;
+    @Getter private final Networking networking;
+    @Getter private final List<GameObject> objects;
+    private final List<GameObject> players = new LinkedList<>();
 
-    public void addPaintable(PaintableComponent paintableComponent) {
-	paintables.add(paintableComponent);
-    }
-
-    public void sendThemAll(Message m) {
+    public synchronized void sendThemAll(Message m) {
 	for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
 	    GameObject gameObject = it.next();
 	    gameObject.message(m);
 	}
     }
 
-    public void sendToID(Message m, int id) {
+    public synchronized void sendToID(Message m, int id) {
 	objects.get(id).message(m);
     }
 
     public synchronized void addObject(GameObject gameObject) {
 	objects.add(gameObject);
 	gameObject.setId(objects.size() - 1);
+    }
+
+    public synchronized void addPlayer() {
+	Player player = new Player(null, this);
+    }
+
+    public Player getPlayer(int id) {
+	return (Player) players.get(id);
     }
 }

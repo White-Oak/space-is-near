@@ -2,17 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game;
+package spaceisnear.game.objects;
 
 import lombok.AllArgsConstructor;
-import spaceisnear.game.messages.MessageType;
+import lombok.Getter;
 
 /**
  *
  * @author white_oak
  */
-class Bundle {
-
-    public MessageType messageType;
-    public byte[] bytes;
+@AllArgsConstructor public class Position {
+    @Getter private final int x, y;
 }

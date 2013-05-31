@@ -1,8 +1,9 @@
-package spaceisnear.game.objects;
+package spaceisnear.server.objects;
 
-import spaceisnear.game.GameContext;
-import spaceisnear.game.components.PlayerComponent;
-import spaceisnear.game.components.PositionComponent;
+import spaceisnear.game.objects.GameObjectType;
+import spaceisnear.server.GameContext;
+import spaceisnear.server.components.PlayerComponent;
+import spaceisnear.server.components.PositionComponent;
 
 /**
  *

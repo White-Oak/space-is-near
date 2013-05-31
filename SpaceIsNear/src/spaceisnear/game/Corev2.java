@@ -38,33 +38,6 @@ public class Corev2 extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
 	TiledLayer tiledLayer = null;
-	//<editor-fold defaultstate="collapsed" desc="map generating">
-	try {
-	    tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false), GameContext.TILE_WIDTH,
-		    GameContext.TILE_HEIGHT, 2048, 2048);
-	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
-	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
-
-	    //карту рисуем, чо. пока так
-	    //тут заливка травой всей карты
-	    tiledLayer.fillRectTile(0, 0, 2048, 2048, 5);
-
-	    //генерируем по 12500 тайлов с землёй для более КРАСИВОГО ПЕЙЗАЖА
-	    Random rnd = new Random();
-	    //тут сделаем 200 "островков" с землёй по четыре тайла для ещё более КРАСИВОГО ПЕЙЗАЖА
-	    for (int i = 0; i < 200; i++) {
-		int blockx = rnd.nextInt(124);
-		int blocky = rnd.nextInt(124);
-
-		tiledLayer.setTile(blockx, blocky, 7);
-		tiledLayer.setTile(blockx + 1, blocky, 8);
-		tiledLayer.setTile(blockx, blocky + 1, 9);
-		tiledLayer.setTile(blockx + 1, blocky + 1, 10);
-	    }
-	} catch (Exception ex) {
-	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	//</editor-fold>
 	context = new GameContext(new CameraMan(tiledLayer), objects);
 	GamerPlayer player = new GamerPlayer(null, context);
 	context.addObject(player);

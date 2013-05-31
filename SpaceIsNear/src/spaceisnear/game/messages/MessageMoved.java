@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.*;
+import spaceisnear.game.bundles.Bundle;
+import spaceisnear.game.bundles.MessageBundle;
 
 public class MessageMoved extends Message implements NetworkableMessage {
 
@@ -37,7 +39,7 @@ public class MessageMoved extends Message implements NetworkableMessage {
     }
 
     @Override
-    public byte[] getBytes() {
+    public Bundle getBundle() {
 	ByteArrayOutputStream b = null;
 	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(); DataOutputStream daos = new DataOutputStream(baos)) {
 	    daos.writeInt(x);
@@ -48,7 +50,11 @@ public class MessageMoved extends Message implements NetworkableMessage {
 	} catch (IOException ex) {
 	    Logger.getLogger(MessageMoved.class.getName()).log(Level.SEVERE, null, ex);
 	}
-	return b.toByteArray();
+	byte[] by = b.toByteArray();
+	MessageBundle mb = new MessageBundle();
+	mb.bytes = by;
+	mb.messageType = getMessageType().ordinal();
+	return mb;
     }
 
     public static MessageMoved getInstance(byte[] b) {

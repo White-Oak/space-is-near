@@ -4,12 +4,14 @@
  */
 package spaceisnear.game.messages;
 
+import spaceisnear.game.bundles.Bundle;
+
 /**
  *
  * @author white_oak
  */
 public interface NetworkableMessage {
 
-    public byte[] getBytes();
+    public Bundle getBundle();
     public MessageType getMessageType();
 }

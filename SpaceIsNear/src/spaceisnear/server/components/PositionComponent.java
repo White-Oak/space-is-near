@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.components;
+package spaceisnear.server.components;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +26,7 @@ import spaceisnear.game.objects.Position;
 		MessageMoved messagem = (MessageMoved) message;
 		x += messagem.getX();
 		y += messagem.getY();
-		getContext().getCamera().setNewCameraPositionFor(messagem.getX(), messagem.getY());
+//		getContext().getCamera().setNewCameraPositionFor(messagem.getX(), messagem.getY());
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved

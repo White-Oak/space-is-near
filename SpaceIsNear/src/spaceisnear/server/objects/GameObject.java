@@ -2,17 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.objects;
+package spaceisnear.server.objects;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.*;
-import spaceisnear.game.GameContext;
-import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentState;
-import spaceisnear.game.components.PaintableComponent;
+import spaceisnear.server.GameContext;
+import spaceisnear.server.components.Component;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageTimePassed;
+import spaceisnear.game.objects.GameObjectState;
+import spaceisnear.game.objects.GameObjectType;
 
 /**
  *
@@ -45,9 +44,10 @@ public abstract class GameObject {
 	    Component component = a[i];
 	    component.setContext(context);
 	    component.setOwner(this);
-	    if (component instanceof PaintableComponent) {
-		context.addPaintable((PaintableComponent) component);
-	    }
+	    //dont use it for server
+//	    if (component instanceof PaintableComponent) {
+//		context.addPaintable((PaintableComponent) component);
+//	    }
 	}
 	this.components.addAll(Arrays.asList(a));
     }
@@ -57,7 +57,7 @@ public abstract class GameObject {
     }
 
     public final synchronized GameObjectState getState() {
-	ArrayList<ComponentState> states = new ArrayList<>();
+	ArrayList<spaceisnear.game.components.ComponentState> states = new ArrayList<>();
 	for (Iterator<Component> it = components.iterator(); it.hasNext();) {
 	    Component component = it.next();
 	    states.add(component.getState());
