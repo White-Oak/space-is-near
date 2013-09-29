@@ -5,20 +5,21 @@
 package spaceisnear.game.messages;
 
 import spaceisnear.game.bundles.Bundle;
+import spaceisnear.game.bundles.JSONBundle;
 import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
 
 public class MessageCreated extends Message implements NetworkableMessage {
 
-    private final GameObjectState gameObjectState;
+    private final String json;
 
-    public MessageCreated(GameObjectState gameObjectState) {
+    public MessageCreated(String json) {
 	super(MessageType.CREATED);
-	this.gameObjectState = gameObjectState;
+	this.json = json;
     }
 
     @Override
     public Bundle getBundle() {
-	return gameObjectState.getBundle();
+	return new JSONBundle(json);
     }
 }

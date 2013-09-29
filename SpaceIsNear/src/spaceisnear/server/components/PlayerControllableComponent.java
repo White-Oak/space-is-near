@@ -33,7 +33,7 @@ public class PlayerControllableComponent extends Component {
 	    }
 	    if (mm != null) {
 		getOwner().message(mm);
-		getContext().getNetworking().send(mm);
+		getContext().getNetworking().sendToAll(mm);
 	    }
 	}
     }

@@ -11,10 +11,13 @@ import spaceisnear.server.components.PositionComponent;
  */
 public class Player extends GameObject {
 
-    public Player(GameObject parent, GameContext context) {
+    private int connectionID;
+
+    public Player(GameObject parent, GameContext context, int connectionID) {
 	super(parent, GameObjectType.PLAYER, context);
 	PositionComponent pc = new PositionComponent(24, 18);
 
 	addComponents(pc, new PlayerComponent(pc));
+	this.connectionID = connectionID;
     }
 }

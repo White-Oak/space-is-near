@@ -4,12 +4,14 @@
  */
 package spaceisnear.game.components;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  *
  * @author LPzhelud
  */
-public class ComponentState {
-    public byte[] getBytes(){
-	return new byte[]{};
-    }
+@RequiredArgsConstructor public class ComponentState {
+
+    @Getter private String name, value;
 }

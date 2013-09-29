@@ -20,64 +20,72 @@ import java.util.logging.Logger;
  */
 public class ServerCore {
 
-	@Getter(AccessLevel.PRIVATE) private GameContext context;
-	private boolean unbreakable = true;
-	private boolean paused = false;
-	private final static int QUANT_TIME = 20;
+    @Getter(AccessLevel.PRIVATE) private GameContext context;
+    private boolean unbreakable = true;
+    private boolean paused = false;
+    private final static int QUANT_TIME = 20;
+    private boolean alreadyPaused;
 
-	public ServerCore() {
-		TiledLayer tiledLayer = null;
-		//<editor-fold defaultstate="collapsed" desc="map generating">
-		try {
-			tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false), spaceisnear.game.GameContext.TILE_WIDTH,
-					spaceisnear.game.GameContext.TILE_HEIGHT, 2048, 2048);
-			//tiledLayer.fillRectTile(0, 0, 128, 128, 1);
-			//tiledLayer.fillRectTile(64, 0, 64, 128, 2);
+    public ServerCore() {
+	TiledLayer tiledLayer = null;
+	//<editor-fold defaultstate="collapsed" desc="map generating">
+	try {
+	    tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
+		    spaceisnear.game.GameContext.TILE_WIDTH,
+		    spaceisnear.game.GameContext.TILE_HEIGHT, 2048, 2048);
+	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
+	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
 
-			//карту рисуем, чо. пока так
-			//тут заливка травой всей карты
-			tiledLayer.fillRectTile(0, 0, 2048, 2048, 5);
+	    //карту рисуем, чо. пока так
+	    //тут заливка травой всей карты
+	    tiledLayer.fillRectTile(0, 0, 2048, 2048, 5);
 
-			//генерируем по 12500 тайлов с землёй для более КРАСИВОГО ПЕЙЗАЖА
-			Random rnd = new Random();
-			//тут сделаем 200 "островков" с землёй по четыре тайла для ещё более КРАСИВОГО ПЕЙЗАЖА
-			for (int i = 0; i < 200; i++) {
-				int blockx = rnd.nextInt(124);
-				int blocky = rnd.nextInt(124);
+	    //генерируем по 12500 тайлов с землёй для более КРАСИВОГО ПЕЙЗАЖА
+	    Random rnd = new Random();
+	    //тут сделаем 200 "островков" с землёй по четыре тайла для ещё более КРАСИВОГО ПЕЙЗАЖА
+	    for (int i = 0; i < 200; i++) {
+		int blockx = rnd.nextInt(124);
+		int blocky = rnd.nextInt(124);
 
-				tiledLayer.setTile(blockx, blocky, 7);
-				tiledLayer.setTile(blockx + 1, blocky, 8);
-				tiledLayer.setTile(blockx, blocky + 1, 9);
-				tiledLayer.setTile(blockx + 1, blocky + 1, 10);
-			}
-		} catch (Exception ex) {
-			Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+		tiledLayer.setTile(blockx, blocky, 7);
+		tiledLayer.setTile(blockx + 1, blocky, 8);
+		tiledLayer.setTile(blockx, blocky + 1, 9);
+		tiledLayer.setTile(blockx + 1, blocky + 1, 10);
+	    }
+	} catch (Exception ex) {
+	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
+	context = new GameContext(new Networking(this), new ArrayList<GameObject>());
+    }
+
+    public void run() {
+	while (unbreakable) {
+	    if (paused) {
+		for (Iterator<GameObject> it = getContext().getObjects().iterator(); it.hasNext();) {
+		    GameObject gameObject = it.next();
+		    gameObject.process();
 		}
-		//</editor-fold>
-		context = new GameContext(new Networking(this), new ArrayList<GameObject>());
+	    } else {
+		alreadyPaused = true;
+	    }
 	}
+    }
 
-	public void run() {
-		while (unbreakable) {
-			if (paused) {
-				for (Iterator<GameObject> it = getContext().getObjects().iterator(); it.hasNext(); ) {
-					GameObject gameObject = it.next();
-					gameObject.process();
-				}
-			}
-		}
-	}
+    public void pause() {
+	paused = true;
+    }
 
-	public void pause() {
-		paused = true;
-	}
+    public void unpause() {
+	paused = false;
+	alreadyPaused = false;
+    }
 
-	public void unpause() {
-		paused = false;
-	}
+    public Player addPlayer(int connectionID) {
+	return context.addPlayer(connectionID);
+    }
 
-	public void addPlayer() {
-		final Player player = new Player(null, context);
-		context.addPlayer();
-	}
+    public boolean isAlreadyPaused() {
+	return alreadyPaused;
+    }
 }
