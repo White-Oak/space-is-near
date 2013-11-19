@@ -9,8 +9,8 @@ import spaceisnear.game.components.UIComponent;
 
 public class UI extends GameObject {
 
-    public UI(GameObject parent, GameObjectType type, GameContext context) {
-	super(parent, type, context);
+    public UI(GameObjectType type, GameContext context) {
+	super(type, context);
 	addComponents(new UIComponent());
     }
 }

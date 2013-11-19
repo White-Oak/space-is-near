@@ -13,8 +13,8 @@ import spaceisnear.game.components.PositionComponent;
  */
 public class StaticItem extends GameObject{
 
-    public StaticItem(GameObject parent, GameContext context,Position p) {
-	super(parent, GameObjectType.ITEM, context);
+    public StaticItem(GameContext context,Position p) {
+	super(GameObjectType.ITEM, context);
 	PositionComponent pc=new PositionComponent(p);
     }
     

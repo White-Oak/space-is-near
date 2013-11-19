@@ -20,7 +20,7 @@ import java.util.*;
     public static final int TILE_HEIGHT = 16, TILE_WIDTH = 16;
     @Getter private final Networking networking;
     @Getter private final List<GameObject> objects;
-    private final List<GameObject> players = new LinkedList<>();
+    private final List<spaceisnear.game.objects.GameObject> players = new LinkedList<>();
 
     public synchronized void sendThemAll(Message m) {
 	for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
@@ -39,7 +39,7 @@ import java.util.*;
     }
 
     public synchronized Player addPlayer(int connectionID) {
-	Player player = new Player(null, this, connectionID);
+	Player player = new Player(this, connectionID);
 	players.add(player);
 	return player;
     }

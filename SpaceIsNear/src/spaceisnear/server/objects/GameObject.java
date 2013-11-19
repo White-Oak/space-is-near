@@ -4,31 +4,34 @@
  */
 package spaceisnear.server.objects;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import lombok.*;
-import spaceisnear.server.GameContext;
-import spaceisnear.server.components.Component;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import spaceisnear.game.bundles.ObjectBundle;
+import spaceisnear.game.components.Component;
+import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
 
 /**
  *
- * @author LPzhelud
+ * @author White Oak
  */
 public abstract class GameObject {
 
     private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter(AccessLevel.PROTECTED) private boolean destroyed = false;
-    @Getter private final GameObject parent;
     @Getter(AccessLevel.PROTECTED) private LinkedList<Component> components = new LinkedList<>();
     @Getter private final GameObjectType type;
-    @Getter private final GameContext context;
+    @Getter private final spaceisnear.game.GameContext context;
 
-    public GameObject(GameObject parent, GameObjectType type, GameContext context) {
-	this.parent = parent;
+    public GameObject(GameObjectType type, spaceisnear.game.GameContext context) {
 	this.type = type;
 	this.context = context;
     }
@@ -39,15 +42,13 @@ public abstract class GameObject {
 	}
     }
 
-    public final void addComponents(Component... a) {
+    public synchronized final void addComponents(Component... a) {
 	for (int i = 0; i < a.length; i++) {
 	    Component component = a[i];
 	    component.setContext(context);
-	    component.setOwner(this);
-	    //dont use it for server
-//	    if (component instanceof PaintableComponent) {
-//		context.addPaintable((PaintableComponent) component);
-//	    }
+	    if (component instanceof PaintableComponent) {
+		context.addPaintable((PaintableComponent) component);
+	    }
 	}
 	this.components.addAll(Arrays.asList(a));
     }
@@ -56,13 +57,12 @@ public abstract class GameObject {
 	messages.add(message);
     }
 
-    public final synchronized GameObjectState getState() {
-	ArrayList<spaceisnear.game.components.ComponentState> states = new ArrayList<>();
-	for (Iterator<Component> it = components.iterator(); it.hasNext();) {
-	    Component component = it.next();
-	    states.add(component.getState());
-	}
-	return new GameObjectState(states, id, type);
+    private final synchronized GameObjectState getState() {
+	return new GameObjectState(components.toArray(new Component[components.size()]), id, type);
+    }
+
+    public final synchronized ObjectBundle getBundle() {
+	return new ObjectBundle(getState(), id, type);
     }
 
     public synchronized void process() {

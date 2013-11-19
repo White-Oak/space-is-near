@@ -9,5 +9,5 @@ package spaceisnear.game.objects;
  * @author LPzhelud
  */
 public enum GameObjectType {
-    PLAYER, ITEM
+    PLAYER, ITEM, GAMER_PLAYER
 }

@@ -12,7 +12,7 @@ import spaceisnear.game.GameContext;
  */
 public class TheOtherPlayer extends Player {
 
-    public TheOtherPlayer(GameObject parent, GameContext context) {
-	super(parent, context);
+    public TheOtherPlayer(GameContext context) {
+	super(context);
     }
 }

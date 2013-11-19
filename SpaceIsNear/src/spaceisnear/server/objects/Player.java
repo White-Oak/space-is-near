@@ -1,9 +1,9 @@
 package spaceisnear.server.objects;
 
+import spaceisnear.game.components.PlayerComponent;
+import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.server.GameContext;
-import spaceisnear.server.components.PlayerComponent;
-import spaceisnear.server.components.PositionComponent;
 
 /**
  *
@@ -11,10 +11,10 @@ import spaceisnear.server.components.PositionComponent;
  */
 public class Player extends GameObject {
 
-    private int connectionID;
+    public int connectionID;
 
-    public Player(GameObject parent, GameContext context, int connectionID) {
-	super(parent, GameObjectType.PLAYER, context);
+    public Player(GameContext context, int connectionID) {
+	super(GameObjectType.PLAYER, null);
 	PositionComponent pc = new PositionComponent(24, 18);
 
 	addComponents(pc, new PlayerComponent(pc));

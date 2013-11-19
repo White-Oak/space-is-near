@@ -4,6 +4,7 @@
  */
 package spaceisnear.game.components;
 
+import java.util.ArrayList;
 import lombok.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.objects.GameObject;
@@ -15,21 +16,14 @@ import spaceisnear.game.messages.Message;
  */
 public abstract class Component {
 
-    @Getter private ComponentState state;
+    @Getter private ArrayList<ComponentState> states = new ArrayList<>();
     @Getter(AccessLevel.PROTECTED) private GameContext context = null;
-    @Getter private GameObject owner;
 
     public abstract void processMessage(Message message);
 
     public void setContext(GameContext context) {
 	if (this.context == null) {
 	    this.context = context;
-	}
-    }
-
-    public void setOwner(GameObject owner) {
-	if (this.owner == null) {
-	    this.owner = owner;
 	}
     }
 }

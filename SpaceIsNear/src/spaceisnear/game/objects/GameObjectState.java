@@ -4,30 +4,16 @@
  */
 package spaceisnear.game.objects;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import spaceisnear.game.components.ComponentState;
-import java.util.ArrayList;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import spaceisnear.game.bundles.ObjectBundle;
+import lombok.RequiredArgsConstructor;
+import spaceisnear.game.components.Component;
 
 /**
  *
  * @author LPzhelud
  */
-@AllArgsConstructor public class GameObjectState {
+@RequiredArgsConstructor public class GameObjectState {
 
-    @Getter private final ArrayList<ComponentState> states;
-    @Getter private final int id;
-    @Getter private final GameObjectType type;
-
-    public ObjectBundle getBundle() {
-	ComponentState[] states_a = states.toArray(new ComponentState[states.size()]);
-	ObjectBundle objectBundle = new ObjectBundle();
-	objectBundle.objectID = id;
-	objectBundle.objectType = type.ordinal();
-	objectBundle.states = states_a;
-	return objectBundle;
-    }
+    private final Component[] components;
+    private final int id;
+    private final GameObjectType type;
 }

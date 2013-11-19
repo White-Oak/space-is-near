@@ -6,6 +6,7 @@ package spaceisnear.server;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.*;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.bundles.MessageBundle;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spaceisnear.game.bundles.ObjectBundle;
+import spaceisnear.game.messages.MessageCreated;
 import spaceisnear.server.objects.Player;
 
 /**
@@ -65,10 +68,12 @@ import spaceisnear.server.objects.Player;
 
     @Override
     public synchronized void connected(Connection connection) {
-	//@working r36
+	//@working r36, r37
 	//1. add a player
-	//2. send MessageCreated of GamerPlayer to connection
-	//3. send MessageCreated of xxPlayer to other connections
+	//[s]2. send MessageCreated of GamerPlayer to connection[/s]
+	//2. send MessageCreated of Player to all connections
+	//3. sebd to the connection his player's id
+	//4. send the world to the new player
 
 	//1.
 	connections.add(connection);
@@ -80,10 +85,12 @@ import spaceisnear.server.objects.Player;
 		Logger.getLogger(Networking.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
-	connection.getRemoteAddressTCP().toString();
+	connections.add(connection);
 	Player player = core.addPlayer(connections.size());
 	//2.
-	
+	ObjectBundle bundle = player.getBundle();
+	Gson gson = new Gson();
+	MessageCreated messageCreated = new MessageCreated(gson.toJson(bundle));
     }
 
     public void host() throws IOException {

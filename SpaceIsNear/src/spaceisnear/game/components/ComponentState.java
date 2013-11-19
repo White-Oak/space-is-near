@@ -4,14 +4,17 @@
  */
 package spaceisnear.game.components;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author LPzhelud
  */
-@RequiredArgsConstructor public class ComponentState {
+@AllArgsConstructor public class ComponentState {
 
-    @Getter private String name, value;
+    @Getter @Setter private String name;
+    @Getter @Setter private Object value;
 }

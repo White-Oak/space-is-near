@@ -4,11 +4,14 @@
  */
 package spaceisnear.game.bundles;
 
-import spaceisnear.game.components.ComponentState;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import spaceisnear.game.objects.GameObjectState;
+import spaceisnear.game.objects.GameObjectType;
 
+@AllArgsConstructor public class ObjectBundle extends Bundle {
 
-public class ObjectBundle extends Bundle {
-    public ComponentState[] states;
-    public int objectID;
-    public int objectType;
+    @Getter private GameObjectState state;
+    @Getter private int objectID;
+    @Getter private GameObjectType objectType;
 }
