@@ -14,6 +14,8 @@ import spaceisnear.server.objects.Player;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spaceisnear.game.messages.MessagePaused;
+import spaceisnear.game.messages.MessageUnpaused;
 
 /**
  * @author white_oak
@@ -24,7 +26,7 @@ public class ServerCore {
     private boolean unbreakable = true;
     private boolean paused = false;
     private final static int QUANT_TIME = 20;
-    private boolean alreadyPaused;
+    @Getter private boolean alreadyPaused;
 
     public ServerCore() {
 	TiledLayer tiledLayer = null;
@@ -59,7 +61,7 @@ public class ServerCore {
 	context = new GameContext(new Networking(this), new ArrayList<GameObject>());
     }
 
-    public void run() {
+    public void run() throws InterruptedException {
 	while (unbreakable) {
 	    if (paused) {
 		for (Iterator<GameObject> it = getContext().getObjects().iterator(); it.hasNext();) {
@@ -69,23 +71,22 @@ public class ServerCore {
 	    } else {
 		alreadyPaused = true;
 	    }
+	    Thread.sleep(QUANT_TIME);
 	}
     }
 
     public void pause() {
 	paused = true;
+	context.getNetworking().sendToAll(new MessagePaused());
     }
 
     public void unpause() {
+	context.getNetworking().sendToAll(new MessageUnpaused());
 	paused = false;
 	alreadyPaused = false;
     }
 
     public Player addPlayer(int connectionID) {
 	return context.addPlayer(connectionID);
-    }
-
-    public boolean isAlreadyPaused() {
-	return alreadyPaused;
     }
 }

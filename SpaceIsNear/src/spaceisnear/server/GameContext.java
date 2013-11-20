@@ -20,7 +20,7 @@ import java.util.*;
     public static final int TILE_HEIGHT = 16, TILE_WIDTH = 16;
     @Getter private final Networking networking;
     @Getter private final List<GameObject> objects;
-    private final List<spaceisnear.game.objects.GameObject> players = new LinkedList<>();
+    private final List<Player> players = new LinkedList<>();
 
     public synchronized void sendThemAll(Message m) {
 	for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {

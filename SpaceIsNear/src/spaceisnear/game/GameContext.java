@@ -23,6 +23,7 @@ import spaceisnear.game.messages.Message;
     @Getter private Networking networking = new Networking(this);
     @Getter private final ArrayList<GameObject> objects;
     @Getter @Setter private int playerID = -1;
+    @Getter(AccessLevel.PACKAGE) private final Corev2 core;
 
     public void addPaintable(PaintableComponent paintableComponent) {
 	paintables.add(paintableComponent);

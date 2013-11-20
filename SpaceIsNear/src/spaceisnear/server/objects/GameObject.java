@@ -17,6 +17,7 @@ import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
+import spaceisnear.server.GameContext;
 
 /**
  *
@@ -29,9 +30,9 @@ public abstract class GameObject {
     @Getter @Setter(AccessLevel.PROTECTED) private boolean destroyed = false;
     @Getter(AccessLevel.PROTECTED) private LinkedList<Component> components = new LinkedList<>();
     @Getter private final GameObjectType type;
-    @Getter private final spaceisnear.game.GameContext context;
+    @Getter private final GameContext context;
 
-    public GameObject(GameObjectType type, spaceisnear.game.GameContext context) {
+    public GameObject(GameObjectType type, GameContext context) {
 	this.type = type;
 	this.context = context;
     }
@@ -46,9 +47,6 @@ public abstract class GameObject {
 	for (int i = 0; i < a.length; i++) {
 	    Component component = a[i];
 	    component.setContext(context);
-	    if (component instanceof PaintableComponent) {
-		context.addPaintable((PaintableComponent) component);
-	    }
 	}
 	this.components.addAll(Arrays.asList(a));
     }
@@ -57,7 +55,7 @@ public abstract class GameObject {
 	messages.add(message);
     }
 
-    private final synchronized GameObjectState getState() {
+    private synchronized GameObjectState getState() {
 	return new GameObjectState(components.toArray(new Component[components.size()]), id, type);
     }
 

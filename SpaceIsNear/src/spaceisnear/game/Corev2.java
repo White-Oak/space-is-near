@@ -34,12 +34,13 @@ public class Corev2 extends BasicGameState {
     private int key;
     public static boolean HOST;
     public static String IP;
+    private boolean notpaused;
 
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
 	TiledLayer tiledLayer = null;
-	context = new GameContext(new CameraMan(tiledLayer), objects);
-	GamerPlayer player = new GamerPlayer(null, context);
+	context = new GameContext(new CameraMan(tiledLayer), objects, this);
+	GamerPlayer player = new GamerPlayer(context);
 	context.addObject(player);
 	context.setPlayerID(player.getId());
 	context.getCamera().setWindowWidth(800);
@@ -62,20 +63,22 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
-	MessageControlled mc = checkKeys();
-	//1 quant of time is 50L by default
-	int quants = delta / QUANT_TIME;
-	MessageTimePassed messageTimePassed = new MessageTimePassed(quants);
-	context.sendThemAll(messageTimePassed);
-	//
-	int playerID = context.getPlayerID();
-	if (mc != null && playerID != -1) {
-	    context.sendToID(mc, playerID);
-	}
-	//
-	for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
-	    GameObject gameObject = it.next();
-	    gameObject.process();
+	if (notpaused) {
+	    MessageControlled mc = checkKeys();
+	    //1 quant of time is 50L by default
+	    int quants = delta / QUANT_TIME;
+	    MessageTimePassed messageTimePassed = new MessageTimePassed(quants);
+	    context.sendThemAll(messageTimePassed);
+	    //
+	    int playerID = context.getPlayerID();
+	    if (mc != null && playerID != -1) {
+		context.sendToID(mc, playerID);
+	    }
+	    //
+	    for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
+		GameObject gameObject = it.next();
+		gameObject.process();
+	    }
 	}
     }
 
@@ -121,5 +124,8 @@ public class Corev2 extends BasicGameState {
     @Override
     public int getID() {
 	return 2;
+    }
+
+    public void pause() {
     }
 }

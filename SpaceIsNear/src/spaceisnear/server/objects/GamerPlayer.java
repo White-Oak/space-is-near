@@ -14,6 +14,6 @@ public class GamerPlayer extends spaceisnear.game.objects.Player {
 
     public GamerPlayer() {
 	super(null);
-	addComponents(new PlayerControllableComponent());
+	addComponents(new PlayerControllableComponent(this));
     }
 }

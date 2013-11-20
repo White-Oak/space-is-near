@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import spaceisnear.game.bundles.ObjectBundle;
+import spaceisnear.game.messages.MessageClientInformation;
 import spaceisnear.game.messages.MessageCreated;
 import spaceisnear.server.objects.Player;
 
@@ -48,6 +49,9 @@ import spaceisnear.server.objects.Player;
 	    MessageType mt = MessageType.values()[bundle.messageType];
 	    byte[] b = bundle.bytes;
 	    switch (mt) {
+		case CLIENT_INFO:
+		    MessageClientInformation mci = MessageClientInformation.getInstance(b);
+		    break;
 	    }
 
 	    System.out.println("Message received");
@@ -68,11 +72,14 @@ import spaceisnear.server.objects.Player;
 
     @Override
     public synchronized void connected(Connection connection) {
-	//@working r36, r37
+    }
+
+    private void createPlayer(Connection connection) {
+	//@working r36, r37, r38
 	//1. add a player
 	//[s]2. send MessageCreated of GamerPlayer to connection[/s]
 	//2. send MessageCreated of Player to all connections
-	//3. sebd to the connection his player's id
+	//3. send to the connection his player's id
 	//4. send the world to the new player
 
 	//1.
@@ -91,6 +98,9 @@ import spaceisnear.server.objects.Player;
 	ObjectBundle bundle = player.getBundle();
 	Gson gson = new Gson();
 	MessageCreated messageCreated = new MessageCreated(gson.toJson(bundle));
+	sendToAll(messageCreated);
+	//3.
+
     }
 
     public void host() throws IOException {

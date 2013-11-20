@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.objects.Position;
@@ -49,7 +50,6 @@ public class PositionComponent extends Component {
 		MessageMoved messagem = (MessageMoved) message;
 		setX(getX() + messagem.getX());
 		setY(getY() + messagem.getY());
-		getContext().getCamera().setNewCameraPositionFor(messagem.getX(), messagem.getY());
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved

@@ -17,11 +17,12 @@ import spaceisnear.game.messages.Message;
 public abstract class Component {
 
     @Getter private ArrayList<ComponentState> states = new ArrayList<>();
-    @Getter(AccessLevel.PROTECTED) private GameContext context = null;
+    /** Notice that it is actually GameContext. Upcasting is left for compability with server side. */
+    @Getter(AccessLevel.PROTECTED) private Object context = null;
 
     public abstract void processMessage(Message message);
 
-    public void setContext(GameContext context) {
+    public void setContext(Object context) {
 	if (this.context == null) {
 	    this.context = context;
 	}

@@ -4,10 +4,10 @@
  */
 package spaceisnear.server.objects;
 
+import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.GameContext;
-import spaceisnear.server.components.PositionComponent;
 
 /**
  *
@@ -15,8 +15,8 @@ import spaceisnear.server.components.PositionComponent;
  */
 public class StaticItem extends GameObject{
 
-    public StaticItem(GameObject parent, GameContext context,Position p) {
-	super(parent, GameObjectType.ITEM, context);
+    public StaticItem(GameContext context, Position p) {
+	super(GameObjectType.ITEM, context);
 	PositionComponent pc=new PositionComponent(p);
     }
     

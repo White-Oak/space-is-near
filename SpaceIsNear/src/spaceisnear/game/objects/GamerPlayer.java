@@ -11,6 +11,6 @@ public class GamerPlayer extends Player {
 
     public GamerPlayer(GameContext context) {
 	super(context);
-	addComponents(new PlayerControllableComponent());
+	addComponents(new PlayerControllableComponent(this));
     }
 }

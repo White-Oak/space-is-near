@@ -54,7 +54,7 @@ public abstract class GameObject {
 	messages.add(message);
     }
 
-    private final synchronized GameObjectState getState() {
+    private synchronized GameObjectState getState() {
 	return new GameObjectState(components.toArray(new Component[components.size()]), id, type);
     }
 
