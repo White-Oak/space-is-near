@@ -16,12 +16,8 @@ import spaceisnear.game.layer.TiledLayer;
 public class CameraMan {
 
     private int x, y;
-    @Getter private final TiledLayer tiledLayer;
+    @Getter @Setter private TiledLayer tiledLayer;
     @Setter private int windowWidth, windowHeight;
-
-    public CameraMan(TiledLayer tiledLayer) {
-	this.tiledLayer = tiledLayer;
-    }
 
     public void delegateWidth() {
 	tiledLayer.setWindowHeight(windowHeight);

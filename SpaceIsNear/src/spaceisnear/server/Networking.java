@@ -29,24 +29,13 @@ import spaceisnear.server.objects.Player;
 /**
  * @author white_oak
  */
-@RequiredArgsConstructor public class Networking extends Listener {
+@RequiredArgsConstructor public class Networking extends Listener implements Runnable {
 
     public Server server;
     private final ServerCore core;
     private ArrayList<Connection> connections = new ArrayList<>();
     private MessageClientInformation informationAboutLastConnected;
     private boolean[] rogered;
-
-    public void registerEverything() {
-	register(Bundle.class);
-	register(MessageBundle.class);
-	register(byte[].class);
-    }
-
-    private void register(Class classs) {
-	Kryo kryo = server.getKryo();
-	kryo.register(classs);
-    }
 
     @Override
     public void received(Connection connection, Object object) {
@@ -75,9 +64,18 @@ import spaceisnear.server.objects.Player;
 	sendToID(id, b);
     }
 
-    public void sendToID(int id, Bundle bundle) {
-	server.sendToTCP(connections.get(id).getID(), bundle);
+    private void sendToID(int id, Bundle bundle) {
+	sendToConnection(connections.get(id), bundle);
+    }
+
+    private void sendToConnection(Connection c, Bundle bundle) {
+	server.sendToTCP(c.getID(), bundle);
 	System.out.println("Message sent");
+    }
+
+    private void sendToConnection(Connection c, NetworkableMessage message) {
+	Bundle b = message.getBundle();
+	sendToConnection(c, b);
     }
 
     @Override
@@ -87,57 +85,58 @@ import spaceisnear.server.objects.Player;
 	    connections.add(connection);
 	    rogered = new boolean[connections.size()];
 	} else {
-	    connection.sendTCP(new MessageConnectionBroken());
+	    sendToConnection(connection, new MessageConnectionBroken());
 	    connection.close();
 	}
     }
 
-    private void createPlayerAndSend() {
+    private MessageCreated createPlayerAndPrepare() {
 
 	//1
 	Player player = core.addPlayer(connections.size());
+	player.setNickname(informationAboutLastConnected.getDesiredNickname());
 	//2
 	ObjectBundle bundle = player.getBundle();
 	Gson gson = new Gson();
 	MessageCreated messageCreated = new MessageCreated(gson.toJson(bundle));
-	sendToAll(messageCreated);
+	return messageCreated;
     }
 
     public void host() throws IOException {
 	server = new Server();
-	registerEverything();
+	Registerer.registerEverything(server);
 	server.start();
 	server.addListener(this);
 	server.bind(54555);
     }
 
+    @Override
     public void run() {
-	//wait for client ot send information about client
-	while (informationAboutLastConnected != null) {
-	    try {
-		Thread.sleep(100L);
-	    } catch (InterruptedException ex) {
-		Logger.getLogger(Networking.class.getName()).log(Level.SEVERE, null, ex);
-	    }
+	//wait for client to send information about clien
+	//and for server to finally pause
+	//@done use this info
+	while (informationAboutLastConnected != null && !core.isAlreadyPaused()) {
+	    waitSomeTime();
 	}
-	//@working r36, r37, r38, r39, r40
+	//@working r36, r37, r38, r39
 	//1. send the world to the new player
 	//2. add a player
 	//3. send MessageCreated of Player to all connections
 	//1
 	JSONBundle worldInOneJSON = getWorldInOneJSON();
 	sendToID(connections.size() - 1, worldInOneJSON);
-	//waiting for client to process
-	while (!rogered[rogered.length - 1]) {
-	    try {
-		Thread.sleep(100L);
-	    } catch (InterruptedException ex) {
-		Logger.getLogger(Networking.class.getName()).log(Level.SEVERE, null, ex);
-	    }
-	}
+	//2
+	MessageCreated messageCreated = createPlayerAndPrepare();
+	//waiting for client to process world
+	waitForToRoger(rogered.length - 1);
 	rogered[rogered.length - 1] = false;
-	//2, 3
-	createPlayerAndSend();
+	//3
+	sendToAll(messageCreated);
+	//wait for client to receive his player
+	waitForAllToRoger();
+	resetRogeredStatuses();
+	//
+	core.unpause();
     }
 
     private JSONBundle getWorldInOneJSON() {
@@ -147,7 +146,8 @@ import spaceisnear.server.objects.Player;
 	for (GameObject object : objects) {
 	    messages.add(new MessageCreated(new Gson().toJson(object.getBundle())));
 	}
-	return new JSONBundle(new Gson().toJson(messages.toArray(new MessageCreated[messages.size()])));
+	Object[] objectss = new Object[]{messages.toArray(new MessageCreated[messages.size()]), core.getTiledLayer()};
+	return new JSONBundle(new Gson().toJson(objectss));
     }
 
     private boolean isRogeredByAll() {
@@ -157,5 +157,31 @@ import spaceisnear.server.objects.Player;
 	    result &= b;
 	}
 	return result;
+    }
+
+    private void waitForAllToRoger() {
+	while (!isRogeredByAll()) {
+	    waitSomeTime();
+	}
+    }
+
+    private void resetRogeredStatuses() {
+	for (int i = 0; i < rogered.length; i++) {
+	    rogered[i] = false;
+	}
+    }
+
+    private void waitForToRoger(int connectionId) {
+	while (!rogered[connectionId]) {
+	    waitSomeTime();
+	}
+    }
+
+    private void waitSomeTime() {
+	try {
+	    Thread.sleep(100L);
+	} catch (InterruptedException ex) {
+	    Logger.getLogger(Networking.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 }

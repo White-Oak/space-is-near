@@ -8,10 +8,14 @@ import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 
 import java.io.IOException;
+import lombok.Getter;
+import spaceisnear.game.layer.TiledLayer;
+import static spaceisnear.game.messages.MessageType.UNPAUSED;
 import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.GameObject;
 import static spaceisnear.game.objects.GameObjectType.PLAYER;
+import spaceisnear.server.Registerer;
 
 /**
  * @author LPzhelud
@@ -20,11 +24,11 @@ import static spaceisnear.game.objects.GameObjectType.PLAYER;
 
     private final GameContext gameContext;
     private Client client;
-    private boolean justConnected = true;
+    @Getter private boolean justConnected = true;
 
     public void connect(String host, int tcpPort) throws IOException {
 	client = new Client();
-	registerEverything();
+	Registerer.registerEverything(client);
 	client.start();
 	client.addListener(this);
 	client.connect(5000, host, tcpPort);
@@ -69,15 +73,20 @@ import static spaceisnear.game.objects.GameObjectType.PLAYER;
 		case PAUSED:
 		    gameContext.getCore().pause();
 		    break;
+		case UNPAUSED:
+		    gameContext.getCore().unpause();
+		    break;
 		case CREATED:
 		    MessageCreated mc = MessageCreated.getInstance(b);
 		    ObjectBundle ob = (ObjectBundle) (new Gson().fromJson(mc.getJson(), ObjectBundle.class));
 		    GameObject gameObject = null;
 		    if (justConnected) {
-			justConnected = false;
+			System.out.println("got some first object");
 			Player player = GamerPlayer.getInstance(ob, gameContext);
+			gameContext.setPlayerID(player.getId());
 			gameObject = player;
 			send(new MessageRogered());
+			justConnected = false;
 		    } else {
 			gameObject = getObjectFromBundle(ob);
 		    }
@@ -91,7 +100,8 @@ import static spaceisnear.game.objects.GameObjectType.PLAYER;
 	    System.out.println("Message received");
 	} else if (object instanceof JSONBundle) {
 	    //World received
-	    MessageCreated[] messages = new Gson().fromJson(((JSONBundle) object).getBody(), MessageCreated[].class);
+	    Object[] obs = new Gson().fromJson(((JSONBundle) object).getBody(), Object[].class);
+	    MessageCreated[] messages = (MessageCreated[]) obs[0];
 	    for (int i = 0; i < messages.length; i++) {
 		MessageCreated mc = messages[i];
 		ObjectBundle ob = (ObjectBundle) (new Gson().fromJson(mc.getJson(), ObjectBundle.class));
@@ -100,7 +110,11 @@ import static spaceisnear.game.objects.GameObjectType.PLAYER;
 		    gameContext.addObject(gameObject);
 		}
 	    }
+	    //Tiled Layer
+	    gameContext.getCamera().setTiledLayer((TiledLayer) obs[1]);
+	    gameContext.getCamera().delegateWidth();
 	    send(new MessageRogered());
+	    System.out.println("got all objects and tiled layer");
 	}
     }
 
@@ -118,19 +132,5 @@ import static spaceisnear.game.objects.GameObjectType.PLAYER;
 	if (client != null) {
 	    client.close();
 	}
-    }
-
-    public void registerEverything() {
-	register(Bundle.class);
-	register(MessageBundle.class);
-	register(byte[].class);
-    }
-
-    private void register(Class classs) {
-	Kryo kryo = null;
-	if (client != null) {
-	    kryo = client.getKryo();
-	}
-	kryo.register(classs);
     }
 }

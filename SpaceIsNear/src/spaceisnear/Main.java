@@ -17,7 +17,7 @@ import spaceisnear.game.Corev2;
 public class Main extends StateBasedGame {
 
     public Main(String name) {
-        super(name);
+	super(name);
     }
 
     public static void main(String[] args) throws SlickException {
@@ -30,8 +30,10 @@ public class Main extends StateBasedGame {
 
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
-//	addState(new Splash());
-        addState(new Menu());
-        addState(new Corev2());
+	//	addState(new Splash());
+	Corev2 corev2 = new Corev2();
+	addState(new Menu());
+	addState(new LoadingScreen(corev2));
+	addState(corev2);
     }
 }

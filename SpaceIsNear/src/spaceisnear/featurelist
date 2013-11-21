@@ -1,14 +1,17 @@
--Basic items system
--Obstacles' system
 +Objects' sending
 -Turning host button into 'hosting server and connecting to client' button:
 	+new Bundle system (no getBytes, but getBundle in NetworkableMessage)
 	+removed server from sin.game.Networking
 	+sending and receiving information about new client
-	+adding player when player is connected
 	+sending the world to the client
+	+adding player when player is connected
 	+pausing server when new client is connecting
 	+pausing clients when client is connecting
-	-unpausing
-	+adding some information to Player's object
-	+new message: connection broken
+	+unpausing
+	+starting server in separate thread
+	+adding loading screen (connecting)
++adding some information to Player's object
++new messages: connection broken, rogered
++new component: Name
+-Basic items system
+-Obstacles' system

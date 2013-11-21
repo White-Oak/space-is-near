@@ -32,33 +32,30 @@ public class Corev2 extends BasicGameState {
     private final ArrayList<GameObject> objects = new ArrayList<>();
     private final static int QUANT_TIME = 50;
     private int key;
-    public static boolean HOST;
     public static String IP;
     private boolean notpaused;
 
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
-	TiledLayer tiledLayer = null;
-	context = new GameContext(new CameraMan(tiledLayer), objects, this);
-	GamerPlayer player = new GamerPlayer(context);
-	context.addObject(player);
-	context.setPlayerID(player.getId());
+	context = new GameContext(new CameraMan(), objects, this);
 	context.getCamera().setWindowWidth(800);
 	context.getCamera().setWindowHeight(600);
-	context.getCamera().delegateWidth();
     }
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+    }
+
+    public void callToConnect() {
 	try {
-	    if (HOST) {
-		context.getNetworking().host();
-	    } else {
-		context.getNetworking().connect(IP, 54555);
-	    }
+	    context.getNetworking().connect(IP, 54555);
 	} catch (IOException ex) {
 	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
 	}
+    }
+
+    public boolean isJustConnected() {
+	return context.getNetworking().isJustConnected();
     }
 
     @Override
@@ -123,9 +120,14 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public int getID() {
-	return 2;
+	return 3;
     }
 
     public void pause() {
+	notpaused = false;
+    }
+
+    public void unpause() {
+	notpaused = true;
     }
 }

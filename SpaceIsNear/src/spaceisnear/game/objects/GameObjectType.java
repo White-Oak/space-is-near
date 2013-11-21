@@ -4,10 +4,13 @@
  */
 package spaceisnear.game.objects;
 
+import java.io.IOException;
+
 /**
  *
  * @author LPzhelud
  */
 public enum GameObjectType {
-    PLAYER, ITEM, GAMER_PLAYER
+
+    PLAYER, ITEM, GAMER_PLAYER;
 }

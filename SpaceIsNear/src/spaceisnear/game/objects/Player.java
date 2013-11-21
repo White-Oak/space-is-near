@@ -2,6 +2,7 @@ package spaceisnear.game.objects;
 
 import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
+import spaceisnear.game.components.NameComponent;
 import spaceisnear.game.components.PlayerComponent;
 import spaceisnear.game.components.PositionComponent;
 
@@ -15,15 +16,15 @@ public class Player extends GameObject {
 	super(GameObjectType.PLAYER, context);
 	PositionComponent pc = new PositionComponent(24, 18);
 
-	addComponents(pc, new PlayerComponent(pc));
+	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null));
     }
 
     public String getNickname() {
-	return ((PlayerComponent) getComponents().getLast()).getNickname();
+	return ((NameComponent) getComponents().getLast()).getNickname();
     }
 
     public void setNickname(String nickname) {
-	((PlayerComponent) getComponents().getLast()).setNickname(nickname);
+	((NameComponent) getComponents().getLast()).setNickname(nickname);
     }
 
     public static Player getInstance(ObjectBundle bundle, GameContext context) {

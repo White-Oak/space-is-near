@@ -1,6 +1,7 @@
 package spaceisnear.server.objects;
 
 import spaceisnear.game.bundles.ObjectBundle;
+import spaceisnear.game.components.NameComponent;
 import spaceisnear.game.components.PlayerComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.objects.GameObjectType;
@@ -18,16 +19,15 @@ public class Player extends GameObject {
 	super(GameObjectType.PLAYER, null);
 	PositionComponent pc = new PositionComponent(24, 18);
 
-	addComponents(pc, new PlayerComponent(pc));
+	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null));
 	this.connectionID = connectionID;
     }
-    
 
     public String getNickname() {
-	return ((PlayerComponent) getComponents().getLast()).getNickname();
+	return ((NameComponent) getComponents().getLast()).getNickname();
     }
 
     public void setNickname(String nickname) {
-	((PlayerComponent) getComponents().getLast()).setNickname(nickname);
+	((NameComponent) getComponents().getLast()).setNickname(nickname);
     }
 }

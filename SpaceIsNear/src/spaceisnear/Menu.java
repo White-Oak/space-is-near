@@ -4,6 +4,9 @@
  */
 package spaceisnear;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -16,6 +19,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 import spaceisnear.game.Corev2;
+import spaceisnear.server.ServerCore;
 
 /**
  *
@@ -62,16 +66,24 @@ public class Menu extends BasicGameState implements ComponentListener {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-	if (hostresult) {
-	    Corev2.HOST = true;
-	    game.enterState(2, new FadeOutTransition(Color.white, 400), new FadeInTransition(Color.white, 400));
-	}
-	if (state == 2 & !hostresult) {
-	    Corev2.HOST = false;
+	if (state == 2) {
+	    if (hostresult) {
+		ServerCore serverCore = new ServerCore();
+		try {
+		    serverCore.host();
+		} catch (IOException ex) {
+		    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		new Thread(serverCore).start();
+		Corev2.IP = "127.0.0.1";
+		System.out.println("Hosting...");
+	    }
 	    //вырезаем всё, кроме цифр и точек. бизапаснасть
-	    Corev2.IP = ip.getText().replaceAll("[^0-9^/.]", "");
-	    game.enterState(2, new FadeOutTransition(Color.white, 400), new FadeInTransition(Color.white, 400));
+	    if (Corev2.IP == null) {
+		Corev2.IP = ip.getText().replaceAll("[^0-9^/.]", "");
+	    }
 	    System.out.println("connecting to " + Corev2.IP + "...");
+	    game.enterState(2, new FadeOutTransition(Color.white, 400), new FadeInTransition(Color.white, 400));
 	}
 
     }
@@ -85,6 +97,7 @@ public class Menu extends BasicGameState implements ComponentListener {
 		switch (c) {
 		    case '1':
 			hostresult = true;
+			state = 2;
 			break;
 		    case '2':
 			state++;

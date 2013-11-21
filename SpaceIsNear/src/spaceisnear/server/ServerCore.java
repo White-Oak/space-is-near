@@ -4,6 +4,7 @@
  */
 package spaceisnear.server;
 
+import java.io.IOException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.newdawn.slick.Image;
@@ -27,9 +28,9 @@ public class ServerCore implements Runnable {
     private boolean paused = false;
     private final static int QUANT_TIME = 20;
     @Getter private boolean alreadyPaused;
+    @Getter private TiledLayer tiledLayer;
 
     public ServerCore() {
-	TiledLayer tiledLayer = null;
 	//<editor-fold defaultstate="collapsed" desc="map generating">
 	try {
 	    tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
@@ -70,7 +71,9 @@ public class ServerCore implements Runnable {
 		    gameObject.process();
 		}
 	    } else {
-		alreadyPaused = true;
+		if (!alreadyPaused) {
+		    alreadyPaused = true;
+		}
 	    }
 	    try {
 		Thread.sleep(QUANT_TIME);
@@ -89,6 +92,10 @@ public class ServerCore implements Runnable {
 	context.getNetworking().sendToAll(new MessageUnpaused());
 	paused = false;
 	alreadyPaused = false;
+    }
+
+    public void host() throws IOException {
+	getContext().getNetworking().host();
     }
 
     public Player addPlayer(int connectionID) {
