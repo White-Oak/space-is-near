@@ -15,6 +15,7 @@ public class PlayerComponent extends PaintableComponent {
 
     public PlayerComponent(PositionComponent positionComponent) {
 	super(positionComponent);
+	getStates().add(new ComponentState("nickname", ""));
     }
 
     @Override
@@ -30,5 +31,13 @@ public class PlayerComponent extends PaintableComponent {
 
     @Override
     public void processMessage(Message message) {
+    }
+
+    public String getNickname() {
+	return (String) getStates().get(1).getValue();
+    }
+
+    public void setNickname(String name) {
+	getStates().get(0).setValue(name);
     }
 }

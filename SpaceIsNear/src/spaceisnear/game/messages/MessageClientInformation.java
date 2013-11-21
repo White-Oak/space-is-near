@@ -12,12 +12,10 @@ import spaceisnear.game.bundles.MessageBundle;
 
 public class MessageClientInformation extends Message implements NetworkableMessage {
 
-    @Getter private final String IP;
     @Getter private final String desiredNickname;
 
-    public MessageClientInformation(String IP, String desiredNickname) {
+    public MessageClientInformation(String desiredNickname) {
 	super(MessageType.CLIENT_INFO);
-	this.IP = IP;
 	this.desiredNickname = desiredNickname;
     }
 

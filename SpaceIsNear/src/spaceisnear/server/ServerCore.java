@@ -20,9 +20,9 @@ import spaceisnear.game.messages.MessageUnpaused;
 /**
  * @author white_oak
  */
-public class ServerCore {
+public class ServerCore implements Runnable {
 
-    @Getter(AccessLevel.PRIVATE) private GameContext context;
+    @Getter(AccessLevel.PACKAGE) private GameContext context;
     private boolean unbreakable = true;
     private boolean paused = false;
     private final static int QUANT_TIME = 20;
@@ -61,7 +61,8 @@ public class ServerCore {
 	context = new GameContext(new Networking(this), new ArrayList<GameObject>());
     }
 
-    public void run() throws InterruptedException {
+    @Override
+    public void run() {
 	while (unbreakable) {
 	    if (paused) {
 		for (Iterator<GameObject> it = getContext().getObjects().iterator(); it.hasNext();) {
@@ -71,7 +72,11 @@ public class ServerCore {
 	    } else {
 		alreadyPaused = true;
 	    }
-	    Thread.sleep(QUANT_TIME);
+	    try {
+		Thread.sleep(QUANT_TIME);
+	    } catch (InterruptedException ex) {
+		Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+	    }
 	}
     }
 

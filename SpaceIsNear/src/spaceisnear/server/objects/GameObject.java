@@ -56,7 +56,7 @@ public abstract class GameObject {
     }
 
     private synchronized GameObjectState getState() {
-	return new GameObjectState(components.toArray(new Component[components.size()]), id, type);
+	return new GameObjectState(components.toArray(new Component[components.size()]));
     }
 
     public final synchronized ObjectBundle getBundle() {

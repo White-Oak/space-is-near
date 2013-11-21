@@ -4,6 +4,8 @@
  */
 package spaceisnear.game.objects;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import spaceisnear.game.components.Component;
 
@@ -13,7 +15,5 @@ import spaceisnear.game.components.Component;
  */
 @RequiredArgsConstructor public class GameObjectState {
 
-    private final Component[] components;
-    private final int id;
-    private final GameObjectType type;
+    @Getter(AccessLevel.PACKAGE) private final Component[] components;
 }

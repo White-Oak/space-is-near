@@ -2,11 +2,16 @@ package spaceisnear.game;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.*;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 
 import java.io.IOException;
+import spaceisnear.game.objects.GamerPlayer;
+import spaceisnear.game.objects.Player;
+import spaceisnear.game.objects.GameObject;
+import static spaceisnear.game.objects.GameObjectType.PLAYER;
 
 /**
  * @author LPzhelud
@@ -15,6 +20,7 @@ import java.io.IOException;
 
     private final GameContext gameContext;
     private Client client;
+    private boolean justConnected = true;
 
     public void connect(String host, int tcpPort) throws IOException {
 	client = new Client();
@@ -22,11 +28,12 @@ import java.io.IOException;
 	client.start();
 	client.addListener(this);
 	client.connect(5000, host, tcpPort);
+	send(new MessageClientInformation("fuck you"));
     }
 
     public void send(NetworkableMessage message) {
 	Bundle bundle = message.getBundle();
-	if (client != null) {
+	if (client != null && client.isConnected()) {
 	    client.sendTCP(bundle);
 	}
 	System.out.println("Message sent");
@@ -63,13 +70,48 @@ import java.io.IOException;
 		    gameContext.getCore().pause();
 		    break;
 		case CREATED:
+		    MessageCreated mc = MessageCreated.getInstance(b);
+		    ObjectBundle ob = (ObjectBundle) (new Gson().fromJson(mc.getJson(), ObjectBundle.class));
+		    GameObject gameObject = null;
+		    if (justConnected) {
+			justConnected = false;
+			Player player = GamerPlayer.getInstance(ob, gameContext);
+			gameObject = player;
+			send(new MessageRogered());
+		    } else {
+			gameObject = getObjectFromBundle(ob);
+		    }
+		    if (gameObject != null) {
+			gameContext.addObject(gameObject);
+		    }
 		    break;
 		case DIED:
 		    break;
 	    }
-
 	    System.out.println("Message received");
+	} else if (object instanceof JSONBundle) {
+	    //World received
+	    MessageCreated[] messages = new Gson().fromJson(((JSONBundle) object).getBody(), MessageCreated[].class);
+	    for (int i = 0; i < messages.length; i++) {
+		MessageCreated mc = messages[i];
+		ObjectBundle ob = (ObjectBundle) (new Gson().fromJson(mc.getJson(), ObjectBundle.class));
+		GameObject gameObject = getObjectFromBundle(ob);
+		if (gameObject != null) {
+		    gameContext.addObject(gameObject);
+		}
+	    }
+	    send(new MessageRogered());
 	}
+    }
+
+    private GameObject getObjectFromBundle(ObjectBundle ob) {
+	GameObject gameObject = null;
+	switch (ob.getObjectType()) {
+	    case PLAYER:
+		gameObject = Player.getInstance(ob, gameContext);
+		break;
+	}
+	return gameObject;
     }
 
     public void close() {
