@@ -6,11 +6,16 @@ package spaceisnear.game.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author white_oak
  */
 @AllArgsConstructor public class Position {
-    @Getter private final int x, y;
+
+    @Getter @Setter private int x, y;
+
+    Position() {
+    }
 }

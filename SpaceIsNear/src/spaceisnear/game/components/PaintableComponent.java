@@ -5,6 +5,7 @@
 package spaceisnear.game.components;
 
 import spaceisnear.game.GameContext;
+import spaceisnear.game.objects.Position;
 
 public abstract class PaintableComponent extends Component {
 
@@ -12,18 +13,22 @@ public abstract class PaintableComponent extends Component {
     }
 
     public PaintableComponent(PositionComponent positionComponent) {
-	getStates().add(new ComponentState("positionComponent", positionComponent));
+	getStates().add(new ComponentState("position", positionComponent.getPosition()));
     }
 
-    private PositionComponent getPositionComponent() {
-	return (PositionComponent) getStates().get(0).getValue();
+    public int getX() {
+	return ((Position) getStates().get(0).getValue()).getX();
+    }
+
+    public int getY() {
+	return ((Position) getStates().get(0).getValue()).getY();
     }
 
     public abstract void paintComponent(org.newdawn.slick.Graphics g);
 
     public final void paint(org.newdawn.slick.Graphics g) {
-	int xto = getPositionComponent().getX() * GameContext.TILE_WIDTH;
-	int yto = getPositionComponent().getY() * GameContext.TILE_HEIGHT;
+	int xto = getX() * GameContext.TILE_WIDTH;
+	int yto = getY() * GameContext.TILE_HEIGHT;
 	g.translate(xto, yto);
 	paintComponent(g);
 	g.translate(-xto, -yto);

@@ -33,12 +33,12 @@ public abstract class Component {
 	}
     }
 
-    public static Component getInstance(ComponentState[] states, Class component) {
+    public static Component getInstance(ComponentStateBundle[] states, Class component) throws ClassNotFoundException {
 	try {
 	    Component newInstance = (Component) component.newInstance();
 	    newInstance.states = new ArrayList<>();
 	    for (int i = 0; i < states.length; i++) {
-		ComponentState componentState = states[i];
+		ComponentState componentState = states[i].getState();
 		newInstance.states.add(componentState);
 	    }
 	    return newInstance;

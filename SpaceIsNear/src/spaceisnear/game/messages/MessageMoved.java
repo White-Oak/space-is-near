@@ -51,7 +51,7 @@ public class MessageMoved extends Message implements NetworkableMessage {
 	    Logger.getLogger(MessageMoved.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	byte[] by = b.toByteArray();
-	MessageBundle mb = new MessageBundle();
+	MessageBundle mb = new MessageBundle(getMessageType());
 	mb.bytes = by;
 	mb.messageType = getMessageType();
 	return mb;

@@ -11,6 +11,7 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
+import spaceisnear.game.components.ComponentStateBundle;
 import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageTimePassed;
@@ -55,11 +56,16 @@ public abstract class GameObject {
     }
 
     private synchronized GameObjectState getState() {
-	ComponentState[][] states = new ComponentState[components.size()][];
+	ComponentStateBundle[][] states = new ComponentStateBundle[components.size()][];
 	String[] classes = new String[components.size()];
 	for (int i = 0; i < classes.length; i++) {
 	    classes[i] = components.get(i).getClass().getName();
-	    states[i] = components.get(i).getStates().toArray(new ComponentState[components.get(i).getStates().size()]);
+	    ArrayList<ComponentState> states1 = components.get(i).getStates();
+	    ComponentStateBundle[] bundles = new ComponentStateBundle[states1.size()];
+	    for (int j = 0; j < bundles.length; j++) {
+		bundles[j] = new ComponentStateBundle(states1.get(i));
+	    }
+	    states[i] = bundles;
 	}
 	return new GameObjectState(states, classes);
     }

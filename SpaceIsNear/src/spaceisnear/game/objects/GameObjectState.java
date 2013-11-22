@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
+import spaceisnear.game.components.ComponentStateBundle;
 
 /**
  *
@@ -16,7 +17,7 @@ import spaceisnear.game.components.ComponentState;
  */
 @AllArgsConstructor public class GameObjectState {
 
-    private ComponentState[][] states;
+    private ComponentStateBundle[][] states;
     private String[] classes;
 
     GameObjectState() {
