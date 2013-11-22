@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectState;
@@ -56,7 +57,13 @@ public abstract class GameObject {
     }
 
     private synchronized GameObjectState getState() {
-	return new GameObjectState(components.toArray(new Component[components.size()]));
+	ComponentState[][] states = new ComponentState[components.size()][];
+	String[] classes = new String[components.size()];
+	for (int i = 0; i < classes.length; i++) {
+	    classes[i] = components.get(i).getClass().getName();
+	    states[i] = components.get(i).getStates().toArray(new ComponentState[components.get(i).getStates().size()]);
+	}
+	return new GameObjectState(states, classes);
     }
 
     public final synchronized ObjectBundle getBundle() {

@@ -8,6 +8,9 @@ import spaceisnear.game.GameContext;
 
 public abstract class PaintableComponent extends Component {
 
+    PaintableComponent() {
+    }
+
     public PaintableComponent(PositionComponent positionComponent) {
 	getStates().add(new ComponentState("positionComponent", positionComponent));
     }

@@ -9,6 +9,9 @@ import spaceisnear.game.messages.MessageNetworkState;
 
 public class UIComponent extends Component {
 
+    public UIComponent() {
+    }
+
     @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {

@@ -12,6 +12,7 @@ import spaceisnear.game.bundles.JSONBundle;
 import spaceisnear.game.bundles.MessageBundle;
 import spaceisnear.game.bundles.NullBundle;
 import spaceisnear.game.bundles.ObjectBundle;
+import spaceisnear.game.messages.MessageType;
 
 /**
  *
@@ -22,9 +23,7 @@ public class Registerer {
     private static Class[] classes = {
 	Bundle.class,
 	MessageBundle.class,
-	JSONBundle.class,
-	ObjectBundle.class,
-	NullBundle.class,
+	MessageType.class,
 	byte[].class,
 	String.class
     };

@@ -9,5 +9,7 @@ package spaceisnear.game.components;
  * @author LPzhelud
  */
 public class IntelligenceComponent {
-    
+
+    IntelligenceComponent() {
+    }
 }

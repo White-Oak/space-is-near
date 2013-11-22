@@ -4,11 +4,11 @@
  */
 package spaceisnear.game.objects;
 
-import lombok.AccessLevel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentState;
 
 /**
  *
@@ -16,8 +16,22 @@ import spaceisnear.game.components.Component;
  */
 @AllArgsConstructor public class GameObjectState {
 
-    @Getter(AccessLevel.PACKAGE) private Component[] components;
+    private ComponentState[][] states;
+    private String[] classes;
 
-    public GameObjectState() {
+    GameObjectState() {
+    }
+
+    public Component[] getComponents() {
+	Component[] components = new Component[classes.length];
+	for (int i = 0; i < classes.length; i++) {
+	    try {
+		Class class1 = Class.forName(classes[i]);
+		components[i] = Component.getInstance(states[i], class1);
+	    } catch (ClassNotFoundException ex) {
+		Logger.getLogger(GameObjectState.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	return components;
     }
 }

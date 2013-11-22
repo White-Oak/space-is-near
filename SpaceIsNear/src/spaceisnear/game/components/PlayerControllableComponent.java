@@ -19,6 +19,9 @@ import spaceisnear.game.objects.GameObject;
 
 public class PlayerControllableComponent extends Component {
 
+    PlayerControllableComponent() {
+    }
+
     public PlayerControllableComponent(GameObject owner) {
 	getStates().add(new ComponentState("owner", owner));
     }

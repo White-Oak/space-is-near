@@ -4,7 +4,7 @@
  */
 package spaceisnear.game.messages;
 
-import spaceisnear.game.bundles.Bundle;
+import spaceisnear.game.bundles.MessageBundle;
 
 /**
  *
@@ -12,6 +12,6 @@ import spaceisnear.game.bundles.Bundle;
  */
 public interface NetworkableMessage {
 
-    public Bundle getBundle();
+    public MessageBundle getBundle();
     public MessageType getMessageType();
 }

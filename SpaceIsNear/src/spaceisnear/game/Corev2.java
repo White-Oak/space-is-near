@@ -5,20 +5,17 @@
 package spaceisnear.game;
 
 import spaceisnear.game.objects.GameObject;
-import spaceisnear.game.objects.GamerPlayer;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import spaceisnear.game.components.PaintableComponent;
-import spaceisnear.game.layer.TiledLayer;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageTimePassed;
 

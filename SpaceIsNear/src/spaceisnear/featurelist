@@ -11,7 +11,7 @@
 	+starting server in separate thread
 	+adding loading screen (connecting)
 +adding some information to Player's object
-+new messages: connection broken, rogered
++new messages: connection broken, rogered, world sent, map sent
 +new component: Name
 -Basic items system
 -Obstacles' system

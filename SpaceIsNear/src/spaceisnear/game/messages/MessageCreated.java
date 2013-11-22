@@ -7,6 +7,7 @@ package spaceisnear.game.messages;
 import lombok.Getter;
 import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.bundles.JSONBundle;
+import spaceisnear.game.bundles.MessageBundle;
 import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
 
@@ -20,8 +21,10 @@ public class MessageCreated extends Message implements NetworkableMessage {
     }
 
     @Override
-    public Bundle getBundle() {
-	return new JSONBundle(json);
+    public MessageBundle getBundle() {
+	MessageBundle messageBundle = new MessageBundle(getMessageType());
+	messageBundle.bytes = json.getBytes();
+	return messageBundle;
     }
 
     public static MessageCreated getInstance(byte[] b) {

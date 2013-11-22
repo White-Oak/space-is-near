@@ -17,6 +17,9 @@ import spaceisnear.game.objects.Position;
 
 public class PositionComponent extends Component {
 
+    PositionComponent() {
+    }
+
     public PositionComponent(Position p) {
 	this(p.getX(), p.getY());
     }

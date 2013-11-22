@@ -35,18 +35,18 @@ public class ServerCore implements Runnable {
 	try {
 	    tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
 		    spaceisnear.game.GameContext.TILE_WIDTH,
-		    spaceisnear.game.GameContext.TILE_HEIGHT, 2048, 2048);
+		    spaceisnear.game.GameContext.TILE_HEIGHT, 128, 128);
 	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
 	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
 
 	    //карту рисуем, чо. пока так
 	    //тут заливка травой всей карты
-	    tiledLayer.fillRectTile(0, 0, 2048, 2048, 5);
+	    tiledLayer.fillRectTile(0, 0, 128, 128, 5);
 
 	    //генерируем по 12500 тайлов с землёй для более КРАСИВОГО ПЕЙЗАЖА
 	    Random rnd = new Random();
 	    //тут сделаем 200 "островков" с землёй по четыре тайла для ещё более КРАСИВОГО ПЕЙЗАЖА
-	    for (int i = 0; i < 200; i++) {
+	    for (int i = 0; i < 5; i++) {
 		int blockx = rnd.nextInt(124);
 		int blocky = rnd.nextInt(124);
 

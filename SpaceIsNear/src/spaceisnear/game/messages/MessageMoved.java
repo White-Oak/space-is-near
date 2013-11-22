@@ -39,7 +39,7 @@ public class MessageMoved extends Message implements NetworkableMessage {
     }
 
     @Override
-    public Bundle getBundle() {
+    public MessageBundle getBundle() {
 	ByteArrayOutputStream b = null;
 	try (ByteArrayOutputStream baos = new ByteArrayOutputStream(); DataOutputStream daos = new DataOutputStream(baos)) {
 	    daos.writeInt(x);
@@ -53,7 +53,7 @@ public class MessageMoved extends Message implements NetworkableMessage {
 	byte[] by = b.toByteArray();
 	MessageBundle mb = new MessageBundle();
 	mb.bytes = by;
-	mb.messageType = getMessageType().ordinal();
+	mb.messageType = getMessageType();
 	return mb;
     }
 

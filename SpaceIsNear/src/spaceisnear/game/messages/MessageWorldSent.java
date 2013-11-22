@@ -19,8 +19,8 @@ public class MessageWorldSent extends Message implements NetworkableMessage {
     }
 
     @Override
-    public Bundle getBundle() {
-	MessageBundle messageBundle = new MessageBundle(getMessageType().ordinal());
+    public MessageBundle getBundle() {
+	MessageBundle messageBundle = new MessageBundle(getMessageType());
 	messageBundle.bytes = new Gson().toJson(this).getBytes();
 	return messageBundle;
     }

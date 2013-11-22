@@ -18,6 +18,9 @@ public class ItemPaintableComponent extends PaintableComponent {
     public void processMessage(Message message) {
     }
 
+    ItemPaintableComponent() {
+    }
+
     public ItemPaintableComponent(PositionComponent positionComponent) {
 	super(positionComponent);
     }

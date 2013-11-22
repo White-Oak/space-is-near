@@ -13,7 +13,7 @@ import org.newdawn.slick.Image;
  */
 public class TiledLayer extends Layer {
 
-    @Getter(AccessLevel.PROTECTED) private final int[][] map;//[x][y]
+    @Getter @Setter private int[][] map;//[x][y]
 //    private NullLayer obstaclesMap;
     @Getter private final Image[] tiles;
     @Getter private final int tileWidth, tileHeight;

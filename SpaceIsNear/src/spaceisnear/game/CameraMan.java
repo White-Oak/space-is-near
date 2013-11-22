@@ -7,6 +7,8 @@ package spaceisnear.game;
 import lombok.Getter;
 import lombok.Setter;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import spaceisnear.game.layer.TiledLayer;
 
 /**
@@ -18,6 +20,12 @@ public class CameraMan {
     private int x, y;
     @Getter @Setter private TiledLayer tiledLayer;
     @Setter private int windowWidth, windowHeight;
+
+    public CameraMan() throws SlickException {
+	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
+		spaceisnear.game.GameContext.TILE_WIDTH,
+		spaceisnear.game.GameContext.TILE_HEIGHT, 128, 128);
+    }
 
     public void delegateWidth() {
 	tiledLayer.setWindowHeight(windowHeight);

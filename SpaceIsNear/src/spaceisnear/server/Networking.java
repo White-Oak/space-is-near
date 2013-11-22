@@ -4,7 +4,6 @@
  */
 package spaceisnear.server;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.*;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +14,10 @@ import spaceisnear.game.messages.NetworkableMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import spaceisnear.game.bundles.JSONBundle;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.messages.MessageClientInformation;
 import spaceisnear.game.messages.MessageConnectionBroken;
@@ -43,15 +42,25 @@ import spaceisnear.server.objects.Player;
     public void received(Connection connection, Object object) {
 	if (object instanceof MessageBundle) {
 	    MessageBundle bundle = (MessageBundle) object;
-	    MessageType mt = MessageType.values()[bundle.messageType];
+	    MessageType mt = bundle.messageType;
 	    byte[] b = bundle.bytes;
 	    switch (mt) {
 		case CLIENT_INFO:
 		    informationAboutLastConnected = MessageClientInformation.getInstance(b);
 		    System.out.println("Client information received");
 		    break;
+		case ROGERED:
+		    connections.toArray(new Connection[connections.size()]);
+		    for (int i = 0; i < connections.size(); i++) {
+			Connection connection1 = connections.get(i);
+			if (connection1.equals(connection)) {
+			    rogered[i] = true;
+			    System.out.println(i + " rogered");
+			}
+		    }
+		    break;
 	    }
-	    System.out.println("Message received");
+//	    System.out.println("Message received");
 	} else if (object instanceof String) {
 	    System.out.println(object);
 	}
@@ -60,7 +69,7 @@ import spaceisnear.server.objects.Player;
     public void sendToAll(NetworkableMessage message) {
 	Bundle b = message.getBundle();
 	server.sendToAllTCP(b);
-	System.out.println("Message sent");
+//	System.out.println("Message sent");
     }
 
     public void sendToID(int id, NetworkableMessage message) {
@@ -72,14 +81,14 @@ import spaceisnear.server.objects.Player;
 	sendToConnection(connections.get(id), bundle);
     }
 
-    private void sendToConnection(Connection c, Bundle bundle) {
-	server.sendToTCP(c.getID(), bundle);
-	System.out.println("Message sent");
-    }
-
     private void sendToConnection(Connection c, NetworkableMessage message) {
 	Bundle b = message.getBundle();
 	sendToConnection(c, b);
+    }
+
+    private void sendToConnection(Connection c, Bundle bundle) {
+	server.sendToTCP(c.getID(), bundle);
+//	System.out.println("Message sent");
     }
 
     @Override
@@ -96,7 +105,6 @@ import spaceisnear.server.objects.Player;
     }
 
     private MessageCreated createPlayerAndPrepare() {
-
 	//1
 	Player player = core.addPlayer(connections.size());
 	player.setNickname(informationAboutLastConnected.getDesiredNickname());
@@ -130,10 +138,10 @@ import spaceisnear.server.objects.Player;
 	//1
 	MessageWorldSent messageWorldSent = getWorldInOneJSON();
 	sendToID(connections.size() - 1, messageWorldSent);
-	System.out.println("World has sent");
+	System.out.println("World has sent " + messageWorldSent.getWorld().length());
 	MessageMapSent messageMapSent = getTiledLayerInOneJSON();
 	sendToID(connections.size() - 1, messageMapSent);
-	System.out.println("Map has sent");
+	System.out.println("Map has sent " + messageMapSent.getMap().length());
 	//2
 	MessageCreated messageCreated = createPlayerAndPrepare();
 	//waiting for client to process world
@@ -161,7 +169,7 @@ import spaceisnear.server.objects.Player;
     }
 
     private MessageMapSent getTiledLayerInOneJSON() {
-	return new MessageMapSent(new Gson().toJson(core.getTiledLayer()));
+	return new MessageMapSent(new Gson().toJson(core.getTiledLayer().getMap()));
     }
 
     private boolean isRogeredByAll() {
@@ -180,9 +188,7 @@ import spaceisnear.server.objects.Player;
     }
 
     private void resetRogeredStatuses() {
-	for (int i = 0; i < rogered.length; i++) {
-	    rogered[i] = false;
-	}
+	Arrays.fill(rogered, false);
     }
 
     private void waitForToRoger(int connectionId) {

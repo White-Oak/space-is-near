@@ -5,6 +5,7 @@
 package spaceisnear.game.bundles;
 
 import lombok.AllArgsConstructor;
+import spaceisnear.game.messages.MessageType;
 
 /**
  *
@@ -12,9 +13,5 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor public class MessageBundle extends Bundle {
 
-    public int messageType;
-
-    @Deprecated
-    public MessageBundle() {
-    }
+    public MessageType messageType;
 }

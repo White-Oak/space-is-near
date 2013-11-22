@@ -41,7 +41,7 @@ import spaceisnear.server.Registerer;
 	if (client != null && client.isConnected()) {
 	    client.sendTCP(bundle);
 	}
-	System.out.println("Message sent");
+//	System.out.println("Message sent");
     }
 
     @Override
@@ -64,7 +64,7 @@ import spaceisnear.server.Registerer;
     public void received(Connection connection, Object object) {
 	if (object instanceof MessageBundle) {
 	    MessageBundle bundle = (MessageBundle) object;
-	    MessageType mt = MessageType.values()[bundle.messageType];
+	    MessageType mt = bundle.messageType;
 	    byte[] b = bundle.bytes;
 	    switch (mt) {
 		case MOVED:
@@ -80,7 +80,7 @@ import spaceisnear.server.Registerer;
 		case CREATED:
 		    MessageCreated mc = MessageCreated.getInstance(b);
 		    ObjectBundle ob = (ObjectBundle) (new Gson().fromJson(mc.getJson(), ObjectBundle.class));
-		    GameObject gameObject = null;
+		    GameObject gameObject;
 		    if (justConnected) {
 			System.out.println("got some first object");
 			Player player = GamerPlayer.getInstance(ob, gameContext);
@@ -108,17 +108,18 @@ import spaceisnear.server.Registerer;
 			    gameContext.addObject(gameObject1);
 			}
 		    }
+		    System.out.println("got all objects");
 		    break;
 		case MAP_SENT:
 		    MessageMapSent mms = MessageMapSent.getInstance(b);
-		    TiledLayer tl = new Gson().fromJson(mms.getMap(), TiledLayer.class);
-		    gameContext.getCamera().setTiledLayer(tl);
+		    int[][] map = new Gson().fromJson(mms.getMap(), int[][].class);
+		    gameContext.getCamera().getTiledLayer().setMap(map);
 		    gameContext.getCamera().delegateWidth();
 		    send(new MessageRogered());
-		    System.out.println("got all objects and tiled layer");
+		    System.out.println("got tiled layer");
 		    break;
 	    }
-	    System.out.println("Message received");
+//	    System.out.println("Message received");
 	}
     }
 

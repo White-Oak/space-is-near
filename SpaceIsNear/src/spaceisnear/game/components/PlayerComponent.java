@@ -13,6 +13,9 @@ import spaceisnear.game.messages.Message;
  */
 public class PlayerComponent extends PaintableComponent {
 
+    PlayerComponent() {
+    }
+
     public PlayerComponent(PositionComponent positionComponent) {
 	super(positionComponent);
     }
