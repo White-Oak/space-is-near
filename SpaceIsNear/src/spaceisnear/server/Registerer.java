@@ -25,7 +25,8 @@ public class Registerer {
 	JSONBundle.class,
 	ObjectBundle.class,
 	NullBundle.class,
-	byte[].class
+	byte[].class,
+	String.class
     };
 
     public static void registerEverything(Server server) {

@@ -23,6 +23,8 @@ import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.messages.MessageClientInformation;
 import spaceisnear.game.messages.MessageConnectionBroken;
 import spaceisnear.game.messages.MessageCreated;
+import spaceisnear.game.messages.MessageMapSent;
+import spaceisnear.game.messages.MessageWorldSent;
 import spaceisnear.server.objects.GameObject;
 import spaceisnear.server.objects.Player;
 
@@ -45,11 +47,13 @@ import spaceisnear.server.objects.Player;
 	    byte[] b = bundle.bytes;
 	    switch (mt) {
 		case CLIENT_INFO:
-		    MessageClientInformation mci = MessageClientInformation.getInstance(b);
+		    informationAboutLastConnected = MessageClientInformation.getInstance(b);
+		    System.out.println("Client information received");
 		    break;
 	    }
-
 	    System.out.println("Message received");
+	} else if (object instanceof String) {
+	    System.out.println(object);
 	}
     }
 
@@ -84,6 +88,7 @@ import spaceisnear.server.objects.Player;
 	    core.pause();
 	    connections.add(connection);
 	    rogered = new boolean[connections.size()];
+	    new Thread(this).start();
 	} else {
 	    sendToConnection(connection, new MessageConnectionBroken());
 	    connection.close();
@@ -103,7 +108,7 @@ import spaceisnear.server.objects.Player;
     }
 
     public void host() throws IOException {
-	server = new Server();
+	server = new Server(10445718, 10445718);
 	Registerer.registerEverything(server);
 	server.start();
 	server.addListener(this);
@@ -115,7 +120,7 @@ import spaceisnear.server.objects.Player;
 	//wait for client to send information about clien
 	//and for server to finally pause
 	//@done use this info
-	while (informationAboutLastConnected != null && !core.isAlreadyPaused()) {
+	while (informationAboutLastConnected == null || !core.isAlreadyPaused()) {
 	    waitSomeTime();
 	}
 	//@working r36, r37, r38, r39
@@ -123,8 +128,12 @@ import spaceisnear.server.objects.Player;
 	//2. add a player
 	//3. send MessageCreated of Player to all connections
 	//1
-	JSONBundle worldInOneJSON = getWorldInOneJSON();
-	sendToID(connections.size() - 1, worldInOneJSON);
+	MessageWorldSent messageWorldSent = getWorldInOneJSON();
+	sendToID(connections.size() - 1, messageWorldSent);
+	System.out.println("World has sent");
+	MessageMapSent messageMapSent = getTiledLayerInOneJSON();
+	sendToID(connections.size() - 1, messageMapSent);
+	System.out.println("Map has sent");
 	//2
 	MessageCreated messageCreated = createPlayerAndPrepare();
 	//waiting for client to process world
@@ -132,22 +141,27 @@ import spaceisnear.server.objects.Player;
 	rogered[rogered.length - 1] = false;
 	//3
 	sendToAll(messageCreated);
+	System.out.println("Player has sent");
 	//wait for client to receive his player
 	waitForAllToRoger();
 	resetRogeredStatuses();
 	//
 	core.unpause();
+	System.out.println("Server has continued his work");
     }
 
-    private JSONBundle getWorldInOneJSON() {
+    private MessageWorldSent getWorldInOneJSON() {
 	GameContext context = core.getContext();
 	List<GameObject> objects = context.getObjects();
 	List<MessageCreated> messages = new ArrayList<>();
 	for (GameObject object : objects) {
 	    messages.add(new MessageCreated(new Gson().toJson(object.getBundle())));
 	}
-	Object[] objectss = new Object[]{messages.toArray(new MessageCreated[messages.size()]), core.getTiledLayer()};
-	return new JSONBundle(new Gson().toJson(objectss));
+	return new MessageWorldSent(new Gson().toJson(messages));
+    }
+
+    private MessageMapSent getTiledLayerInOneJSON() {
+	return new MessageMapSent(new Gson().toJson(core.getTiledLayer()));
     }
 
     private boolean isRogeredByAll() {

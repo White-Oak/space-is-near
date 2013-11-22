@@ -14,4 +14,7 @@ import spaceisnear.game.objects.GameObjectType;
     @Getter private GameObjectState state;
     @Getter private int objectID;
     @Getter private GameObjectType objectType;
+
+    public ObjectBundle() {
+    }
 }

@@ -4,13 +4,17 @@
  */
 package spaceisnear.game.bundles;
 
-import spaceisnear.game.messages.MessageType;
+import lombok.AllArgsConstructor;
 
 /**
  *
  * @author white_oak
  */
-public class MessageBundle extends Bundle {
+@AllArgsConstructor public class MessageBundle extends Bundle {
 
     public int messageType;
+
+    @Deprecated
+    public MessageBundle() {
+    }
 }

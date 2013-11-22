@@ -4,12 +4,16 @@
  */
 package spaceisnear.game.bundles;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor public class JSONBundle extends Bundle {
+@AllArgsConstructor public class JSONBundle extends Bundle {
 
-    @Getter private final String body;
+    @Getter private String body;
+
+    public JSONBundle() {
+    }
 
     @Override
     public byte[] getBytes() {

@@ -21,7 +21,7 @@ public class MessageClientInformation extends Message implements NetworkableMess
 
     @Override
     public Bundle getBundle() {
-	MessageBundle messageBundle = new MessageBundle();
+	MessageBundle messageBundle = new MessageBundle(MessageType.CLIENT_INFO.ordinal());
 	messageBundle.bytes = new Gson().toJson(this).getBytes();
 	return messageBundle;
     }

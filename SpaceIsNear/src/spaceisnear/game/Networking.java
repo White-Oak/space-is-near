@@ -1,6 +1,5 @@
 package spaceisnear.game;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.*;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +7,8 @@ import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import lombok.Getter;
 import spaceisnear.game.layer.TiledLayer;
 import static spaceisnear.game.messages.MessageType.UNPAUSED;
@@ -27,7 +28,7 @@ import spaceisnear.server.Registerer;
     @Getter private boolean justConnected = true;
 
     public void connect(String host, int tcpPort) throws IOException {
-	client = new Client();
+	client = new Client(10445718, 10445718);
 	Registerer.registerEverything(client);
 	client.start();
 	client.addListener(this);
@@ -96,25 +97,28 @@ import spaceisnear.server.Registerer;
 		    break;
 		case DIED:
 		    break;
+		case WORLD_SENT:
+		    MessageWorldSent mws = MessageWorldSent.getInstance(b);
+		    ArrayList<MessageCreated> messages = new Gson().fromJson(mws.getWorld(), ArrayList.class);
+		    for (Iterator<MessageCreated> it = messages.iterator(); it.hasNext();) {
+			MessageCreated mc1Created = it.next();
+			ObjectBundle ob1 = (ObjectBundle) (new Gson().fromJson(mc1Created.getJson(), ObjectBundle.class));
+			GameObject gameObject1 = getObjectFromBundle(ob1);
+			if (gameObject1 != null) {
+			    gameContext.addObject(gameObject1);
+			}
+		    }
+		    break;
+		case MAP_SENT:
+		    MessageMapSent mms = MessageMapSent.getInstance(b);
+		    TiledLayer tl = new Gson().fromJson(mms.getMap(), TiledLayer.class);
+		    gameContext.getCamera().setTiledLayer(tl);
+		    gameContext.getCamera().delegateWidth();
+		    send(new MessageRogered());
+		    System.out.println("got all objects and tiled layer");
+		    break;
 	    }
 	    System.out.println("Message received");
-	} else if (object instanceof JSONBundle) {
-	    //World received
-	    Object[] obs = new Gson().fromJson(((JSONBundle) object).getBody(), Object[].class);
-	    MessageCreated[] messages = (MessageCreated[]) obs[0];
-	    for (int i = 0; i < messages.length; i++) {
-		MessageCreated mc = messages[i];
-		ObjectBundle ob = (ObjectBundle) (new Gson().fromJson(mc.getJson(), ObjectBundle.class));
-		GameObject gameObject = getObjectFromBundle(ob);
-		if (gameObject != null) {
-		    gameContext.addObject(gameObject);
-		}
-	    }
-	    //Tiled Layer
-	    gameContext.getCamera().setTiledLayer((TiledLayer) obs[1]);
-	    gameContext.getCamera().delegateWidth();
-	    send(new MessageRogered());
-	    System.out.println("got all objects and tiled layer");
 	}
     }
 

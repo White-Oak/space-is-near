@@ -65,7 +65,7 @@ public class ServerCore implements Runnable {
     @Override
     public void run() {
 	while (unbreakable) {
-	    if (paused) {
+	    if (!paused) {
 		for (Iterator<GameObject> it = getContext().getObjects().iterator(); it.hasNext();) {
 		    GameObject gameObject = it.next();
 		    gameObject.process();
