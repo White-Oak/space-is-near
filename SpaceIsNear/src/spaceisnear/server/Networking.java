@@ -23,6 +23,7 @@ import spaceisnear.game.messages.MessageClientInformation;
 import spaceisnear.game.messages.MessageConnectionBroken;
 import spaceisnear.game.messages.MessageCreated;
 import spaceisnear.game.messages.MessageMapSent;
+import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.MessageWorldSent;
 import spaceisnear.server.objects.GameObject;
 import spaceisnear.server.objects.Player;
@@ -58,6 +59,11 @@ import spaceisnear.server.objects.Player;
 			    System.out.println(i + " rogered");
 			}
 		    }
+		    break;
+		case MOVED:
+		    MessageMoved mm = MessageMoved.getInstance(b);
+		    core.getContext().sendToID(mm, mm.getId());
+		    sendToAll(mm);
 		    break;
 	    }
 //	    System.out.println("Message received");
@@ -165,7 +171,7 @@ import spaceisnear.server.objects.Player;
 	for (GameObject object : objects) {
 	    messages.add(new MessageCreated(new Gson().toJson(object.getBundle())));
 	}
-	return new MessageWorldSent(new Gson().toJson(messages));
+	return new MessageWorldSent(new Gson().toJson(messages.toArray(new MessageCreated[messages.size()])));
     }
 
     private MessageMapSent getTiledLayerInOneJSON() {

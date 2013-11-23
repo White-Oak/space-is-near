@@ -31,6 +31,7 @@ public class PlayerComponent extends PaintableComponent {
 	g.drawLine(w - 1, 1, 1, h);
     }
 
+    
     @Override
     public void processMessage(Message message) {
     }

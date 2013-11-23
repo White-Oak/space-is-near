@@ -86,6 +86,7 @@ public class ServerCore implements Runnable {
     public void pause() {
 	paused = true;
 	context.getNetworking().sendToAll(new MessagePaused());
+	System.out.println("Server's been paused");
     }
 
     public void unpause() {

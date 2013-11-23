@@ -83,13 +83,17 @@ import spaceisnear.server.Registerer;
 		    GameObject gameObject;
 		    if (justConnected) {
 			System.out.println("got some first object");
-			Player player = GamerPlayer.getInstance(ob, gameContext);
+			GamerPlayer player = GamerPlayer.getInstance(ob, gameContext);
+			player.setId(ob.getObjectID());
 			gameContext.setPlayerID(player.getId());
 			gameObject = player;
 			send(new MessageRogered());
 			justConnected = false;
 		    } else {
 			gameObject = getObjectFromBundle(ob);
+			if (!gameContext.getCore().isNotpaused() && gameObject instanceof Player) {
+			    send(new MessageRogered());
+			}
 		    }
 		    if (gameObject != null) {
 			gameContext.addObject(gameObject);
@@ -99,10 +103,11 @@ import spaceisnear.server.Registerer;
 		    break;
 		case WORLD_SENT:
 		    MessageWorldSent mws = MessageWorldSent.getInstance(b);
-		    ArrayList<MessageCreated> messages = new Gson().fromJson(mws.getWorld(), ArrayList.class);
-		    for (Iterator<MessageCreated> it = messages.iterator(); it.hasNext();) {
-			MessageCreated mc1Created = it.next();
-			ObjectBundle ob1 = (ObjectBundle) (new Gson().fromJson(mc1Created.getJson(), ObjectBundle.class));
+		    MessageCreated[] messages = new Gson().fromJson(mws.getWorld(), MessageCreated[].class);
+		    for (int i = 0; i < messages.length; i++) {
+			MessageCreated messageCreated = messages[i];
+			ObjectBundle ob1 = (ObjectBundle) (new Gson().fromJson(messageCreated.getJson(),
+				ObjectBundle.class));
 			GameObject gameObject1 = getObjectFromBundle(ob1);
 			if (gameObject1 != null) {
 			    gameContext.addObject(gameObject1);

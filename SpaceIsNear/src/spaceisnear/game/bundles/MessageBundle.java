@@ -14,4 +14,7 @@ import spaceisnear.game.messages.MessageType;
 @AllArgsConstructor public class MessageBundle extends Bundle {
 
     public MessageType messageType;
+
+    public MessageBundle() {
+    }
 }

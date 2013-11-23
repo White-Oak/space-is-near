@@ -27,7 +27,7 @@ public abstract class GameObject {
     @Getter @Setter(AccessLevel.PROTECTED) private boolean destroyed = false;
     @Getter(AccessLevel.PROTECTED) private LinkedList<Component> components = new LinkedList<>();
     @Getter private final GameObjectType type;
-    @Getter private final GameContext context;
+    @Getter @Setter(AccessLevel.PROTECTED) private GameContext context;
 
     public GameObject(GameObjectType type, GameContext context) {
 	this.type = type;

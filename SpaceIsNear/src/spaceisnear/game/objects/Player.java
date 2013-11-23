@@ -2,6 +2,8 @@ package spaceisnear.game.objects;
 
 import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
+import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.NameComponent;
 import spaceisnear.game.components.PlayerComponent;
 import spaceisnear.game.components.PositionComponent;
@@ -19,6 +21,10 @@ public class Player extends GameObject {
 	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null));
     }
 
+    Player() {
+	super(GameObjectType.PLAYER, null);
+    }
+
     public String getNickname() {
 	return ((NameComponent) getComponents().getLast()).getNickname();
     }
@@ -28,9 +34,24 @@ public class Player extends GameObject {
     }
 
     public static Player getInstance(ObjectBundle bundle, GameContext context) {
-	Player player = new Player(context);
+	Player player = new Player();
+	player.setContext(context);
 	player.setId(bundle.getObjectID());
-	player.addComponents(bundle.getState().getComponents());
+	Component[] components = bundle.getState().getComponents();
+	Position p = null;
+	for (int i = 0; i < components.length; i++) {
+	    Component component = components[i];
+	    if (component instanceof PositionComponent) {
+		p = ((PositionComponent) component).getPosition();
+	    }
+	}
+	for (int i = 0; i < components.length; i++) {
+	    Component component = components[i];
+	    if (component instanceof PlayerComponent) {
+		((PlayerComponent) component).getStates().set(0, new ComponentState("position", p));
+	    }
+	}
+	player.addComponents(components);
 	return player;
     }
 }

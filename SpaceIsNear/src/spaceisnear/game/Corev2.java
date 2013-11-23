@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -30,7 +31,7 @@ public class Corev2 extends BasicGameState {
     private final static int QUANT_TIME = 50;
     private int key;
     public static String IP;
-    private boolean notpaused;
+    @Getter private boolean notpaused;
 
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
@@ -126,5 +127,6 @@ public class Corev2 extends BasicGameState {
 
     public void unpause() {
 	notpaused = true;
+	System.out.println("Client has continued his work");
     }
 }

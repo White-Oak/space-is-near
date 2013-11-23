@@ -41,6 +41,8 @@ import java.util.*;
     public synchronized Player addPlayer(int connectionID) {
 	Player player = new Player(this, connectionID);
 	players.add(player);
+	objects.add(player);
+	player.setId(objects.size() - 1);
 	return player;
     }
 

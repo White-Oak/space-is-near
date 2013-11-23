@@ -22,12 +22,12 @@ public class PlayerControllableComponent extends Component {
     PlayerControllableComponent() {
     }
 
-    public PlayerControllableComponent(GameObject owner) {
+    public PlayerControllableComponent(int owner) {
 	getStates().add(new ComponentState("owner", owner));
     }
 
     private GameObject getOwner() {
-	return (GameObject) getStates().get(0).getValue();
+	return ((GameContext) getContext()).getObjects().get((Integer) getStates().get(0).getValue());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class PlayerControllableComponent extends Component {
 			break;
 		}
 		if (mm != null) {
-		    getOwner().message(mm);
+//		    getOwner().message(mm);
 		    ((GameContext) getContext()).getNetworking().send(mm);
 		}
 	}
