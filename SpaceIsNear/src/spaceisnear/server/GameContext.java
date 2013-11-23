@@ -11,6 +11,7 @@ import spaceisnear.server.objects.GameObject;
 import spaceisnear.server.objects.Player;
 
 import java.util.*;
+import spaceisnear.game.messages.DirectedMessage;
 
 /**
  * @author LPzhelud
@@ -23,9 +24,11 @@ import java.util.*;
     private final List<Player> players = new LinkedList<>();
 
     public synchronized void sendThemAll(Message m) {
-	for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
-	    GameObject gameObject = it.next();
-	    gameObject.message(m);
+	if (!(m instanceof DirectedMessage)) {
+	    for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
+		GameObject gameObject = it.next();
+		gameObject.message(m);
+	    }
 	}
     }
 

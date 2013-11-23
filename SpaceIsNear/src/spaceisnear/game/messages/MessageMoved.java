@@ -15,7 +15,7 @@ import lombok.*;
 import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.bundles.MessageBundle;
 
-public class MessageMoved extends Message implements NetworkableMessage {
+public class MessageMoved extends DirectedMessage implements NetworkableMessage {
 
     @Getter private final int x, y;
     @Getter private final int id;

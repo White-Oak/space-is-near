@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import lombok.*;
 import spaceisnear.game.components.PaintableComponent;
+import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
 
 /**
@@ -30,9 +31,11 @@ import spaceisnear.game.messages.Message;
     }
 
     public void sendThemAll(Message m) {
-	for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
-	    GameObject gameObject = it.next();
-	    gameObject.message(m);
+	if (!(m instanceof DirectedMessage)) {
+	    for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
+		GameObject gameObject = it.next();
+		gameObject.message(m);
+	    }
 	}
     }
 
