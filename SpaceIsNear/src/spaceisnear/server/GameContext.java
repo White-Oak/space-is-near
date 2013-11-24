@@ -25,8 +25,7 @@ import spaceisnear.game.messages.DirectedMessage;
 
     public synchronized void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
-	    for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
-		GameObject gameObject = it.next();
+	    for (GameObject gameObject : objects) {
 		gameObject.message(m);
 	    }
 	}

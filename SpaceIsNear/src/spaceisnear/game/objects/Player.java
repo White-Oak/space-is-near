@@ -7,8 +7,10 @@ import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.NameComponent;
 import spaceisnear.game.components.PlayerComponent;
 import spaceisnear.game.components.PositionComponent;
+import spaceisnear.game.components.inventory.InventoryComponent;
 
 /**
+ * Some player's object.
  *
  * @author LPzhelud
  */
@@ -18,7 +20,7 @@ public class Player extends GameObject {
 	super(GameObjectType.PLAYER, context);
 	PositionComponent pc = new PositionComponent(24, 18);
 
-	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null));
+	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null), new InventoryComponent());
     }
 
     Player() {

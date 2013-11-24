@@ -69,9 +69,7 @@ public class Corev2 extends BasicGameState {
 	    if (mc != null && playerID != -1) {
 		context.sendToID(mc, playerID);
 	    }
-	    //
-	    for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
-		GameObject gameObject = it.next();
+	    for (GameObject gameObject : objects) {
 		gameObject.process();
 	    }
 	}

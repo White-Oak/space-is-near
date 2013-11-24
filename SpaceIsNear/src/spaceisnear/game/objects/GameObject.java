@@ -14,7 +14,6 @@ import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentStateBundle;
 import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageTimePassed;
 
 /**
  *
@@ -22,10 +21,10 @@ import spaceisnear.game.messages.MessageTimePassed;
  */
 public abstract class GameObject {
 
-    private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter(AccessLevel.PROTECTED) private boolean destroyed = false;
-    @Getter(AccessLevel.PROTECTED) private LinkedList<Component> components = new LinkedList<>();
+    @Getter(AccessLevel.PROTECTED) private final LinkedList<Component> components = new LinkedList<>();
     @Getter private final GameObjectType type;
     @Getter @Setter(AccessLevel.PROTECTED) private GameContext context;
 
@@ -41,8 +40,7 @@ public abstract class GameObject {
     }
 
     public synchronized final void addComponents(Component... a) {
-	for (int i = 0; i < a.length; i++) {
-	    Component component = a[i];
+	for (Component component : a) {
 	    component.setContext(context);
 	    if (component instanceof PaintableComponent) {
 		context.addPaintable((PaintableComponent) component);

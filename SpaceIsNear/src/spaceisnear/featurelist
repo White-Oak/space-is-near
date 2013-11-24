@@ -15,4 +15,8 @@
 +new component: Name
 +there are now directed and non-diected messages. Directed cannot be sent to everyone
 -Basic items system
+    -new items: Cloth, Tool, Environment
 -Obstacles' system
+-Inventory
+    -each inventory consists of inventory slots
+    -each inventory slot has his size, item field and name

@@ -35,7 +35,7 @@ import spaceisnear.server.objects.Player;
 
     public Server server;
     private final ServerCore core;
-    private ArrayList<Connection> connections = new ArrayList<>();
+    private final ArrayList<Connection> connections = new ArrayList<>();
     private MessageClientInformation informationAboutLastConnected;
     private boolean[] rogered;
 

@@ -15,6 +15,7 @@ import spaceisnear.server.objects.Player;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.newdawn.slick.SlickException;
 import spaceisnear.game.messages.MessagePaused;
 import spaceisnear.game.messages.MessageUnpaused;
 
@@ -23,8 +24,8 @@ import spaceisnear.game.messages.MessageUnpaused;
  */
 public class ServerCore implements Runnable {
 
-    @Getter(AccessLevel.PACKAGE) private GameContext context;
-    private boolean unbreakable = true;
+    @Getter(AccessLevel.PACKAGE) private final GameContext context;
+    private final boolean unbreakable = true;
     private boolean paused = false;
     private final static int QUANT_TIME = 20;
     @Getter private boolean alreadyPaused;
@@ -55,7 +56,7 @@ public class ServerCore implements Runnable {
 		tiledLayer.setTile(blockx, blocky + 1, 9);
 		tiledLayer.setTile(blockx + 1, blocky + 1, 10);
 	    }
-	} catch (Exception ex) {
+	} catch (SlickException ex) {
 	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	//</editor-fold>
@@ -66,8 +67,7 @@ public class ServerCore implements Runnable {
     public void run() {
 	while (unbreakable) {
 	    if (!paused) {
-		for (Iterator<GameObject> it = getContext().getObjects().iterator(); it.hasNext();) {
-		    GameObject gameObject = it.next();
+		for (GameObject gameObject : getContext().getObjects()) {
 		    gameObject.process();
 		}
 	    } else {

@@ -6,7 +6,6 @@ package spaceisnear.server.objects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AccessLevel;
@@ -16,7 +15,6 @@ import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentStateBundle;
-import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
@@ -28,10 +26,10 @@ import spaceisnear.server.GameContext;
  */
 public abstract class GameObject {
 
-    private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter(AccessLevel.PROTECTED) private boolean destroyed = false;
-    @Getter(AccessLevel.PROTECTED) private LinkedList<Component> components = new LinkedList<>();
+    @Getter(AccessLevel.PROTECTED) private final LinkedList<Component> components = new LinkedList<>();
     @Getter private final GameObjectType type;
     @Getter private final GameContext context;
 
@@ -47,8 +45,7 @@ public abstract class GameObject {
     }
 
     public synchronized final void addComponents(Component... a) {
-	for (int i = 0; i < a.length; i++) {
-	    Component component = a[i];
+	for (Component component : a) {
 	    component.setContext(context);
 	}
 	this.components.addAll(Arrays.asList(a));
@@ -83,8 +80,7 @@ public abstract class GameObject {
 	}
 	while (messages.size() > 0) {
 	    Message message = messages.poll();
-	    for (Iterator<Component> it = components.iterator(); it.hasNext();) {
-		Component component = it.next();
+	    for (Component component : components) {
 		component.processMessage(message);
 	    }
 	}

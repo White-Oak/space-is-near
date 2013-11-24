@@ -19,9 +19,9 @@ import spaceisnear.game.messages.Message;
 @RequiredArgsConstructor public class GameContext {
 
     @Getter private final CameraMan camera;
-    @Getter private ArrayList<PaintableComponent> paintables = new ArrayList<>();
+    @Getter private final ArrayList<PaintableComponent> paintables = new ArrayList<>();
     public static final int TILE_HEIGHT = 16, TILE_WIDTH = 16;
-    @Getter private Networking networking = new Networking(this);
+    @Getter private final Networking networking = new Networking(this);
     @Getter private final ArrayList<GameObject> objects;
     @Getter @Setter private int playerID = -1;
     @Getter(AccessLevel.PACKAGE) private final Corev2 core;
@@ -32,8 +32,7 @@ import spaceisnear.game.messages.Message;
 
     public void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
-	    for (Iterator<GameObject> it = objects.iterator(); it.hasNext();) {
-		GameObject gameObject = it.next();
+	    for (GameObject gameObject : objects) {
 		gameObject.message(m);
 	    }
 	}

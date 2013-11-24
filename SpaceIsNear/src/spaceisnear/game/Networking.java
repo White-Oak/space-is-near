@@ -7,10 +7,7 @@ import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import lombok.Getter;
-import spaceisnear.game.layer.TiledLayer;
 import static spaceisnear.game.messages.MessageType.UNPAUSED;
 import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.objects.Player;
@@ -104,8 +101,7 @@ import spaceisnear.server.Registerer;
 		case WORLD_SENT:
 		    MessageWorldSent mws = MessageWorldSent.getInstance(b);
 		    MessageCreated[] messages = new Gson().fromJson(mws.getWorld(), MessageCreated[].class);
-		    for (int i = 0; i < messages.length; i++) {
-			MessageCreated messageCreated = messages[i];
+		    for (MessageCreated messageCreated : messages) {
 			ObjectBundle ob1 = (ObjectBundle) (new Gson().fromJson(messageCreated.getJson(),
 				ObjectBundle.class));
 			GameObject gameObject1 = getObjectFromBundle(ob1);

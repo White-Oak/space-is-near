@@ -2,7 +2,6 @@ package spaceisnear.game.layer;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.newdawn.slick.Image;

@@ -11,10 +11,7 @@ import spaceisnear.game.objects.GameObjectType;
 
 @AllArgsConstructor public class ObjectBundle extends Bundle {
 
-    @Getter private GameObjectState state;
-    @Getter private int objectID;
-    @Getter private GameObjectType objectType;
-
-    public ObjectBundle() {
-    }
+    @Getter private final GameObjectState state;
+    @Getter private final int objectID;
+    @Getter private final GameObjectType objectType;
 }

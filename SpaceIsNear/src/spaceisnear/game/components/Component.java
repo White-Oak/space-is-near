@@ -5,12 +5,9 @@
 package spaceisnear.game.components;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.*;
-import spaceisnear.game.GameContext;
-import spaceisnear.game.objects.GameObject;
 import spaceisnear.game.messages.Message;
 
 /**
@@ -37,8 +34,8 @@ public abstract class Component {
 	try {
 	    Component newInstance = (Component) component.newInstance();
 	    newInstance.states = new ArrayList<>();
-	    for (int i = 0; i < states.length; i++) {
-		ComponentState componentState = states[i].getState();
+	    for (ComponentStateBundle state : states) {
+		ComponentState componentState = state.getState();
 		newInstance.states.add(componentState);
 	    }
 	    return newInstance;

@@ -14,9 +14,9 @@ import lombok.Setter;
  */
 public class ComponentStateBundle {
 
-    private String name;
-    private String value;
-    private String className;
+    private final String name;
+    private final String value;
+    private final String className;
 
     public ComponentStateBundle(ComponentState state) {
 	name = state.getName();
