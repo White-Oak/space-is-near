@@ -9,7 +9,7 @@ import lombok.Setter;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import spaceisnear.game.layer.TiledLayer;
+import spaceisnear.game.layer.*;
 
 /**
  *
@@ -21,10 +21,17 @@ public class CameraMan {
     @Getter @Setter private TiledLayer tiledLayer;
     @Setter private int windowWidth, windowHeight;
 
+    @Getter private final ObstaclesLayer obstacles;
+    @Getter private final AtmosphericLayer atmosphere;
+
     public CameraMan() throws SlickException {
+	final int width = 128;
+	final int height = width;
 	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
 		spaceisnear.game.GameContext.TILE_WIDTH,
-		spaceisnear.game.GameContext.TILE_HEIGHT, 128, 128);
+		spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
+	obstacles = new ObstaclesLayer(width, height);
+	atmosphere = new AtmosphericLayer(width, height);
     }
 
     public void delegateWidth() {

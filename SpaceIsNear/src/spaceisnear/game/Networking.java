@@ -112,8 +112,8 @@ import static spaceisnear.Utils.GSON;
 		case MAP_SENT:
 		    MessageMapSent mms = MessageMapSent.getInstance(b);
 		    int[][] map = GSON.fromJson(mms.getMap(), int[][].class);
-		    gameContext.getCamera().getTiledLayer().setMap(map);
-		    gameContext.getCamera().delegateWidth();
+		    gameContext.getCameraMan().getTiledLayer().setMap(map);
+		    gameContext.getCameraMan().delegateWidth();
 		    send(new MessageRogered());
 		    System.out.println("got tiled layer");
 		    break;

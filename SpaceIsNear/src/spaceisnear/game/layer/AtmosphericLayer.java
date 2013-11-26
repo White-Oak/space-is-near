@@ -11,7 +11,7 @@ import java.util.Arrays;
  *
  * @author White Oak
  */
-public class AtmosphericLayer {
+public class AtmosphericLayer extends Layer {
 
     private final int[][] map;
     /**
@@ -22,9 +22,14 @@ public class AtmosphericLayer {
      * Maximum pressure which one node can distribute over to other nodes.
      */
     private final static int MAX_CHANGE_OF_PRESSURE_PER_TICK = 30;
+    public final static int PRESSURE_HARD_TO_BREATH = 60, PRESSURE_ENOUGH_TO_BREATH = 40;
 
     public AtmosphericLayer(int width, int height) {
+	super(width, height);
 	map = new int[width][height];
+	for (int[] is : map) {
+	    Arrays.fill(is, 100);
+	}
     }
 
     public void tick() {
@@ -32,31 +37,29 @@ public class AtmosphericLayer {
 	//The full cycle of corners is 
 	//top left -> bottom right -> bottom left -> top right -> top left ->...
 	if ((tickState & 0b10) != 0) {
-	    for (int i = 0; i < map.length; i++) {
-		int[] is = map[i];
+	    for (int i = 0; i < getHeight(); i++) {
 		if ((tickState & 0b1) != 0) {
 		    //top left
-		    for (int j = 0; j < is.length; j++) {
+		    for (int j = 0; j < getWidth(); j++) {
 			processPressureIn(i, j);
 		    }
 		} else {
 		    //top right
-		    for (int j = is.length - 1; j > 0; j--) {
+		    for (int j = getWidth() - 1; j > 0; j--) {
 			processPressureIn(i, j);
 		    }
 		}
 	    }
 	} else {
-	    for (int i = map.length - 1; i > 0; i--) {
-		int[] is = map[i];
+	    for (int i = getHeight() - 1; i > 0; i--) {
 		if ((tickState & 0b1) != 0) {
 		    //bottom left
-		    for (int j = 0; j < is.length; j++) {
+		    for (int j = 0; j < getWidth(); j++) {
 			processPressureIn(i, j);
 		    }
 		} else {
 		    //bottom right
-		    for (int j = is.length - 1; j > 0; j--) {
+		    for (int j = getWidth() - 1; j > 0; j--) {
 			processPressureIn(i, j);
 		    }
 		}
@@ -116,6 +119,10 @@ public class AtmosphericLayer {
 	} catch (ArrayIndexOutOfBoundsException e) {
 	    return -1;
 	}
+    }
+
+    public boolean isBreatheable(int x, int y) {
+	return getPressure(x, y) > PRESSURE_ENOUGH_TO_BREATH;
     }
 
     private void setPressure(int x, int y, int value) {

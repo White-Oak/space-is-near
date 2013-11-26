@@ -5,7 +5,8 @@
  */
 package spaceisnear;
 
-import spaceisnear.game.layer.TiledLayer;
+import spaceisnear.game.CameraMan;
+import spaceisnear.game.messages.Message;
 
 /**
  *
@@ -13,5 +14,11 @@ import spaceisnear.game.layer.TiledLayer;
  */
 public abstract class Context {
 
-    public abstract TiledLayer getTiledLayer();
+    public final static int NETWORKING_ID = 0;
+
+    public abstract CameraMan getCameraMan();
+
+    public abstract void sendThemAll(Message m);
+
+    public abstract void sendToID(Message m, int id);
 }

@@ -29,3 +29,10 @@
     -each inventory slot has his size, item field and name
 *PlayerControllableComponent was replaced with GamePlayerPositionComponent
 -Camera movement for teleporting messages
++added NetworkingComponent and MessageToSend for the architecture to look more good
+-added HealthComponent
+    +atnosphere
+    -actual hitpoints
++added HurtMessage
+    +types of damage
+    -acceptance on server

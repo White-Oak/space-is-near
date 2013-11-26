@@ -10,11 +10,12 @@ import java.util.Arrays;
  *
  * @author White Oak
  */
-public class ObstaclesLayer {
+public class ObstaclesLayer extends Layer {
 
     private final boolean[][] obstacles;
 
     public ObstaclesLayer(int width, int height) {
+	super(width, height);
 	obstacles = new boolean[width][height];
 	for (boolean[] bs : obstacles) {
 	    Arrays.fill(bs, true);

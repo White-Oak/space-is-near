@@ -19,6 +19,4 @@ public abstract class Layer {
 	this.width = width;
 	this.height = height;
     }
-
-    public abstract void paintLayer(org.newdawn.slick.Graphics g);
 }

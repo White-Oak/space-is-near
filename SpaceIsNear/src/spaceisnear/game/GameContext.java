@@ -19,7 +19,7 @@ import spaceisnear.game.layer.TiledLayer;
  */
 @RequiredArgsConstructor public class GameContext extends Context {
 
-    @Getter private final CameraMan camera;
+    @Getter private final CameraMan cameraMan;
     @Getter private final ArrayList<PaintableComponent> paintables = new ArrayList<>();
     public static final int TILE_HEIGHT = 16, TILE_WIDTH = 16;
     @Getter private final Networking networking = new Networking(this);
@@ -31,6 +31,7 @@ import spaceisnear.game.layer.TiledLayer;
 	paintables.add(paintableComponent);
     }
 
+    @Override
     public void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
 	    for (GameObject gameObject : objects) {
@@ -39,6 +40,7 @@ import spaceisnear.game.layer.TiledLayer;
 	}
     }
 
+    @Override
     public void sendToID(Message m, int id) {
 	objects.get(id).message(m);
     }
@@ -46,10 +48,5 @@ import spaceisnear.game.layer.TiledLayer;
     public synchronized void addObject(GameObject gameObject) {
 	objects.add(gameObject);
 	gameObject.setId(objects.size() - 1);
-    }
-
-    @Override
-    public TiledLayer getTiledLayer() {
-	return camera.getTiledLayer();
     }
 }

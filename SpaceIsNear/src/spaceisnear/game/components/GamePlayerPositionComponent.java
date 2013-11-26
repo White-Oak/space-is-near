@@ -6,11 +6,10 @@
 package spaceisnear.game.components;
 
 import spaceisnear.Context;
-import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
-import spaceisnear.game.objects.GameObject;
+import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.Position;
 
 public class GamePlayerPositionComponent extends PositionComponent {
@@ -20,10 +19,6 @@ public class GamePlayerPositionComponent extends PositionComponent {
 	getStates().add(new ComponentState("owner", owner));
     }
 
-    private GameObject getOwner() {
-	return ((GameContext) getContext()).getObjects().get((Integer) getStateNamed("owner"));
-    }
-
     @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
@@ -31,10 +26,10 @@ public class GamePlayerPositionComponent extends PositionComponent {
 		MessageMoved messagem = (MessageMoved) message;
 		int newX = getX() + messagem.getX();
 		int newY = getY() + messagem.getY();
-		if (((Context) getContext()).getTiledLayer().getObstacles().isReacheable(newX, newY)) {
+		if (((Context) getContext()).getCameraMan().getObstacles().isReacheable(newX, newY)) {
 		    setX(newX);
 		    setY(newY);
-		    ((GameContext) getContext()).getCamera().setNewCameraPositionFor(messagem.getX(), messagem.getY());
+		    ((Context) getContext()).getCameraMan().setNewCameraPositionFor(messagem.getX(), messagem.getY());
 		}
 		break;
 	    case TELEPORTED:
@@ -62,8 +57,7 @@ public class GamePlayerPositionComponent extends PositionComponent {
 			break;
 		}
 		if (mm != null) {
-//		    getOwner().message(mm);
-		    ((GameContext) getContext()).getNetworking().send(mm);
+		    getContext().sendToID(new MessageToSend(mm), Context.NETWORKING_ID);
 		}
 	}
     }

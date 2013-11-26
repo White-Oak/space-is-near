@@ -50,7 +50,7 @@ public class PositionComponent extends Component {
 		MessageMoved messagem = (MessageMoved) message;
 		int newX = getX() + messagem.getX();
 		int newY = getY() + messagem.getY();
-		if (((Context) getContext()).getTiledLayer().getObstacles().isReacheable(newX, newY)) {
+		if (((Context) getContext()).getCameraMan().getObstacles().isReacheable(newX, newY)) {
 		    setX(newX);
 		    setY(newY);
 		}

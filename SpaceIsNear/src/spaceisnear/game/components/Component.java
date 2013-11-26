@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import lombok.*;
 import spaceisnear.game.messages.Message;
 import spaceisnear.Context;
+import spaceisnear.game.GameContext;
+import spaceisnear.game.objects.GameObject;
 
 /**
  *
@@ -51,5 +53,13 @@ public abstract class Component {
 	    }
 	}
 	return null;
+    }
+
+    protected GameObject getOwner() {
+	return ((GameContext) getContext()).getObjects().get(getOwnerId());
+    }
+
+    protected int getOwnerId() {
+	return (Integer) getStateNamed("owner");
     }
 }

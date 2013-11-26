@@ -36,8 +36,8 @@ public class Corev2 extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
 	context = new GameContext(new CameraMan(), objects, this);
-	context.getCamera().setWindowWidth(800);
-	context.getCamera().setWindowHeight(600);
+	context.getCameraMan().setWindowWidth(800);
+	context.getCameraMan().setWindowHeight(600);
     }
 
     @Override
@@ -106,12 +106,12 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame sbg, Graphics g) throws SlickException {
-	context.getCamera().moveCamera(g);
-	context.getCamera().paint(g);
+	context.getCameraMan().moveCamera(g);
+	context.getCameraMan().paint(g);
 	for (PaintableComponent paintableComponent : context.getPaintables()) {
 	    paintableComponent.paint(g);
 	}
-	context.getCamera().unmoveCamera(g);
+	context.getCameraMan().unmoveCamera(g);
     }
 
     @Override
