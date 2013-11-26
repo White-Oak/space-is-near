@@ -1,3 +1,4 @@
+0.0.1 r44
 +Objects' sending
 +Turning host button into 'hosting server and connecting to client' button:
 	+new Bundle system (no getBytes, but getBundle in NetworkableMessage)
@@ -13,10 +14,18 @@
 +adding some information to Player's object
 +new messages: connection broken, rogered, world sent, map sent
 +new component: Name
-+there are now directed and non-diected messages. Directed cannot be sent to everyone
+
+0.0.2
++there are now directed and non-directed messages. Directed cannot be sent to everyone
 -Basic items system
-    -new items: Cloth, Tool, Environment
+    +new items: Cloth, Tool, Environment
 -Obstacles' system
+    +Obstacles layer
+    +checking for reacheableness in PositionComponent
+-Atmosphere
+    +Atmosphere layer
 -Inventory
     -each inventory consists of inventory slots
     -each inventory slot has his size, item field and name
+*PlayerControllableComponent was replaced with GamePlayerPositionComponent
+-Camera movement for teleporting messages

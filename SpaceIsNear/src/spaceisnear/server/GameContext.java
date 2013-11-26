@@ -11,17 +11,20 @@ import spaceisnear.server.objects.GameObject;
 import spaceisnear.server.objects.Player;
 
 import java.util.*;
+import spaceisnear.Context;
+import spaceisnear.game.layer.TiledLayer;
 import spaceisnear.game.messages.DirectedMessage;
 
 /**
  * @author LPzhelud
  */
-@RequiredArgsConstructor public class GameContext {
+@RequiredArgsConstructor public class GameContext extends Context{
 
     public static final int TILE_HEIGHT = 16, TILE_WIDTH = 16;
     @Getter private final Networking networking;
     @Getter private final List<GameObject> objects;
     private final List<Player> players = new LinkedList<>();
+    @Getter private final TiledLayer tiledLayer;
 
     public synchronized void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
@@ -43,8 +46,7 @@ import spaceisnear.game.messages.DirectedMessage;
     public synchronized Player addPlayer(int connectionID) {
 	Player player = new Player(this, connectionID);
 	players.add(player);
-	objects.add(player);
-	player.setId(objects.size() - 1);
+	addObject(player);
 	return player;
     }
 

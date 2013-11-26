@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
+import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.MessagePaused;
 import spaceisnear.game.messages.MessageUnpaused;
 
@@ -60,7 +61,7 @@ public class ServerCore implements Runnable {
 	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	//</editor-fold>
-	context = new GameContext(new Networking(this), new ArrayList<GameObject>());
+	context = new GameContext(new Networking(this), new ArrayList<GameObject>(), tiledLayer);
     }
 
     @Override

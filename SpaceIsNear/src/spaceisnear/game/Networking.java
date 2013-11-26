@@ -1,19 +1,17 @@
 package spaceisnear.game;
 
 import com.esotericsoftware.kryonet.*;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 
 import java.io.IOException;
 import lombok.Getter;
-import static spaceisnear.game.messages.MessageType.UNPAUSED;
 import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.GameObject;
-import static spaceisnear.game.objects.GameObjectType.PLAYER;
 import spaceisnear.server.Registerer;
+import static spaceisnear.Utils.GSON;
 
 /**
  * @author LPzhelud
@@ -76,7 +74,7 @@ import spaceisnear.server.Registerer;
 		    break;
 		case CREATED:
 		    MessageCreated mc = MessageCreated.getInstance(b);
-		    ObjectBundle ob = (ObjectBundle) (new Gson().fromJson(mc.getJson(), ObjectBundle.class));
+		    ObjectBundle ob = (ObjectBundle) (GSON.fromJson(mc.getJson(), ObjectBundle.class));
 		    GameObject gameObject;
 		    if (justConnected) {
 			System.out.println("got some first object");
@@ -100,9 +98,9 @@ import spaceisnear.server.Registerer;
 		    break;
 		case WORLD_SENT:
 		    MessageWorldSent mws = MessageWorldSent.getInstance(b);
-		    MessageCreated[] messages = new Gson().fromJson(mws.getWorld(), MessageCreated[].class);
+		    MessageCreated[] messages = GSON.fromJson(mws.getWorld(), MessageCreated[].class);
 		    for (MessageCreated messageCreated : messages) {
-			ObjectBundle ob1 = (ObjectBundle) (new Gson().fromJson(messageCreated.getJson(),
+			ObjectBundle ob1 = (ObjectBundle) (GSON.fromJson(messageCreated.getJson(),
 				ObjectBundle.class));
 			GameObject gameObject1 = getObjectFromBundle(ob1);
 			if (gameObject1 != null) {
@@ -113,7 +111,7 @@ import spaceisnear.server.Registerer;
 		    break;
 		case MAP_SENT:
 		    MessageMapSent mms = MessageMapSent.getInstance(b);
-		    int[][] map = new Gson().fromJson(mms.getMap(), int[][].class);
+		    int[][] map = GSON.fromJson(mms.getMap(), int[][].class);
 		    gameContext.getCamera().getTiledLayer().setMap(map);
 		    gameContext.getCamera().delegateWidth();
 		    send(new MessageRogered());

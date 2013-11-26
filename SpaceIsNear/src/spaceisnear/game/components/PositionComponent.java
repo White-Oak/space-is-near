@@ -4,9 +4,11 @@
  */
 package spaceisnear.game.components;
 
+import spaceisnear.Context;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.objects.Position;
+import spaceisnear.server.GameContext;
 
 public class PositionComponent extends Component {
 
@@ -46,12 +48,17 @@ public class PositionComponent extends Component {
 	switch (message.getMessageType()) {
 	    case MOVED:
 		MessageMoved messagem = (MessageMoved) message;
-		setX(getX() + messagem.getX());
-		setY(getY() + messagem.getY());
+		int newX = getX() + messagem.getX();
+		int newY = getY() + messagem.getY();
+		if (((Context) getContext()).getTiledLayer().getObstacles().isReacheable(newX, newY)) {
+		    setX(newX);
+		    setY(newY);
+		}
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
 		MessageMoved messagetMessageMoved = (MessageMoved) message;
+		//here no check for obstacles
 		setX(messagetMessageMoved.getX());
 		setY(messagetMessageMoved.getY());
 		break;

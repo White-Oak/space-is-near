@@ -14,7 +14,9 @@ import spaceisnear.game.objects.Position;
  *
  * @author white_oak
  */
-public abstract class StaticItem extends GameObject {    
+public abstract class StaticItem extends GameObject {
+
+    private boolean blockable, airBlockable;
 
     public StaticItem(GameContext context, Position p) {
 	super(GameObjectType.ITEM, context);

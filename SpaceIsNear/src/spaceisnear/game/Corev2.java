@@ -75,6 +75,16 @@ public class Corev2 extends BasicGameState {
 	}
     }
 
+    @Override
+    public void keyPressed(int key, char c) {
+	this.key = key;
+    }
+
+    @Override
+    public void keyReleased(int key, char c) {
+	this.key = 0;
+    }
+
     private MessageControlled checkKeys() {
 	MessageControlled mc = null;
 	switch (key) {
@@ -102,16 +112,6 @@ public class Corev2 extends BasicGameState {
 	    paintableComponent.paint(g);
 	}
 	context.getCamera().unmoveCamera(g);
-    }
-
-    @Override
-    public void keyPressed(int key, char c) {
-	this.key = key;
-    }
-
-    @Override
-    public void keyReleased(int key, char c) {
-	this.key = 0;
     }
 
     @Override

@@ -8,15 +8,21 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
+import spaceisnear.game.components.GamePlayerPositionComponent;
 import spaceisnear.game.components.PlayerComponent;
-import spaceisnear.game.components.PlayerControllableComponent;
 import spaceisnear.game.components.PositionComponent;
 
 public class GamerPlayer extends Player {
 
     public GamerPlayer(GameContext context) {
 	super(context);
-	addComponents(new PlayerControllableComponent(this.getId()));
+	for (int i = 0; i < getComponents().size(); i++) {
+	    Component component = getComponents().get(i);
+	    if (component instanceof PositionComponent) {
+		getComponents().set(i, new GamePlayerPositionComponent(((PositionComponent) component).getPosition(),
+			this.getId()));
+	    }
+	}
     }
 
     GamerPlayer() {
@@ -31,17 +37,18 @@ public class GamerPlayer extends Player {
 	for (int i = 0; i < components.length; i++) {
 	    Component component = components[i];
 	    if (component instanceof PositionComponent) {
+		components[i] = new GamePlayerPositionComponent(((PositionComponent) component).getPosition(),
+			player.getId());
+
 		p = ((PositionComponent) component).getPosition();
 	    }
 	}
-	for (int i = 0; i < components.length; i++) {
-	    Component component = components[i];
+	for (Component component : components) {
 	    if (component instanceof PlayerComponent) {
 		((PlayerComponent) component).getStates().set(0, new ComponentState("position", p));
 	    }
 	}
 	player.addComponents(components);
-	player.addComponents(new PlayerControllableComponent(player.getId()));
 	return player;
     }
 }

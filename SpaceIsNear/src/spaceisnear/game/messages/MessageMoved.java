@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.*;
-import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.bundles.MessageBundle;
 
 public class MessageMoved extends DirectedMessage implements NetworkableMessage {
@@ -31,7 +30,7 @@ public class MessageMoved extends DirectedMessage implements NetworkableMessage 
      * Only for MessageTeleported subclass
      *
      */
-    MessageMoved(int x, int y, int id, int unused) {
+    protected MessageMoved(int x, int y, int id, int unused) {
 	super(MessageType.TELEPORTED);
 	this.x = x;
 	this.y = y;

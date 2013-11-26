@@ -27,6 +27,7 @@ import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.MessageWorldSent;
 import spaceisnear.server.objects.GameObject;
 import spaceisnear.server.objects.Player;
+import static spaceisnear.Utils.GSON;
 
 /**
  * @author white_oak
@@ -116,8 +117,7 @@ import spaceisnear.server.objects.Player;
 	player.setNickname(informationAboutLastConnected.getDesiredNickname());
 	//2
 	ObjectBundle bundle = player.getBundle();
-	Gson gson = new Gson();
-	MessageCreated messageCreated = new MessageCreated(gson.toJson(bundle));
+	MessageCreated messageCreated = new MessageCreated(GSON.toJson(bundle));
 	return messageCreated;
     }
 
@@ -169,13 +169,13 @@ import spaceisnear.server.objects.Player;
 	List<GameObject> objects = context.getObjects();
 	List<MessageCreated> messages = new ArrayList<>();
 	for (GameObject object : objects) {
-	    messages.add(new MessageCreated(new Gson().toJson(object.getBundle())));
+	    messages.add(new MessageCreated(GSON.toJson(object.getBundle())));
 	}
-	return new MessageWorldSent(new Gson().toJson(messages.toArray(new MessageCreated[messages.size()])));
+	return new MessageWorldSent(GSON.toJson(messages.toArray(new MessageCreated[messages.size()])));
     }
 
     private MessageMapSent getTiledLayerInOneJSON() {
-	return new MessageMapSent(new Gson().toJson(core.getTiledLayer().getMap()));
+	return new MessageMapSent(GSON.toJson(core.getTiledLayer().getMap()));
     }
 
     private boolean isRogeredByAll() {

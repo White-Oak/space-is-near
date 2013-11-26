@@ -1,33 +1,27 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package spaceisnear.game.components;
 
+import spaceisnear.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageControlled;
-import static spaceisnear.game.messages.MessageControlled.Type.DOWN;
-import static spaceisnear.game.messages.MessageControlled.Type.LEFT;
-import static spaceisnear.game.messages.MessageControlled.Type.RIGHT;
-import static spaceisnear.game.messages.MessageControlled.Type.UP;
 import spaceisnear.game.messages.MessageMoved;
-import spaceisnear.game.messages.MessageType;
-import static spaceisnear.game.messages.MessageType.MOVED;
-import static spaceisnear.game.messages.MessageType.TELEPORTED;
 import spaceisnear.game.objects.GameObject;
+import spaceisnear.game.objects.Position;
 
-public class PlayerControllableComponent extends Component {
+public class GamePlayerPositionComponent extends PositionComponent {
 
-    PlayerControllableComponent() {
-    }
-
-    public PlayerControllableComponent(int owner) {
+    public GamePlayerPositionComponent(Position p, int owner) {
+	super(p);
 	getStates().add(new ComponentState("owner", owner));
     }
 
     private GameObject getOwner() {
-	return ((GameContext) getContext()).getObjects().get((Integer) getStates().get(0).getValue());
+	return ((GameContext) getContext()).getObjects().get((Integer) getStateNamed("owner"));
     }
 
     @Override
@@ -35,13 +29,20 @@ public class PlayerControllableComponent extends Component {
 	switch (message.getMessageType()) {
 	    case MOVED:
 		MessageMoved messagem = (MessageMoved) message;
-		((GameContext) getContext()).getCamera().setNewCameraPositionFor(messagem.getX(), messagem.getY());
+		int newX = getX() + messagem.getX();
+		int newY = getY() + messagem.getY();
+		if (((Context) getContext()).getTiledLayer().getObstacles().isReacheable(newX, newY)) {
+		    setX(newX);
+		    setY(newY);
+		    ((GameContext) getContext()).getCamera().setNewCameraPositionFor(messagem.getX(), messagem.getY());
+		}
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
 		MessageMoved messagetMessageMoved = (MessageMoved) message;
-		((GameContext) getContext()).getCamera().setNewCameraPositionFor(messagetMessageMoved.getX(),
-			messagetMessageMoved.getY());
+		//here no check for obstacles
+		setX(messagetMessageMoved.getX());
+		setY(messagetMessageMoved.getY());
 		break;
 	    case CONTROLLED:
 		MessageControlled mc = (MessageControlled) message;
@@ -66,4 +67,5 @@ public class PlayerControllableComponent extends Component {
 		}
 	}
     }
+
 }

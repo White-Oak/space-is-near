@@ -17,6 +17,7 @@ public class TiledLayer extends Layer {
     @Getter private final Image[] tiles;
     @Getter private final int tileWidth, tileHeight;
     @Getter private final int horizontalTilesNumber, verticalTilesNumber;
+    @Getter private final ObstaclesLayer obstacles;
     private int maxXTiles, maxYTiles;
     private int startx, starty;
     private int startx_absolute, starty_absolute;
@@ -69,6 +70,7 @@ public class TiledLayer extends Layer {
 	map = new int[width][height];
 	horizontalTilesNumber = width;
 	verticalTilesNumber = height;
+	obstacles = new ObstaclesLayer(width, height);
     }
 
     private Image[] chopImage(Image image) {

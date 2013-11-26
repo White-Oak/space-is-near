@@ -18,6 +18,7 @@ public class Player extends GameObject {
     public Player(GameContext context, int connectionID) {
 	super(GameObjectType.PLAYER, null);
 	PositionComponent pc = new PositionComponent(24, 18);
+	pc.setContext(context);
 
 	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null));
 	this.connectionID = connectionID;

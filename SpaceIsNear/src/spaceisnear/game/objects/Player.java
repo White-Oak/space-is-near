@@ -41,14 +41,12 @@ public class Player extends GameObject {
 	player.setId(bundle.getObjectID());
 	Component[] components = bundle.getState().getComponents();
 	Position p = null;
-	for (int i = 0; i < components.length; i++) {
-	    Component component = components[i];
+	for (Component component : components) {
 	    if (component instanceof PositionComponent) {
 		p = ((PositionComponent) component).getPosition();
 	    }
 	}
-	for (int i = 0; i < components.length; i++) {
-	    Component component = components[i];
+	for (Component component : components) {
 	    if (component instanceof PlayerComponent) {
 		((PlayerComponent) component).getStates().set(0, new ComponentState("position", p));
 	    }
