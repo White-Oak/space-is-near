@@ -1,9 +1,12 @@
 package spaceisnear.server.objects;
 
-import spaceisnear.game.bundles.ObjectBundle;
+import lombok.Getter;
+import spaceisnear.game.components.BreathingComponent;
+import spaceisnear.game.components.HealthComponent;
 import spaceisnear.game.components.NameComponent;
 import spaceisnear.game.components.PlayerComponent;
 import spaceisnear.game.components.PositionComponent;
+import spaceisnear.game.components.inventory.InventoryComponent;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.server.GameContext;
 
@@ -14,13 +17,16 @@ import spaceisnear.server.GameContext;
 public class Player extends GameObject {
 
     public int connectionID;
+    @Getter private final HealthComponent healthComponent;
 
     public Player(GameContext context, int connectionID) {
 	super(GameObjectType.PLAYER, null);
 	PositionComponent pc = new PositionComponent(24, 18);
 	pc.setContext(context);
 
-	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null));
+	healthComponent = new HealthComponent();
+	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null), healthComponent,
+		new BreathingComponent(), new InventoryComponent());
 	this.connectionID = connectionID;
     }
 

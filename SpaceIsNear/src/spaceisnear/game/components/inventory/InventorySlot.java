@@ -4,6 +4,7 @@
  */
 package spaceisnear.game.components.inventory;
 
+import spaceisnear.game.objects.items.Size;
 import lombok.Getter;
 import lombok.Setter;
 import spaceisnear.game.objects.items.StaticItem;

@@ -29,7 +29,7 @@ public abstract class GameObject {
     private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter(AccessLevel.PROTECTED) private boolean destroyed = false;
-    @Getter(AccessLevel.PROTECTED) private final LinkedList<Component> components = new LinkedList<>();
+    @Getter private final LinkedList<Component> components = new LinkedList<>();
     @Getter private final GameObjectType type;
     @Getter private final GameContext context;
 

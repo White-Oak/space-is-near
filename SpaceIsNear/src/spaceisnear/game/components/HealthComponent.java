@@ -5,13 +5,8 @@
  */
 package spaceisnear.game.components;
 
-import java.util.LinkedList;
-import spaceisnear.Context;
-import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.messages.HurtMessage;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageToSend;
-import spaceisnear.game.objects.Position;
 
 /**
  *
@@ -19,21 +14,41 @@ import spaceisnear.game.objects.Position;
  */
 public class HealthComponent extends Component {
 
+    public static final int MAX_HEALTH = 100;
+    public static final int MIN_HEALTH = 0;
+    public static final int CRIT_HEALTH = 20;
+    public static final int SICK_HEALTH = 80;
+
+    public HealthComponent() {
+	addState(new ComponentState("health", 100));
+    }
+
     @Override
     public void processMessage(Message message) {
-	AtmosphericLayer atmosphere = getContext().getCameraMan().getAtmosphere();
-	LinkedList<Component> components = getOwner().getComponents();
-	Position p = null;
-	for (Component component : components) {
-	    if (component instanceof PositionComponent) {
-		p = ((PositionComponent) component).getPosition();
-	    }
-	}
-	if (!atmosphere.isBreatheable(p.getX(), p.getY())) {
-	    HurtMessage hurtMessage = new HurtMessage(5, HurtMessage.Type.SUFFOCATING);
-	    getContext().sendToID(hurtMessage, getOwnerId());
-	    getContext().sendToID(new MessageToSend(hurtMessage), Context.NETWORKING_ID);
+	switch (message.getMessageType()) {
+	    case HURT:
+		HurtMessage hm = (HurtMessage) message;
+		ComponentState health = getStateNamed("health");
+		health.setValue(((Integer) health.getValue()) - hm.getDamage());
+		break;
 	}
     }
 
+    public State getState() {
+	int health = (Integer) getStateValueNamed("health");
+	if (health > SICK_HEALTH) {
+	    return State.ALLRIGHT;
+	} else if (health > CRIT_HEALTH) {
+	    return State.SICK;
+	} else if (health > MIN_HEALTH) {
+	    return State.CRITICICAL;
+	} else {
+	    return State.DEAD;
+	}
+    }
+
+    public enum State {
+
+	ALLRIGHT, DEAD, CRITICICAL, SICK
+    }
 }

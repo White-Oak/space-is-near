@@ -6,10 +6,13 @@ package spaceisnear.game.messages;
 
 import com.google.gson.Gson;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.bundles.MessageBundle;
 
+/**
+ * Sent only when client is connected to server for the first time.
+ *
+ * @author White Oak
+ */
 public class MessageClientInformation extends Message implements NetworkableMessage {
 
     @Getter private final String desiredNickname;

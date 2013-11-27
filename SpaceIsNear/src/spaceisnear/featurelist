@@ -19,6 +19,7 @@
 +there are now directed and non-directed messages. Directed cannot be sent to everyone
 -Basic items system
     +new items: Cloth, Tool, Environment
+    -designed definition's format
 -Obstacles' system
     +Obstacles layer
     +checking for reacheableness in PositionComponent
@@ -31,8 +32,11 @@
 -Camera movement for teleporting messages
 +added NetworkingComponent and MessageToSend for the architecture to look more good
 -added HealthComponent
-    +atnosphere
-    -actual hitpoints
+    +actual hitpoints
+    +states
++server processes health states of players
 +added HurtMessage
     +types of damage
+    -acceptance on server
++added MessageKnockbacked
     -acceptance on server

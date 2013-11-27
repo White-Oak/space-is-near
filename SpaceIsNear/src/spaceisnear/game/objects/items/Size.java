@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.components.inventory;
+package spaceisnear.game.objects.items;
 
 /**
  * Sizes of items.

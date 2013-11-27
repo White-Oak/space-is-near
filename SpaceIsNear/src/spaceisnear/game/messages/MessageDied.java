@@ -4,7 +4,7 @@
  */
 package spaceisnear.game.messages;
 
-public class MessageDied extends DirectedMessage {
+public class MessageDied extends DirectedMessage implements NetworkableMessage {
 
     public MessageDied() {
 	super(MessageType.DIED);

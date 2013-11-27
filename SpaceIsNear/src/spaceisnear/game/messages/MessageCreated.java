@@ -7,6 +7,11 @@ package spaceisnear.game.messages;
 import lombok.Getter;
 import spaceisnear.game.bundles.MessageBundle;
 
+/**
+ * Sent only by server as a result of Items' interactions.
+ *
+ * @author White Oak
+ */
 public class MessageCreated extends Message implements NetworkableMessage {
 
     @Getter private final String json;

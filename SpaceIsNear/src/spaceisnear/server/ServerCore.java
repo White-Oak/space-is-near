@@ -16,8 +16,13 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
+import spaceisnear.game.components.Component;
+import spaceisnear.game.components.HealthComponent;
 import spaceisnear.game.layer.ObstaclesLayer;
+import spaceisnear.game.messages.MessageDied;
+import spaceisnear.game.messages.MessageKnockbacked;
 import spaceisnear.game.messages.MessagePaused;
+import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.MessageUnpaused;
 
 /**
@@ -70,6 +75,22 @@ public class ServerCore implements Runnable {
 	    if (!paused) {
 		for (GameObject gameObject : getContext().getObjects()) {
 		    gameObject.process();
+		}
+		for (Player player : getContext().getPlayers()) {
+		    HealthComponent hc = player.getHealthComponent();
+		    switch (hc.getState()) {
+			case CRITICICAL:
+			    MessageKnockbacked messageKnockbacked = new MessageKnockbacked();
+			    getContext().sendToID(messageKnockbacked, player.getId());
+			    getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
+			    break;
+			case DEAD:
+			    MessageDied messageDied = new MessageDied();
+			    getContext().sendToID(messageDied, player.getId());
+			    getContext().sendToID(new MessageToSend(messageDied), player.getId());
+			    break;
+
+		    }
 		}
 	    } else {
 		if (!alreadyPaused) {

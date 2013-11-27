@@ -4,6 +4,11 @@
  */
 package spaceisnear.game.messages;
 
+/**
+ * Not used yet.
+ *
+ * @author White Oak
+ */
 public class MessageConnectionBroken extends Message implements NetworkableMessage {
 
     public MessageConnectionBroken() {

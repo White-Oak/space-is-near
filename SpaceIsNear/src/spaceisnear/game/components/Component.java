@@ -5,7 +5,6 @@
 package spaceisnear.game.components;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.*;
@@ -46,7 +45,16 @@ public abstract class Component {
 	return null;
     }
 
-    protected Object getStateNamed(String name) {
+    protected ComponentState getStateNamed(String name) {
+	for (ComponentState componentState : states) {
+	    if (componentState.getName().equals(name)) {
+		return componentState;
+	    }
+	}
+	return null;
+    }
+
+    protected Object getStateValueNamed(String name) {
 	for (ComponentState componentState : states) {
 	    if (componentState.getName().equals(name)) {
 		return componentState.getValue();
@@ -60,6 +68,10 @@ public abstract class Component {
     }
 
     protected int getOwnerId() {
-	return (Integer) getStateNamed("owner");
+	return (Integer) getStateValueNamed("owner");
+    }
+
+    protected void addState(ComponentState state) {
+	states.add(state);
     }
 }

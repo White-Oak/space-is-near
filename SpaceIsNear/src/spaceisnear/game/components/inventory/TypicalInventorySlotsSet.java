@@ -4,6 +4,8 @@
  */
 package spaceisnear.game.components.inventory;
 
+import spaceisnear.game.objects.items.Size;
+
 /**
  *
  * @author White Oak

@@ -7,9 +7,12 @@ package spaceisnear.game.messages;
 
 import lombok.Getter;
 import spaceisnear.Utils;
-import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.bundles.MessageBundle;
 
+/**
+ * Sent both to client and server if player was hurt. Otherwise — sent only to server.
+ * @author White Oak
+ */
 public class HurtMessage extends DirectedMessage implements NetworkableMessage {
 
     @Getter private final int damage;
