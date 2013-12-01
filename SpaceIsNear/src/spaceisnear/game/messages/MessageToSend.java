@@ -7,15 +7,15 @@
 package spaceisnear.game.messages;
 
 public class MessageToSend extends DirectedMessage {
-	private final NetworkableMessage message;
-	
-	public MessageToSend(NetworkableMessage m) {
-		super(MessageType.NETWORKING);
-		message = m;
-	}
-	
-	
-	public NetworkableMessage getMessage() {
-		return this.message;
-	}
+
+    private final NetworkableMessage message;
+
+    public MessageToSend(NetworkableMessage m) {
+	super(MessageType.NETWORKING);
+	message = m;
+    }
+
+    public NetworkableMessage getMessage() {
+	return this.message;
+    }
 }

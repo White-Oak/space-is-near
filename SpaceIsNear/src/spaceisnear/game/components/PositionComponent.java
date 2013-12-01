@@ -12,15 +12,13 @@ import spaceisnear.server.GameContext;
 
 public class PositionComponent extends Component {
 
-    PositionComponent() {
-    }
-
-    public PositionComponent(Position p) {
+    public PositionComponent(Position p, int owner) {
+	super(owner);
 	getStates().add(new ComponentState("position", p));
     }
 
-    public PositionComponent(int x, int y) {
-	this(new Position(x, y));
+    public PositionComponent(int x, int y, int owner) {
+	this(new Position(x, y), owner);
     }
 
     public Position getPosition() {

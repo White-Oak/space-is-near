@@ -5,31 +5,29 @@
  */
 package spaceisnear.game.messages;
 
-import com.google.gson.Gson;
-import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.bundles.MessageBundle;
 
 public class MessageMapSent extends Message implements NetworkableMessage {
-	private final String map;
-	
-	public MessageMapSent(String map) {
-		super(MessageType.MAP_SENT);
-		this.map = map;
-	}
-	
-	@Override
-	public MessageBundle getBundle() {
-		MessageBundle messageBundle = new MessageBundle(getMessageType());
-		messageBundle.bytes = new Gson().toJson(this).getBytes();
-		return messageBundle;
-	}
-	
-	public static MessageMapSent getInstance(byte[] b) {
-		return new Gson().fromJson(new String(b), MessageMapSent.class);
-	}
-	
-	
-	public String getMap() {
-		return this.map;
-	}
+
+    private final String map;
+
+    public MessageMapSent(String map) {
+	super(MessageType.MAP_SENT);
+	this.map = map;
+    }
+
+    @Override
+    public MessageBundle getBundle() {
+	MessageBundle messageBundle = new MessageBundle(getMessageType());
+	messageBundle.bytes = map.getBytes();
+	return messageBundle;
+    }
+
+    public static MessageMapSent getInstance(byte[] b) {
+	return new MessageMapSent(new String(b));
+    }
+
+    public String getMap() {
+	return this.map;
+    }
 }

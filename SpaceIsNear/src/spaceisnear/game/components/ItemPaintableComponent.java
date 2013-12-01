@@ -7,7 +7,6 @@ package spaceisnear.game.components;
 import org.newdawn.slick.Graphics;
 import spaceisnear.game.messages.Message;
 
-
 public class ItemPaintableComponent extends PaintableComponent {
 
     @Override
@@ -18,11 +17,8 @@ public class ItemPaintableComponent extends PaintableComponent {
     public void processMessage(Message message) {
     }
 
-    ItemPaintableComponent() {
+    public ItemPaintableComponent(int owner) {
+	super(owner);
     }
 
-    public ItemPaintableComponent(PositionComponent positionComponent) {
-	super(positionComponent);
-    }
-    
 }

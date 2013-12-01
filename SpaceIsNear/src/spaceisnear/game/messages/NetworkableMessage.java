@@ -13,5 +13,6 @@ import spaceisnear.game.bundles.MessageBundle;
 public interface NetworkableMessage {
 
     public MessageBundle getBundle();
+
     public MessageType getMessageType();
 }

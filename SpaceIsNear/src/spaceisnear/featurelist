@@ -32,6 +32,7 @@
 *PlayerControllableComponent was replaced with GamePlayerPositionComponent
 -Camera movement for teleporting messages
 +added NetworkingComponent and MessageToSend for the architecture to look more good
+-added empty slots on server-side's objects list for networking, ui, etc 
 -added HealthComponent
     +actual hitpoints
     +states

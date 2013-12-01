@@ -14,28 +14,29 @@ import spaceisnear.server.GameContext;
  * @author LPzhelud
  */
 public class Player extends GameObject {
-	public int connectionID;
-	private final HealthComponent healthComponent;
-	
-	public Player(GameContext context, int connectionID) {
-		super(GameObjectType.PLAYER, null);
-		PositionComponent pc = new PositionComponent(24, 18);
-		pc.setContext(context);
-		healthComponent = new HealthComponent();
-		addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null), healthComponent, new BreathingComponent(), new InventoryComponent());
-		this.connectionID = connectionID;
-	}
-	
-	public String getNickname() {
-		return ((NameComponent)getComponents().getLast()).getNickname();
-	}
-	
-	public void setNickname(String nickname) {
-		((NameComponent)getComponents().getLast()).setNickname(nickname);
-	}
-	
-	
-	public HealthComponent getHealthComponent() {
-		return this.healthComponent;
-	}
+
+    public int connectionID;
+    private final HealthComponent healthComponent;
+
+    public Player(GameContext context, int connectionID) {
+	super(GameObjectType.PLAYER, null);
+	PositionComponent pc = new PositionComponent(24, 18, getId());
+	pc.setContext(context);
+	healthComponent = new HealthComponent(getId());
+	addComponents(pc, new PlayerComponent(getId()), healthComponent, new BreathingComponent(getId()),
+		new InventoryComponent(getId()), new NameComponent(null, getId()));
+	this.connectionID = connectionID;
+    }
+
+    public String getNickname() {
+	return ((NameComponent) getComponents().getLast()).getNickname();
+    }
+
+    public void setNickname(String nickname) {
+	((NameComponent) getComponents().getLast()).setNickname(nickname);
+    }
+
+    public HealthComponent getHealthComponent() {
+	return this.healthComponent;
+    }
 }

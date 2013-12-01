@@ -11,6 +11,10 @@ import spaceisnear.game.objects.NetworkingObject;
 
 public class NetworkingComponent extends Component {
 
+    public NetworkingComponent(int owner) {
+	super(owner);
+    }
+
     @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {

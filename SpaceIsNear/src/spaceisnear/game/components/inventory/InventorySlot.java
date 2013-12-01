@@ -12,38 +12,34 @@ import spaceisnear.game.objects.items.StaticItem;
  * @author White Oak
  */
 public class InventorySlot {
-	private StaticItem item = null;
-	private Size size;
-	private String name;
-	
-	public InventorySlot(Size size, String name) {
-		
-		this.size = size;
-		this.name = name;
-	}
-	
-	@Deprecated
-	InventorySlot() {
-		
-	}
-	
-	
-	public StaticItem getItem() {
-		return this.item;
-	}
-	
-	
-	public void setItem(final StaticItem item) {
-		this.item = item;
-	}
-	
-	
-	public Size getSize() {
-		return this.size;
-	}
-	
-	
-	public String getName() {
-		return this.name;
-	}
+
+    private int item;
+    private Size size;
+    private String name;
+
+    public InventorySlot(Size size, String name) {
+	this.size = size;
+	this.name = name;
+    }
+
+    @Deprecated
+    InventorySlot() {
+
+    }
+
+    public int getItem() {
+	return this.item;
+    }
+
+    public void setItem(final int item) {
+	this.item = item;
+    }
+
+    public Size getSize() {
+	return this.size;
+    }
+
+    public String getName() {
+	return this.name;
+    }
 }

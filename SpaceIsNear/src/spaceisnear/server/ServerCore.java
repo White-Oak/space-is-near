@@ -34,6 +34,7 @@ public class ServerCore implements Runnable {
     private static final int QUANT_TIME = 20;
     private boolean alreadyPaused;
     private TiledLayer tiledLayer;
+    public static final int OBJECTS_TO_SKIP = 1;
 
     public ServerCore() {
 
@@ -41,7 +42,7 @@ public class ServerCore implements Runnable {
 	try {
 	    tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
 		    spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, 128, 128);
-			//tiledLayer.fillRectTile(0, 0, 128, 128, 1);
+	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
 	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
 	    tiledLayer.fillRectTile(0, 0, 128, 128, 5);
 	    Random rnd = new Random();
@@ -57,7 +58,11 @@ public class ServerCore implements Runnable {
 	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	//</editor-fold>
-	context = new GameContext(new Networking(this), new ArrayList<GameObject>(), tiledLayer);
+	final ArrayList<GameObject> objects = new ArrayList<>();
+	for (int i = 0; i < OBJECTS_TO_SKIP; i++) {
+	    objects.add(null);
+	}
+	context = new GameContext(new Networking(this), objects, tiledLayer);
     }
 
     @Override
@@ -65,7 +70,9 @@ public class ServerCore implements Runnable {
 	while (unbreakable) {
 	    if (!paused) {
 		for (GameObject gameObject : getContext().getObjects()) {
-		    gameObject.process();
+		    if (gameObject != null) {
+			gameObject.process();
+		    }
 		}
 		for (Player player : getContext().getPlayers()) {
 		    HealthComponent hc = player.getHealthComponent();

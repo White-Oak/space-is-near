@@ -11,6 +11,6 @@ public class UI extends GameObject {
 
     public UI(GameObjectType type, GameContext context) {
 	super(type, context);
-	addComponents(new UIComponent());
+	addComponents(new UIComponent(getId()));
     }
 }

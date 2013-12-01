@@ -13,11 +13,8 @@ import spaceisnear.game.messages.Message;
  */
 public class PlayerComponent extends PaintableComponent {
 
-    PlayerComponent() {
-    }
-
-    public PlayerComponent(PositionComponent positionComponent) {
-	super(positionComponent);
+    public PlayerComponent(int owner) {
+	super(owner);
     }
 
     @Override
@@ -31,7 +28,6 @@ public class PlayerComponent extends PaintableComponent {
 	g.drawLine(w - 1, 1, 1, h);
     }
 
-    
     @Override
     public void processMessage(Message message) {
     }

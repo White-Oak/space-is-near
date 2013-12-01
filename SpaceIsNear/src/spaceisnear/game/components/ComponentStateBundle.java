@@ -5,6 +5,7 @@
 package spaceisnear.game.components;
 
 import com.google.gson.Gson;
+import spaceisnear.game.components.inventory.TypicalInventorySlotsSet;
 
 /**
  *
@@ -18,8 +19,12 @@ public class ComponentStateBundle {
 
     public ComponentStateBundle(ComponentState state) {
 	name = state.getName();
-	value = new Gson().toJson(state.getValue());
+	value = getValueInJSON(state);
 	className = state.getValue().getClass().getName();
+    }
+
+    private String getValueInJSON(ComponentState state) {
+	return new Gson().toJson(state.getValue());
     }
 
     public ComponentState getState() throws ClassNotFoundException {

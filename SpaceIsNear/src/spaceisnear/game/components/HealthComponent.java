@@ -19,7 +19,12 @@ public class HealthComponent extends Component {
     public static final int CRIT_HEALTH = 20;
     public static final int SICK_HEALTH = 80;
 
-    public HealthComponent() {
+    /**
+     *
+     * @param owner
+     */
+    public HealthComponent(int owner) {
+	super(owner);
 	addState(new ComponentState("health", 100));
     }
 

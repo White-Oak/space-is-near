@@ -7,15 +7,13 @@ package spaceisnear.game.components;
 
 import spaceisnear.Context;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
-import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.Position;
 
 public class GamePlayerPositionComponent extends PositionComponent {
 
     public GamePlayerPositionComponent(Position p, int owner) {
-	super(p);
+	super(p, owner);
 	getStates().add(new ComponentState("owner", owner));
     }
 

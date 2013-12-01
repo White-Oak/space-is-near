@@ -18,74 +18,69 @@ import spaceisnear.game.messages.DirectedMessage;
  * @author LPzhelud
  */
 public class GameContext extends Context {
-	public static final int TILE_HEIGHT = 16;
-	public static final int TILE_WIDTH = 16;
-	private final Networking networking;
-	private final List<GameObject> objects;
-	private final List<Player> players = new LinkedList<>();
-	private final TiledLayer tiledLayer;
-	
-	@Override
-	public synchronized void sendThemAll(Message m) {
-		if (!(m instanceof DirectedMessage)) {
-			for (GameObject gameObject : objects) {
-				gameObject.message(m);
-			}
-		}
+
+    public static final int TILE_HEIGHT = 16;
+    public static final int TILE_WIDTH = 16;
+    private final Networking networking;
+    private final List<GameObject> objects;
+    private final List<Player> players = new LinkedList<>();
+    private final TiledLayer tiledLayer;
+
+    @Override
+    public synchronized void sendThemAll(Message m) {
+	if (!(m instanceof DirectedMessage)) {
+	    for (GameObject gameObject : objects) {
+		gameObject.message(m);
+	    }
 	}
-	
-	@Override
-	public synchronized void sendToID(Message m, int id) {
-		objects.get(id).message(m);
-	}
-	
-	public synchronized void addObject(GameObject gameObject) {
-		objects.add(gameObject);
-		gameObject.setId(objects.size() - 1);
-	}
-	
-	public synchronized Player addPlayer(int connectionID) {
-		Player player = new Player(this, connectionID);
-		players.add(player);
-		addObject(player);
-		return player;
-	}
-	
-	public Player getPlayer(int id) {
-		return (Player)players.get(id);
-	}
-	
-	@Override
-	public CameraMan getCameraMan() {
-		return null;
-	}
-	
-	@java.beans.ConstructorProperties({"networking", "objects", "tiledLayer"})
-	
-	public GameContext(final Networking networking, final List<GameObject> objects, final TiledLayer tiledLayer) {
-		
-		this.networking = networking;
-		this.objects = objects;
-		this.tiledLayer = tiledLayer;
-	}
-	
-	
-	public Networking getNetworking() {
-		return this.networking;
-	}
-	
-	
-	public List<GameObject> getObjects() {
-		return this.objects;
-	}
-	
-	
-	public List<Player> getPlayers() {
-		return this.players;
-	}
-	
-	
-	public TiledLayer getTiledLayer() {
-		return this.tiledLayer;
-	}
+    }
+
+    @Override
+    public synchronized void sendToID(Message m, int id) {
+	objects.get(id).message(m);
+    }
+
+    public synchronized void addObject(GameObject gameObject) {
+	objects.add(gameObject);
+	gameObject.setId(objects.size() - 1);
+    }
+
+    public synchronized Player addPlayer(int connectionID) {
+	Player player = new Player(this, connectionID);
+	players.add(player);
+	addObject(player);
+	return player;
+    }
+
+    public Player getPlayer(int id) {
+	return (Player) players.get(id);
+    }
+
+    @Override
+    public CameraMan getCameraMan() {
+	return null;
+    }
+
+    @java.beans.ConstructorProperties({"networking", "objects", "tiledLayer"})
+    public GameContext(final Networking networking, final List<GameObject> objects, final TiledLayer tiledLayer) {
+	this.networking = networking;
+	this.objects = objects;
+	this.tiledLayer = tiledLayer;
+    }
+
+    public Networking getNetworking() {
+	return this.networking;
+    }
+
+    public List<GameObject> getObjects() {
+	return this.objects;
+    }
+
+    public List<Player> getPlayers() {
+	return this.players;
+    }
+
+    public TiledLayer getTiledLayer() {
+	return this.tiledLayer;
+    }
 }

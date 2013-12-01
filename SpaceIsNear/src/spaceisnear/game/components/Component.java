@@ -12,79 +12,93 @@ import spaceisnear.game.messages.Message;
 import spaceisnear.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.objects.GameObject;
+import spaceisnear.game.objects.Position;
 
 /**
  * @author LPzhelud
  */
 public abstract class Component {
-	
-	private ArrayList<ComponentState> states = new ArrayList<>();
-	private Context context = null;
-	
-	public abstract void processMessage(Message message);
-	
-	public void setContext(Context context) {
-		if (this.context == null) {
-			this.context = context;
-		}
+
+    private ArrayList<ComponentState> states = new ArrayList<>();
+    private Context context = null;
+
+    public Component(int owner) {
+	setOwnerId(owner);
+    }
+
+    public abstract void processMessage(Message message);
+
+    public void setContext(Context context) {
+	if (this.context == null) {
+	    this.context = context;
 	}
-	
-	public static Component getInstance(ComponentStateBundle[] states, Class component) throws ClassNotFoundException {
-		try {
-			Component newInstance = (Component)component.newInstance();
-			newInstance.states = new ArrayList<>();
-			for (ComponentStateBundle state : states) {
-				ComponentState componentState = state.getState();
-				newInstance.states.add(componentState);
-			}
-			return newInstance;
-		} catch (InstantiationException | IllegalAccessException ex) {
-			Logger.getLogger(Component.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return null;
+    }
+
+    public static Component getInstance(ComponentStateBundle[] states, Class component) throws ClassNotFoundException {
+	try {
+	    Component newInstance = (Component) component.newInstance();
+	    newInstance.states = new ArrayList<>();
+	    for (ComponentStateBundle state : states) {
+		ComponentState componentState = state.getState();
+		newInstance.states.add(componentState);
+	    }
+	    return newInstance;
+	} catch (InstantiationException | IllegalAccessException ex) {
+	    Logger.getLogger(Component.class.getName()).log(Level.SEVERE, null, ex);
 	}
-	
-	protected ComponentState getStateNamed(String name) {
-		for (ComponentState componentState : states) {
-			if (componentState.getName().equals(name)) {
-				return componentState;
-			}
-		}
-		return null;
+	return null;
+    }
+
+    protected ComponentState getStateNamed(String name) {
+	for (ComponentState componentState : states) {
+	    if (componentState.getName().equals(name)) {
+		return componentState;
+	    }
 	}
-	
-	protected Object getStateValueNamed(String name) {
-		for (ComponentState componentState : states) {
-			if (componentState.getName().equals(name)) {
-				return componentState.getValue();
-			}
-		}
-		return null;
+	return null;
+    }
+
+    protected Object getStateValueNamed(String name) {
+	for (ComponentState componentState : states) {
+	    if (componentState.getName().equals(name)) {
+		return componentState.getValue();
+	    }
 	}
-	
-	protected GameObject getOwner() {
-		return ((GameContext)getContext()).getObjects().get(getOwnerId());
+	return null;
+    }
+
+    protected GameObject getOwner() {
+	return ((GameContext) getContext()).getObjects().get(getOwnerId());
+    }
+
+    protected int getOwnerId() {
+	return (Integer) getStateValueNamed("owner");
+    }
+
+    private void setOwnerId(int id) {
+	states.add(new ComponentState("owner", id));
+    }
+
+    protected void addState(ComponentState state) {
+	states.add(state);
+    }
+
+    public ArrayList<ComponentState> getStates() {
+	return this.states;
+    }
+
+    protected Context getContext() {
+	return this.context;
+    }
+
+    protected Position getPosition() {
+	GameObject owner = getOwner();
+	for (Component component : owner.getComponents()) {
+	    if (component instanceof PositionComponent) {
+		PositionComponent positionComponent = (PositionComponent) component;
+		return positionComponent.getPosition();
+	    }
 	}
-	
-	protected int getOwnerId() {
-		return (Integer)getStateValueNamed("owner");
-	}
-	
-	public void setOwnerId(int id) {
-		states.add(new ComponentState("owner", id));
-	}
-	
-	protected void addState(ComponentState state) {
-		states.add(state);
-	}
-	
-	
-	public ArrayList<ComponentState> getStates() {
-		return this.states;
-	}
-	
-	
-	protected Context getContext() {
-		return this.context;
-	}
+	return null;
+    }
 }

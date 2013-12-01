@@ -13,6 +13,10 @@ import spaceisnear.game.messages.MessageToSend;
 
 public class PlayerControllableComponent extends Component {
 
+    public PlayerControllableComponent(int owner) {
+	super(owner);
+    }
+
     @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {

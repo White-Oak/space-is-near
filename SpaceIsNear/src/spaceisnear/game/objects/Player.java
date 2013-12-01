@@ -18,9 +18,10 @@ public class Player extends GameObject {
 
     public Player(GameContext context) {
 	super(GameObjectType.PLAYER, context);
-	PositionComponent pc = new PositionComponent(24, 18);
+	PositionComponent pc = new PositionComponent(24, 18, getId());
 
-	addComponents(pc, new PlayerComponent(pc), new NameComponent(pc, null), new InventoryComponent());
+	addComponents(pc, new PlayerComponent(getId()), new NameComponent(null, getId()), new InventoryComponent(
+		getId()));
     }
 
     Player() {

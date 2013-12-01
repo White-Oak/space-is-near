@@ -9,31 +9,27 @@ import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
 
 public class ObjectBundle extends Bundle {
-	private final GameObjectState state;
-	private final int objectID;
-	private final GameObjectType objectType;
-	
-	@java.beans.ConstructorProperties({"state", "objectID", "objectType"})
-	
-	public ObjectBundle(final GameObjectState state, final int objectID, final GameObjectType objectType) {
-		
-		this.state = state;
-		this.objectID = objectID;
-		this.objectType = objectType;
-	}
-	
-	
-	public GameObjectState getState() {
-		return this.state;
-	}
-	
-	
-	public int getObjectID() {
-		return this.objectID;
-	}
-	
-	
-	public GameObjectType getObjectType() {
-		return this.objectType;
-	}
+
+    private final GameObjectState state;
+    private final int objectID;
+    private final GameObjectType objectType;
+
+    @java.beans.ConstructorProperties({"state", "objectID", "objectType"})
+    public ObjectBundle(final GameObjectState state, final int objectID, final GameObjectType objectType) {
+	this.state = state;
+	this.objectID = objectID;
+	this.objectType = objectType;
+    }
+
+    public GameObjectState getState() {
+	return this.state;
+    }
+
+    public int getObjectID() {
+	return this.objectID;
+    }
+
+    public GameObjectType getObjectType() {
+	return this.objectType;
+    }
 }
