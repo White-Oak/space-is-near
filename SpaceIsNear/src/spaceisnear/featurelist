@@ -25,6 +25,7 @@
     +checking for reacheableness in PositionComponent
 -Atmosphere
     +Atmosphere layer
+    +removed from client-side
 -Inventory
     -each inventory consists of inventory slots
     -each inventory slot has his size, item field and name

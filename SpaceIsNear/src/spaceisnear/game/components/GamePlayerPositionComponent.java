@@ -39,26 +39,6 @@ public class GamePlayerPositionComponent extends PositionComponent {
 		setX(messagetMessageMoved.getX());
 		setY(messagetMessageMoved.getY());
 		break;
-	    case CONTROLLED:
-		MessageControlled mc = (MessageControlled) message;
-		MessageMoved mm = null;
-		switch (mc.getType()) {
-		    case UP:
-			mm = new MessageMoved(0, -1, getOwner().getId());
-			break;
-		    case DOWN:
-			mm = new MessageMoved(0, 1, getOwner().getId());
-			break;
-		    case LEFT:
-			mm = new MessageMoved(-1, 0, getOwner().getId());
-			break;
-		    case RIGHT:
-			mm = new MessageMoved(1, 0, getOwner().getId());
-			break;
-		}
-		if (mm != null) {
-		    getContext().sendToID(new MessageToSend(mm), Context.NETWORKING_ID);
-		}
 	}
     }
 

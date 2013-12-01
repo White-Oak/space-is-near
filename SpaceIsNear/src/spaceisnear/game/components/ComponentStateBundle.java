@@ -5,8 +5,6 @@
 package spaceisnear.game.components;
 
 import com.google.gson.Gson;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
