@@ -8,12 +8,11 @@ import spaceisnear.Context;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.objects.Position;
-import spaceisnear.server.GameContext;
 
 public class PositionComponent extends Component {
 
     public PositionComponent(Position p, int owner) {
-	super(owner);
+	super(owner, ComponentType.POSITION);
 	getStates().add(new ComponentState("position", p));
     }
 
@@ -21,8 +20,9 @@ public class PositionComponent extends Component {
 	this(new Position(x, y), owner);
     }
 
+    @Override
     public Position getPosition() {
-	return (Position) getStates().get(0).getValue();
+	return (Position) getStateValueNamed("position");
     }
 
     public int getX() {

@@ -14,7 +14,6 @@ public class GamePlayerPositionComponent extends PositionComponent {
 
     public GamePlayerPositionComponent(Position p, int owner) {
 	super(p, owner);
-	getStates().add(new ComponentState("owner", owner));
     }
 
     @Override

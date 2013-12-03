@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.components;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,9 +22,11 @@ public abstract class Component {
 
     private ArrayList<ComponentState> states = new ArrayList<>();
     private Context context = null;
+    private final ComponentType type;
 
-    public Component(int owner) {
+    public Component(int owner, ComponentType type) {
 	setOwnerId(owner);
+	this.type = type;
     }
 
     public abstract void processMessage(Message message);
@@ -33,10 +36,12 @@ public abstract class Component {
 	    this.context = context;
 	}
     }
+//@working rewrite
 
-    public static Component getInstance(ComponentStateBundle[] states, Class component) throws ClassNotFoundException {
+    public static Component getInstance(ComponentStateBundle[] states, Class component, int owner) throws ClassNotFoundException,
+	    NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	try {
-	    Component newInstance = (Component) component.newInstance();
+	    Component newInstance = (Component) component.getConstructor(int.class).newInstance(owner);
 	    newInstance.states = new ArrayList<>();
 	    for (ComponentStateBundle state : states) {
 		ComponentState componentState = state.getState();
@@ -75,7 +80,7 @@ public abstract class Component {
 	return (Integer) getStateValueNamed("owner");
     }
 
-    private void setOwnerId(int id) {
+    public final void setOwnerId(int id) {
 	states.add(new ComponentState("owner", id));
     }
 
@@ -101,4 +106,9 @@ public abstract class Component {
 	}
 	return null;
     }
+
+    public ComponentType getType() {
+	return type;
+    }
+
 }

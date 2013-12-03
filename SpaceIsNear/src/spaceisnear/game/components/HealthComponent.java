@@ -24,7 +24,7 @@ public class HealthComponent extends Component {
      * @param owner
      */
     public HealthComponent(int owner) {
-	super(owner);
+	super(owner, ComponentType.HEALTH);
 	addState(new ComponentState("health", 100));
     }
 

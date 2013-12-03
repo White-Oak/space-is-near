@@ -6,12 +6,13 @@ package spaceisnear.game.components.inventory;
 
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
+import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 
 public class InventoryComponent extends Component {
 
     public InventoryComponent(int owner) {
-	super(owner);
+	super(owner, ComponentType.INVENTORY);
 	getStates().add(new ComponentState("slots", new TypicalInventorySlotsSet()));
     }
 

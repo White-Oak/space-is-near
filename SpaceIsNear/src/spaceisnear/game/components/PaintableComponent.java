@@ -5,13 +5,15 @@
 package spaceisnear.game.components;
 
 import spaceisnear.game.GameContext;
-import spaceisnear.game.objects.GameObject;
-import spaceisnear.game.objects.Position;
 
 public abstract class PaintableComponent extends Component {
 
     public PaintableComponent(int owner) {
-	super(owner);
+	this(owner, ComponentType.PAINTABLE);
+    }
+
+    protected PaintableComponent(int owner, ComponentType type) {
+	super(owner, type);
     }
 
     public int getX() {

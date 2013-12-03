@@ -14,7 +14,7 @@ import spaceisnear.game.messages.MessageToSend;
 public class PlayerControllableComponent extends Component {
 
     public PlayerControllableComponent(int owner) {
-	super(owner);
+	super(owner, ComponentType.PLAYER_CONTROLLABLE);
     }
 
     @Override

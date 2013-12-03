@@ -10,7 +10,7 @@ import spaceisnear.game.messages.MessageNetworkState;
 public class UIComponent extends Component {
 
     public UIComponent(int owner) {
-	super(owner);
+	super(owner, ComponentType.UI);
     }
 
     @Override

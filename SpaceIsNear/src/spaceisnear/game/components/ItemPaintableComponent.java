@@ -18,7 +18,7 @@ public class ItemPaintableComponent extends PaintableComponent {
     }
 
     public ItemPaintableComponent(int owner) {
-	super(owner);
+	super(owner, ComponentType.ITEM_PAINTABLE);
     }
 
 }

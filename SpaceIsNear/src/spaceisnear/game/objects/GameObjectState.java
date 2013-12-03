@@ -5,41 +5,41 @@
  */
 package spaceisnear.game.objects;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentStateBundle;
 
 /**
  * @author LPzhelud
  */
 public class GameObjectState {
-	private ComponentStateBundle[][] states;
-	private String[] classes;
-	
-	GameObjectState() {
-		
+
+    private ComponentStateBundle[][] states;
+    private String[] classes;
+
+    GameObjectState() {
+
+    }
+
+    public Component[] getComponents(int owner) {
+	Component[] components = new Component[classes.length];
+	for (int i = 0; i < classes.length; i++) {
+	    try {
+		Class class1 = Class.forName(classes[i]);
+		components[i] = Component.getInstance(states[i], class1, owner);
+	    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		Logger.getLogger(GameObjectState.class.getName()).log(Level.SEVERE, null, ex);
+	    }
 	}
-	
-	public Component[] getComponents() {
-		Component[] components = new Component[classes.length];
-		for (int i = 0; i < classes.length; i++) {
-			try {
-				Class class1 = Class.forName(classes[i]);
-				components[i] = Component.getInstance(states[i], class1);
-			} catch (ClassNotFoundException ex) {
-				Logger.getLogger(GameObjectState.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-		return components;
-	}
-	
-	@java.beans.ConstructorProperties({"states", "classes"})
-	
-	public GameObjectState(final ComponentStateBundle[][] states, final String[] classes) {
-		
-		this.states = states;
-		this.classes = classes;
-	}
+	return components;
+    }
+
+    @java.beans.ConstructorProperties({"states", "classes"})
+    public GameObjectState(final ComponentStateBundle[][] states, final String[] classes) {
+
+	this.states = states;
+	this.classes = classes;
+    }
 }

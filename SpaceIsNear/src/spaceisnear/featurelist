@@ -42,3 +42,6 @@
     -acceptance on server
 +added MessageKnockbacked
     -acceptance on server
++now components that rely on Position search PositionComponent in a list of objects' components
++Players had different components on server and client: dealt with sending them over the net
++Components had bad newInstance method: recoded

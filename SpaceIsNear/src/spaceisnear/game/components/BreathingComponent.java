@@ -5,7 +5,7 @@
  */
 package spaceisnear.game.components;
 
-import java.util.LinkedList;
+import java.util.List;
 import spaceisnear.Context;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.messages.HurtMessage;
@@ -16,13 +16,13 @@ import spaceisnear.game.objects.Position;
 public class BreathingComponent extends Component {
 
     public BreathingComponent(int owner) {
-	super(owner);
+	super(owner,ComponentType.BREATHING);
     }
 
     @Override
     public void processMessage(Message message) {
 	AtmosphericLayer atmosphere = getContext().getCameraMan().getAtmosphere();
-	LinkedList<Component> components = getOwner().getComponents();
+	List<Component> components = getOwner().getComponents();
 	Position p = null;
 	for (Component component : components) {
 	    if (component instanceof PositionComponent) {

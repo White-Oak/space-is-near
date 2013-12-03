@@ -12,7 +12,7 @@ import spaceisnear.game.objects.NetworkingObject;
 public class NetworkingComponent extends Component {
 
     public NetworkingComponent(int owner) {
-	super(owner);
+	super(owner, ComponentType.NETWORKING);
     }
 
     @Override

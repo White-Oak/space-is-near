@@ -5,7 +5,6 @@
 package spaceisnear.game.components;
 
 import com.google.gson.Gson;
-import spaceisnear.game.components.inventory.TypicalInventorySlotsSet;
 
 /**
  *
