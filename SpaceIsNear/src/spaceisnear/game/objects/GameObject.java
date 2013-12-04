@@ -28,7 +28,6 @@ public abstract class GameObject {
     private GameContext context;
 
     public GameObject(GameObjectType type, GameContext context) {
-
 	this.type = type;
 	this.context = context;
     }
@@ -61,10 +60,13 @@ public abstract class GameObject {
 	String[] classes = new String[components.size()];
 	for (int i = 0; i < classes.length; i++) {
 	    classes[i] = components.get(i).getClass().getName();
-	    ArrayList<ComponentState> states1 = components.get(i).getStates();
+	    HashMap<String, ComponentState> states1 = components.get(i).getStates();
 	    ComponentStateBundle[] bundles = new ComponentStateBundle[states1.size()];
-	    for (int j = 0; j < bundles.length; j++) {
-		bundles[j] = new ComponentStateBundle(states1.get(i));
+	    Collection<ComponentState> values = states1.values();
+	    int j = 0;
+	    for (ComponentState componentState : values) {
+		bundles[j] = new ComponentStateBundle(componentState);
+		j++;
 	    }
 	    states[i] = bundles;
 	}

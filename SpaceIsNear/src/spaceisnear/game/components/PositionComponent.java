@@ -13,11 +13,15 @@ public class PositionComponent extends Component {
 
     public PositionComponent(Position p, int owner) {
 	super(owner, ComponentType.POSITION);
-	getStates().add(new ComponentState("position", p));
+	addState(new ComponentState("position", p));
     }
 
     public PositionComponent(int x, int y, int owner) {
 	this(new Position(x, y), owner);
+    }
+
+    private PositionComponent(int owner) {
+	super(owner, ComponentType.POSITION);
     }
 
     @Override

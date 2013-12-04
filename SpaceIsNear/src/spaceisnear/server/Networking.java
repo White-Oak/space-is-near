@@ -26,6 +26,7 @@ import spaceisnear.game.messages.MessageWorldSent;
 import spaceisnear.server.objects.GameObject;
 import spaceisnear.server.objects.Player;
 import static spaceisnear.Utils.GSON;
+import spaceisnear.game.messages.MessageControlled;
 
 /**
  * @author white_oak
@@ -61,6 +62,10 @@ public class Networking extends Listener implements Runnable {
 		    }
 		    break;
 
+		case CONTROLLED:
+		    MessageControlled mc=MessageControlled.getInstance(b);
+		    
+		    break;
 		case MOVED:
 		    MessageMoved mm = MessageMoved.getInstance(b);
 		    core.getContext().sendToID(mm, mm.getId());

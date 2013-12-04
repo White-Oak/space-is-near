@@ -39,9 +39,11 @@
 +server processes health states of players
 +added HurtMessage
     +types of damage
-    -acceptance on server
+    -acceptance on client
 +added MessageKnockbacked
-    -acceptance on server
+    -acceptance on client
 +now components that rely on Position search PositionComponent in a list of objects' components
 +Players had different components on server and client: dealt with sending them over the net
 +Components had bad newInstance method: recoded
++added enum for components
++ComponentStates stored in a hashmap inside Component

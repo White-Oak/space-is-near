@@ -13,7 +13,7 @@ public class InventoryComponent extends Component {
 
     public InventoryComponent(int owner) {
 	super(owner, ComponentType.INVENTORY);
-	getStates().add(new ComponentState("slots", new TypicalInventorySlotsSet()));
+	addState(new ComponentState("slots", new TypicalInventorySlotsSet()));
     }
 
     @Override

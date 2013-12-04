@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.messages;
 
+import spaceisnear.Utils;
 import spaceisnear.game.bundles.MessageBundle;
 
 /**
@@ -14,8 +15,8 @@ public class MessageControlled extends DirectedMessage implements NetworkableMes
 
     private final Type type;
 
-    public MessageControlled(Type type) {
-	super(MessageType.CONTROLLED);
+    public MessageControlled(Type type, int id) {
+	super(MessageType.CONTROLLED, id);
 	this.type = type;
     }
 
@@ -30,7 +31,13 @@ public class MessageControlled extends DirectedMessage implements NetworkableMes
 
     @Override
     public MessageBundle getBundle() {
-	return null;
+	MessageBundle messageBundle = new MessageBundle(MessageType.CONTROLLED);
+	messageBundle.bytes = Utils.GSON.toJson(this).getBytes();
+	return messageBundle;
+    }
+
+    public static MessageControlled getInstance(byte[] b) {
+	return Utils.GSON.fromJson(new String(b), MessageControlled.class);
     }
 
     public Type getType() {

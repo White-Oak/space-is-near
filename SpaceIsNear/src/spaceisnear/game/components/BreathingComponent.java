@@ -16,7 +16,7 @@ import spaceisnear.game.objects.Position;
 public class BreathingComponent extends Component {
 
     public BreathingComponent(int owner) {
-	super(owner,ComponentType.BREATHING);
+	super(owner, ComponentType.BREATHING);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class BreathingComponent extends Component {
 	    }
 	}
 	if (!atmosphere.isBreatheable(p.getX(), p.getY())) {
-	    HurtMessage hurtMessage = new HurtMessage(5, HurtMessage.Type.SUFFOCATING);
+	    HurtMessage hurtMessage = new HurtMessage(5, HurtMessage.Type.SUFFOCATING, getOwnerId());
 	    getContext().sendToID(hurtMessage, getOwnerId());
 	    getContext().sendToID(new MessageToSend(hurtMessage), Context.NETWORKING_ID);
 	}

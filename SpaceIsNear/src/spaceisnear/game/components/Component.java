@@ -5,8 +5,10 @@
  */
 package spaceisnear.game.components;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import spaceisnear.game.messages.Message;
@@ -20,7 +22,7 @@ import spaceisnear.game.objects.Position;
  */
 public abstract class Component {
 
-    private ArrayList<ComponentState> states = new ArrayList<>();
+    private final HashMap<String, ComponentState> states = new HashMap<>();
     private Context context = null;
     private final ComponentType type;
 
@@ -36,17 +38,20 @@ public abstract class Component {
 	    this.context = context;
 	}
     }
-//@working rewrite
 
-    public static Component getInstance(ComponentStateBundle[] states, Class component, int owner) throws ClassNotFoundException,
+    public static Component getInstance(ComponentStateBundle[] states, Class component, Context c, int owner) throws ClassNotFoundException,
 	    NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	try {
-	    Component newInstance = (Component) component.getConstructor(int.class).newInstance(owner);
-	    newInstance.states = new ArrayList<>();
+	    final Constructor constructor = component.getDeclaredConstructor(int.class);
+	    constructor.setAccessible(true);
+	    Component newInstance = (Component) constructor.newInstance(owner);
 	    for (ComponentStateBundle state : states) {
 		ComponentState componentState = state.getState();
-		newInstance.states.add(componentState);
+		if (!componentState.getName().equals("owner")) {
+		    newInstance.states.put(componentState.getName(), componentState);
+		}
 	    }
+	    newInstance.setContext(c);
 	    return newInstance;
 	} catch (InstantiationException | IllegalAccessException ex) {
 	    Logger.getLogger(Component.class.getName()).log(Level.SEVERE, null, ex);
@@ -55,21 +60,11 @@ public abstract class Component {
     }
 
     protected ComponentState getStateNamed(String name) {
-	for (ComponentState componentState : states) {
-	    if (componentState.getName().equals(name)) {
-		return componentState;
-	    }
-	}
-	return null;
+	return states.get(name);
     }
 
     protected Object getStateValueNamed(String name) {
-	for (ComponentState componentState : states) {
-	    if (componentState.getName().equals(name)) {
-		return componentState.getValue();
-	    }
-	}
-	return null;
+	return getStateNamed(name).getValue();
     }
 
     protected GameObject getOwner() {
@@ -81,14 +76,14 @@ public abstract class Component {
     }
 
     public final void setOwnerId(int id) {
-	states.add(new ComponentState("owner", id));
+	states.put("owner", new ComponentState("owner", id));
     }
 
     protected void addState(ComponentState state) {
-	states.add(state);
+	states.put(state.getName(), state);
     }
 
-    public ArrayList<ComponentState> getStates() {
+    public HashMap<String, ComponentState> getStates() {
 	return this.states;
     }
 
@@ -99,9 +94,11 @@ public abstract class Component {
     protected Position getPosition() {
 	GameObject owner = getOwner();
 	for (Component component : owner.getComponents()) {
-	    if (component instanceof PositionComponent) {
-		PositionComponent positionComponent = (PositionComponent) component;
-		return positionComponent.getPosition();
+	    switch (component.getType()) {
+		case POSITION:
+		case GAMER_PLAYER_POSITION:
+		    PositionComponent positionComponent = (PositionComponent) component;
+		    return positionComponent.getPosition();
 	    }
 	}
 	return null;

@@ -1,0 +1,36 @@
+Константы:
+-item_name:
+    - все имена вещей так, как они определены в файле определений
+    - player — если вещь использует человек
+-FOOD:
+    -FOOD_SMALL_SATURATION
+    -FOOD_NORMAL_SATURATION
+    -FOOD_BIG_SATURATION
+
+Функции:
+feedPlayer()				— кормит человека
+log(place, message)			— пишет сообщение в выбранное место (GAME_CONSOLE, SYSTEM_CONSOLE)
+createInstead(name)			— заменяет текущий итем новым
+int findItem(name)			— возвращает ид итема, если он есть у объекта в инвентаре
+getToolForItemAndDropIt(id)		— 
+destroyItem(id)				— уничтожает итем
+createItemAndPutItIntoInventory (name)	— создаёт итем и помещает его в инвентарь объекту
+createItemAndDropIt (name)		— создаёт итем и помещает его в окружающую среду
+drop()					— хмхм
+
+Пример:
+//banana
+if (item_name == "player") {
+    feedPlayer {FOOD_NORMAL_SATURATION};
+    log {GAME_CONSOLE, "%player ate a banana"};
+    createInstead {banana_erased};
+}
+else {
+    drop {};
+}
+Пример:
+//lomik
+if (item_name == "plitka") {
+    getToolForItemAndDropIt(action_item_id);
+    destroyItem(action_item_id);
+}

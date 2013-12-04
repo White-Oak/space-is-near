@@ -6,12 +6,14 @@
  */
 package spaceisnear.game.messages;
 
+import spaceisnear.Context;
+
 public class MessageToSend extends DirectedMessage {
 
     private final NetworkableMessage message;
 
     public MessageToSend(NetworkableMessage m) {
-	super(MessageType.NETWORKING);
+	super(MessageType.NETWORKING, Context.NETWORKING_ID);
 	message = m;
     }
 

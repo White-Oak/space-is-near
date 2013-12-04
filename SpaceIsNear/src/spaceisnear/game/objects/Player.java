@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentState;
-import spaceisnear.game.components.GamePlayerPositionComponent;
 import spaceisnear.game.components.NameComponent;
 import spaceisnear.game.components.PlayerComponent;
 import spaceisnear.game.components.PositionComponent;
@@ -37,13 +35,16 @@ public class Player extends GameObject {
 	Player player = new Player(context);
 	player.setContext(context);
 	player.setId(bundle.getObjectID());
-	Component[] components = bundle.getState().getComponents(player.getId());
+	Component[] components = bundle.getState().getComponents(player.getId(), context);
 	LinkedList<Component> list = new LinkedList<>();
 	for (Component component : components) {
-	    if (component instanceof PositionComponent) {
-		list.add(component);
-	    } else if (component instanceof NameComponent || component instanceof InventoryComponent || component instanceof PlayerComponent) {
-		list.add(component);
+	    switch (component.getType()) {
+		case POSITION:
+		case NAME:
+		case INVENTORY:
+		case PLAYER:
+		    list.add(component);
+		    break;
 	    }
 	}
 	player.setComponents(list);

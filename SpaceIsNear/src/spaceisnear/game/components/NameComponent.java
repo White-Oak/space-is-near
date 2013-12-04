@@ -11,7 +11,11 @@ public class NameComponent extends PaintableComponent {
 
     public NameComponent(String name, int owner) {
 	super(owner, ComponentType.NAME);
-	getStates().add(new ComponentState("name", name));
+	addState(new ComponentState("name", name));
+    }
+
+    private NameComponent(int owner) {
+	super(owner, ComponentType.NAME);
     }
 
     @Override
@@ -23,10 +27,10 @@ public class NameComponent extends PaintableComponent {
     }
 
     public String getNickname() {
-	return (String) getStates().get(1).getValue();
+	return (String) getStateValueNamed("name");
     }
 
     public void setNickname(String name) {
-	getStates().get(1).setValue(name);
+	getStateNamed("name").setValue(name);
     }
 }

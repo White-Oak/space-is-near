@@ -8,6 +8,7 @@ package spaceisnear.game.objects;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spaceisnear.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentStateBundle;
 
@@ -23,12 +24,12 @@ public class GameObjectState {
 
     }
 
-    public Component[] getComponents(int owner) {
+    public Component[] getComponents(int owner, Context c) {
 	Component[] components = new Component[classes.length];
 	for (int i = 0; i < classes.length; i++) {
 	    try {
 		Class class1 = Class.forName(classes[i]);
-		components[i] = Component.getInstance(states[i], class1, owner);
+		components[i] = Component.getInstance(states[i], class1, c, owner);
 	    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 		Logger.getLogger(GameObjectState.class.getName()).log(Level.SEVERE, null, ex);
 	    }

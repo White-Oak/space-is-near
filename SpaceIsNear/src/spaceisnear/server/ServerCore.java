@@ -14,9 +14,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
-import spaceisnear.game.components.Component;
 import spaceisnear.game.components.HealthComponent;
-import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.MessageDied;
 import spaceisnear.game.messages.MessageKnockbacked;
 import spaceisnear.game.messages.MessagePaused;
@@ -78,13 +76,13 @@ public class ServerCore implements Runnable {
 		    HealthComponent hc = player.getHealthComponent();
 		    switch (hc.getState()) {
 			case CRITICICAL:
-			    MessageKnockbacked messageKnockbacked = new MessageKnockbacked();
+			    MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
 			    getContext().sendToID(messageKnockbacked, player.getId());
 			    getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
 			    break;
 
 			case DEAD:
-			    MessageDied messageDied = new MessageDied();
+			    MessageDied messageDied = new MessageDied(player.getId());
 			    getContext().sendToID(messageDied, player.getId());
 			    getContext().sendToID(new MessageToSend(messageDied), player.getId());
 			    break;

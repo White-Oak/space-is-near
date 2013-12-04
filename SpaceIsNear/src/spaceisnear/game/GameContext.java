@@ -25,6 +25,7 @@ public class GameContext extends Context {
     private final ArrayList<GameObject> objects;
     private int playerID = -1;
     private final Corev2 core;
+    public static GameContext CONTEXT;
 
     public void addPaintable(PaintableComponent paintableComponent) {
 	paintables.add(paintableComponent);
@@ -54,6 +55,7 @@ public class GameContext extends Context {
 	this.cameraMan = cameraMan;
 	this.objects = objects;
 	this.core = core;
+	CONTEXT = this;
     }
 
     @Override

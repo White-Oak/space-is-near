@@ -12,8 +12,8 @@ package spaceisnear.game.messages;
  */
 public class MessageKnockbacked extends DirectedMessage implements NetworkableMessage {
 
-    public MessageKnockbacked() {
-	super(MessageType.KNOCKBACKED);
+    public MessageKnockbacked(int id) {
+	super(MessageType.KNOCKBACKED, id);
     }
 
 }
