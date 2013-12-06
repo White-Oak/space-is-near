@@ -8,6 +8,7 @@ package spaceisnear.game;
 import spaceisnear.game.objects.GameObject;
 import java.util.ArrayList;
 import spaceisnear.Context;
+import spaceisnear.game.components.Component;
 import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
@@ -27,10 +28,6 @@ public class GameContext extends Context {
     private final Corev2 core;
     public static GameContext CONTEXT;
 
-    public void addPaintable(PaintableComponent paintableComponent) {
-	paintables.add(paintableComponent);
-    }
-
     @Override
     public void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
@@ -47,6 +44,11 @@ public class GameContext extends Context {
 
     public synchronized void addObject(GameObject gameObject) {
 	objects.add(gameObject);
+	for (Component component : gameObject.getComponents()) {
+	    if (component instanceof PaintableComponent) {
+		paintables.add((PaintableComponent) component);
+	    }
+	}
 	gameObject.setId(objects.size() - 1);
     }
 

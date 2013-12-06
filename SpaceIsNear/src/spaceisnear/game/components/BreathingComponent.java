@@ -15,25 +15,25 @@ import spaceisnear.game.objects.Position;
 
 public class BreathingComponent extends Component {
 
-    public BreathingComponent(int owner) {
-	super(owner, ComponentType.BREATHING);
+    public BreathingComponent() {
+	super(ComponentType.BREATHING);
     }
 
     @Override
     public void processMessage(Message message) {
-	AtmosphericLayer atmosphere = getContext().getCameraMan().getAtmosphere();
-	List<Component> components = getOwner().getComponents();
-	Position p = null;
-	for (Component component : components) {
-	    if (component instanceof PositionComponent) {
-		p = ((PositionComponent) component).getPosition();
-	    }
-	}
-	if (!atmosphere.isBreatheable(p.getX(), p.getY())) {
-	    HurtMessage hurtMessage = new HurtMessage(5, HurtMessage.Type.SUFFOCATING, getOwnerId());
-	    getContext().sendToID(hurtMessage, getOwnerId());
-	    getContext().sendToID(new MessageToSend(hurtMessage), Context.NETWORKING_ID);
-	}
+//	AtmosphericLayer atmosphere = getContext().getCameraMan().getAtmosphere();
+//	List<Component> components = getOwner().getComponents();
+//	Position p = null;
+//	for (Component component : components) {
+//	    if (component instanceof PositionComponent) {
+//		p = ((PositionComponent) component).getPosition();
+//	    }
+//	}
+//	if (!atmosphere.isBreatheable(p.getX(), p.getY())) {
+//	    HurtMessage hurtMessage = new HurtMessage(5, HurtMessage.Type.SUFFOCATING, getOwnerId());
+//	    getContext().sendToID(hurtMessage, getOwnerId());
+//	    getContext().sendToID(new MessageToSend(hurtMessage), Context.NETWORKING_ID);
+//	}
     }
 
 }

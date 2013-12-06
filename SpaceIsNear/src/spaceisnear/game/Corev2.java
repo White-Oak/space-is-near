@@ -37,6 +37,7 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
+	System.out.println("Client has continued his work");
 	context = new GameContext(new CameraMan(), objects, this);
 	context.addObject(new NetworkingObject(context));
 	context.getCameraMan().setWindowWidth(800);
@@ -70,8 +71,7 @@ public class Corev2 extends BasicGameState {
 	    //
 	    int playerID = context.getPlayerID();
 	    if (mc != null && playerID != -1) {
-		MessageToSend messageToSend = new MessageToSend(mc);
-		context.sendToID(messageToSend, Context.NETWORKING_ID);
+		context.sendDirectedMessage(new MessageToSend(mc));
 	    }
 	    for (GameObject gameObject : objects) {
 		gameObject.process();

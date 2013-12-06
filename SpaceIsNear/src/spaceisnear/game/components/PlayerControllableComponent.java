@@ -5,7 +5,6 @@
  */
 package spaceisnear.game.components;
 
-import spaceisnear.Context;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
@@ -13,8 +12,8 @@ import spaceisnear.game.messages.MessageToSend;
 
 public class PlayerControllableComponent extends Component {
 
-    public PlayerControllableComponent(int owner) {
-	super(owner, ComponentType.PLAYER_CONTROLLABLE);
+    public PlayerControllableComponent() {
+	super(ComponentType.PLAYER_CONTROLLABLE);
     }
 
     @Override
@@ -25,20 +24,22 @@ public class PlayerControllableComponent extends Component {
 		MessageMoved mm = null;
 		switch (mc.getType()) {
 		    case UP:
-			mm = new MessageMoved(0, -1, getOwner().getId());
+			mm = new MessageMoved(0, -1, getOwnerId());
 			break;
 		    case DOWN:
-			mm = new MessageMoved(0, 1, getOwner().getId());
+			mm = new MessageMoved(0, 1, getOwnerId());
 			break;
 		    case LEFT:
-			mm = new MessageMoved(-1, 0, getOwner().getId());
+			mm = new MessageMoved(-1, 0, getOwnerId());
 			break;
 		    case RIGHT:
-			mm = new MessageMoved(1, 0, getOwner().getId());
+			mm = new MessageMoved(1, 0, getOwnerId());
 			break;
 		}
 		if (mm != null) {
-		    getContext().sendToID(new MessageToSend(mm), Context.NETWORKING_ID);
+		    getOwner().message(mm);
+		    System.out.println("So we say them to move");
+		    getContext().sendDirectedMessage(new MessageToSend(mm));
 		}
 	}
     }

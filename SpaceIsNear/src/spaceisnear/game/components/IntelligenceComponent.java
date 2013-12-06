@@ -12,8 +12,8 @@ import spaceisnear.game.messages.Message;
  */
 public class IntelligenceComponent extends Component {
 
-    IntelligenceComponent(int owner) {
-	super(owner, ComponentType.INTELLIGENCE);
+    IntelligenceComponent() {
+	super(ComponentType.INTELLIGENCE);
     }
 
     @Override

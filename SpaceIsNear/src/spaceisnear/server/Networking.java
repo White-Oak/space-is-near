@@ -63,8 +63,9 @@ public class Networking extends Listener implements Runnable {
 		    break;
 
 		case CONTROLLED:
-		    MessageControlled mc=MessageControlled.getInstance(b);
-		    
+		    System.out.println("Somebody controlled his player");
+		    MessageControlled mc = MessageControlled.getInstance(b);
+		    core.getContext().sendDirectedMessage(mc);
 		    break;
 		case MOVED:
 		    MessageMoved mm = MessageMoved.getInstance(b);
@@ -129,7 +130,7 @@ public class Networking extends Listener implements Runnable {
     }
 
     public void host() throws IOException {
-	server = new Server(10445718, 10445718);
+	server = new Server(104457, 104457);
 	Registerer.registerEverything(server);
 	server.start();
 	server.addListener(this);
@@ -190,8 +191,7 @@ public class Networking extends Listener implements Runnable {
     private boolean isRogeredByAll() {
 	boolean result = true;
 	for (int i = 0; i < rogered.length; i++) {
-	    boolean b = rogered[i];
-	    result = b;
+	    result &= rogered[i];
 	}
 	return result;
     }

@@ -20,21 +20,20 @@ public class GamerPlayer extends Player {
 	    Component component = getComponents().get(i);
 	    if (component.getType() == ComponentType.POSITION) {
 		final Position position = ((PositionComponent) component).getPosition();
-		getComponents().set(i, new GamePlayerPositionComponent(position, this.getId()));
+		getComponents().set(i, new GamePlayerPositionComponent(position));
 	    }
 	}
     }
 
     public static GamerPlayer getInstance(ObjectBundle bundle, GameContext context) {
 	GamerPlayer player = new GamerPlayer(context);
-	player.setId(bundle.getObjectID());
 	Component[] components = bundle.getState().getComponents(player.getId(), context);
 	LinkedList<Component> list = new LinkedList<>();
 
 	for (Component component : components) {
 	    switch (component.getType()) {
 		case POSITION:
-		    component = new GamePlayerPositionComponent(((PositionComponent) component).getPosition(), player.getId());
+		    component = new GamePlayerPositionComponent(((PositionComponent) component).getPosition());
 		case NAME:
 		case INVENTORY:
 		case PLAYER:
@@ -43,6 +42,7 @@ public class GamerPlayer extends Player {
 	    }
 	}
 	player.setComponents(list);
+	player.setId(bundle.getObjectID());
 	return player;
     }
 }

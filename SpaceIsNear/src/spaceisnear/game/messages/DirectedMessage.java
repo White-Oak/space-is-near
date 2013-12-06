@@ -17,4 +17,8 @@ public abstract class DirectedMessage extends Message {
 	this.id = id;
     }
 
+    public int getId() {
+	return id;
+    }
+
 }

@@ -17,8 +17,8 @@ public class ItemPaintableComponent extends PaintableComponent {
     public void processMessage(Message message) {
     }
 
-    public ItemPaintableComponent(int owner) {
-	super(owner, ComponentType.ITEM_PAINTABLE);
+    public ItemPaintableComponent() {
+	super(ComponentType.ITEM_PAINTABLE);
     }
 
 }

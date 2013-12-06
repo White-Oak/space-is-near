@@ -9,13 +9,13 @@ import spaceisnear.game.messages.Message;
 
 public class NameComponent extends PaintableComponent {
 
-    public NameComponent(String name, int owner) {
-	super(owner, ComponentType.NAME);
+    public NameComponent(String name) {
+	super(ComponentType.NAME);
 	addState(new ComponentState("name", name));
     }
 
-    private NameComponent(int owner) {
-	super(owner, ComponentType.NAME);
+    private NameComponent() {
+	super(ComponentType.NAME);
     }
 
     @Override

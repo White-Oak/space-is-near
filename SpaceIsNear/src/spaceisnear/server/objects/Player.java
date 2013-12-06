@@ -5,6 +5,7 @@ import spaceisnear.game.components.BreathingComponent;
 import spaceisnear.game.components.HealthComponent;
 import spaceisnear.game.components.NameComponent;
 import spaceisnear.game.components.PlayerComponent;
+import spaceisnear.game.components.PlayerControllableComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.components.inventory.InventoryComponent;
 import spaceisnear.game.objects.GameObjectType;
@@ -20,11 +21,10 @@ public class Player extends GameObject {
 
     public Player(GameContext context, int connectionID) {
 	super(GameObjectType.PLAYER, null);
-	PositionComponent pc = new PositionComponent(24, 18, getId());
-	pc.setContext(context);
-	healthComponent = new HealthComponent(getId());
-	addComponents(pc, new PlayerComponent(getId()), healthComponent, new BreathingComponent(getId()),
-		new InventoryComponent(getId()), new NameComponent(null, getId()));
+	PositionComponent pc = new PositionComponent(24, 18);
+	healthComponent = new HealthComponent();
+	addComponents(pc, new PlayerComponent(), healthComponent, new BreathingComponent(),
+		new InventoryComponent(), new PlayerControllableComponent(), new NameComponent(null));
 	this.connectionID = connectionID;
     }
 

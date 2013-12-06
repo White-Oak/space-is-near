@@ -7,7 +7,6 @@ package spaceisnear.game.components;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,9 +24,9 @@ public abstract class Component {
     private final HashMap<String, ComponentState> states = new HashMap<>();
     private Context context = null;
     private final ComponentType type;
+    private int ownerId = -1;
 
-    public Component(int owner, ComponentType type) {
-	setOwnerId(owner);
+    public Component(ComponentType type) {
 	this.type = type;
     }
 
@@ -39,17 +38,15 @@ public abstract class Component {
 	}
     }
 
-    public static Component getInstance(ComponentStateBundle[] states, Class component, Context c, int owner) throws ClassNotFoundException,
+    public static Component getInstance(ComponentStateBundle[] states, Class component, Context c) throws ClassNotFoundException,
 	    NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	try {
-	    final Constructor constructor = component.getDeclaredConstructor(int.class);
+	    final Constructor constructor = component.getDeclaredConstructor();
 	    constructor.setAccessible(true);
-	    Component newInstance = (Component) constructor.newInstance(owner);
+	    Component newInstance = (Component) constructor.newInstance();
 	    for (ComponentStateBundle state : states) {
 		ComponentState componentState = state.getState();
-		if (!componentState.getName().equals("owner")) {
-		    newInstance.states.put(componentState.getName(), componentState);
-		}
+		newInstance.states.put(componentState.getName(), componentState);
 	    }
 	    newInstance.setContext(c);
 	    return newInstance;
@@ -68,15 +65,20 @@ public abstract class Component {
     }
 
     protected GameObject getOwner() {
+	if (getOwnerId() == -1) {
+	    throw new RuntimeException("Owner id is -1");
+	}
 	return ((GameContext) getContext()).getObjects().get(getOwnerId());
     }
 
-    protected int getOwnerId() {
-	return (Integer) getStateValueNamed("owner");
+    public int getOwnerId() {
+//	return (Integer) getStateValueNamed("owner");
+	return ownerId;
     }
 
     public final void setOwnerId(int id) {
-	states.put("owner", new ComponentState("owner", id));
+//	states.put("owner", new ComponentState("owner", id));
+	ownerId = id;
     }
 
     protected void addState(ComponentState state) {
@@ -99,6 +101,8 @@ public abstract class Component {
 		case GAMER_PLAYER_POSITION:
 		    PositionComponent positionComponent = (PositionComponent) component;
 		    return positionComponent.getPosition();
+		default:
+		    throw new RuntimeException("No position component here.");
 	    }
 	}
 	return null;

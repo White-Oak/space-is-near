@@ -13,7 +13,7 @@ public class NetworkingObject extends GameObject {
 
     public NetworkingObject(GameContext context) {
 	super(GameObjectType.NETWORKING, context);
-	addComponents(new NetworkingComponent(getId()));
+	addComponents(new NetworkingComponent());
     }
 
     public void send(NetworkableMessage m) {

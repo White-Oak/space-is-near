@@ -11,17 +11,17 @@ import spaceisnear.game.objects.Position;
 
 public class PositionComponent extends Component {
 
-    public PositionComponent(Position p, int owner) {
-	super(owner, ComponentType.POSITION);
+    public PositionComponent(Position p) {
+	super(ComponentType.POSITION);
 	addState(new ComponentState("position", p));
     }
 
-    public PositionComponent(int x, int y, int owner) {
-	this(new Position(x, y), owner);
+    public PositionComponent(int x, int y) {
+	this(new Position(x, y));
     }
 
-    private PositionComponent(int owner) {
-	super(owner, ComponentType.POSITION);
+    private PositionComponent() {
+	super(ComponentType.POSITION);
     }
 
     @Override

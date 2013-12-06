@@ -29,7 +29,7 @@ public class GameObjectState {
 	for (int i = 0; i < classes.length; i++) {
 	    try {
 		Class class1 = Class.forName(classes[i]);
-		components[i] = Component.getInstance(states[i], class1, c, owner);
+		components[i] = Component.getInstance(states[i], class1, c);
 	    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 		Logger.getLogger(GameObjectState.class.getName()).log(Level.SEVERE, null, ex);
 	    }

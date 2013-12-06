@@ -5,7 +5,6 @@
  */
 package spaceisnear.server.objects;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -41,6 +40,9 @@ public abstract class GameObject {
     public void setId(int id) {
 	if (this.id == -1) {
 	    this.id = id;
+	    for (Component component : components) {
+		component.setOwnerId(id);
+	    }
 	}
     }
 

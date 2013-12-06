@@ -13,8 +13,8 @@ import spaceisnear.game.messages.Message;
  */
 public class PlayerComponent extends PaintableComponent {
 
-    public PlayerComponent(int owner) {
-	super(owner, ComponentType.PLAYER);
+    public PlayerComponent() {
+	super(ComponentType.PLAYER);
     }
 
     @Override

@@ -8,12 +8,8 @@ import spaceisnear.game.GameContext;
 
 public abstract class PaintableComponent extends Component {
 
-    public PaintableComponent(int owner) {
-	this(owner, ComponentType.PAINTABLE);
-    }
-
-    protected PaintableComponent(int owner, ComponentType type) {
-	super(owner, type);
+    protected PaintableComponent(ComponentType type) {
+	super(type);
     }
 
     public int getX() {

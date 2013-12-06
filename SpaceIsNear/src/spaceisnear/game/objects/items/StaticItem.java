@@ -20,7 +20,7 @@ public abstract class StaticItem extends GameObject {
 
     public StaticItem(GameContext context, Position p) {
 	super(GameObjectType.ITEM, context);
-	PositionComponent pc = new PositionComponent(p, getId());
+	PositionComponent pc = new PositionComponent(p);
 	addComponents(pc);
     }
 }

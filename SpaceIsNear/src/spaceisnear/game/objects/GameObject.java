@@ -44,9 +44,6 @@ public abstract class GameObject {
     public final synchronized void addComponents(Component... a) {
 	for (Component component : a) {
 	    component.setContext(context);
-	    if (component instanceof PaintableComponent) {
-		context.addPaintable((PaintableComponent) component);
-	    }
 	}
 	this.components.addAll(Arrays.asList(a));
     }

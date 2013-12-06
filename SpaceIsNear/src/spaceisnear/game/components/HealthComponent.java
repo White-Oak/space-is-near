@@ -23,8 +23,8 @@ public class HealthComponent extends Component {
      *
      * @param owner
      */
-    public HealthComponent(int owner) {
-	super(owner, ComponentType.HEALTH);
+    public HealthComponent() {
+	super(ComponentType.HEALTH);
 	addState(new ComponentState("health", 100));
     }
 
@@ -39,6 +39,10 @@ public class HealthComponent extends Component {
 	}
     }
 
+    /**
+     *
+     * @return state of a living creature.
+     */
     public State getState() {
 	int health = (Integer) getStateValueNamed("health");
 	if (health > SICK_HEALTH) {

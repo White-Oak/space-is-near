@@ -11,8 +11,8 @@ import spaceisnear.game.messages.Message;
 
 public class InventoryComponent extends Component {
 
-    public InventoryComponent(int owner) {
-	super(owner, ComponentType.INVENTORY);
+    public InventoryComponent() {
+	super(ComponentType.INVENTORY);
 	addState(new ComponentState("slots", new TypicalInventorySlotsSet()));
     }
 

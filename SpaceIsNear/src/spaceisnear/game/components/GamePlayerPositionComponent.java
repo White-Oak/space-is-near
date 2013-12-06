@@ -12,8 +12,8 @@ import spaceisnear.game.objects.Position;
 
 public class GamePlayerPositionComponent extends PositionComponent {
 
-    public GamePlayerPositionComponent(Position p, int owner) {
-	super(p, owner);
+    public GamePlayerPositionComponent(Position p) {
+	super(p);
     }
 
     @Override

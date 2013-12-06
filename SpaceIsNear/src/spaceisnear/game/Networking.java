@@ -21,7 +21,7 @@ public class Networking extends Listener {
     private boolean justConnected = true;
 
     public void connect(String host, int tcpPort) throws IOException {
-	client = new Client(10445718, 10445718);
+	client = new Client(104457, 104457);
 	Registerer.registerEverything(client);
 	client.start();
 	client.addListener(this);
@@ -80,19 +80,16 @@ public class Networking extends Listener {
 		    if (justConnected) {
 			System.out.println("got some first object");
 			GamerPlayer player = GamerPlayer.getInstance(ob, gameContext);
-			player.setId(ob.getObjectID());
 			gameContext.setPlayerID(player.getId());
 			gameObject = player;
-			send(new MessageRogered());
 			justConnected = false;
 		    } else {
 			gameObject = getObjectFromBundle(ob);
-			if (!gameContext.getCore().isNotpaused() && gameObject instanceof Player) {
-			    send(new MessageRogered());
-			}
 		    }
 		    if (gameObject != null) {
 			gameContext.addObject(gameObject);
+			System.out.println("added player");
+			send(new MessageRogered());
 		    }
 		    break;
 

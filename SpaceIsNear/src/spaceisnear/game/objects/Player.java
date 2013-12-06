@@ -18,9 +18,9 @@ public class Player extends GameObject {
 
     public Player(GameContext context) {
 	super(GameObjectType.PLAYER, context);
-	PositionComponent pc = new PositionComponent(24, 18, getId());
+	PositionComponent pc = new PositionComponent(24, 18);
 
-	addComponents(pc, new PlayerComponent(getId()), new NameComponent(null, getId()), new InventoryComponent(getId()));
+	addComponents(pc, new PlayerComponent(), new NameComponent(null), new InventoryComponent());
     }
 
     public String getNickname() {
@@ -34,8 +34,7 @@ public class Player extends GameObject {
     public static Player getInstance(ObjectBundle bundle, GameContext context) {
 	Player player = new Player(context);
 	player.setContext(context);
-	player.setId(bundle.getObjectID());
-	Component[] components = bundle.getState().getComponents(player.getId(), context);
+	Component[] components = bundle.getState().getComponents(bundle.getObjectID(), context);
 	LinkedList<Component> list = new LinkedList<>();
 	for (Component component : components) {
 	    switch (component.getType()) {
@@ -48,6 +47,7 @@ public class Player extends GameObject {
 	    }
 	}
 	player.setComponents(list);
+	player.setId(bundle.getObjectID());
 	return player;
     }
 }
