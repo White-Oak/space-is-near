@@ -1,0 +1,18 @@
+[
+    {
+	"name": "lomik",
+	"size": "MEDIUM",
+	"type": "TOOL",
+	"blockingPath": false,
+	"blockingAir": false,
+	"imageIds": [0]
+    },
+    {
+	"name": "plitka",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": false,
+	"blockingAir": false,
+	"imageIds": [1]
+    }
+]

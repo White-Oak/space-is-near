@@ -21,6 +21,8 @@ import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageTimePassed;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.NetworkingObject;
+import spaceisnear.game.objects.items.ItemsArchive;
+import spaceisnear.game.objects.items.ItemsReader;
 
 /**
  * @author LPzhelud
@@ -36,7 +38,11 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
-	System.out.println("Client has continued his work");
+	try {
+	    ItemsArchive.itemsArchive = new ItemsArchive(ItemsReader.read());
+	} catch (Exception ex) {
+	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
+	}
 	context = new GameContext(new CameraMan(), objects, this);
 	context.addObject(new NetworkingObject(context));
 	context.getCameraMan().setWindowWidth(800);

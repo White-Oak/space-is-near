@@ -44,7 +44,10 @@
 
 0.0.3
 -Basic items system
-    -designed definition's format
+    +realized ItemsArchive
+    +designed definition's format
+    +realized ItemBundle (name, size, blockingAir, blockingPath, imageIds)
+    +realized reading definitions of items from file
 -Obstacles' system
 -Atmosphere
 -Inventory

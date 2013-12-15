@@ -5,6 +5,8 @@
 package spaceisnear.game.objects.items;
 
 import spaceisnear.game.GameContext;
+import spaceisnear.game.components.ItemPaintableComponent;
+import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.game.objects.GameObjectType;
@@ -16,11 +18,9 @@ import spaceisnear.game.objects.Position;
  */
 public abstract class StaticItem extends ClientGameObject {
 
-    private boolean blockable, airBlockable;
-
-    public StaticItem(GameContext context, Position p) {
+    public StaticItem(GameContext context, Position p, int itemId) {
 	super(GameObjectType.ITEM, context);
 	PositionComponent pc = new PositionComponent(p);
-	addComponents(pc);
+	addComponents(pc, new ItemPropertiesComponent(itemId), new ItemPaintableComponent());
     }
 }
