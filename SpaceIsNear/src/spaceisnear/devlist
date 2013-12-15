@@ -15,11 +15,10 @@
 +new messages: connection broken, rogered, world sent, map sent
 +new component: Name
 
-0.0.2
+0.0.2 r63
 +there are now directed and non-directed messages. Directed cannot be sent to everyone
 -Basic items system
     +new items: Cloth, Tool, Environment
-    -designed definition's format
 -Obstacles' system
     +Obstacles layer
     +checking for reacheableness in PositionComponent
@@ -27,23 +26,33 @@
     +Atmosphere layer
     +removed from client-side
 -Inventory
-    -each inventory consists of inventory slots
-    -each inventory slot has his size, item field and name
+    +each inventory consists of inventory slots
 *PlayerControllableComponent was replaced with GamePlayerPositionComponent
--Camera movement for teleporting messages
-+added NetworkingComponent and MessageToSend for the architecture to look more good
--added empty slots on server-side's objects list for networking, ui, etc 
++added NetworkingComponent and MessageToSend for the architecture to look good
 -added HealthComponent
     +actual hitpoints
-    +states
-+server processes health states of players
+    +server processes health states of players (alive, critical etc)
 +added HurtMessage
     +types of damage
-    -acceptance on client
 +added MessageKnockbacked
+*now components that rely on Position search PositionComponent in a list of objects' components
+*Players now have different components on server and client: dealt with sending them over the net
+*Components had bad newInstance method: recoded
++added enum for components (ComponentType)
+*ComponentStates are stored now in a hashmap inside Component for easy-access
+*ServerGameObject and ClientGameObject are now subclasses of abstract AbstractGameObject
+
+0.0.3
+-Basic items system
+    -designed definition's format
+-Obstacles' system
+-Atmosphere
+-Inventory
+    -each inventory slot has his size, item field and name
+-Camera movement for teleporting messages
+-HealthComponent
+-added empty slots on server-side's objects list for networking, ui, etc 
++HurtMessage
     -acceptance on client
-+now components that rely on Position search PositionComponent in a list of objects' components
-+Players had different components on server and client: dealt with sending them over the net
-+Components had bad newInstance method: recoded
-+added enum for components
-+ComponentStates stored in a hashmap inside Component
++MessageKnockbacked
+    -acceptance on client

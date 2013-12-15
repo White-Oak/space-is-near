@@ -6,30 +6,36 @@
 package spaceisnear.server;
 
 import spaceisnear.game.messages.Message;
-import spaceisnear.server.objects.GameObject;
+import spaceisnear.server.objects.ServerGameObject;
 import spaceisnear.server.objects.Player;
 import java.util.*;
+import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.CameraMan;
+import spaceisnear.game.layer.AtmosphericLayer;
+import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.layer.TiledLayer;
 import spaceisnear.game.messages.DirectedMessage;
+import spaceisnear.server.objects.ServerNetworkingObject;
 
 /**
  * @author LPzhelud
  */
-public class GameContext extends Context {
+public final class ServerContext extends Context {
 
     public static final int TILE_HEIGHT = 16;
     public static final int TILE_WIDTH = 16;
     private final Networking networking;
-    private final List<GameObject> objects;
+    private final List<AbstractGameObject> objects;
     private final List<Player> players = new LinkedList<>();
     private final TiledLayer tiledLayer;
+    private final ObstaclesLayer obstacles;
+    private final AtmosphericLayer atmosphere;
 
     @Override
     public synchronized void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
-	    for (GameObject gameObject : objects) {
+	    for (AbstractGameObject gameObject : objects) {
 		gameObject.message(m);
 	    }
 	}
@@ -40,7 +46,7 @@ public class GameContext extends Context {
 	objects.get(id).message(m);
     }
 
-    public synchronized void addObject(GameObject gameObject) {
+    public synchronized void addObject(ServerGameObject gameObject) {
 	objects.add(gameObject);
 	gameObject.setId(objects.size() - 1);
     }
@@ -62,17 +68,23 @@ public class GameContext extends Context {
     }
 
     @java.beans.ConstructorProperties({"networking", "objects", "tiledLayer"})
-    public GameContext(final Networking networking, final List<GameObject> objects, final TiledLayer tiledLayer) {
+    public ServerContext(final Networking networking, final List<AbstractGameObject> objects, final TiledLayer tiledLayer,
+	    ObstaclesLayer obstacles,
+	    AtmosphericLayer atmosphere) {
 	this.networking = networking;
 	this.objects = objects;
 	this.tiledLayer = tiledLayer;
+	this.obstacles = obstacles;
+	this.atmosphere = atmosphere;
+	addObject(new ServerNetworkingObject(this));
     }
 
     public Networking getNetworking() {
 	return this.networking;
     }
 
-    public List<GameObject> getObjects() {
+    @Override
+    public List<AbstractGameObject> getObjects() {
 	return this.objects;
     }
 
@@ -83,4 +95,15 @@ public class GameContext extends Context {
     public TiledLayer getTiledLayer() {
 	return this.tiledLayer;
     }
+
+    @Override
+    public ObstaclesLayer getObstacles() {
+	return obstacles;
+    }
+
+    @Override
+    public AtmosphericLayer getAtmosphere() {
+	return atmosphere;
+    }
+
 }

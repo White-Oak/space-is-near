@@ -8,25 +8,28 @@ package spaceisnear.server;
 import java.io.IOException;
 import org.newdawn.slick.Image;
 import spaceisnear.game.layer.TiledLayer;
-import spaceisnear.server.objects.GameObject;
 import spaceisnear.server.objects.Player;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
+import spaceisnear.AbstractGameObject;
 import spaceisnear.game.components.HealthComponent;
+import spaceisnear.game.layer.AtmosphericLayer;
+import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.MessageDied;
 import spaceisnear.game.messages.MessageKnockbacked;
 import spaceisnear.game.messages.MessagePaused;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.MessageUnpaused;
+import spaceisnear.server.objects.ServerNetworkingObject;
 
 /**
  * @author white_oak
  */
 public class ServerCore implements Runnable {
 
-    private final GameContext context;
+    private final ServerContext context;
     private final boolean unbreakable = true;
     private boolean paused = false;
     private static final int QUANT_TIME = 20;
@@ -35,11 +38,12 @@ public class ServerCore implements Runnable {
     public static final int OBJECTS_TO_SKIP = 1;
 
     public ServerCore() {
-
+	int width = 128;
+	int height = 128;
 	//<editor-fold defaultstate="collapsed" desc="map generating">
 	try {
 	    tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
-		    spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, 128, 128);
+		    spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
 	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
 	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
 	    tiledLayer.fillRectTile(0, 0, 128, 128, 5);
@@ -56,18 +60,20 @@ public class ServerCore implements Runnable {
 	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	//</editor-fold>
-	final ArrayList<GameObject> objects = new ArrayList<>();
-	for (int i = 0; i < OBJECTS_TO_SKIP; i++) {
-	    objects.add(null);
-	}
-	context = new GameContext(new Networking(this), objects, tiledLayer);
+	final ArrayList<AbstractGameObject> objects = new ArrayList<>();
+//	for (int i = 0; i < OBJECTS_TO_SKIP; i++) {
+//	    objects.add(null);
+//	}
+	ObstaclesLayer obstacles = new ObstaclesLayer(width, height);
+	AtmosphericLayer atmosphere = new AtmosphericLayer(width, height);
+	context = new ServerContext(new Networking(this), objects, tiledLayer, obstacles, atmosphere);
     }
 
     @Override
     public void run() {
 	while (unbreakable) {
 	    if (!paused) {
-		for (GameObject gameObject : getContext().getObjects()) {
+		for (AbstractGameObject gameObject : getContext().getObjects()) {
 		    if (gameObject != null) {
 			gameObject.process();
 		    }
@@ -122,7 +128,7 @@ public class ServerCore implements Runnable {
 	return context.addPlayer(connectionID);
     }
 
-    GameContext getContext() {
+    ServerContext getContext() {
 	return this.context;
     }
 

@@ -5,7 +5,10 @@
  */
 package spaceisnear;
 
+import java.util.List;
 import spaceisnear.game.CameraMan;
+import spaceisnear.game.layer.AtmosphericLayer;
+import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
 
@@ -26,4 +29,10 @@ public abstract class Context {
     public synchronized void sendDirectedMessage(DirectedMessage directedMessage) {
 	sendToID(directedMessage, directedMessage.getId());
     }
+
+    public abstract List<AbstractGameObject> getObjects();
+
+    public abstract AtmosphericLayer getAtmosphere();
+
+    public abstract ObstaclesLayer getObstacles();
 }

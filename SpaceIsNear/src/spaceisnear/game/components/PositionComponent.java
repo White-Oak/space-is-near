@@ -30,19 +30,19 @@ public class PositionComponent extends Component {
     }
 
     public int getX() {
-	return ((Position) getStates().get(0).getValue()).getX();
+	return getPosition().getX();
     }
 
     public int getY() {
-	return ((Position) getStates().get(0).getValue()).getY();
+	return getPosition().getY();
     }
 
     public void setX(int x) {
-	((Position) getStates().get(0).getValue()).setX(x);
+	getPosition().setX(x);
     }
 
     public void setY(int y) {
-	((Position) getStates().get(0).getValue()).setY(y);
+	getPosition().setY(y);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PositionComponent extends Component {
 		MessageMoved messagem = (MessageMoved) message;
 		int newX = getX() + messagem.getX();
 		int newY = getY() + messagem.getY();
-		if (((Context) getContext()).getCameraMan().getObstacles().isReacheable(newX, newY)) {
+		if (getContext().getObstacles().isReacheable(newX, newY)) {
 		    setX(newX);
 		    setY(newY);
 		}

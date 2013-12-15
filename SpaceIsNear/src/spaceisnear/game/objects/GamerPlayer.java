@@ -34,6 +34,7 @@ public class GamerPlayer extends Player {
 	    switch (component.getType()) {
 		case POSITION:
 		    component = new GamePlayerPositionComponent(((PositionComponent) component).getPosition());
+		    component.setContext(context);
 		case NAME:
 		case INVENTORY:
 		case PLAYER:

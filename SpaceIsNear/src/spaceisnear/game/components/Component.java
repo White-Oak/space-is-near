@@ -7,13 +7,16 @@ package spaceisnear.game.components;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spaceisnear.AbstractGameObject;
 import spaceisnear.game.messages.Message;
 import spaceisnear.Context;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.objects.GameObject;
+import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.game.objects.Position;
 
 /**
@@ -64,11 +67,13 @@ public abstract class Component {
 	return getStateNamed(name).getValue();
     }
 
-    protected GameObject getOwner() {
+    protected AbstractGameObject getOwner() {
 	if (getOwnerId() == -1) {
 	    throw new RuntimeException("Owner id is -1");
 	}
-	return ((GameContext) getContext()).getObjects().get(getOwnerId());
+	final Context name = getContext();
+	final List<AbstractGameObject> objects = name.getObjects();
+	return objects.get(getOwnerId());
     }
 
     public int getOwnerId() {
@@ -94,7 +99,7 @@ public abstract class Component {
     }
 
     protected Position getPosition() {
-	GameObject owner = getOwner();
+	AbstractGameObject owner = getOwner();
 	for (Component component : owner.getComponents()) {
 	    switch (component.getType()) {
 		case POSITION:

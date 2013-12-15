@@ -9,7 +9,7 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.components.NetworkingComponent;
 import spaceisnear.game.messages.NetworkableMessage;
 
-public class NetworkingObject extends GameObject {
+public class NetworkingObject extends ClientGameObject {
 
     public NetworkingObject(GameContext context) {
 	super(GameObjectType.NETWORKING, context);

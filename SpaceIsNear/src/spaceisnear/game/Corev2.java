@@ -5,7 +5,6 @@
  */
 package spaceisnear.game;
 
-import spaceisnear.game.objects.GameObject;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -16,7 +15,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import spaceisnear.Context;
+import spaceisnear.AbstractGameObject;
 import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageTimePassed;
@@ -29,7 +28,7 @@ import spaceisnear.game.objects.NetworkingObject;
 public class Corev2 extends BasicGameState {
 
     private GameContext context;
-    private final ArrayList<GameObject> objects = new ArrayList<>();
+    private final ArrayList<AbstractGameObject> objects = new ArrayList<>();
     private static final int QUANT_TIME = 50;
     private int key;
     public static String IP;
@@ -73,7 +72,7 @@ public class Corev2 extends BasicGameState {
 	    if (mc != null && playerID != -1) {
 		context.sendDirectedMessage(new MessageToSend(mc));
 	    }
-	    for (GameObject gameObject : objects) {
+	    for (AbstractGameObject gameObject : objects) {
 		gameObject.process();
 	    }
 	}

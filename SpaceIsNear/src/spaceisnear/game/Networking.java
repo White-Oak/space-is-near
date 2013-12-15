@@ -7,7 +7,7 @@ import spaceisnear.game.messages.*;
 import java.io.IOException;
 import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.objects.Player;
-import spaceisnear.game.objects.GameObject;
+import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.server.Registerer;
 import static spaceisnear.Utils.GSON;
 
@@ -76,7 +76,7 @@ public class Networking extends Listener {
 		case CREATED:
 		    MessageCreated mc = MessageCreated.getInstance(b);
 		    ObjectBundle ob = (ObjectBundle) (GSON.fromJson(mc.getJson(), ObjectBundle.class));
-		    GameObject gameObject;
+		    ClientGameObject gameObject;
 		    if (justConnected) {
 			System.out.println("got some first object");
 			GamerPlayer player = GamerPlayer.getInstance(ob, gameContext);
@@ -101,7 +101,7 @@ public class Networking extends Listener {
 		    MessageCreated[] messages = GSON.fromJson(mws.getWorld(), MessageCreated[].class);
 		    for (MessageCreated messageCreated : messages) {
 			ObjectBundle ob1 = (ObjectBundle) (GSON.fromJson(messageCreated.getJson(), ObjectBundle.class));
-			GameObject gameObject1 = getObjectFromBundle(ob1);
+			ClientGameObject gameObject1 = getObjectFromBundle(ob1);
 			if (gameObject1 != null) {
 			    gameContext.addObject(gameObject1);
 			}
@@ -123,8 +123,8 @@ public class Networking extends Listener {
 	}
     }
 
-    private GameObject getObjectFromBundle(ObjectBundle ob) {
-	GameObject gameObject = null;
+    private ClientGameObject getObjectFromBundle(ObjectBundle ob) {
+	ClientGameObject gameObject = null;
 	switch (ob.getObjectType()) {
 	    case PLAYER:
 		gameObject = Player.getInstance(ob, gameContext);

@@ -14,7 +14,7 @@ import spaceisnear.game.components.inventory.InventoryComponent;
  *
  * @author LPzhelud
  */
-public class Player extends GameObject {
+public class Player extends ClientGameObject {
 
     public Player(GameContext context) {
 	super(GameObjectType.PLAYER, context);

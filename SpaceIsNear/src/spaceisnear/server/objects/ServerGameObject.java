@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import spaceisnear.AbstractGameObject;
+import spaceisnear.Context;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
@@ -17,21 +19,21 @@ import spaceisnear.game.components.ComponentStateBundle;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.server.GameContext;
+import spaceisnear.server.ServerContext;
 
 /**
  * @author White Oak
  */
-public abstract class GameObject {
+public abstract class ServerGameObject extends AbstractGameObject {
 
     private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     private int id = -1;
     private boolean destroyed = false;
     private final LinkedList<Component> components = new LinkedList<>();
     private final GameObjectType type;
-    private final GameContext context;
+    private final ServerContext context;
 
-    public GameObject(GameObjectType type, GameContext context) {
+    public ServerGameObject(GameObjectType type, ServerContext context) {
 
 	this.type = type;
 	this.context = context;
@@ -53,6 +55,7 @@ public abstract class GameObject {
 	this.components.addAll(Arrays.asList(a));
     }
 
+    @Override
     public final void message(Message message) {
 	messages.add(message);
     }
@@ -75,10 +78,12 @@ public abstract class GameObject {
 	return new GameObjectState(states, classes);
     }
 
+    @Override
     public final synchronized ObjectBundle getBundle() {
 	return new ObjectBundle(getState(), id, type);
     }
 
+    @Override
     public synchronized void process() {
 	if (destroyed) {
 	    return;
@@ -103,6 +108,7 @@ public abstract class GameObject {
 	this.destroyed = destroyed;
     }
 
+    @Override
     public LinkedList<Component> getComponents() {
 	return this.components;
     }
@@ -111,7 +117,8 @@ public abstract class GameObject {
 	return this.type;
     }
 
-    public GameContext getContext() {
+    @Override
+    public Context getContext() {
 	return this.context;
     }
 }

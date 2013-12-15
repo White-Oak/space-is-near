@@ -5,7 +5,6 @@
  */
 package spaceisnear.game.components;
 
-import spaceisnear.Context;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.objects.Position;
@@ -23,10 +22,10 @@ public class GamePlayerPositionComponent extends PositionComponent {
 		MessageMoved messagem = (MessageMoved) message;
 		int newX = getX() + messagem.getX();
 		int newY = getY() + messagem.getY();
-		if (((Context) getContext()).getCameraMan().getObstacles().isReacheable(newX, newY)) {
+		if (getContext().getObstacles().isReacheable(newX, newY)) {
 		    setX(newX);
 		    setY(newY);
-		    ((Context) getContext()).getCameraMan().setNewCameraPositionFor(messagem.getX(), messagem.getY());
+		    getContext().getCameraMan().setNewCameraPositionFor(messagem.getX(), messagem.getY());
 		}
 		break;
 	    case TELEPORTED:

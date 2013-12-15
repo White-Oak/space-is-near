@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spaceisnear.AbstractGameObject;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.messages.MessageClientInformation;
 import spaceisnear.game.messages.MessageConnectionBroken;
@@ -23,7 +24,6 @@ import spaceisnear.game.messages.MessageCreated;
 import spaceisnear.game.messages.MessageMapSent;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.MessageWorldSent;
-import spaceisnear.server.objects.GameObject;
 import spaceisnear.server.objects.Player;
 import static spaceisnear.Utils.GSON;
 import spaceisnear.game.messages.MessageControlled;
@@ -63,7 +63,7 @@ public class Networking extends Listener implements Runnable {
 		    break;
 
 		case CONTROLLED:
-		    System.out.println("Somebody controlled his player");
+//		    System.out.println("Somebody controlled his player");
 		    MessageControlled mc = MessageControlled.getInstance(b);
 		    core.getContext().sendDirectedMessage(mc);
 		    break;
@@ -173,10 +173,10 @@ public class Networking extends Listener implements Runnable {
     }
 
     private MessageWorldSent getWorldInOneJSON() {
-	GameContext context = core.getContext();
-	List<GameObject> objects = context.getObjects();
+	ServerContext context = core.getContext();
+	List<AbstractGameObject> objects = context.getObjects();
 	List<MessageCreated> messages = new ArrayList<>();
-	for (GameObject object : objects) {
+	for (AbstractGameObject object : objects) {
 	    if (object != null) {
 		messages.add(new MessageCreated(GSON.toJson(object.getBundle())));
 	    }

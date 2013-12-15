@@ -38,7 +38,7 @@ public class PlayerControllableComponent extends Component {
 		}
 		if (mm != null) {
 		    getOwner().message(mm);
-		    System.out.println("So we say them to move");
+//		    System.out.println("So we say them to move");
 		    getContext().sendDirectedMessage(new MessageToSend(mm));
 		}
 	}

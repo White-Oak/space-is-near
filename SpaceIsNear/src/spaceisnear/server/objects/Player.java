@@ -9,18 +9,18 @@ import spaceisnear.game.components.PlayerControllableComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.components.inventory.InventoryComponent;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.server.GameContext;
+import spaceisnear.server.ServerContext;
 
 /**
  * @author LPzhelud
  */
-public class Player extends GameObject {
+public class Player extends ServerGameObject {
 
     public int connectionID;
     private final HealthComponent healthComponent;
 
-    public Player(GameContext context, int connectionID) {
-	super(GameObjectType.PLAYER, null);
+    public Player(ServerContext context, int connectionID) {
+	super(GameObjectType.PLAYER, context);
 	PositionComponent pc = new PositionComponent(24, 18);
 	healthComponent = new HealthComponent();
 	addComponents(pc, new PlayerComponent(), healthComponent, new BreathingComponent(),

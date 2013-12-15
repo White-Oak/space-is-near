@@ -6,7 +6,7 @@ package spaceisnear.game.objects.items;
 
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.PositionComponent;
-import spaceisnear.game.objects.GameObject;
+import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 
@@ -14,7 +14,7 @@ import spaceisnear.game.objects.Position;
  *
  * @author white_oak
  */
-public abstract class StaticItem extends GameObject {
+public abstract class StaticItem extends ClientGameObject {
 
     private boolean blockable, airBlockable;
 

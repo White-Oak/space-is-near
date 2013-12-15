@@ -5,11 +5,15 @@
  */
 package spaceisnear.game;
 
-import spaceisnear.game.objects.GameObject;
+import spaceisnear.game.objects.ClientGameObject;
 import java.util.ArrayList;
+import java.util.List;
+import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.PaintableComponent;
+import spaceisnear.game.layer.AtmosphericLayer;
+import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
 
@@ -23,7 +27,7 @@ public class GameContext extends Context {
     public static final int TILE_HEIGHT = 16;
     public static final int TILE_WIDTH = 16;
     private final Networking networking = new Networking(this);
-    private final ArrayList<GameObject> objects;
+    private final List<AbstractGameObject> objects;
     private int playerID = -1;
     private final Corev2 core;
     public static GameContext CONTEXT;
@@ -31,7 +35,7 @@ public class GameContext extends Context {
     @Override
     public void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
-	    for (GameObject gameObject : objects) {
+	    for (AbstractGameObject gameObject : objects) {
 		gameObject.message(m);
 	    }
 	}
@@ -42,7 +46,7 @@ public class GameContext extends Context {
 	objects.get(id).message(m);
     }
 
-    public synchronized void addObject(GameObject gameObject) {
+    public synchronized void addObject(ClientGameObject gameObject) {
 	objects.add(gameObject);
 	for (Component component : gameObject.getComponents()) {
 	    if (component instanceof PaintableComponent) {
@@ -53,7 +57,7 @@ public class GameContext extends Context {
     }
 
     @java.beans.ConstructorProperties({"cameraMan", "objects", "core"})
-    public GameContext(final CameraMan cameraMan, final ArrayList<GameObject> objects, final Corev2 core) {
+    public GameContext(CameraMan cameraMan, ArrayList<AbstractGameObject> objects, Corev2 core) {
 	this.cameraMan = cameraMan;
 	this.objects = objects;
 	this.core = core;
@@ -73,7 +77,8 @@ public class GameContext extends Context {
 	return this.networking;
     }
 
-    public ArrayList<GameObject> getObjects() {
+    @Override
+    public List<AbstractGameObject> getObjects() {
 	return this.objects;
     }
 
@@ -87,5 +92,15 @@ public class GameContext extends Context {
 
     Corev2 getCore() {
 	return this.core;
+    }
+
+    @Override
+    public AtmosphericLayer getAtmosphere() {
+	return getCameraMan().getAtmosphere();
+    }
+
+    @Override
+    public ObstaclesLayer getObstacles() {
+	return getCameraMan().getObstacles();
     }
 }

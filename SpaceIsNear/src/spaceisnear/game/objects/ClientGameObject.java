@@ -7,6 +7,7 @@ package spaceisnear.game.objects;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import spaceisnear.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
@@ -18,7 +19,7 @@ import spaceisnear.game.messages.Message;
 /**
  * @author LPzhelud
  */
-public abstract class GameObject {
+public abstract class ClientGameObject extends AbstractGameObject {
 
     private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     private int id = -1;
@@ -27,7 +28,7 @@ public abstract class GameObject {
     private final GameObjectType type;
     private GameContext context;
 
-    public GameObject(GameObjectType type, GameContext context) {
+    public ClientGameObject(GameObjectType type, GameContext context) {
 	this.type = type;
 	this.context = context;
     }
@@ -48,6 +49,7 @@ public abstract class GameObject {
 	this.components.addAll(Arrays.asList(a));
     }
 
+    @Override
     public final void message(Message message) {
 	messages.add(message);
     }
@@ -70,18 +72,19 @@ public abstract class GameObject {
 	return new GameObjectState(states, classes);
     }
 
+    @Override
     public final synchronized ObjectBundle getBundle() {
 	return new ObjectBundle(getState(), id, type);
     }
 
+    @Override
     public synchronized void process() {
 	if (destroyed) {
 	    return;
 	}
 	while (messages.size() > 0) {
 	    Message message = messages.poll();
-	    for (Iterator<Component> it = components.iterator(); it.hasNext();) {
-		Component component = it.next();
+	    for (Component component : components) {
 		component.processMessage(message);
 	    }
 	}
@@ -99,6 +102,7 @@ public abstract class GameObject {
 	this.destroyed = destroyed;
     }
 
+    @Override
     public List<Component> getComponents() {
 	return this.components;
     }
