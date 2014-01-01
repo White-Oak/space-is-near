@@ -13,7 +13,6 @@ import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentStateBundle;
-import spaceisnear.game.components.PaintableComponent;
 import spaceisnear.game.messages.Message;
 
 /**
@@ -111,11 +110,12 @@ public abstract class ClientGameObject extends AbstractGameObject {
 	return this.type;
     }
 
+    @Override
     public GameContext getContext() {
 	return this.context;
     }
 
-    protected void setContext(final GameContext context) {
+    public void setContext(final GameContext context) {
 	this.context = context;
     }
 

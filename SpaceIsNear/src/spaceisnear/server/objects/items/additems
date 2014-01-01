@@ -1,0 +1,6 @@
+//addItem (name, x, y)
+//x and y — are cell coordinates, not real
+addItem {plitka, 5, 5}
+addItem {plitka, 4, 5}
+addItem {plitka, 4, 2}
+addItem {plitka, 4, 3}

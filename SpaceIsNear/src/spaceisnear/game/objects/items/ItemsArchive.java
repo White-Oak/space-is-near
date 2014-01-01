@@ -5,7 +5,14 @@
  */
 package spaceisnear.game.objects.items;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+import spaceisnear.game.GameContext;
+import spaceisnear.server.ServerContext;
 
 /**
  *
@@ -20,9 +27,10 @@ public class ItemsArchive {
     private final String[] names;
     private final Type[] types;
     private final int[][] imageIds;
+    private final Image[] images;
     public static ItemsArchive itemsArchive;
 
-    public ItemsArchive(ItemBundle[] bundles) {
+    public ItemsArchive(ItemBundle[] bundles) throws SlickException, IOException {
 	final int length = bundles.length;
 	blockingAir = new boolean[length];
 	blockingPath = new boolean[length];
@@ -39,6 +47,17 @@ public class ItemsArchive {
 	    types[i] = itemBundle.type;
 	    imageIds[i] = itemBundle.imageIds;
 	    ids.put(itemBundle.name, i);
+	}
+	SpriteSheet sheet;
+	try (InputStream resourceAsStream = getClass().getResourceAsStream("/res/sprites.png")) {
+	    sheet = new SpriteSheet("sprites", resourceAsStream, GameContext.TILE_WIDTH,
+		    GameContext.TILE_HEIGHT);
+	}
+	images = new Image[sheet.getHorizontalCount() * sheet.getVerticalCount()];
+	for (int i = 0; i < sheet.getHorizontalCount(); i++) {
+	    for (int j = 0; j < sheet.getVerticalCount(); j++) {
+		images[i * sheet.getHorizontalCount() + j] = sheet.getSprite(i, j);
+	    }
 	}
     }
 
@@ -84,5 +103,17 @@ public class ItemsArchive {
 
     public Type getType(String name) {
 	return types[getIdByName(name)];
+    }
+
+    public Image getImage(int id) {
+	return images[id];
+    }
+
+    public int[] getImageIds(int id) {
+	return imageIds[id];
+    }
+
+    public spaceisnear.server.objects.items.StaticItem getNewItem(int id, ServerContext serverContext) {
+	return new spaceisnear.server.objects.items.StaticItem(serverContext, id);
     }
 }

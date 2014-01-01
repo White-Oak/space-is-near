@@ -47,6 +47,7 @@ public class GameContext extends Context {
     }
 
     public synchronized void addObject(ClientGameObject gameObject) {
+	gameObject.setContext(this);
 	objects.add(gameObject);
 	for (Component component : gameObject.getComponents()) {
 	    if (component instanceof PaintableComponent) {

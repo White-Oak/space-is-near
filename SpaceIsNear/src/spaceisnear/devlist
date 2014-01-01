@@ -48,13 +48,18 @@
     +designed definition's format
     +realized ItemBundle (name, size, blockingAir, blockingPath, imageIds)
     +realized reading definitions of items from file
+    +loading images of items into an array of archive
+    -creating clone of item by id
+    +adding items from a script
+    +sending items over the net 
+    +drawing items on the map
 -Obstacles' system
 -Atmosphere
 -Inventory
     -each inventory slot has his size, item field and name
 -Camera movement for teleporting messages
 -HealthComponent
--added empty slots on server-side's objects list for networking, ui, etc 
++added empty slots on server-side's objects list for networking, ui, etc 
 +HurtMessage
     -acceptance on client
 +MessageKnockbacked

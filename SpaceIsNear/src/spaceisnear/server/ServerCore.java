@@ -6,6 +6,7 @@
 package spaceisnear.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import org.newdawn.slick.Image;
 import spaceisnear.game.layer.TiledLayer;
 import spaceisnear.server.objects.Player;
@@ -23,6 +24,7 @@ import spaceisnear.game.messages.MessagePaused;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.MessageUnpaused;
 import spaceisnear.server.objects.ServerNetworkingObject;
+import spaceisnear.server.objects.items.ItemAdder;
 
 /**
  * @author white_oak
@@ -37,13 +39,15 @@ public class ServerCore implements Runnable {
     private TiledLayer tiledLayer;
     public static final int OBJECTS_TO_SKIP = 1;
 
-    public ServerCore() {
+    public ServerCore() throws IOException {
 	int width = 128;
 	int height = 128;
 	//<editor-fold defaultstate="collapsed" desc="map generating">
 	try {
-	    tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
-		    spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
+	    try (InputStream resourceAsStream = getClass().getResourceAsStream("/res/tiles1.png")) {
+		tiledLayer = new TiledLayer(new Image(resourceAsStream, "tiles", false),
+			spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
+	    }
 	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
 	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
 	    tiledLayer.fillRectTile(0, 0, 128, 128, 5);
@@ -56,17 +60,21 @@ public class ServerCore implements Runnable {
 		tiledLayer.setTile(blockx, blocky + 1, 9);
 		tiledLayer.setTile(blockx + 1, blocky + 1, 10);
 	    }
-	} catch (SlickException ex) {
+	} catch (SlickException | IOException ex) {
 	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	//</editor-fold>
 	final ArrayList<AbstractGameObject> objects = new ArrayList<>();
-//	for (int i = 0; i < OBJECTS_TO_SKIP; i++) {
-//	    objects.add(null);
-//	}
 	ObstaclesLayer obstacles = new ObstaclesLayer(width, height);
 	AtmosphericLayer atmosphere = new AtmosphericLayer(width, height);
 	context = new ServerContext(new Networking(this), objects, tiledLayer, obstacles, atmosphere);
+	//ui objects etc
+	while (objects.size() < OBJECTS_TO_SKIP) {
+	    objects.add(null);
+	}
+	//items adding
+	ItemAdder itemAdder = new ItemAdder(context);
+	itemAdder.addItems();
     }
 
     @Override

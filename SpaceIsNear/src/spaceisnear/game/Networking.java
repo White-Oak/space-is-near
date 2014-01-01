@@ -2,6 +2,7 @@
 package spaceisnear.game;
 
 import com.esotericsoftware.kryonet.*;
+import com.google.gson.JsonSyntaxException;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.server.Registerer;
 import static spaceisnear.Utils.GSON;
+import spaceisnear.game.objects.items.StaticItem;
 
 /**
  * @author LPzhelud
@@ -62,65 +64,83 @@ public class Networking extends Listener {
 	    switch (mt) {
 		case MOVED:
 		    MessageMoved mm = MessageMoved.getInstance(b);
-		    gameContext.sendToID(mm, mm.getId());
+		    processMessageMoved(mm);
 		    break;
-
 		case PAUSED:
-		    gameContext.getCore().pause();
+		    processMessagePaused();
 		    break;
-
 		case UNPAUSED:
-		    gameContext.getCore().unpause();
+		    processMessageUnpaused();
 		    break;
-
 		case CREATED:
 		    MessageCreated mc = MessageCreated.getInstance(b);
-		    ObjectBundle ob = (ObjectBundle) (GSON.fromJson(mc.getJson(), ObjectBundle.class));
-		    ClientGameObject gameObject;
-		    if (justConnected) {
-			System.out.println("got some first object");
-			GamerPlayer player = GamerPlayer.getInstance(ob, gameContext);
-			gameContext.setPlayerID(player.getId());
-			gameObject = player;
-			justConnected = false;
-		    } else {
-			gameObject = getObjectFromBundle(ob);
-		    }
-		    if (gameObject != null) {
-			gameContext.addObject(gameObject);
-			System.out.println("added player");
-			send(new MessageRogered());
-		    }
+		    processMessageCreated(mc);
 		    break;
-
 		case DIED:
+		    processMessageDied();
 		    break;
-
 		case WORLD_SENT:
 		    MessageWorldSent mws = MessageWorldSent.getInstance(b);
-		    MessageCreated[] messages = GSON.fromJson(mws.getWorld(), MessageCreated[].class);
-		    for (MessageCreated messageCreated : messages) {
-			ObjectBundle ob1 = (ObjectBundle) (GSON.fromJson(messageCreated.getJson(), ObjectBundle.class));
-			ClientGameObject gameObject1 = getObjectFromBundle(ob1);
-			if (gameObject1 != null) {
-			    gameContext.addObject(gameObject1);
-			}
-		    }
-		    System.out.println("got all objects");
+		    processMessageWorldSent(mws);
 		    break;
-
 		case MAP_SENT:
 		    MessageMapSent mms = MessageMapSent.getInstance(b);
-		    int[][] map = GSON.fromJson(mms.getMap(), int[][].class);
-		    gameContext.getCameraMan().getTiledLayer().setMap(map);
-		    gameContext.getCameraMan().delegateWidth();
-		    send(new MessageRogered());
-		    System.out.println("got tiled layer");
+		    processMessageMapSent(mms);
 		    break;
-
 	    }
 //	    System.out.println("Message received");
 	}
+    }
+
+    private void processMessageMapSent(MessageMapSent mms) throws JsonSyntaxException {
+	int[][] map = GSON.fromJson(mms.getMap(), int[][].class);
+	gameContext.getCameraMan().getTiledLayer().setMap(map);
+	gameContext.getCameraMan().delegateWidth();
+	send(new MessageRogered());
+	System.out.println("got tiled layer");
+    }
+
+    private void processMessageWorldSent(MessageWorldSent mws) throws JsonSyntaxException {
+	MessageCreated[] messages = GSON.fromJson(mws.getWorld(), MessageCreated[].class);
+	for (MessageCreated messageCreated : messages) {
+	    ObjectBundle ob1 = (ObjectBundle) (GSON.fromJson(messageCreated.getJson(), ObjectBundle.class));
+	    ClientGameObject gameObject1 = getObjectFromBundle(ob1);
+	    if (gameObject1 != null) {
+		gameContext.addObject(gameObject1);
+	    }
+	}
+	System.out.println("got all objects");
+    }
+
+    private void processMessageMoved(MessageMoved mm) {
+	gameContext.sendToID(mm, mm.getId());
+    }
+
+    private void processMessagePaused() {
+	gameContext.getCore().pause();
+    }
+
+    private void processMessageCreated(MessageCreated mc) throws JsonSyntaxException {
+	ObjectBundle ob = (ObjectBundle) (GSON.fromJson(mc.getJson(), ObjectBundle.class));
+	ClientGameObject gameObject;
+	if (justConnected) {
+	    System.out.println("got some first object");
+	    GamerPlayer player = GamerPlayer.getInstance(ob, gameContext);
+	    gameContext.setPlayerID(player.getId());
+	    gameObject = player;
+	    justConnected = false;
+	} else {
+	    gameObject = getObjectFromBundle(ob);
+	}
+	if (gameObject != null) {
+	    gameContext.addObject(gameObject);
+	    System.out.println("added player");
+	    send(new MessageRogered());
+	}
+    }
+
+    private void processMessageUnpaused() {
+	gameContext.getCore().unpause();
     }
 
     private ClientGameObject getObjectFromBundle(ObjectBundle ob) {
@@ -128,6 +148,9 @@ public class Networking extends Listener {
 	switch (ob.getObjectType()) {
 	    case PLAYER:
 		gameObject = Player.getInstance(ob, gameContext);
+		break;
+	    case ITEM:
+		gameObject = StaticItem.getInstance(ob, gameContext);
 		break;
 	}
 	return gameObject;
@@ -147,5 +170,8 @@ public class Networking extends Listener {
 
     public boolean isJustConnected() {
 	return this.justConnected;
+    }
+
+    private void processMessageDied() {
     }
 }

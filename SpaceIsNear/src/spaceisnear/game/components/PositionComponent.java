@@ -4,7 +4,6 @@
  */
 package spaceisnear.game.components;
 
-import spaceisnear.Context;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.objects.Position;

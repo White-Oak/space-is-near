@@ -5,12 +5,21 @@
 package spaceisnear.game.components;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.objects.items.ItemsArchive;
+import spaceisnear.game.objects.items.StaticItem;
 
 public class ItemPaintableComponent extends PaintableComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+	ItemPropertiesComponent properties = ((StaticItem) getOwner()).getProperties();
+	int id = properties.getId();
+	int[] imageIds = ItemsArchive.itemsArchive.getImageIds(id);
+	//curently drawing zero state image
+	Image image = ItemsArchive.itemsArchive.getImage(imageIds[0]);
+	g.drawImage(image, 0, 0);
     }
 
     @Override

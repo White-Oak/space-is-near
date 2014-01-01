@@ -20,7 +20,11 @@ public class ItemPropertiesComponent extends Component {
 	addState(new ComponentState("id", id));
     }
 
-    private int getId() {
+    ItemPropertiesComponent() {
+	super(ComponentType.ITEM_PROPERTY);
+    }
+
+    public int getId() {
 	return (int) getStates().get("id").getValue();
     }
 

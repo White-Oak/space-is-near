@@ -26,7 +26,7 @@ public class CameraMan {
     public CameraMan() throws SlickException {
 	final int width = 128;
 	final int height = width;
-	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "sprites", false),
+	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "tiles", false),
 		spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
 	obstacles = new ObstaclesLayer(width, height);
 	atmosphere = new AtmosphericLayer(width, height);
@@ -82,7 +82,11 @@ public class CameraMan {
     }
 
     void paint(Graphics g) {
-	tiledLayer.paintLayer(g);
+	try {
+	    tiledLayer.paintLayer(g);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
     }
 
     public TiledLayer getTiledLayer() {

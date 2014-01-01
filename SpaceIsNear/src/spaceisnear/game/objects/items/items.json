@@ -5,7 +5,7 @@
 	"type": "TOOL",
 	"blockingPath": false,
 	"blockingAir": false,
-	"imageIds": [0]
+	"imageIds": [1]
     },
     {
 	"name": "plitka",
@@ -13,6 +13,6 @@
 	"type": "ENVIRONMENT",
 	"blockingPath": false,
 	"blockingAir": false,
-	"imageIds": [1]
+	"imageIds": [0] 
     }
 ]
