@@ -34,6 +34,7 @@ public class GamePlayerPositionComponent extends PositionComponent {
 		//here no check for obstacles
 		setX(messagetMessageMoved.getX());
 		setY(messagetMessageMoved.getY());
+		getContext().getCameraMan().moveCameraToPlayer(messagetMessageMoved.getX(), messagetMessageMoved.getY());
 		break;
 	}
     }

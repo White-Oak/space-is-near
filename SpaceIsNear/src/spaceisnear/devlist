@@ -57,7 +57,6 @@
 -Atmosphere
 -Inventory
     -each inventory slot has his size, item field and name
--Camera movement for teleporting messages
 -HealthComponent
 +added empty slots on server-side's objects list for networking, ui, etc 
 +HurtMessage
@@ -65,3 +64,4 @@
 +MessageKnockbacked
     -acceptance on client
 +Camera is always centered at player
++Camera movement for teleporting messages
