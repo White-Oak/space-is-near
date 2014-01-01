@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
 import spaceisnear.AbstractGameObject;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.components.HealthComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
@@ -40,8 +41,8 @@ public class ServerCore implements Runnable {
     public static final int OBJECTS_TO_SKIP = 1;
 
     public ServerCore() throws IOException {
-	int width = 128;
-	int height = 128;
+	int width = GameContext.MAP_WIDTH;
+	int height = width;
 	//<editor-fold defaultstate="collapsed" desc="map generating">
 	try {
 	    try (InputStream resourceAsStream = getClass().getResourceAsStream("/res/tiles1.png")) {
@@ -50,11 +51,11 @@ public class ServerCore implements Runnable {
 	    }
 	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
 	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
-	    tiledLayer.fillRectTile(0, 0, 128, 128, 5);
+	    tiledLayer.fillRectTile(0, 0, width, height, 5);
 	    Random rnd = new Random();
 	    for (int i = 0; i < 5; i++) {
-		int blockx = rnd.nextInt(124);
-		int blocky = rnd.nextInt(124);
+		int blockx = rnd.nextInt(width-1);
+		int blocky = rnd.nextInt(height-1);
 		tiledLayer.setTile(blockx, blocky, 7);
 		tiledLayer.setTile(blockx + 1, blocky, 8);
 		tiledLayer.setTile(blockx, blocky + 1, 9);

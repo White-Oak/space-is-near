@@ -64,3 +64,4 @@
     -acceptance on client
 +MessageKnockbacked
     -acceptance on client
++Camera is always centered at player

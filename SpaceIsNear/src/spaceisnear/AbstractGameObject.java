@@ -8,7 +8,11 @@ package spaceisnear;
 import java.util.List;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentType;
+import spaceisnear.game.components.GamePlayerPositionComponent;
+import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.objects.Position;
 
 /**
  *
@@ -25,4 +29,14 @@ public abstract class AbstractGameObject {
     public abstract Object getBundle();
 
     public abstract Context getContext();
+
+    public PositionComponent getPositionComponent() {
+	PositionComponent pc = null;
+	for (Component component : getComponents()) {
+	    if (component.getType() == ComponentType.POSITION) {
+		pc = (PositionComponent) component;
+	    }
+	}
+	return pc;
+    }
 }

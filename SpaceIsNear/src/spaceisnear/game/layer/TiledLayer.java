@@ -26,11 +26,18 @@ public class TiledLayer extends Layer {
     private int starty_absolute;
 
     public void setStartx(int startx) {
-	this.startx = startx < 0 ? 0 : startx;
+	this.startx = startx < 0 ? 0 : startx >= horizontalTilesNumber ? horizontalTilesNumber - 1 : startx;
     }
 
     public void setStarty(int starty) {
-	this.starty = starty < 0 ? 0 : starty;
+	this.starty = starty < 0 ? 0 : starty >= verticalTilesNumber ? verticalTilesNumber - 1 : starty;
+    }
+
+    public void moveCameraTo(int x, int y) {
+	startx_absolute = x;
+	starty_absolute = y;
+	setStartx(startx_absolute);
+	setStarty(starty_absolute);
     }
 
     public void moveLeft() {
@@ -152,4 +159,13 @@ public class TiledLayer extends Layer {
     public int getVerticalTilesNumber() {
 	return this.verticalTilesNumber;
     }
+
+    public int getMaxXTiles() {
+	return maxXTiles;
+    }
+
+    public int getMaxYTiles() {
+	return maxYTiles;
+    }
+    
 }

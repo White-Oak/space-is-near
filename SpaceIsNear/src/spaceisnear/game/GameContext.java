@@ -12,10 +12,12 @@ import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.PaintableComponent;
+import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.objects.GamerPlayer;
 
 /**
  * @author LPzhelud
@@ -24,8 +26,10 @@ public class GameContext extends Context {
 
     private final CameraMan cameraMan;
     private final ArrayList<PaintableComponent> paintables = new ArrayList<>();
-    public static final int TILE_HEIGHT = 16;
-    public static final int TILE_WIDTH = 16;
+    public static final int TILE_HEIGHT = 32;
+    public static final int TILE_WIDTH = 32;
+    public static final int MAP_WIDTH = 32;
+    public static final int MAP_HEIGHT = 32;
     private final Networking networking = new Networking(this);
     private final List<AbstractGameObject> objects;
     private int playerID = -1;
@@ -103,5 +107,11 @@ public class GameContext extends Context {
     @Override
     public ObstaclesLayer getObstacles() {
 	return getCameraMan().getObstacles();
+    }
+
+    public void setCameraToPlayer() {
+	GamerPlayer get = (GamerPlayer) objects.get(playerID);
+	PositionComponent positionComponent = get.getPositionComponent();
+	cameraMan.moveCameraToPlayer(positionComponent.getX(), positionComponent.getY());
     }
 }

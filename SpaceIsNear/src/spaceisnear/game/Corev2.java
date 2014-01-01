@@ -51,6 +51,7 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+	context.setCameraToPlayer();
     }
 
     public void callToConnect() {

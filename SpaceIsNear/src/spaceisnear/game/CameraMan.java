@@ -24,7 +24,7 @@ public class CameraMan {
     private final AtmosphericLayer atmosphere;
 
     public CameraMan() throws SlickException {
-	final int width = 128;
+	final int width = GameContext.MAP_WIDTH;
 	final int height = width;
 	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "tiles", false),
 		spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
@@ -53,6 +53,16 @@ public class CameraMan {
 	}
     }
 
+    public void moveCameraTo(int x, int y) {
+	this.x = x;
+	this.y = y;
+	tiledLayer.moveCameraTo(x, y);
+    }
+
+    public void moveCameraToPlayer(int x, int y) {
+	moveCameraTo(x - (tiledLayer.getMaxXTiles() >> 1), y - (tiledLayer.getMaxYTiles() >> 1));
+    }
+
     private void cameraUp() {
 	y--;
 	tiledLayer.moveUp();
@@ -74,11 +84,11 @@ public class CameraMan {
     }
 
     public void moveCamera(Graphics g) {
-	g.translate(-x * tiledLayer.getTileWidth(), -y * tiledLayer.getTileWidth());
+	g.translate(-x * tiledLayer.getTileWidth(), -y * tiledLayer.getTileHeight());
     }
 
     public void unmoveCamera(Graphics g) {
-	g.translate(-x * tiledLayer.getTileWidth(), -y * tiledLayer.getTileWidth());
+	g.translate(-x * tiledLayer.getTileWidth(), -y * tiledLayer.getTileHeight());
     }
 
     void paint(Graphics g) {
