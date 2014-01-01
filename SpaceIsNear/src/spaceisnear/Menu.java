@@ -68,15 +68,19 @@ public class Menu extends BasicGameState implements ComponentListener {
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 	if (state == 2) {
 	    if (hostresult) {
-		ServerCore serverCore = new ServerCore();
 		try {
-		    serverCore.host();
+		    ServerCore serverCore = new ServerCore();
+		    try {
+			serverCore.host();
+		    } catch (IOException ex) {
+			Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+		    new Thread(serverCore).start();
+		    Corev2.IP = "127.0.0.1";
+		    System.out.println("Hosting...");
 		} catch (IOException ex) {
 		    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		new Thread(serverCore).start();
-		Corev2.IP = "127.0.0.1";
-		System.out.println("Hosting...");
 	    }
 	    //вырезаем всё, кроме цифр и точек. бизапаснасть
 	    if (Corev2.IP == null) {

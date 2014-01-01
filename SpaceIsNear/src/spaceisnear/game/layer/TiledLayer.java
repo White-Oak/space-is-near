@@ -74,32 +74,18 @@ public class TiledLayer extends Layer {
 	verticalTilesNumber = height;
     }
 
+    //Updated on 1st January 2014
     private Image[] chopImage(Image image) {
-	int x = 0;
-	int y = 0;
 	List<Image> list = new ArrayList<>();
-	try {
-	    while (true) {
-		while (true) {
-		    Image subImage = image.getSubImage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
-		    list.add(subImage);
-		    //x increment
-		    x++;
-		    if ((x + 1) * tileWidth > image.getWidth()) {
-			x = 0;
-			break;
-		    }
-		}
-		//y increment
-		y++;
-		if ((y + 1) * tileHeight > image.getHeight()) {
-		    break;
-		}
+	int y = 0;
+	while ((y + 1) * tileHeight <= image.getHeight()) {
+	    int x = 0;
+	    while ((x + 1) * tileWidth <= image.getWidth()) {
+		Image subImage = image.getSubImage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+		list.add(subImage);
+		x++;
 	    }
-	} catch (Exception e) {
-	    System.out.println(x);
-	    System.out.println(y);
-	    e.printStackTrace();
+	    y++;
 	}
 	return list.toArray(new Image[list.size()]);
     }
