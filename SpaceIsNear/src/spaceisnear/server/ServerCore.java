@@ -68,7 +68,7 @@ public class ServerCore implements Runnable {
 	final ArrayList<AbstractGameObject> objects = new ArrayList<>();
 	ObstaclesLayer obstacles = new ObstaclesLayer(width, height);
 	AtmosphericLayer atmosphere = new AtmosphericLayer(width, height);
-	context = new ServerContext(new Networking(this), objects, tiledLayer, obstacles, atmosphere);
+	context = new ServerContext(new ServerNetworking(this), objects, tiledLayer, obstacles, atmosphere);
 	//ui objects etc
 	while (objects.size() < OBJECTS_TO_SKIP) {
 	    objects.add(null);

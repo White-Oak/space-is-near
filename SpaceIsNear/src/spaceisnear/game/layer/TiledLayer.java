@@ -4,6 +4,7 @@ package spaceisnear.game.layer;
 import java.util.ArrayList;
 import java.util.List;
 import org.newdawn.slick.Image;
+import spaceisnear.game.GameContext;
 
 /**
  * @author LPzhelud
@@ -61,11 +62,11 @@ public class TiledLayer extends Layer {
     }
 
     public void setWindowWidth(int w) {
-	maxXTiles = w / tileWidth + 2;
+	maxXTiles = w / getTileWidth() + 2;
     }
 
     public void setWindowHeight(int h) {
-	maxYTiles = h / tileHeight + 2;
+	maxYTiles = h / getTileHeight() + 2;
     }
 
     public TiledLayer(Image image, int tileWidth, int tileHeight, int width, int height) {
@@ -145,11 +146,11 @@ public class TiledLayer extends Layer {
     }
 
     public int getTileWidth() {
-	return this.tileWidth;
+	return (int) (this.tileWidth * GameContext.SCALING_X);
     }
 
     public int getTileHeight() {
-	return this.tileHeight;
+	return (int) (this.tileHeight * GameContext.SCALING_Y);
     }
 
     public int getHorizontalTilesNumber() {
@@ -167,5 +168,8 @@ public class TiledLayer extends Layer {
     public int getMaxYTiles() {
 	return maxYTiles;
     }
-    
+
+    public void scale() {
+
+    }
 }

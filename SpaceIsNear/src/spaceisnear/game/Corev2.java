@@ -62,10 +62,6 @@ public class Corev2 extends BasicGameState {
 	}
     }
 
-    public boolean isJustConnected() {
-	return context.getNetworking().isJustConnected();
-    }
-
     @Override
     public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
 	if (notpaused) {
@@ -118,6 +114,7 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame sbg, Graphics g) throws SlickException {
+	g.scale(GameContext.SCALING_X, GameContext.SCALING_Y);
 	context.getCameraMan().moveCamera(g);
 	context.getCameraMan().paint(g);
 	for (PaintableComponent paintableComponent : context.getPaintables()) {

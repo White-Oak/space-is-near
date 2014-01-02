@@ -25,7 +25,7 @@ public final class ServerContext extends Context {
 
     public static final int TILE_HEIGHT = 16;
     public static final int TILE_WIDTH = 16;
-    private final Networking networking;
+    private final ServerNetworking networking;
     private final List<AbstractGameObject> objects;
     private final List<Player> players = new LinkedList<>();
     private final TiledLayer tiledLayer;
@@ -68,7 +68,7 @@ public final class ServerContext extends Context {
     }
 
     @java.beans.ConstructorProperties({"networking", "objects", "tiledLayer"})
-    public ServerContext(final Networking networking, final List<AbstractGameObject> objects, final TiledLayer tiledLayer,
+    public ServerContext(final ServerNetworking networking, final List<AbstractGameObject> objects, final TiledLayer tiledLayer,
 	    ObstaclesLayer obstacles,
 	    AtmosphericLayer atmosphere) {
 	this.networking = networking;
@@ -79,7 +79,7 @@ public final class ServerContext extends Context {
 	addObject(new ServerNetworkingObject(this));
     }
 
-    public Networking getNetworking() {
+    public ServerNetworking getNetworking() {
 	return this.networking;
     }
 

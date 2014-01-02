@@ -49,7 +49,6 @@
     +realized ItemBundle (name, size, blockingAir, blockingPath, imageIds)
     +realized reading definitions of items from file
     +loading images of items into an array of archive
-    -creating clone of item by id
     +adding items from a script
     +sending items over the net 
     +drawing items on the map
@@ -65,3 +64,7 @@
     -acceptance on client
 +Camera is always centered at player
 +Camera movement for teleporting messages
++Scaling
+*Send not the whole world in one time (MessageWorldSent) but all objects in turn instead.
++Send DiscoveredYourPlayerMessage
+*Networking -> ServerNetworking

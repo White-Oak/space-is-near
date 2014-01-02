@@ -27,11 +27,13 @@ import spaceisnear.game.messages.MessageWorldSent;
 import spaceisnear.server.objects.Player;
 import static spaceisnear.Utils.GSON;
 import spaceisnear.game.messages.MessageControlled;
+import spaceisnear.game.messages.MessageRogerRequested;
+import spaceisnear.game.messages.MessageYourPlayerDiscovered;
 
 /**
  * @author white_oak
  */
-public class Networking extends Listener implements Runnable {
+public class ServerNetworking extends Listener implements Runnable {
 
     public Server server;
     private final ServerCore core;
@@ -150,21 +152,22 @@ public class Networking extends Listener implements Runnable {
 	//2. add a player
 	//3. send MessageCreated of Player to all connections
 	//1
-	MessageWorldSent messageWorldSent = getWorldInOneJSON();
-	sendToID(connections.size() - 1, messageWorldSent);
-	System.out.println("World has sent " + messageWorldSent.getWorld().length());
+	MessageCreated[] world = getWorldInOneJSON();
+	for (MessageCreated messageCreated : world) {
+	    sendToID(connections.size() - 1, messageCreated);
+	}
 	MessageMapSent messageMapSent = getTiledLayerInOneJSON();
 	sendToID(connections.size() - 1, messageMapSent);
 	System.out.println("Map has sent " + messageMapSent.getMap().length());
 	//2
 	MessageCreated messageCreated = createPlayerAndPrepare();
-	//waiting for client to process world
-	waitForToRoger(rogered.length - 1);
-	rogered[rogered.length - 1] = false;
+	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(core.getContext().getObjects().size() - 1);
 	//3
 	sendToAll(messageCreated);
+	sendToID(connections.size() - 1, mypd);
 	System.out.println("Player has sent");
 	//wait for client to receive his player
+	sendToAll(new MessageRogerRequested());
 	waitForAllToRoger();
 	resetRogeredStatuses();
 	//
@@ -172,7 +175,7 @@ public class Networking extends Listener implements Runnable {
 	System.out.println("Server has continued his work");
     }
 
-    private MessageWorldSent getWorldInOneJSON() {
+    private MessageCreated[] getWorldInOneJSON() {
 	ServerContext context = core.getContext();
 	List<AbstractGameObject> objects = context.getObjects();
 	List<MessageCreated> messages = new ArrayList<>();
@@ -181,7 +184,7 @@ public class Networking extends Listener implements Runnable {
 		messages.add(new MessageCreated(GSON.toJson(object.getBundle())));
 	    }
 	}
-	return new MessageWorldSent(GSON.toJson(messages.toArray(new MessageCreated[messages.size()])));
+	return messages.toArray(new MessageCreated[messages.size()]);
     }
 
     private MessageMapSent getTiledLayerInOneJSON() {
@@ -216,12 +219,12 @@ public class Networking extends Listener implements Runnable {
 	try {
 	    Thread.sleep(100L);
 	} catch (InterruptedException ex) {
-	    Logger.getLogger(Networking.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
     @java.beans.ConstructorProperties({"core"})
-    public Networking(final ServerCore core) {
+    public ServerNetworking(final ServerCore core) {
 	this.core = core;
     }
 }

@@ -48,14 +48,13 @@ public class LoadingScreen extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-	if (!core.isJustConnected()) {
+	if (core.isNotpaused()) {
 	    System.out.println("Moving to Core...");
 	    game.enterState(3, new FadeOutTransition(Color.white, 400), new FadeInTransition(Color.white, 400));
 	}
     }
 
     @java.beans.ConstructorProperties({"core"})
-    
     public LoadingScreen(final Corev2 core) {
 
 	this.core = core;

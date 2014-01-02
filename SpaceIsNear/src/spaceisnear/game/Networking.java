@@ -6,7 +6,6 @@ import com.google.gson.JsonSyntaxException;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 import java.io.IOException;
-import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.server.Registerer;
@@ -20,7 +19,6 @@ public class Networking extends Listener {
 
     private final GameContext gameContext;
     private Client client;
-    private boolean justConnected = true;
 
     public void connect(String host, int tcpPort) throws IOException {
 	client = new Client(104457, 104457);
@@ -79,37 +77,31 @@ public class Networking extends Listener {
 		case DIED:
 		    processMessageDied();
 		    break;
-		case WORLD_SENT:
-		    MessageWorldSent mws = MessageWorldSent.getInstance(b);
-		    processMessageWorldSent(mws);
-		    break;
 		case MAP_SENT:
 		    MessageMapSent mms = MessageMapSent.getInstance(b);
 		    processMessageMapSent(mms);
+		    break;
+		case DISCOVERED_PLAYER:
+		    MessageYourPlayerDiscovered dypm = MessageYourPlayerDiscovered.getInstance(b);
+		    processDiscoveredYourPlayerMessage(dypm);
+		    break;
+		case ROGER_REQUESTED:
+		    send(new MessageRogered());
 		    break;
 	    }
 //	    System.out.println("Message received");
 	}
     }
 
+    private void processDiscoveredYourPlayerMessage(MessageYourPlayerDiscovered dypm) {
+	gameContext.setNewGamerPlayer(dypm.getPlayerID());
+    }
+
     private void processMessageMapSent(MessageMapSent mms) throws JsonSyntaxException {
 	int[][] map = GSON.fromJson(mms.getMap(), int[][].class);
 	gameContext.getCameraMan().getTiledLayer().setMap(map);
 	gameContext.getCameraMan().delegateWidth();
-	send(new MessageRogered());
 	System.out.println("got tiled layer");
-    }
-
-    private void processMessageWorldSent(MessageWorldSent mws) throws JsonSyntaxException {
-	MessageCreated[] messages = GSON.fromJson(mws.getWorld(), MessageCreated[].class);
-	for (MessageCreated messageCreated : messages) {
-	    ObjectBundle ob1 = (ObjectBundle) (GSON.fromJson(messageCreated.getJson(), ObjectBundle.class));
-	    ClientGameObject gameObject1 = getObjectFromBundle(ob1);
-	    if (gameObject1 != null) {
-		gameContext.addObject(gameObject1);
-	    }
-	}
-	System.out.println("got all objects");
     }
 
     private void processMessageMoved(MessageMoved mm) {
@@ -123,24 +115,17 @@ public class Networking extends Listener {
     private void processMessageCreated(MessageCreated mc) throws JsonSyntaxException {
 	ObjectBundle ob = (ObjectBundle) (GSON.fromJson(mc.getJson(), ObjectBundle.class));
 	ClientGameObject gameObject;
-	if (justConnected) {
-	    System.out.println("got some first object");
-	    GamerPlayer player = GamerPlayer.getInstance(ob, gameContext);
-	    gameContext.setPlayerID(player.getId());
-	    gameObject = player;
-	    justConnected = false;
-	} else {
-	    gameObject = getObjectFromBundle(ob);
-	}
+	gameObject = getObjectFromBundle(ob);
 	if (gameObject != null) {
 	    gameContext.addObject(gameObject);
-	    System.out.println("added player");
-	    send(new MessageRogered());
 	}
     }
 
     private void processMessageUnpaused() {
 	gameContext.getCore().unpause();
+    }
+
+    private void processMessageDied() {
     }
 
     private ClientGameObject getObjectFromBundle(ObjectBundle ob) {
@@ -168,10 +153,4 @@ public class Networking extends Listener {
 	this.gameContext = gameContext;
     }
 
-    public boolean isJustConnected() {
-	return this.justConnected;
-    }
-
-    private void processMessageDied() {
-    }
 }

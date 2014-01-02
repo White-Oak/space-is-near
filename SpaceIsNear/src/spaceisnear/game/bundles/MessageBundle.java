@@ -11,16 +11,15 @@ import spaceisnear.game.messages.MessageType;
  * @author white_oak
  */
 public class MessageBundle extends Bundle {
-	public MessageType messageType;
-	
-	public MessageBundle() {
-		
-	}
-	
-	@java.beans.ConstructorProperties({"messageType"})
-	
-	public MessageBundle(final MessageType messageType) {
-		
-		this.messageType = messageType;
-	}
+
+    public MessageType messageType;
+
+    private MessageBundle() {
+    }
+
+    @java.beans.ConstructorProperties({"messageType"})
+    public MessageBundle(final MessageType messageType) {
+
+	this.messageType = messageType;
+    }
 }

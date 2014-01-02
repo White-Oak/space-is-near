@@ -16,11 +16,18 @@ public class GamerPlayer extends Player {
 
     private GamerPlayer(GameContext context) {
 	super(context);
+    }
+
+    public GamerPlayer(GameContext context, Player p) {
+	this(context);
+	setComponents(p.getComponents());
 	for (int i = 0; i < getComponents().size(); i++) {
 	    Component component = getComponents().get(i);
 	    if (component.getType() == ComponentType.POSITION) {
 		final Position position = ((PositionComponent) component).getPosition();
-		getComponents().set(i, new GamePlayerPositionComponent(position));
+		final GamePlayerPositionComponent component1Component = new GamePlayerPositionComponent(position);
+		component1Component.setContext(context);
+		getComponents().set(i, component1Component);
 	    }
 	}
     }

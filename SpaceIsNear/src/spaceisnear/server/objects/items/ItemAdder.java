@@ -25,7 +25,8 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 
     private final ServerContext context;
     Function[] f = {
-	new NativeFunction("addItem", 3)
+	new NativeFunction("addItem", 3),
+	new NativeFunction("fillWithItem", 5)
     };
     Constant[] c = {};
 
@@ -38,6 +39,19 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 		StaticItem staticItem = new StaticItem(context, p, idByName);
 		context.addObject(staticItem);
 		break;
+	    case "fillWithItem":
+		int idByName1 = ItemsArchive.itemsArchive.getIdByName(values[0].getValue());
+		int x = Integer.valueOf(values[1].getValue());
+		int y = Integer.valueOf(values[2].getValue());
+		int endX = Integer.valueOf(values[3].getValue());
+		int endY = Integer.valueOf(values[4].getValue());
+		for (int i = x; i < endX; i++) {
+		    for (int j = y; j < endY; j++) {
+			Position p1 = new Position(i, j);
+			StaticItem staticItem1 = new StaticItem(context, p1, idByName1);
+			context.addObject(staticItem1);
+		    }
+		}
 	}
 	return null;
     }

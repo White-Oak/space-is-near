@@ -18,6 +18,7 @@ import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GamerPlayer;
+import spaceisnear.game.objects.Player;
 
 /**
  * @author LPzhelud
@@ -30,6 +31,7 @@ public class GameContext extends Context {
     public static final int TILE_WIDTH = 32;
     public static final int MAP_WIDTH = 32;
     public static final int MAP_HEIGHT = 32;
+    public static float SCALING_X = 1f, SCALING_Y = 1f;
     private final Networking networking = new Networking(this);
     private final List<AbstractGameObject> objects;
     private int playerID = -1;
@@ -113,5 +115,11 @@ public class GameContext extends Context {
 	GamerPlayer get = (GamerPlayer) objects.get(playerID);
 	PositionComponent positionComponent = get.getPositionComponent();
 	cameraMan.moveCameraToPlayer(positionComponent.getX(), positionComponent.getY());
+    }
+
+    public void setNewGamerPlayer(int playerID) {
+	this.playerID = playerID;
+	Player get = (Player) objects.get(playerID);
+	objects.set(playerID, new GamerPlayer(this, get));
     }
 }
