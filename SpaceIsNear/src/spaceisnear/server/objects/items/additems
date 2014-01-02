@@ -2,4 +2,4 @@
 //x and y — are cell coordinates, not real
 //fillWithItem (name, x, y, end_x, end_y)
 
-//fillWithItem {plitka, 0, 0, 32, 32}
+fillWithItem {plitka, 0, 0, 32, 32}

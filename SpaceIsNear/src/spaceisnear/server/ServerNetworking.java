@@ -23,7 +23,6 @@ import spaceisnear.game.messages.MessageConnectionBroken;
 import spaceisnear.game.messages.MessageCreated;
 import spaceisnear.game.messages.MessageMapSent;
 import spaceisnear.game.messages.MessageMoved;
-import spaceisnear.game.messages.MessageWorldSent;
 import spaceisnear.server.objects.Player;
 import static spaceisnear.Utils.GSON;
 import spaceisnear.game.messages.MessageControlled;
@@ -132,7 +131,7 @@ public class ServerNetworking extends Listener implements Runnable {
     }
 
     public void host() throws IOException {
-	server = new Server(104457, 104457);
+	server = new Server(64 * 1024, 4 * 1024);
 	Registerer.registerEverything(server);
 	server.start();
 	server.addListener(this);
@@ -152,9 +151,13 @@ public class ServerNetworking extends Listener implements Runnable {
 	//2. add a player
 	//3. send MessageCreated of Player to all connections
 	//1
-	MessageCreated[] world = getWorldInOneJSON();
-	for (MessageCreated messageCreated : world) {
+	MessageCreated[] world = getWorld();
+	for (int i = 0; i < world.length; i++) {
+	    MessageCreated messageCreated = world[i];
 	    sendToID(connections.size() - 1, messageCreated);
+	    if (i % 16 == 0) {
+		waitSomeTime();
+	    }
 	}
 	MessageMapSent messageMapSent = getTiledLayerInOneJSON();
 	sendToID(connections.size() - 1, messageMapSent);
@@ -175,7 +178,7 @@ public class ServerNetworking extends Listener implements Runnable {
 	System.out.println("Server has continued his work");
     }
 
-    private MessageCreated[] getWorldInOneJSON() {
+    private MessageCreated[] getWorld() {
 	ServerContext context = core.getContext();
 	List<AbstractGameObject> objects = context.getObjects();
 	List<MessageCreated> messages = new ArrayList<>();
@@ -217,7 +220,7 @@ public class ServerNetworking extends Listener implements Runnable {
 
     private void waitSomeTime() {
 	try {
-	    Thread.sleep(100L);
+	    Thread.sleep(10L);
 	} catch (InterruptedException ex) {
 	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
 	}

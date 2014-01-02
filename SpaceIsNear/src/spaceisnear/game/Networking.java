@@ -21,7 +21,7 @@ public class Networking extends Listener {
     private Client client;
 
     public void connect(String host, int tcpPort) throws IOException {
-	client = new Client(104457, 104457);
+	client = new Client(32 * 1024, 8 * 1024);
 	Registerer.registerEverything(client);
 	client.start();
 	client.addListener(this);

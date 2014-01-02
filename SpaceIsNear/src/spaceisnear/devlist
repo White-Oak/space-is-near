@@ -42,7 +42,7 @@
 *ComponentStates are stored now in a hashmap inside Component for easy-access
 *ServerGameObject and ClientGameObject are now subclasses of abstract AbstractGameObject
 
-0.0.3
+0.0.3 r70
 -Basic items system
     +realized ItemsArchive
     +designed definition's format
@@ -55,16 +55,26 @@
 -Obstacles' system
 -Atmosphere
 -Inventory
-    -each inventory slot has his size, item field and name
 -HealthComponent
 +added empty slots on server-side's objects list for networking, ui, etc 
-+HurtMessage
-    -acceptance on client
-+MessageKnockbacked
-    -acceptance on client
 +Camera is always centered at player
 +Camera movement for teleporting messages
 +Scaling
 *Send not the whole world in one time (MessageWorldSent) but all objects in turn instead.
-+Send DiscoveredYourPlayerMessage
-*Networking -> ServerNetworking
+*MessageCreateds are sent with a dealy not to overflow buffer
++Send DiscoveredYourPlayerMessage to get client knowing which object is his player.
+*Networking -> ServerNetworking (renamed)
+
+0.0.4 
+-Basic items system
+-Obstacles' system
+-Atmosphere
+    -the separate thread calculating atmosphere and/or hull breaches
+    -if there are no plitkas on the tile then it is counted as hull breach
+-Inventory
+    -each inventory slot has his size, item field and name
+-HealthComponent
++HurtMessage
+    -acceptance on client
++MessageKnockbacked
+    -acceptance on client
