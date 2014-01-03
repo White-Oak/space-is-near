@@ -78,3 +78,7 @@
     -acceptance on client
 +MessageKnockbacked
     -acceptance on client
+-Mouse interaction
+    -selection of tile where player has clicked
++Animated player movement
++SINGL'TON PAWUH!!!

@@ -17,25 +17,23 @@ public class GamePlayerPositionComponent extends PositionComponent {
 
     @Override
     public void processMessage(Message message) {
+	int oldX = getX();
+	int oldY = getY();
+	super.processMessage(message);
 	switch (message.getMessageType()) {
 	    case MOVED:
 		MessageMoved messagem = (MessageMoved) message;
-		int newX = getX() + messagem.getX();
-		int newY = getY() + messagem.getY();
-		if (getContext().getObstacles().isReacheable(newX, newY)) {
-		    setX(newX);
-		    setY(newY);
-		    getContext().getCameraMan().setNewCameraPositionFor(messagem.getX(), messagem.getY());
+		if (oldX != getX() || oldY != getY()) {
+		    getContext().getCameraMan().setNewCameraPositionForMove(messagem.getX(), messagem.getY());
 		}
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
 		MessageMoved messagetMessageMoved = (MessageMoved) message;
-		//here no check for obstacles
-		setX(messagetMessageMoved.getX());
-		setY(messagetMessageMoved.getY());
 		getContext().getCameraMan().moveCameraToPlayer(messagetMessageMoved.getX(), messagetMessageMoved.getY());
 		break;
+	    case TIME_PASSED:
+		
 	}
     }
 

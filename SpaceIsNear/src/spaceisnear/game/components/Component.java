@@ -97,17 +97,12 @@ public abstract class Component {
 
     protected Position getPosition() {
 	AbstractGameObject owner = getOwner();
-	for (Component component : owner.getComponents()) {
-	    switch (component.getType()) {
-		case POSITION:
-		case GAMER_PLAYER_POSITION:
-		    PositionComponent positionComponent = (PositionComponent) component;
-		    return positionComponent.getPosition();
-		default:
-		    throw new RuntimeException("No position component here.");
-	    }
-	}
-	return null;
+	return owner.getPosition();
+    }
+
+    protected PositionComponent getPositionComponent() {
+	AbstractGameObject owner = getOwner();
+	return owner.getPositionComponent();
     }
 
     public ComponentType getType() {

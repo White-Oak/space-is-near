@@ -6,12 +6,11 @@
 package spaceisnear;
 
 import java.util.List;
-import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.components.GamePlayerPositionComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 
 /**
@@ -19,6 +18,8 @@ import spaceisnear.game.objects.Position;
  * @author White Oak
  */
 public abstract class AbstractGameObject {
+
+    private PositionComponent positionComponent;
 
     public abstract void message(Message m);
 
@@ -30,13 +31,20 @@ public abstract class AbstractGameObject {
 
     public abstract Context getContext();
 
+    public abstract GameObjectType getType();
+
+    public Position getPosition() {
+	return getPositionComponent().getPosition();
+    }
+
     public PositionComponent getPositionComponent() {
-	PositionComponent pc = null;
-	for (Component component : getComponents()) {
-	    if (component.getType() == ComponentType.POSITION) {
-		pc = (PositionComponent) component;
+	if (positionComponent == null) {
+	    for (Component component : getComponents()) {
+		if (component.getType() == ComponentType.POSITION || component.getType() == ComponentType.GAMER_PLAYER_POSITION) {
+		    positionComponent = (PositionComponent) component;
+		}
 	    }
 	}
-	return pc;
+	return positionComponent;
     }
 }

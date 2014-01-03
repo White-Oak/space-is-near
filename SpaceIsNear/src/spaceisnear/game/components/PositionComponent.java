@@ -4,11 +4,20 @@
  */
 package spaceisnear.game.components;
 
+import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
+import spaceisnear.game.messages.MessageTimePassed;
 import spaceisnear.game.objects.Position;
 
 public class PositionComponent extends Component {
+
+    private Position p;
+    boolean animation;
+    private int delayX, delayY;
+    private int timeAccumulated;
+    private static final long TIME_NEDEED_TO_MOVE_ON_TO_NEXT_PHASE_OF_ANIMATION = 4L;
+    private static final int STEP = 8;
 
     public PositionComponent(Position p) {
 	super(ComponentType.POSITION);
@@ -25,7 +34,14 @@ public class PositionComponent extends Component {
 
     @Override
     public Position getPosition() {
-	return (Position) getStateValueNamed("position");
+	if (p == null) {
+	    p = (Position) getStateValueNamed("position");
+	}
+	return p;
+    }
+
+    public boolean isAnimation() {
+	return animation;
     }
 
     public int getX() {
@@ -44,6 +60,14 @@ public class PositionComponent extends Component {
 	getPosition().setY(y);
     }
 
+    public int getDelayX() {
+	return delayX;
+    }
+
+    public int getDelayY() {
+	return delayY;
+    }
+
     @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
@@ -52,6 +76,9 @@ public class PositionComponent extends Component {
 		int newX = getX() + messagem.getX();
 		int newY = getY() + messagem.getY();
 		if (getContext().getObstacles().isReacheable(newX, newY)) {
+		    delayX = messagem.getX() * GameContext.TILE_WIDTH;
+		    delayY = messagem.getY() * GameContext.TILE_HEIGHT;
+		    animation = true;
 		    setX(newX);
 		    setY(newY);
 		}
@@ -63,6 +90,31 @@ public class PositionComponent extends Component {
 		setX(messagetMessageMoved.getX());
 		setY(messagetMessageMoved.getY());
 		break;
+	    case TIME_PASSED:
+		if (animation) {
+//		    MessageTimePassed mtp = (MessageTimePassed) message;
+//		    int timePassed = mtp.getTimePassed();
+//		    timeAccumulated += timePassed;
+//		    if (timeAccumulated >= TIME_NEDEED_TO_MOVE_ON_TO_NEXT_PHASE_OF_ANIMATION) {
+		    if (true) {
+			int step = STEP;
+			if (delayX != 0) {
+			    if (Math.abs(delayX) != delayX) {
+				step = -step;
+			    }
+			    delayX -= step;
+			}
+			if (delayY != 0) {
+			    if (Math.abs(delayY) != delayY) {
+				step = -step;
+			    }
+			    delayY -= step;
+			}
+			if (delayX == 0 && delayY == 0) {
+			    animation = false;
+			}
+		    }
+		}
 	}
     }
 }

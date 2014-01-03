@@ -93,6 +93,10 @@ public class GameContext extends Context {
 	return this.playerID;
     }
 
+    public GamerPlayer getPlayer() {
+	return (GamerPlayer) objects.get(playerID);
+    }
+
     public void setPlayerID(final int playerID) {
 	this.playerID = playerID;
     }

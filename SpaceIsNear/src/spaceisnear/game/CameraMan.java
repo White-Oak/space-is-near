@@ -37,7 +37,7 @@ public class CameraMan {
 	tiledLayer.setWindowWidth(windowWidth);
     }
 
-    public void setNewCameraPositionFor(int deltax, int deltay) {
+    public void setNewCameraPositionForMove(int deltax, int deltay) {
 	if (deltax != 0) {
 	    if (deltax > 0) {
 		cameraRight();

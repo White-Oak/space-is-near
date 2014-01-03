@@ -93,20 +93,27 @@ public class Corev2 extends BasicGameState {
 
     private MessageControlled checkKeys() {
 	MessageControlled mc = null;
+	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimation();
 	switch (key) {
 	    case Input.KEY_UP:
-		mc = new MessageControlled(MessageControlled.Type.UP, context.getPlayerID());
+		if (ableToMove) {
+		    mc = new MessageControlled(MessageControlled.Type.UP, context.getPlayerID());
+		}
 		break;
 	    case Input.KEY_DOWN:
-		mc = new MessageControlled(MessageControlled.Type.DOWN, context.getPlayerID());
+		if (ableToMove) {
+		    mc = new MessageControlled(MessageControlled.Type.DOWN, context.getPlayerID());
+		}
 		break;
-
 	    case Input.KEY_LEFT:
-		mc = new MessageControlled(MessageControlled.Type.LEFT, context.getPlayerID());
+		if (ableToMove) {
+		    mc = new MessageControlled(MessageControlled.Type.LEFT, context.getPlayerID());
+		}
 		break;
-
 	    case Input.KEY_RIGHT:
-		mc = new MessageControlled(MessageControlled.Type.RIGHT, context.getPlayerID());
+		if (ableToMove) {
+		    mc = new MessageControlled(MessageControlled.Type.RIGHT, context.getPlayerID());
+		}
 		break;
 	}
 	return mc;
@@ -140,4 +147,10 @@ public class Corev2 extends BasicGameState {
     public boolean isNotpaused() {
 	return this.notpaused;
     }
+
+    @Override
+    public void mouseClicked(int button, int x, int y, int clickCount) {
+	super.mouseClicked(button, x, y, clickCount); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

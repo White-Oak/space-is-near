@@ -16,9 +16,12 @@ import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentStateBundle;
+import spaceisnear.game.components.ComponentType;
+import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
+import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
 
 /**
@@ -113,6 +116,7 @@ public abstract class ServerGameObject extends AbstractGameObject {
 	return this.components;
     }
 
+    @Override
     public GameObjectType getType() {
 	return this.type;
     }

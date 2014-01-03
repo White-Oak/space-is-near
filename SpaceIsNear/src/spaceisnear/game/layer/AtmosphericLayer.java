@@ -6,6 +6,13 @@
 package spaceisnear.game.layer;
 
 import java.util.Arrays;
+import java.util.List;
+import spaceisnear.AbstractGameObject;
+import spaceisnear.game.components.ItemPropertiesComponent;
+import spaceisnear.game.objects.GameObjectType;
+import spaceisnear.game.objects.items.ItemsArchive;
+import spaceisnear.server.ServerContext;
+import spaceisnear.server.objects.items.StaticItem;
 
 /**
  *
@@ -134,21 +141,36 @@ public class AtmosphericLayer extends Layer {
 
     public void setAirReacheable(int x, int y, boolean reacheable) {
 	if (reacheable) {
-	    //if wall is removed then the pressure in the node is calculated as mean value of surrounding nodes
-	    int[] values = {
-		getPressure(x - 1, y), //left
-		getPressure(x, y - 1), //top
-		getPressure(x + 1, y), //right
-		getPressure(x, y + 1) //left
-	    };
-	    int sum = 0;
-	    for (int i = 0; i < values.length; i++) {
-		int j = values[i];
-		sum += j;
+	    if (getPressure(x, y) != -1) {
+		//if wall is removed then the pressure in the node is calculated as mean value of surrounding nodes
+		int[] values = {
+		    getPressure(x - 1, y), //left
+		    getPressure(x, y - 1), //top
+		    getPressure(x + 1, y), //right
+		    getPressure(x, y + 1) //left
+		};
+		int sum = 0;
+		for (int i = 0; i < values.length; i++) {
+		    int j = values[i];
+		    sum += j;
+		}
+		setPressure(x, y, sum >> 2);
 	    }
-	    setPressure(x, y, sum >> 2);
 	} else {
 	    setPressure(x, y, -1);
+	}
+    }
+//@working r71...
+
+    public void checkHulls(ServerContext context) {
+	List<AbstractGameObject> objects = context.getObjects();
+	for (AbstractGameObject abstractGameObject : objects) {
+	    GameObjectType type = abstractGameObject.getType();
+	    if (type == GameObjectType.ITEM) {
+		StaticItem item = (StaticItem) abstractGameObject;
+		ItemPropertiesComponent ipc = item.getProperties();
+		setAirReacheable(tickState, tickState, ItemsArchive.itemsArchive.isBlockingAir(ipc.getId()));
+	    }
 	}
     }
 }

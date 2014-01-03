@@ -106,6 +106,7 @@ public abstract class ClientGameObject extends AbstractGameObject {
 	return this.components;
     }
 
+    @Override
     public GameObjectType getType() {
 	return this.type;
     }
