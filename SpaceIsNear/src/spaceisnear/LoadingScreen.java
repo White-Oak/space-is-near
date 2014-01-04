@@ -21,6 +21,7 @@ import spaceisnear.game.Corev2;
 public class LoadingScreen extends BasicGameState {
 
     private final Corev2 core;
+    public static int LOADING_AMOUNT, CURRENT_AMOUNT;
 
     @Override
     public int getID() {
@@ -44,6 +45,9 @@ public class LoadingScreen extends BasicGameState {
 	g.setColor(Color.yellow);
 	g.drawString("Loading...", (game.getContainer().getWidth() >> 1) - (g.getFont().getWidth("Loading...") >> 1),
 		(game.getContainer().getHeight() >> 1) - 100);
+	g.drawString(CURRENT_AMOUNT + " / " + LOADING_AMOUNT,
+		(game.getContainer().getWidth() >> 1) - (g.getFont().getWidth("Loading...") >> 1),
+		(game.getContainer().getHeight() >> 1) - 50);
     }
 
     @Override
@@ -56,7 +60,6 @@ public class LoadingScreen extends BasicGameState {
 
     @java.beans.ConstructorProperties({"core"})
     public LoadingScreen(final Corev2 core) {
-
 	this.core = core;
     }
 }

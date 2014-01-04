@@ -21,7 +21,6 @@ public class GameObjectState {
     private String[] classes;
 
     GameObjectState() {
-
     }
 
     public Component[] getComponents(int owner, Context c) {
@@ -39,7 +38,6 @@ public class GameObjectState {
 
     @java.beans.ConstructorProperties({"states", "classes"})
     public GameObjectState(final ComponentStateBundle[][] states, final String[] classes) {
-
 	this.states = states;
 	this.classes = classes;
     }

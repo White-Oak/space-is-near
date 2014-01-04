@@ -13,7 +13,7 @@ import spaceisnear.game.layer.*;
 /**
  * @author LPzhelud
  */
-public class CameraMan {
+public final class CameraMan {
 
     private int x;
     private int y;
@@ -28,6 +28,7 @@ public class CameraMan {
 	final int height = width;
 	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "tiles", false),
 		spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
+	tiledLayer.fillRectTile(0, 0, width, height, 5);
 	obstacles = new ObstaclesLayer(width, height);
 	atmosphere = new AtmosphericLayer(width, height);
     }

@@ -19,7 +19,7 @@ public class PlayerComponent extends PaintableComponent {
 
     @Override
     public void paintComponent(org.newdawn.slick.Graphics g) {
-	g.setColor(org.newdawn.slick.Color.white);
+	g.setColor(org.newdawn.slick.Color.black);
 	int w = GameContext.TILE_WIDTH;
 	int h = GameContext.TILE_HEIGHT;
 	g.drawLine(0, 0, w, h);

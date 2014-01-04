@@ -47,6 +47,7 @@ public class Corev2 extends BasicGameState {
 	context.addObject(new NetworkingObject(context));
 	context.getCameraMan().setWindowWidth(800);
 	context.getCameraMan().setWindowHeight(600);
+	context.getCameraMan().delegateWidth();
     }
 
     @Override

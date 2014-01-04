@@ -6,6 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 import java.io.IOException;
+import spaceisnear.LoadingScreen;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.server.Registerer;
@@ -19,9 +20,10 @@ public class Networking extends Listener {
 
     private final GameContext gameContext;
     private Client client;
+    private final static MessageRogered ROGERED = new MessageRogered();
 
     public void connect(String host, int tcpPort) throws IOException {
-	client = new Client(32 * 1024, 8 * 1024);
+	client = new Client(256 * 1024, 2 * 1024);
 	Registerer.registerEverything(client);
 	client.start();
 	client.addListener(this);
@@ -86,10 +88,31 @@ public class Networking extends Listener {
 		    processDiscoveredYourPlayerMessage(dypm);
 		    break;
 		case ROGER_REQUESTED:
-		    send(new MessageRogered());
+		    send(ROGERED);
+		    break;
+		case CREATED_SIMPLIFIED:
+		    MessageCreatedItem mci = MessageCreatedItem.getInstance(b);
+		    processMessageCreatedItem(mci);
+		    break;
+		case WORLD_INFO:
+		    MessageWorldInformation mwi = MessageWorldInformation.getInstance(b);
+		    processMessageWorldInformation(mwi);
 		    break;
 	    }
 //	    System.out.println("Message received");
+	}
+    }
+
+    private void processMessageWorldInformation(MessageWorldInformation mwi) {
+	LoadingScreen.LOADING_AMOUNT = mwi.amountOfItems;
+	LoadingScreen.CURRENT_AMOUNT = 0;
+    }
+
+    private void processMessageCreatedItem(MessageCreatedItem mci) {
+	StaticItem item = StaticItem.getInstance(mci.getId(), mci.getP(), gameContext);
+	if (item != null) {
+	    gameContext.addObject(item);
+	    LoadingScreen.CURRENT_AMOUNT++;
 	}
     }
 
@@ -118,6 +141,7 @@ public class Networking extends Listener {
 	gameObject = getObjectFromBundle(ob);
 	if (gameObject != null) {
 	    gameContext.addObject(gameObject);
+	    LoadingScreen.CURRENT_AMOUNT++;
 	}
     }
 
