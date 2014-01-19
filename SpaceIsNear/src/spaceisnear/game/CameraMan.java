@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import spaceisnear.game.layer.*;
+import spaceisnear.game.objects.Position;
 
 /**
  * @author LPzhelud
@@ -123,4 +124,27 @@ public final class CameraMan {
     public AtmosphericLayer getAtmosphere() {
 	return this.atmosphere;
     }
+
+    public boolean belongsToCamera(Position p) {
+	int px = p.getX();
+	int py = p.getY();
+	return (px + 1 > this.x && px - this.x < getMaxXTiles() + 1) && (py + 1 > this.y && py - this.y < getMaxYTiles() + 1);
+    }
+
+    public int getHorizontalTilesNumber() {
+	return tiledLayer.getHorizontalTilesNumber();
+    }
+
+    public int getVerticalTilesNumber() {
+	return tiledLayer.getVerticalTilesNumber();
+    }
+
+    public int getMaxXTiles() {
+	return tiledLayer.getMaxXTiles();
+    }
+
+    public int getMaxYTiles() {
+	return tiledLayer.getMaxYTiles();
+    }
+
 }

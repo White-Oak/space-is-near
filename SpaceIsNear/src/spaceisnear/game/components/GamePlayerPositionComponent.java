@@ -33,7 +33,7 @@ public class GamePlayerPositionComponent extends PositionComponent {
 		getContext().getCameraMan().moveCameraToPlayer(messagetMessageMoved.getX(), messagetMessageMoved.getY());
 		break;
 	    case TIME_PASSED:
-		
+		break;
 	}
     }
 

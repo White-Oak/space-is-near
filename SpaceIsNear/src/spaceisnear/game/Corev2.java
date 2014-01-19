@@ -68,8 +68,8 @@ public class Corev2 extends BasicGameState {
 	if (notpaused) {
 	    MessageControlled mc = checkKeys();
 	    //1 quant of time is 50L by default
-	    int quants = delta / QUANT_TIME;
-	    MessageTimePassed messageTimePassed = new MessageTimePassed(quants);
+//	    int quants = delta / QUANT_TIME;
+	    MessageTimePassed messageTimePassed = new MessageTimePassed(delta);
 	    context.sendThemAll(messageTimePassed);
 	    //
 	    int playerID = context.getPlayerID();

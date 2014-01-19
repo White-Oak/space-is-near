@@ -16,7 +16,7 @@ public class PositionComponent extends Component {
     boolean animation;
     private int delayX, delayY;
     private int timeAccumulated;
-    private static final long TIME_NEDEED_TO_MOVE_ON_TO_NEXT_PHASE_OF_ANIMATION = 4L;
+    private static final int TIME_NEEDED_TO_ANIMATE = 350;
     private static final int STEP = 8;
 
     public PositionComponent(Position p) {
@@ -79,6 +79,7 @@ public class PositionComponent extends Component {
 		    delayX = messagem.getX() * GameContext.TILE_WIDTH;
 		    delayY = messagem.getY() * GameContext.TILE_HEIGHT;
 		    animation = true;
+		    timeAccumulated=0;
 		    setX(newX);
 		    setY(newY);
 		}
@@ -92,11 +93,11 @@ public class PositionComponent extends Component {
 		break;
 	    case TIME_PASSED:
 		if (animation) {
-//		    MessageTimePassed mtp = (MessageTimePassed) message;
-//		    int timePassed = mtp.getTimePassed();
-//		    timeAccumulated += timePassed;
+		    MessageTimePassed mtp = (MessageTimePassed) message;
+		    int timePassed = mtp.getTimePassed();
+		    timeAccumulated += timePassed;
 //		    if (timeAccumulated >= TIME_NEDEED_TO_MOVE_ON_TO_NEXT_PHASE_OF_ANIMATION) {
-		    if (true) {
+		    if (delayX != 0 || delayY != 0) {
 			int step = STEP;
 			if (delayX != 0) {
 			    if (Math.abs(delayX) != delayX) {
@@ -110,9 +111,12 @@ public class PositionComponent extends Component {
 			    }
 			    delayY -= step;
 			}
-			if (delayX == 0 && delayY == 0) {
-			    animation = false;
-			}
+		    }
+		    if (timeAccumulated > TIME_NEEDED_TO_ANIMATE) {
+			animation = false;
+			timeAccumulated = 0;
+			delayX = 0;
+			delayY = 0;
 		    }
 		}
 	}

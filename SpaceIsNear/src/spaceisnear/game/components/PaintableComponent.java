@@ -31,10 +31,12 @@ public abstract class PaintableComponent extends Component {
     public abstract void paintComponent(org.newdawn.slick.Graphics g);
 
     public final void paint(org.newdawn.slick.Graphics g) {
-	int xto = getX() * GameContext.TILE_WIDTH - getDelayX();
-	int yto = getY() * GameContext.TILE_HEIGHT - getDelayY();
-	g.translate(xto, yto);
-	paintComponent(g);
-	g.translate(-xto, -yto);
+	if (getContext().getCameraMan().belongsToCamera(getPosition())) {
+	    int xto = getX() * GameContext.TILE_WIDTH - getDelayX();
+	    int yto = getY() * GameContext.TILE_HEIGHT - getDelayY();
+	    g.translate(xto, yto);
+	    paintComponent(g);
+	    g.translate(-xto, -yto);
+	}
     }
 }

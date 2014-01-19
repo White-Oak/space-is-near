@@ -87,3 +87,4 @@
 +Client will connect properly with bad ping
 +LoadingScreen has objects counter
 +map sending removed
+*movement of players with different FPS was fixed
