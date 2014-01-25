@@ -7,9 +7,13 @@ package spaceisnear.game.console;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
 
 /**
  *
@@ -23,6 +27,11 @@ public class InGameLog {
     public void paint(Graphics g, int startingMessage, int startingLine) {
 	for (int i = startingMessage, linesDrawn = 0; i < stack.size(); i++) {
 	    LogString get = stack.get(i);
+//	    try {
+//		GameConsole.setColor(getColorOfLevel(get), (UnicodeFont) g.getFont());
+//	    } catch (SlickException ex) {
+//		Logger.getLogger(InGameLog.class.getName()).log(Level.SEVERE, null, ex);
+//	    }
 	    g.setColor(getColorOfLevel(get));
 	    String[] strings = splitByLines(get.toString(), width, g.getFont());
 	    for (int j = startingMessage == i ? startingLine : 0; j < strings.length; j++, linesDrawn++) {
@@ -32,11 +41,11 @@ public class InGameLog {
 	}
     }
 
-    public void pushMessage(String msg, LogLevel level) {
-	if (!stack.empty() && msg.equals(pullActualMessage())) {
+    public void pushMessage(LogString str) {
+	if (!stack.empty() && str.getMessage().equals(pullActualMessage())) {
 	    increaseTimesOfLastMessage();
 	} else {
-	    stack.push(new LogString(msg, level));
+	    stack.push(str);
 	}
     }
 
@@ -46,39 +55,6 @@ public class InGameLog {
 
     private void increaseTimesOfLastMessage() {
 	stack.peek().increaseTimes();
-    }
-
-    private class LogString {
-
-	private final String message;
-	private int timesMessaged = 1;
-	private final LogLevel level;
-
-	public LogString(String message, LogLevel level) {
-	    this.message = message;
-	    this.level = level;
-	}
-
-	public String getMessage() {
-	    return message;
-	}
-
-	@Override
-	public String toString() {
-	    if (timesMessaged == 1) {
-		return message;
-	    } else {
-		return message + ": x" + timesMessaged;
-	    }
-	}
-
-	public void increaseTimes() {
-	    timesMessaged++;
-	}
-
-	public LogLevel getLevel() {
-	    return level;
-	}
     }
 
     private static Color getColorOfLevel(LogString str) {
@@ -105,7 +81,7 @@ public class InGameLog {
 	    if (font.getWidth(line.substring(previousCut, indexOf)) > width) {
 		if (previousCut != previousSpace) {
 		    strings.add(line.substring(previousCut, previousSpace));
-		    previousCut = indexOf + 1;
+		    previousCut = previousSpace;
 		} else {
 		    strings.add(line.substring(previousCut, indexOf));
 		    previousCut = indexOf + 1;

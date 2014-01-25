@@ -11,6 +11,8 @@ import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.server.Registerer;
 import static spaceisnear.Utils.GSON;
+import spaceisnear.game.console.LogLevel;
+import spaceisnear.game.console.LogString;
 import spaceisnear.game.objects.items.StaticItem;
 
 /**
@@ -98,8 +100,13 @@ public class Networking extends Listener {
 		    MessageWorldInformation mwi = MessageWorldInformation.getInstance(b);
 		    processMessageWorldInformation(mwi);
 		    break;
+		case LOG:
+		    MessageLog ml = MessageLog.getInstance(b);
+		    gameContext.getCore().log(ml.getLog());
+		    break;
 	    }
 //	    System.out.println("Message received");
+	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));
 	}
     }
 

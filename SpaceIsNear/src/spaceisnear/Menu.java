@@ -27,9 +27,10 @@ import spaceisnear.server.ServerCore;
  */
 public class Menu extends BasicGameState implements ComponentListener {
 
-    private int state;
+    private int state = 0;
     private boolean hostresult;
     private TextField ip;
+    private TextField nickname;
 
     @Override
     public int getID() {
@@ -38,7 +39,11 @@ public class Menu extends BasicGameState implements ComponentListener {
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-	ip = new TextField(container, game.getContainer().getGraphics().getFont(), 300, 280, 200, 20);
+	nickname = new TextField(container, game.getContainer().getGraphics().getFont(), 500, 230, 200,
+		game.getContainer().getGraphics().getFont().getLineHeight());
+	nickname.setMaxLength(20);
+	nickname.addListener(this);
+	ip = new TextField(container, game.getContainer().getGraphics().getFont(), 500, 280, 200, 20);
 	ip.setMaxLength(15);
 	ip.addListener(this);
     }
@@ -50,10 +55,17 @@ public class Menu extends BasicGameState implements ComponentListener {
 	switch (state) {
 	    case 0:
 		g.setColor(Color.yellow);
+		g.drawString("Enter your nickname:", (game.getContainer().getWidth() >> 1)
+			- (g.getFont().getWidth("Enter your nickname:") >> 1),
+			(game.getContainer().getHeight() >> 1) - 100);
+		nickname.render(container, g);
+		break;
+	    case 1:
+		g.setColor(Color.yellow);
 		g.drawString("1. host\n2. join", (game.getContainer().getWidth() >> 1) - (g.getFont().getWidth(
 			"1. host\n2. join") >> 1), (game.getContainer().getHeight() >> 1) - 100);
 		break;
-	    case 1:
+	    case 2:
 		//не придумал, как покрасивее сделать, поэтому сделал тупо смещение
 		g.setColor(Color.yellow);
 		g.drawString("1. host\n   2. join\n\nenter ip address:",
@@ -67,7 +79,7 @@ public class Menu extends BasicGameState implements ComponentListener {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-	if (state == 2) {
+	if (state == 3) {
 	    if (hostresult) {
 		try {
 		    ServerCore serverCore = new ServerCore();
@@ -98,27 +110,28 @@ public class Menu extends BasicGameState implements ComponentListener {
     @Override
     public void keyPressed(int key, char c) {
 	switch (state) {
-	    case 0:
+	    case 1:
 		switch (c) {
 		    case '1':
 			hostresult = true;
-			state = 2;
+			state = 3;
 			break;
 		    case '2':
 			state++;
 			break;
 		}
 		break;
-	    case 1:
-		break;
 	}
     }
 
     @Override
     public void componentActivated(AbstractComponent ac) {
-	if (ac.equals(ip)) {
-	    state = 2;
+	System.out.println("true");
+	if (ac == (ip)) {
+	    state = 3;
 	    hostresult = false;
+	} else if (ac.equals(nickname)) {
+	    state = 1;
 	}
     }
 }

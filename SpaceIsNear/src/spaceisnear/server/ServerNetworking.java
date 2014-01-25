@@ -28,6 +28,7 @@ import static spaceisnear.Utils.GSON;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageCreatedItem;
+import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessageRogerRequested;
 import spaceisnear.game.messages.MessageWorldInformation;
 import spaceisnear.game.messages.MessageYourPlayerDiscovered;
@@ -80,7 +81,11 @@ public class ServerNetworking extends Listener implements Runnable {
 		    core.getContext().sendToID(mm, mm.getId());
 		    sendToAll(mm);
 		    break;
-
+		case LOG:
+		    MessageLog ml = MessageLog.getInstance(b);
+		    core.getContext().log(ml.getLog());
+		    sendToAll(ml);
+		    break;
 	    }
 //	    System.out.println("Message received");
 	} else if (object instanceof String) {

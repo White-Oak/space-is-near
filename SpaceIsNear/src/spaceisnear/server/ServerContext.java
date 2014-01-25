@@ -12,6 +12,7 @@ import java.util.*;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.CameraMan;
+import spaceisnear.game.console.LogString;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.layer.TiledLayer;
@@ -31,6 +32,7 @@ public final class ServerContext extends Context {
     private final TiledLayer tiledLayer;
     private final ObstaclesLayer obstacles;
     private final AtmosphericLayer atmosphere;
+    private final ServerLog log = new ServerLog();
 
     @Override
     public synchronized void sendThemAll(Message m) {
@@ -104,6 +106,10 @@ public final class ServerContext extends Context {
     @Override
     public AtmosphericLayer getAtmosphere() {
 	return atmosphere;
+    }
+
+    public void log(LogString string) {
+	log.log(string);
     }
 
 }

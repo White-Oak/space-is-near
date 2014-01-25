@@ -18,6 +18,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.components.PaintableComponent;
+import spaceisnear.game.console.LogString;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageTimePassed;
 import spaceisnear.game.messages.MessageToSend;
@@ -50,11 +51,11 @@ public class Corev2 extends BasicGameState {
 	context.getCameraMan().setWindowWidth(800);
 	context.getCameraMan().setWindowHeight(600);
 	context.getCameraMan().delegateWidth();
-	console = new GameConsole(800, 0, 400, 600, container);
     }
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+	console = new GameConsole(800, 0, 400, 600, container, context);
 	context.setCameraToPlayer();
     }
 
@@ -158,6 +159,12 @@ public class Corev2 extends BasicGameState {
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
 	super.mouseClicked(button, x, y, clickCount); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void log(LogString log) {
+	if (console != null) {
+	    console.pushMessage(log);
+	}
     }
 
 }

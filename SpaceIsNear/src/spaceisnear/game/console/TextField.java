@@ -11,9 +11,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.AbstractComponent;
-import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.GUIContext;
 
 /**
@@ -24,8 +22,9 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
 
     private StringBuilder text = new StringBuilder();
     private int currentPosition;
-    private int x, y, width, height;
-    private Font font;
+    private int x, y;
+    private final int width, height;
+    private final Font font;
     private Color textColor;
 
     public TextField(GUIContext container, int x, int y, int width, int height, Font font) {
@@ -47,12 +46,15 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
     }
 
     public void removeCharacter() {
-	text.deleteCharAt(currentPosition - 1);
-	currentPosition--;
+	if (currentPosition > 0) {
+	    text.deleteCharAt(currentPosition - 1);
+	    currentPosition--;
+	}
     }
 
     @Override
     public void keyPressed(int key, char c) {
+	super.keyPressed(key, c);
 	if (hasFocus()) {
 	    switch (key) {
 		case Input.KEY_ENTER:
@@ -73,9 +75,13 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
 		    }
 		    break;
 		default:
-		    if (Character.isLetterOrDigit(c) || Character.isWhitespace(c)) {
+//		    if (Character.isLetterOrDigit(c) || Character.isWhitespace(c)) {
+//			addCharacter(c);
+//		    }
+		    if (!Character.isIdentifierIgnorable(c)) {
 			addCharacter(c);
 		    }
+		    break;
 	    }
 	} else {
 	    if (key == Input.KEY_ENTER) {
@@ -87,6 +93,11 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
     @Override
     public void render(GUIContext container, Graphics g) {
 	g.setFont(font);
+//	try {
+//	    GameConsole.setColor(java.awt.Color.black, (UnicodeFont) g.getFont());
+//	} catch (SlickException ex) {
+//	    Logger.getLogger(TextField.class.getName()).log(Level.SEVERE, null, ex);
+//	}
 	g.setColor(textColor);
 	g.drawString(text.toString(), x, y);
 	if (hasFocus()) {
@@ -133,5 +144,4 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
 	text = new StringBuilder(string);
 	currentPosition = text.length();
     }
-
 }

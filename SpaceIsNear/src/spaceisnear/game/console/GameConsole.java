@@ -8,16 +8,16 @@ package spaceisnear.game.console;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
+import spaceisnear.Context;
+import spaceisnear.game.messages.MessageLog;
+import spaceisnear.game.messages.MessageToSend;
 
 /**
  *
@@ -31,15 +31,18 @@ public class GameConsole implements ComponentListener {
     java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 20);
     UnicodeFont font = new UnicodeFont(awtFont);
 //    Font font = new TrueTypeFont(awtFont, false);
+    private final Context context;
 
-    public GameConsole(int x, int y, int width, int height, GameContainer container) {
+    public GameConsole(int x, int y, int width, int height, GameContainer container, Context context) {
 	this.x = x;
 	this.y = y;
 	this.width = width;
 	this.height = height;
 	font.getEffects().add(new ColorEffect(java.awt.Color.black));
+	font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
+	font.getEffects().add(new ColorEffect(java.awt.Color.gray));
 	font.addGlyphs("йцукенгшщзхъфывапролджэячсмитьбю");
-	font.addNeheGlyphs();
+	font.addAsciiGlyphs();
 	try {
 	    font.loadGlyphs();
 	} catch (SlickException ex) {
@@ -50,6 +53,7 @@ public class GameConsole implements ComponentListener {
 	ip.setTextColor(Color.black);
 	ip.addListener(this);
 	ip.setFocus(false);
+	this.context = context;
     }
 
     public void paint(Graphics g, GameContainer container) {
@@ -81,7 +85,9 @@ public class GameConsole implements ComponentListener {
     @Override
     public void componentActivated(AbstractComponent source) {
 	if (source == ip) {
-	    log.pushMessage(ip.getText(), LogLevel.TALKING);
+	    LogString logString = new LogString(ip.getText(), LogLevel.TALKING);
+	    MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
+	    context.sendDirectedMessage(messageToSend);
 	    ip.setText("");
 	    ip.setFocus(false);
 	}
@@ -89,6 +95,18 @@ public class GameConsole implements ComponentListener {
 
     public boolean hasFocus() {
 	return ip.hasFocus();
+    }
+
+    public void pushMessage(LogString str) {
+	log.pushMessage(str);
+    }
+
+    public static void setColor(java.awt.Color color, UnicodeFont font) throws SlickException {
+	font.getEffects().clear();
+	font.getEffects().add(new ColorEffect(color));
+	font.clearGlyphs();
+	font.addGlyphs(0x0400, 0x04FF);
+	font.addAsciiGlyphs();
     }
 
 }
