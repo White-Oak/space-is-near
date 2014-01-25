@@ -90,7 +90,7 @@ public final class CameraMan {
     }
 
     public void unmoveCamera(Graphics g) {
-	g.translate(-x * tiledLayer.getTileWidth(), -y * tiledLayer.getTileHeight());
+	g.translate(x * tiledLayer.getTileWidth(), y * tiledLayer.getTileHeight());
     }
 
     void paint(Graphics g) {

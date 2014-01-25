@@ -82,8 +82,9 @@
     -selection of tile where player has clicked
 +Animated player movement
 +SINGL'TON PAWUH!!!
--In-game console
--In-game chat
++In-game console
++In-game chat
+    -sending messages over net
 +Client will connect properly with bad ping
 +LoadingScreen has objects counter
 +map sending removed

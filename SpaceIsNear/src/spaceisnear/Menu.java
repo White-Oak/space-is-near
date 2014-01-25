@@ -57,8 +57,9 @@ public class Menu extends BasicGameState implements ComponentListener {
 		//не придумал, как покрасивее сделать, поэтому сделал тупо смещение
 		g.setColor(Color.yellow);
 		g.drawString("1. host\n   2. join\n\nenter ip address:",
-			(game.getContainer().getWidth() >> 1) - (g.getFont().getWidth(
-			"1. host\n   2. join\n\nenter ip address:") >> 1), (game.getContainer().getHeight() >> 1) - 100);
+			(game.getContainer().getWidth() >> 1)
+			- (g.getFont().getWidth("1. host\n   2. join\n\nenter ip address:") >> 1),
+			(game.getContainer().getHeight() >> 1) - 100);
 		ip.render(container, g);
 		break;
 	}

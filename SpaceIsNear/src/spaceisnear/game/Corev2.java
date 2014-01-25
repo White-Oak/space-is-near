@@ -5,6 +5,7 @@
  */
 package spaceisnear.game;
 
+import spaceisnear.game.console.GameConsole;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -35,6 +36,7 @@ public class Corev2 extends BasicGameState {
     private int key;
     public static String IP;
     private boolean notpaused;
+    private GameConsole console;
 
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
@@ -48,6 +50,7 @@ public class Corev2 extends BasicGameState {
 	context.getCameraMan().setWindowWidth(800);
 	context.getCameraMan().setWindowHeight(600);
 	context.getCameraMan().delegateWidth();
+	console = new GameConsole(800, 0, 400, 600, container);
     }
 
     @Override
@@ -94,7 +97,7 @@ public class Corev2 extends BasicGameState {
 
     private MessageControlled checkKeys() {
 	MessageControlled mc = null;
-	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimation();
+	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimation() && !console.hasFocus();
 	switch (key) {
 	    case Input.KEY_UP:
 		if (ableToMove) {
@@ -123,12 +126,15 @@ public class Corev2 extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame sbg, Graphics g) throws SlickException {
 	g.scale(GameContext.SCALING_X, GameContext.SCALING_Y);
+	g.pushTransform();
 	context.getCameraMan().moveCamera(g);
 	context.getCameraMan().paint(g);
 	for (PaintableComponent paintableComponent : context.getPaintables()) {
 	    paintableComponent.paint(g);
 	}
-	context.getCameraMan().unmoveCamera(g);
+//	context.getCameraMan().unmoveCamera(g);
+	g.popTransform();
+	console.paint(g, container);
     }
 
     @Override
