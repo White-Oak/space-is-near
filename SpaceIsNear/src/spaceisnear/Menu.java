@@ -29,8 +29,8 @@ public class Menu extends BasicGameState implements ComponentListener {
 
     private int state = 0;
     private boolean hostresult;
-    private TextField ip;
-    private TextField nickname;
+    public static TextField ip;
+    public static TextField nickname;
 
     @Override
     public int getID() {
@@ -130,8 +130,10 @@ public class Menu extends BasicGameState implements ComponentListener {
 	if (ac == (ip)) {
 	    state = 3;
 	    hostresult = false;
+	    ip.setFocus(false);
 	} else if (ac.equals(nickname)) {
 	    state = 1;
+	    nickname.setFocus(false);
 	}
     }
 }

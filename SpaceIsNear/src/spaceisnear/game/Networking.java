@@ -7,6 +7,7 @@ import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 import java.io.IOException;
 import spaceisnear.LoadingScreen;
+import spaceisnear.Menu;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.server.Registerer;
@@ -30,7 +31,7 @@ public class Networking extends Listener {
 	client.start();
 	client.addListener(this);
 	client.connect(5000, host, tcpPort);
-	send(new MessageClientInformation("fuck you"));
+	send(new MessageClientInformation(Menu.nickname.getText()));
     }
 
     public void send(NetworkableMessage message) {

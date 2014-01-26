@@ -84,9 +84,9 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
 		    break;
 	    }
 	} else {
-	    if (key == Input.KEY_ENTER) {
-		setFocus(true);
-	    }
+//	    if (key == Input.KEY_ENTER) {
+//		setFocus(true);
+//	    }
 	}
     }
 

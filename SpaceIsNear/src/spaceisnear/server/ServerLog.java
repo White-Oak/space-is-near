@@ -30,7 +30,7 @@ public class ServerLog {
 	    if (!logFile.exists()) {
 		logFile.createNewFile();
 	    }
-	    logFOS = new FileOutputStream(logFile);
+	    logFOS = new FileOutputStream(logFile, true);
 	} catch (FileNotFoundException ex) {
 	    Logger.getLogger(ServerLog.class.getName()).log(Level.SEVERE, null, ex);
 	} catch (IOException ex) {
@@ -44,6 +44,7 @@ public class ServerLog {
 	    logFOS.write(("[" + date.toString() + "]").getBytes("UTF-8"));
 	    logFOS.write((" [" + string.getLevel().toString() + "]: ").getBytes("UTF-8"));
 	    logFOS.write(string.getMessage().getBytes("UTF-8"));
+	    logFOS.write(System.lineSeparator().getBytes("UTF-8"));
 	} catch (UnsupportedEncodingException ex) {
 	    Logger.getLogger(ServerLog.class.getName()).log(Level.SEVERE, null, ex);
 	} catch (IOException ex) {

@@ -16,8 +16,10 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import spaceisnear.Context;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessageToSend;
+import spaceisnear.game.objects.GamerPlayer;
 
 /**
  *
@@ -85,7 +87,9 @@ public class GameConsole implements ComponentListener {
     @Override
     public void componentActivated(AbstractComponent source) {
 	if (source == ip) {
-	    LogString logString = new LogString(ip.getText(), LogLevel.TALKING);
+	    GamerPlayer player = ((GameContext) context).getPlayer();
+	    String nickname = player.getNickname();
+	    LogString logString = new LogString(nickname + ": " + ip.getText(), LogLevel.TALKING);
 	    MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 	    context.sendDirectedMessage(messageToSend);
 	    ip.setText("");

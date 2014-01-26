@@ -87,12 +87,12 @@
     +sending messages over the net
     +logging all the messages the server get
     -sending to player only messages that they can hear
-    -write player name the message was sent
+    +write player's name the message was sent
     -make PM
     -make OOC
     -make some DEBUG messages
     -make some broadcasting
-+Client will connect properly with bad ping
+*Client will connect properly with bad ping
 +LoadingScreen has objects counter
 +map sending removed
 *movement of players with different FPS was fixed
