@@ -9,6 +9,7 @@ import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.MessageToSend;
+import spaceisnear.game.objects.Position;
 
 public class PlayerControllableComponent extends Component {
 
@@ -22,18 +23,33 @@ public class PlayerControllableComponent extends Component {
 	    case CONTROLLED:
 		MessageControlled mc = (MessageControlled) message;
 		MessageMoved mm = null;
+		Position position = getPosition();
+		int oldX = position.getX();
+		int oldY = position.getY();
 		switch (mc.getType()) {
 		    case UP:
-			mm = new MessageMoved(0, -1, getOwnerId());
+			oldY--;
+			if (getContext().getObstacles().isReacheable(oldX, oldY)) {
+			    mm = new MessageMoved(0, -1, getOwnerId());
+			}
 			break;
 		    case DOWN:
-			mm = new MessageMoved(0, 1, getOwnerId());
+			oldY++;
+			if (getContext().getObstacles().isReacheable(oldX, oldY)) {
+			    mm = new MessageMoved(0, 1, getOwnerId());
+			}
 			break;
 		    case LEFT:
-			mm = new MessageMoved(-1, 0, getOwnerId());
+			oldX--;
+			if (getContext().getObstacles().isReacheable(oldX, oldY)) {
+			    mm = new MessageMoved(-1, 0, getOwnerId());
+			}
 			break;
 		    case RIGHT:
-			mm = new MessageMoved(1, 0, getOwnerId());
+			oldX++;
+			if (getContext().getObstacles().isReacheable(oldX, oldY)) {
+			    mm = new MessageMoved(1, 0, getOwnerId());
+			}
 			break;
 		}
 		if (mm != null) {

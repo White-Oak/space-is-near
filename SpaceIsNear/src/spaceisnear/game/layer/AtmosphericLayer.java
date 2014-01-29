@@ -141,7 +141,7 @@ public class AtmosphericLayer extends Layer {
 
     public void setAirReacheable(int x, int y, boolean reacheable) {
 	if (reacheable) {
-	    if (getPressure(x, y) != -1) {
+	    if (getPressure(x, y) == -1) {
 		//if wall is removed then the pressure in the node is calculated as mean value of surrounding nodes
 		int[] values = {
 		    getPressure(x - 1, y), //left
@@ -150,11 +150,15 @@ public class AtmosphericLayer extends Layer {
 		    getPressure(x, y + 1) //left
 		};
 		int sum = 0;
+		int amount = 0;
 		for (int i = 0; i < values.length; i++) {
 		    int j = values[i];
-		    sum += j;
+		    if (j != -1) {
+			sum += j;
+			amount++;
+		    }
 		}
-		setPressure(x, y, sum >> 2);
+		setPressure(x, y, amount > 0 ? sum / amount : -1);
 	    }
 	} else {
 	    setPressure(x, y, -1);

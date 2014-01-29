@@ -25,7 +25,6 @@ import spaceisnear.game.messages.MessageMapSent;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.server.objects.Player;
 import static spaceisnear.Utils.GSON;
-import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageCreatedItem;
 import spaceisnear.game.messages.MessageLog;

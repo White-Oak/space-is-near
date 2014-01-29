@@ -54,9 +54,9 @@ public class ItemsArchive {
 		    GameContext.TILE_HEIGHT);
 	}
 	images = new Image[sheet.getHorizontalCount() * sheet.getVerticalCount()];
-	for (int i = 0; i < sheet.getHorizontalCount(); i++) {
-	    for (int j = 0; j < sheet.getVerticalCount(); j++) {
-		images[i * sheet.getHorizontalCount() + j] = sheet.getSprite(i, j);
+	for (int i = 0; i < sheet.getVerticalCount(); i++) {
+	    for (int j = 0; j < sheet.getHorizontalCount(); j++) {
+		images[i * sheet.getVerticalCount() + j] = sheet.getSprite(j, i);
 	    }
 	}
     }

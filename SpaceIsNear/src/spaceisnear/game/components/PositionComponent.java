@@ -75,14 +75,12 @@ public class PositionComponent extends Component {
 		MessageMoved messagem = (MessageMoved) message;
 		int newX = getX() + messagem.getX();
 		int newY = getY() + messagem.getY();
-		if (getContext().getObstacles().isReacheable(newX, newY)) {
-		    delayX = messagem.getX() * GameContext.TILE_WIDTH;
-		    delayY = messagem.getY() * GameContext.TILE_HEIGHT;
-		    animation = true;
-		    timeAccumulated=0;
-		    setX(newX);
-		    setY(newY);
-		}
+		delayX = messagem.getX() * GameContext.TILE_WIDTH;
+		delayY = messagem.getY() * GameContext.TILE_HEIGHT;
+		animation = true;
+		timeAccumulated = 0;
+		setX(newX);
+		setY(newY);
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved

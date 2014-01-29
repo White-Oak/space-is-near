@@ -67,8 +67,11 @@
 
 0.0.4 
 -Basic items system
--Obstacles' system
++Obstacles' system
+    +added items set blocking tile status
+    +items block movement
 -Atmosphere
+    +added items set blocking-air tile status
     -the separate thread calculating atmosphere and/or hull breaches
     -if there are no plitkas on the tile then it is counted as hull breach
 -Inventory
@@ -93,6 +96,7 @@
     -make some DEBUG messages
     -make some broadcasting
     +scrolling
+    -ingame commands
 -RADIOSYSTEM
     +two type of messages: local and and frequency-message
     +server discovers whether someone is in range of local message or not
@@ -103,3 +107,5 @@
 *movement of players with different FPS was fixed
 +Being able to enter nickname
 -draw only things that are in the screen
+-gotta do something with disconnected players
+*now server (not client) decides whether player is able to move on next tile

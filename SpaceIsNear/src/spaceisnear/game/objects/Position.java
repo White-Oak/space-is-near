@@ -5,42 +5,17 @@
  */
 package spaceisnear.game.objects;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author white_oak
  */
-public class Position {
-	private int x;
-	private int y;
-	
-	Position() {
-		
-	}
-	
-	@java.beans.ConstructorProperties({"x", "y"})
-	
-	public Position(final int x, final int y) {
-		
-		this.x = x;
-		this.y = y;
-	}
-	
-	
-	public int getX() {
-		return this.x;
-	}
-	
-	
-	public int getY() {
-		return this.y;
-	}
-	
-	
-	public void setX(final int x) {
-		this.x = x;
-	}
-	
-	
-	public void setY(final int y) {
-		this.y = y;
-	}
+@AllArgsConstructor public class Position {
+
+    @Getter @Setter private int x, y;
+
+    Position() {
+    }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package spaceisnear.server.objects.items;
 
 import java.io.IOException;
@@ -36,8 +31,7 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 	    case "addItem":
 		int idByName = ItemsArchive.itemsArchive.getIdByName(values[0].getValue());
 		Position p = new Position(Integer.valueOf(values[1].getValue()), Integer.valueOf(values[2].getValue()));
-		StaticItem staticItem = new StaticItem(context, p, idByName);
-		context.addObject(staticItem);
+		addItem(p, idByName);
 		break;
 	    case "fillWithItem":
 		int idByName1 = ItemsArchive.itemsArchive.getIdByName(values[0].getValue());
@@ -45,15 +39,21 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 		int y = Integer.valueOf(values[2].getValue());
 		int endX = Integer.valueOf(values[3].getValue());
 		int endY = Integer.valueOf(values[4].getValue());
-		for (int i = x; i < endX; i++) {
-		    for (int j = y; j < endY; j++) {
+		for (int i = x; i <= endX; i++) {
+		    for (int j = y; j <= endY; j++) {
 			Position p1 = new Position(i, j);
-			StaticItem staticItem1 = new StaticItem(context, p1, idByName1);
-			context.addObject(staticItem1);
+			addItem(p1, idByName1);
 		    }
 		}
 	}
 	return null;
+    }
+
+    private void addItem(Position p, int id) {
+	StaticItem staticItem1 = new StaticItem(context, p, id);
+	context.addObject(staticItem1);
+	context.getObstacles().setReacheable(p.getX(), p.getY(), !ItemsArchive.itemsArchive.isBlockingPath(id));
+	context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ItemsArchive.itemsArchive.isBlockingAir(id));
     }
 
     public ItemAdder(ServerContext context) {

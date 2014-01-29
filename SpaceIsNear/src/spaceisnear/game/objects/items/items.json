@@ -13,6 +13,14 @@
 	"type": "ENVIRONMENT",
 	"blockingPath": false,
 	"blockingAir": false,
-	"imageIds": [0] 
+	"imageIds": [0]
+    },
+    {
+	"name": "wall",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": true,
+	"blockingAir": true,
+	"imageIds": [1]
     }
 ]

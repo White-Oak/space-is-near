@@ -2,4 +2,20 @@
 //x and y — are cell coordinates, not real
 //fillWithItem (name, x, y, end_x, end_y)
 
-fillWithItem {plitka, 0, 0, 32, 32}
+fillWithItem {plitka, 0, 0, 31, 31}
+fillWithItem {wall, 0, 0, 31, 0} 
+fillWithItem {wall, 0, 31, 31, 31} 
+fillWithItem {wall, 31, 0, 31, 31} 
+fillWithItem {wall, 0, 0, 0, 31}
+fillWithItem {wall, 7, 8, 14, 8}
+fillWithItem {wall, 17, 8, 24, 8}
+fillWithItem {wall, 14, 8, 14, 12}
+fillWithItem {wall, 17, 8, 17, 12}
+fillWithItem {wall, 11, 12, 14, 12}
+fillWithItem {wall, 17, 12, 20, 12}
+fillWithItem {wall, 11, 12, 11, 27}
+fillWithItem {wall, 20, 12, 20, 27}
+fillWithItem {wall, 12, 20, 19, 20}
+fillWithItem {wall, 9, 27, 10, 27}
+fillWithItem {wall, 14, 27, 17, 27}
+fillWithItem {wall, 21, 27, 22, 27}
