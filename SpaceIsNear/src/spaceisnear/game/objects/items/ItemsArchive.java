@@ -29,6 +29,7 @@ public class ItemsArchive {
     private final int[][] imageIds;
     private final Image[] images;
     public static ItemsArchive itemsArchive;
+    public static int PLITKA_ID;
 
     public ItemsArchive(ItemBundle[] bundles) throws SlickException, IOException {
 	final int length = bundles.length;
@@ -47,6 +48,9 @@ public class ItemsArchive {
 	    types[i] = itemBundle.type;
 	    imageIds[i] = itemBundle.imageIds;
 	    ids.put(itemBundle.name, i);
+	    if (itemBundle.name.equals("plitka")) {
+		PLITKA_ID = i;
+	    }
 	}
 	SpriteSheet sheet;
 	try (InputStream resourceAsStream = getClass().getResourceAsStream("/res/sprites.png")) {

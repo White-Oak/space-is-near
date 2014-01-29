@@ -73,7 +73,8 @@
 -Atmosphere
     +added items set blocking-air tile status
     -the separate thread calculating atmosphere and/or hull breaches
-    -if there are no plitkas on the tile then it is counted as hull breach
+    +if there are no plitkas on the tile then it is counted as hull breach
+	+the pressure is set to zero in that point
 -Inventory
     -each inventory slot has his size, item field and name
 -HealthComponent
@@ -100,12 +101,14 @@
 -RADIOSYSTEM
     +two type of messages: local and and frequency-message
     +server discovers whether someone is in range of local message or not
+	+local messages are transfered in 4 ways from the player by 10 tiles
+	-air unrecheable tiles do not let local messages to get through
     -server discovers whether someone is in range of frequncy message or not
 *Client will connect properly with bad ping
 +LoadingScreen has objects counter
 +map sending removed
 *movement of players with different FPS was fixed
 +Being able to enter nickname
--draw only things that are in the screen
+*draw only items that are in the screen (already was done)
 -gotta do something with disconnected players
 *now server (not client) decides whether player is able to move on next tile

@@ -95,7 +95,7 @@ public abstract class Component {
 	return this.context;
     }
 
-    protected Position getPosition() {
+    public Position getPosition() {
 	AbstractGameObject owner = getOwner();
 	return owner.getPosition();
     }

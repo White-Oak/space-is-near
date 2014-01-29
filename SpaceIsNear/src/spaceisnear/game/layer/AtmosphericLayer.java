@@ -10,6 +10,7 @@ import java.util.List;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.objects.GameObjectType;
+import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;
@@ -21,6 +22,7 @@ import spaceisnear.server.objects.items.StaticItem;
 public class AtmosphericLayer extends Layer {
 
     private final int[][] map;
+    private final boolean[][] plitkas;
     /**
      * Two-bit variable where large bit is for top corners and little bit is for left corners.
      */
@@ -34,6 +36,7 @@ public class AtmosphericLayer extends Layer {
     public AtmosphericLayer(int width, int height) {
 	super(width, height);
 	map = new int[width][height];
+	plitkas = new boolean[width][height];
 	for (int[] is : map) {
 	    Arrays.fill(is, 100);
 	}
@@ -164,16 +167,40 @@ public class AtmosphericLayer extends Layer {
 	    setPressure(x, y, -1);
 	}
     }
-//@working r71...
+//@working r71-78...
 
+    /**
+     * Checks if there are no plitka somewhere.
+     *
+     * @param context
+     */
     public void checkHulls(ServerContext context) {
+	for (boolean[] bs : plitkas) {
+	    Arrays.fill(bs, false);
+	}
 	List<AbstractGameObject> objects = context.getObjects();
 	for (AbstractGameObject abstractGameObject : objects) {
-	    GameObjectType type = abstractGameObject.getType();
-	    if (type == GameObjectType.ITEM) {
+	    if (abstractGameObject.getType() == GameObjectType.ITEM) {
 		StaticItem item = (StaticItem) abstractGameObject;
-		ItemPropertiesComponent ipc = item.getProperties();
-		setAirReacheable(tickState, tickState, ItemsArchive.itemsArchive.isBlockingAir(ipc.getId()));
+		if (item.getProperties().getId() == ItemsArchive.PLITKA_ID) {
+		    Position position = abstractGameObject.getPosition();
+		    plitkas[position.getX()][position.getY()] = true;
+		}
+	    }
+	}
+    }
+
+    /**
+     * Fills no-plitka areas with zero pressure.
+     */
+    public void recheckPressureForHulls() {
+	for (int i = 0; i < plitkas.length; i++) {
+	    boolean[] bs = plitkas[i];
+	    for (int j = 0; j < bs.length; j++) {
+		boolean b = bs[j];
+		if (!b) {
+		    setPressure(i, j, 0);
+		}
 	    }
 	}
     }
