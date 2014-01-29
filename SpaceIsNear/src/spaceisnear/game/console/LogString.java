@@ -23,11 +23,19 @@ public class LogString {
 	this(message, level, null, null);
     }
 
-    public LogString(String message, LogLevel level, Position position, String frequency) {
+    private LogString(String message, LogLevel level, Position position, String frequency) {
 	this.message = message;
 	this.level = level;
 	this.position = position;
 	this.frequency = frequency;
+    }
+
+    public LogString(String message, LogLevel level, Position position) {
+	this(message, level, position, null);
+    }
+
+    public LogString(String message, LogLevel level, String frequency) {
+	this(message, level, null, frequency);
     }
 
     public String getMessage() {

@@ -44,6 +44,7 @@ public class ServerNetworking extends Listener implements Runnable {
     public Server server;
     private final ServerCore core;
     private final ArrayList<Connection> connections = new ArrayList<>();
+    private final ArrayList<Player> players = new ArrayList<Player>();
     private MessageClientInformation informationAboutLastConnected;
     private boolean[] rogered;
     private final static MessageRogerRequested ROGER_REQUSTED = new MessageRogerRequested();
@@ -84,7 +85,14 @@ public class ServerNetworking extends Listener implements Runnable {
 		case LOG:
 		    MessageLog ml = MessageLog.getInstance(b);
 		    core.getContext().log(ml.getLog());
-		    sendToAll(ml);
+		    for (int i = 0; i < players.size(); i++) {
+			Player player = players.get(i);
+			Position positionToHear = player.getPosition();
+			Position positionToSay = ml.getLog().getPosition();
+			if (core.getContext().isHearingLogMessage(positionToSay, positionToHear)) {
+			    sendToConnection(connections.get(i), ml);
+			}
+		    }
 		    break;
 	    }
 //	    System.out.println("Message received");
@@ -137,6 +145,7 @@ public class ServerNetworking extends Listener implements Runnable {
     private MessageCreated createPlayerAndPrepare() {
 	//1
 	Player player = core.addPlayer(connections.size());
+	players.add(player);
 	player.setNickname(informationAboutLastConnected.getDesiredNickname());
 	//2
 	ObjectBundle bundle = player.getBundle();

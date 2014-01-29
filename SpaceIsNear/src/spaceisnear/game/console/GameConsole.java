@@ -11,8 +11,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -95,14 +93,18 @@ public class GameConsole implements ComponentListener {
     @Override
     public void componentActivated(AbstractComponent source) {
 	if (source == ip) {
-	    GamerPlayer player = ((GameContext) context).getPlayer();
-	    String nickname = player.getNickname();
-	    LogString logString = new LogString(nickname + ": " + ip.getText(), LogLevel.TALKING);
-	    MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
-	    context.sendDirectedMessage(messageToSend);
-	    ip.setText("");
-	    ip.setFocus(false);
+	    sendMessageFromPlayer();
 	}
+    }
+
+    private void sendMessageFromPlayer() {
+	GamerPlayer player = ((GameContext) context).getPlayer();
+	String nickname = player.getNickname();
+	LogString logString = new LogString(nickname + ": " + ip.getText(), LogLevel.TALKING, player.getPosition());
+	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
+	context.sendDirectedMessage(messageToSend);
+	ip.setText("");
+	ip.setFocus(false);
     }
 
     public boolean hasFocus() {

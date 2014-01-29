@@ -94,8 +94,8 @@
     -make some broadcasting
     +scrolling
 -RADIOSYSTEM
-    -two type of messages: local and and frequency-message
-    -server discovers whether someone is in range of local message or not
+    +two type of messages: local and and frequency-message
+    +server discovers whether someone is in range of local message or not
     -server discovers whether someone is in range of frequncy message or not
 *Client will connect properly with bad ping
 +LoadingScreen has objects counter

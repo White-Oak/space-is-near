@@ -17,6 +17,7 @@ import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.layer.TiledLayer;
 import spaceisnear.game.messages.DirectedMessage;
+import spaceisnear.game.objects.Position;
 import spaceisnear.server.objects.ServerNetworkingObject;
 
 /**
@@ -112,4 +113,44 @@ public final class ServerContext extends Context {
 	log.log(string);
     }
 
+    public boolean isHearingLogMessage(Position said, Position toHear) {
+	int[][] bufferMap = new int[obstacles.getWidth()][obstacles.getHeight()];
+	int initialX = said.getX();
+	int initialY = said.getY();
+	//how to name it???
+	START_RECURSION(bufferMap, initialX, initialY, 10);
+	return bufferMap[toHear.getX()][toHear.getY()] > 0;
+    }
+
+    private void START_RECURSION(int[][] bufferMap, int x, int y, int distance) {
+	bufferMap[x][y] = distance;
+	distance--;
+	if (distance == 0) {
+	    return;
+	}
+	try {
+	    if (bufferMap[x - 1][y] < distance) {
+		START_RECURSION(bufferMap, x - 1, y, distance);
+	    }
+	} catch (ArrayIndexOutOfBoundsException e) {
+	}
+	try {
+	    if (bufferMap[x][y - 1] < distance) {
+		START_RECURSION(bufferMap, x, y - 1, distance);
+	    }
+	} catch (ArrayIndexOutOfBoundsException e) {
+	}
+	try {
+	    if (bufferMap[x][y + 1] < distance) {
+		START_RECURSION(bufferMap, x, y + 1, distance);
+	    }
+	} catch (ArrayIndexOutOfBoundsException e) {
+	}
+	try {
+	    if (bufferMap[x + 1][y] < distance) {
+		START_RECURSION(bufferMap, x + 1, y, distance);
+	    }
+	} catch (ArrayIndexOutOfBoundsException e) {
+	}
+    }
 }
