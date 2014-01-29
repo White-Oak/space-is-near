@@ -7,13 +7,9 @@ package spaceisnear.game.console;
 
 import java.util.ArrayList;
 import java.util.Stack;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.UnicodeFont;
 
 /**
  *
@@ -23,20 +19,25 @@ public class InGameLog {
 
     private final Stack<LogString> stack = new Stack<>();
     private int x = 30, y = 2, width = 370, height = 700;
+    private int linesNumber = 0;
+    private final Font font;
 
-    public void paint(Graphics g, int startingMessage, int startingLine) {
-	for (int i = startingMessage, linesDrawn = 0; i < stack.size(); i++) {
+    public InGameLog(Font font) {
+	this.font = font;
+    }
+
+    public void paint(Graphics g, int startingLine) {
+	final int startingY = -startingLine * g.getFont().getLineHeight();
+	for (int i = 0, linesDrawn = 0; i < stack.size(); i++) {
 	    LogString get = stack.get(i);
-//	    try {
-//		GameConsole.setColor(getColorOfLevel(get), (UnicodeFont) g.getFont());
-//	    } catch (SlickException ex) {
-//		Logger.getLogger(InGameLog.class.getName()).log(Level.SEVERE, null, ex);
-//	    }
 	    g.setColor(getColorOfLevel(get));
 	    String[] strings = splitByLines(get.toString(), width, g.getFont());
-	    for (int j = startingMessage == i ? startingLine : 0; j < strings.length; j++, linesDrawn++) {
+	    for (int j = 0; j < strings.length; j++, linesDrawn++) {
 		String string = strings[j];
-		g.drawString(string, x, y + g.getFont().getLineHeight() * linesDrawn);
+		final int ycoord = y + font.getLineHeight() * linesDrawn + startingY;
+		if (ycoord > 0) {
+		    g.drawString(string, x, ycoord);
+		}
 	    }
 	}
     }
@@ -46,6 +47,7 @@ public class InGameLog {
 	    increaseTimesOfLastMessage();
 	} else {
 	    stack.push(str);
+	    addLastMessageToLinesNumber();
 	}
     }
 
@@ -58,7 +60,7 @@ public class InGameLog {
     }
 
     private static Color getColorOfLevel(LogString str) {
-	LogLevel level = str.level;
+	LogLevel level = str.getLevel();
 	switch (level) {
 	    case DEBUG:
 		return Color.lightGray;
@@ -67,6 +69,19 @@ public class InGameLog {
 	    default:
 		return Color.gray;
 	}
+    }
+
+    public synchronized int size() {
+	return stack.size();
+    }
+
+    public int getLinesNumber() {
+	return linesNumber;
+    }
+
+    private void addLastMessageToLinesNumber() {
+	//TODO Notice that when last message will be modified, it may be bad
+	linesNumber += splitByLines(pullActualMessage(), width, font).length;
     }
 
     private static String[] splitByLines(String line, int width, Font font) {

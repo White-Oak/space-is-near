@@ -5,6 +5,8 @@
  */
 package spaceisnear.game.console;
 
+import spaceisnear.game.objects.Position;
+
 /**
  *
  * @author White Oak
@@ -13,11 +15,19 @@ public class LogString {
 
     private final String message;
     private int timesMessaged = 1;
-    final LogLevel level;
+    private final LogLevel level;
+    private final Position position;
+    private final String frequency;
 
     public LogString(String message, LogLevel level) {
+	this(message, level, null, null);
+    }
+
+    public LogString(String message, LogLevel level, Position position, String frequency) {
 	this.message = message;
 	this.level = level;
+	this.position = position;
+	this.frequency = frequency;
     }
 
     public String getMessage() {
@@ -26,6 +36,10 @@ public class LogString {
 
     @Override
     public String toString() {
+	String message = this.message;
+	if (frequency != null) {
+	    message = "[" + frequency + "]: " + message;
+	}
 	if (timesMessaged == 1) {
 	    return message;
 	} else {
@@ -41,4 +55,11 @@ public class LogString {
 	return level;
     }
 
+    public Position getPosition() {
+	return position;
+    }
+
+    public String getFrequency() {
+	return frequency;
+    }
 }

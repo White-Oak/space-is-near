@@ -8,8 +8,11 @@ package spaceisnear.game.console;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -29,11 +32,14 @@ public class GameConsole implements ComponentListener {
 
     private final int x, y, width, height;
     private final TextField ip;
-    private final InGameLog log = new InGameLog();
-    java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 20);
+    private final InGameLog log;
+    java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 15);
     UnicodeFont font = new UnicodeFont(awtFont);
 //    Font font = new TrueTypeFont(awtFont, false);
     private final Context context;
+    private int scrollBarSize;
+    private int scrollBarY;
+    private boolean scrollBarClicked;
 
     public GameConsole(int x, int y, int width, int height, GameContainer container, Context context) {
 	this.x = x;
@@ -51,11 +57,13 @@ public class GameConsole implements ComponentListener {
 	    Logger.getLogger(GameConsole.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	final int lineHeight = font.getLineHeight();
+	log = new InGameLog(font);
 	ip = new TextField(container, x + 10, y + height - lineHeight - 2, width, lineHeight + 4, font);
 	ip.setTextColor(Color.black);
 	ip.addListener(this);
 	ip.setFocus(false);
 	this.context = context;
+	scrollBarSize = sizeOfScrollBar();
     }
 
     public void paint(Graphics g, GameContainer container) {
@@ -66,7 +74,7 @@ public class GameConsole implements ComponentListener {
 	g.fillRect(0, 0, width, height);
 	//left scrollbar 
 	g.setColor(Color.gray);
-	g.fillRect(0, 2, 20, height - heightOfTextField - 4);
+	g.fillRect(0, 2 + scrollBarY, 20, scrollBarSize);
 	g.setColor(Color.white);
 	g.fillRect(0, 0, 2, height);
 	//bottom input window
@@ -78,7 +86,7 @@ public class GameConsole implements ComponentListener {
 	g.drawLine(0, height - heightOfTextField, width, height - heightOfTextField);
 	//log
 	g.setFont(font);
-	log.paint(g, 0, 0);
+	log.paint(g, getLineByScrollBarY());
 	//
 	g.popTransform();
 	ip.render(container, g);
@@ -103,6 +111,7 @@ public class GameConsole implements ComponentListener {
 
     public void pushMessage(LogString str) {
 	log.pushMessage(str);
+	scrollBarSize = sizeOfScrollBar();
     }
 
     public static void setColor(java.awt.Color color, UnicodeFont font) throws SlickException {
@@ -113,4 +122,63 @@ public class GameConsole implements ComponentListener {
 	font.addAsciiGlyphs();
     }
 
+    public void mouseClicked(int button, int x, int y, int clickCount) {
+
+    }
+
+    public void mousePressed(int button, int x, int y) {
+	if (x > this.x && x < this.x + 20) {
+	    if (y > scrollBarY && y < scrollBarY + scrollBarSize) {
+		scrollBarClicked = true;
+	    }
+	}
+    }
+
+    public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+	if (scrollBarClicked) {
+	    processDrag(oldy, newy);
+	}
+    }
+
+    private void processDrag(int oldy, int newy) {
+	int move = newy - oldy;
+	scrollBarY += move;
+	if (scrollBarY + scrollBarSize > sizeOfGameLog()) {
+	    scrollBarY = sizeOfGameLog() - scrollBarSize;
+	} else if (scrollBarY < 0) {
+	    scrollBarY = 0;
+	}
+    }
+
+    public void mouseReleased(int button, int x, int y) {
+	scrollBarClicked = false;
+    }
+
+    public boolean intersects(int x, int y) {
+	boolean xB = x > this.x && x < x + width;
+	boolean yB = y > this.y && y < y + height;
+	return xB && yB;
+    }
+
+    private int linesPerHeight(Font f, int height) {
+	return height / f.getLineHeight();
+    }
+
+    private int sizeOfScrollBar() {
+	float multiplier = ((float) linesPerHeight(font, sizeOfGameLog())) / log.size();
+	if (multiplier > 1) {
+	    multiplier = 1;
+	}
+	return (int) (multiplier * sizeOfGameLog());
+    }
+
+    private int getLineByScrollBarY() {
+	float multiplier = scrollBarY / (float) (sizeOfGameLog() - sizeOfScrollBar());
+	int unseenLines = log.getLinesNumber() - linesPerHeight(font, height);
+	return (int) (unseenLines * multiplier);
+    }
+
+    private int sizeOfGameLog() {
+	return height - ip.getHeight() - 4;
+    }
 }

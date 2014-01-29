@@ -158,13 +158,30 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
-	super.mouseClicked(button, x, y, clickCount); //To change body of generated methods, choose Tools | Templates.
+	if (console.intersects(x, y)) {
+	    console.mouseClicked(button, x, y, clickCount);
+	}
+    }
+
+    @Override
+    public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+	console.mouseDragged(oldx, oldy, newx, newy);
     }
 
     public void log(LogString log) {
 	if (console != null) {
 	    console.pushMessage(log);
 	}
+    }
+
+    @Override
+    public void mouseReleased(int button, int x, int y) {
+	console.mouseReleased(button, x, y);
+    }
+
+    @Override
+    public void mousePressed(int button, int x, int y) {
+	console.mousePressed(button, x, y);
     }
 
 }

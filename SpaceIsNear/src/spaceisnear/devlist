@@ -92,8 +92,14 @@
     -make OOC
     -make some DEBUG messages
     -make some broadcasting
+    +scrolling
+-RADIOSYSTEM
+    -two type of messages: local and and frequency-message
+    -server discovers whether someone is in range of local message or not
+    -server discovers whether someone is in range of frequncy message or not
 *Client will connect properly with bad ping
 +LoadingScreen has objects counter
 +map sending removed
 *movement of players with different FPS was fixed
 +Being able to enter nickname
+-draw only things that are in the screen
