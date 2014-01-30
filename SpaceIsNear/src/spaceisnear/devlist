@@ -119,7 +119,7 @@
     -ingame commands
 -RADIOSYSTEM
     +server discovers whether someone is in range of local message or not
-	-air unrecheable tiles do not let local messages to get through
+	+air unrecheable tiles do not let local messages to get through
     -server discovers whether someone is in range of frequncy message or not
 -gotta do something with disconnected players
 -being able to run server in no-GUI mode

@@ -64,7 +64,6 @@ public final class ServerContext extends Context {
 	return (Player) players.get(id);
     }
 
-    @java.beans.ConstructorProperties({"networking", "objects", "tiledLayer"})
     public ServerContext(final ServerNetworking networking, final List<AbstractGameObject> objects, final TiledLayer tiledLayer,
 	    ObstaclesLayer obstacles,
 	    AtmosphericLayer atmosphere) {
@@ -115,6 +114,9 @@ public final class ServerContext extends Context {
     }
 
     private void START_RECURSION(int[][] bufferMap, int x, int y, int distance) {
+	if (atmosphere.getPressure(x, y) < 5) {
+	    return;
+	}
 	bufferMap[x][y] = distance;
 	distance--;
 	if (distance == 0) {

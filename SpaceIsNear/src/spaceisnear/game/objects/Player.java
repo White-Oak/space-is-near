@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.components.NameComponent;
 import spaceisnear.game.components.client.PlayerComponent;
 import spaceisnear.game.components.PositionComponent;
@@ -25,11 +26,20 @@ public class Player extends ClientGameObject {
     }
 
     public String getNickname() {
-	return ((NameComponent) getComponents().get(getComponents().size() - 1)).getNickname();
+	return getNameComponent().getNickname();
+    }
+
+    private NameComponent getNameComponent() {
+	for (Component component : getComponents()) {
+	    if (component.getType() == ComponentType.NAME) {
+		return (NameComponent) component;
+	    }
+	}
+	return null;
     }
 
     public void setNickname(String nickname) {
-	((NameComponent) getComponents().get(getComponents().size() - 1)).setNickname(nickname);
+	getNameComponent().setNickname(nickname);
     }
 
     public static Player getInstance(ObjectBundle bundle, GameContext context) {

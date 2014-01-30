@@ -4,6 +4,7 @@
  */
 package org.whiteoak.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,12 +16,12 @@ public class File {
 
     public static byte[] getContents(InputStream is) {
 	try {
-	    ByteVector bv = new ByteVector();
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    int c;
 	    while ((c = is.read()) != -1) {
-		bv.addElement(c);
+		baos.write(c);
 	    }
-	    return bv.getBytes();
+	    return baos.toByteArray();
 	} catch (IOException ex) {
 	    ex.printStackTrace();
 	}
