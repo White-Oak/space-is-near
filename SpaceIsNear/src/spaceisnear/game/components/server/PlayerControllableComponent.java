@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.components.server;
 
+import java.util.List;
 import spaceisnear.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
@@ -13,7 +14,10 @@ import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.Position;
+import spaceisnear.game.objects.items.Size;
 import spaceisnear.server.ServerContext;
+import spaceisnear.server.objects.items.ServerItemsArchive;
+import spaceisnear.server.objects.items.StaticItem;
 
 public class PlayerControllableComponent extends Component {
 
@@ -33,28 +37,16 @@ public class PlayerControllableComponent extends Component {
 		final ServerContext context = (ServerContext) getContext();
 		switch (mc.getType()) {
 		    case UP:
-			oldY--;
-			if (context.getObstacles().isReacheable(oldX, oldY)) {
-			    mm = new MessageMoved(0, -1, getOwnerId());
-			}
+			mm = moveCheck(oldX, oldY, 0, -1);
 			break;
 		    case DOWN:
-			oldY++;
-			if (context.getObstacles().isReacheable(oldX, oldY)) {
-			    mm = new MessageMoved(0, 1, getOwnerId());
-			}
+			mm = moveCheck(oldX, oldY, 0, 1);
 			break;
 		    case LEFT:
-			oldX--;
-			if (context.getObstacles().isReacheable(oldX, oldY)) {
-			    mm = new MessageMoved(-1, 0, getOwnerId());
-			}
+			mm = moveCheck(oldX, oldY, -1, 0);
 			break;
 		    case RIGHT:
-			oldX++;
-			if (context.getObstacles().isReacheable(oldX, oldY)) {
-			    mm = new MessageMoved(1, 0, getOwnerId());
-			}
+			mm = moveCheck(oldX, oldY, 1, 0);
 			break;
 		}
 		if (mm != null) {
@@ -63,6 +55,33 @@ public class PlayerControllableComponent extends Component {
 		    getContext().sendDirectedMessage(new MessageToSend(mm));
 		}
 	}
+    }
+
+    private MessageMoved moveCheck(int x, int y, int deltaX, int deltaY) {
+	x += deltaX;
+	y += deltaY;
+	ServerContext context = (ServerContext) getContext();
+	MessageMoved mm = null;
+	if (context.getObstacles().isReacheable(x, y)) {
+	    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
+	} else if (context.isOnMap(x, y)) {
+	    List<StaticItem> itemsOn = context.itemsOn(x, y);
+	    for (StaticItem staticItem : itemsOn) {
+		int id = staticItem.getProperties().getId();
+		boolean blockingPath = ServerItemsArchive.itemsArchive.isBlockingPath(id);
+		if (blockingPath) {
+		    Boolean property = (Boolean) staticItem.getVariableProperties().getProperty("stucked");
+		    if (property != null && !property && context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
+			mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
+			staticItem.message(mm);
+			getContext().sendDirectedMessage(new MessageToSend(mm));
+			mm = new MessageMoved(deltaX, deltaY, getOwnerId());
+			break;
+		    }
+		}
+	    }
+	}
+	return mm;
     }
 
 }

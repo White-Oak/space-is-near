@@ -5,10 +5,15 @@
 package spaceisnear.game.components;
 
 import spaceisnear.game.GameContext;
+import spaceisnear.game.layer.AtmosphericLayer;
+import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.MessageTimePassed;
+import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
+import spaceisnear.server.ServerContext;
+import spaceisnear.server.objects.items.StaticItem;
 
 public class PositionComponent extends Component {
 
@@ -70,6 +75,8 @@ public class PositionComponent extends Component {
 
     @Override
     public void processMessage(Message message) {
+	int oldX = getX();
+	int oldY = getY();
 	switch (message.getMessageType()) {
 	    case MOVED:
 		MessageMoved messagem = (MessageMoved) message;
@@ -117,6 +124,27 @@ public class PositionComponent extends Component {
 			delayY = 0;
 		    }
 		}
+	}
+	try {
+	    ServerContext context = (ServerContext) getContext();
+	    if (oldX != getX() || oldY != getY()) {
+		if (getOwner().getType() == GameObjectType.ITEM) {
+
+		    StaticItem item = (StaticItem) getOwner();
+		    if (item.getProperties().isBlockingPath()) {
+			ObstaclesLayer obstacles = context.getObstacles();
+			obstacles.setReacheable(oldX, oldY, true);
+			obstacles.setReacheable(getX(), getY(), false);
+		    }
+		    if (item.getProperties().isBlockingAir()) {
+			AtmosphericLayer atmosphere = context.getAtmosphere();
+			atmosphere.setAirReacheable(oldX, oldY, true);
+			atmosphere.setAirReacheable(getX(), getY(), false);
+		    }
+
+		}
+	    }
+	} catch (ClassCastException e) {
 	}
     }
 }

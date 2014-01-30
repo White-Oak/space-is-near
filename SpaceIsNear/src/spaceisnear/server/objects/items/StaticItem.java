@@ -6,6 +6,7 @@ package spaceisnear.server.objects.items;
 
 import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.components.PositionComponent;
+import spaceisnear.game.components.server.ItemVariablePropertiesComponent;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
@@ -18,12 +19,14 @@ import spaceisnear.server.objects.ServerGameObject;
 public class StaticItem extends ServerGameObject {
 
     private final ItemPropertiesComponent properties;
+    private final ItemVariablePropertiesComponent variableProperties;
 
     public StaticItem(ServerContext context, Position p, int itemId) {
 	super(GameObjectType.ITEM, context);
 	PositionComponent pc = new PositionComponent(p);
 	properties = new ItemPropertiesComponent(itemId);
-	addComponents(pc, properties);
+	variableProperties = new ItemVariablePropertiesComponent();
+	addComponents(pc, properties, variableProperties);
     }
 
     public StaticItem(ServerContext context, int itemId) {
@@ -32,6 +35,10 @@ public class StaticItem extends ServerGameObject {
 
     public ItemPropertiesComponent getProperties() {
 	return properties;
+    }
+
+    public ItemVariablePropertiesComponent getVariableProperties() {
+	return variableProperties;
     }
 
 }

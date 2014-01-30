@@ -43,7 +43,7 @@ public class StaticItem extends ClientGameObject {
 	List<Component> components1 = getComponents();
 	ItemPropertiesComponent ipc = null;
 	for (Component component : components1) {
-	    if (component.getType() == ComponentType.ITEM_PROPERTY) {
+	    if (component.getType() == ComponentType.ITEM_PROPERTIES) {
 		ipc = (ItemPropertiesComponent) component;
 		break;
 	    }

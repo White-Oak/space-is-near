@@ -9,7 +9,6 @@ import org.whiteoak.parsing.interpretating.ast.Function;
 import org.whiteoak.parsing.interpretating.ast.NativeFunction;
 import org.whiteoak.parsing.interpretating.ast.Value;
 import spaceisnear.game.objects.Position;
-import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.server.ServerContext;
 
 /**
@@ -29,12 +28,12 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
     public String callNativeFunction(String name, Value[] values) {
 	switch (name) {
 	    case "addItem":
-		int idByName = ItemsArchive.itemsArchive.getIdByName(values[0].getValue());
+		int idByName = ServerItemsArchive.itemsArchive.getIdByName(values[0].getValue());
 		Position p = new Position(Integer.valueOf(values[1].getValue()), Integer.valueOf(values[2].getValue()));
 		addItem(p, idByName);
 		break;
 	    case "fillWithItem":
-		int idByName1 = ItemsArchive.itemsArchive.getIdByName(values[0].getValue());
+		int idByName1 = ServerItemsArchive.itemsArchive.getIdByName(values[0].getValue());
 		int x = Integer.valueOf(values[1].getValue());
 		int y = Integer.valueOf(values[2].getValue());
 		int endX = Integer.valueOf(values[3].getValue());
@@ -52,8 +51,10 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
     private void addItem(Position p, int id) {
 	StaticItem staticItem1 = new StaticItem(context, p, id);
 	context.addObject(staticItem1);
-	context.getObstacles().setReacheable(p.getX(), p.getY(), !ItemsArchive.itemsArchive.isBlockingPath(id));
-	context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ItemsArchive.itemsArchive.isBlockingAir(id));
+	context.getObstacles().setReacheable(p.getX(), p.getY(), !ServerItemsArchive.itemsArchive.isBlockingPath(id));
+	context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ServerItemsArchive.itemsArchive.isBlockingAir(id));
+	boolean st = ServerItemsArchive.itemsArchive.getBundle(id).stuckedByAddingFromScript;
+	staticItem1.getVariableProperties().setProperty("stucked", st);
     }
 
     public ItemAdder(ServerContext context) {

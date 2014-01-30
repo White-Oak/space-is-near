@@ -12,7 +12,7 @@ fillWithItem {wall, 17, 8, 24, 8}
 fillWithItem {wall, 14, 8, 14, 12}
 fillWithItem {wall, 17, 8, 17, 12}
 fillWithItem {wall, 11, 12, 14, 12}
-fillWithItem {wall, 17, 12, 20, 12}
+fillWithItem {wall, 18, 12, 20, 12}
 fillWithItem {wall, 11, 12, 11, 27}
 fillWithItem {wall, 20, 12, 20, 27}
 fillWithItem {wall, 12, 20, 19, 20}

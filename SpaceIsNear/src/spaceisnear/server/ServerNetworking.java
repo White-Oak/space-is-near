@@ -226,10 +226,6 @@ public class ServerNetworking extends Listener implements Runnable {
 	return messages.toArray(new MessageCreated[messages.size()]);
     }
 
-    private MessageMapSent getTiledLayerInOneJSON() {
-	return new MessageMapSent(GSON.toJson(core.getTiledLayer().getMap()));
-    }
-
     private boolean isRogeredByAll() {
 	boolean result = true;
 	for (int i = 0; i < rogered.length; i++) {

@@ -5,7 +5,8 @@
 	"type": "TOOL",
 	"blockingPath": false,
 	"blockingAir": false,
-	"imageIds": [1]
+	"imageIds": [1],
+	"stuckedByAddingFromScript": false
     },
     {
 	"name": "plitka",
@@ -13,7 +14,8 @@
 	"type": "ENVIRONMENT",
 	"blockingPath": false,
 	"blockingAir": false,
-	"imageIds": [0]
+	"imageIds": [0],
+	"stuckedByAddingFromScript": false
     },
     {
 	"name": "wall",
@@ -21,6 +23,16 @@
 	"type": "ENVIRONMENT",
 	"blockingPath": true,
 	"blockingAir": true,
-	"imageIds": [1]
+	"imageIds": [1],
+	"stuckedByAddingFromScript": false
+    },
+    {
+	"name": "radio",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": false,
+	"blockingAir": false,
+	"imageIds": [1],
+	"stuckedByAddingFromScript": true
     }
 ]

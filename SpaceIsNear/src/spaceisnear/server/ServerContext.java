@@ -14,10 +14,11 @@ import spaceisnear.Context;
 import spaceisnear.game.console.LogString;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
-import spaceisnear.game.layer.TiledLayer;
 import spaceisnear.game.messages.DirectedMessage;
+import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.objects.ServerNetworkingObject;
+import spaceisnear.server.objects.items.StaticItem;
 
 /**
  * @author LPzhelud
@@ -29,7 +30,6 @@ public final class ServerContext extends Context {
     private final ServerNetworking networking;
     private final List<AbstractGameObject> objects;
     private final List<Player> players = new LinkedList<>();
-    private final TiledLayer tiledLayer;
     private final ObstaclesLayer obstacles;
     private final AtmosphericLayer atmosphere;
     private final ServerLog log = new ServerLog();
@@ -64,12 +64,11 @@ public final class ServerContext extends Context {
 	return (Player) players.get(id);
     }
 
-    public ServerContext(final ServerNetworking networking, final List<AbstractGameObject> objects, final TiledLayer tiledLayer,
+    public ServerContext(final ServerNetworking networking, final List<AbstractGameObject> objects,
 	    ObstaclesLayer obstacles,
 	    AtmosphericLayer atmosphere) {
 	this.networking = networking;
 	this.objects = objects;
-	this.tiledLayer = tiledLayer;
 	this.obstacles = obstacles;
 	this.atmosphere = atmosphere;
 	addObject(new ServerNetworkingObject(this));
@@ -86,10 +85,6 @@ public final class ServerContext extends Context {
 
     public List<Player> getPlayers() {
 	return this.players;
-    }
-
-    public TiledLayer getTiledLayer() {
-	return this.tiledLayer;
     }
 
     public ObstaclesLayer getObstacles() {
@@ -146,5 +141,19 @@ public final class ServerContext extends Context {
 	    }
 	} catch (ArrayIndexOutOfBoundsException e) {
 	}
+    }
+
+    public boolean isOnMap(int x, int y) {
+	return (x >= 0 && x < obstacles.getWidth()) && (y >= 0 && y < obstacles.getHeight());
+    }
+
+    public List<StaticItem> itemsOn(int x, int y) {
+	LinkedList<StaticItem> items = new LinkedList<>();
+	for (AbstractGameObject abstractGameObject : objects) {
+	    if (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)) {
+		items.add((StaticItem) abstractGameObject);
+	    }
+	}
+	return items;
     }
 }

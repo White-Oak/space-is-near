@@ -2,15 +2,17 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ *//*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-package spaceisnear.game.objects.items;
+package spaceisnear.server.objects.items;
 
+import spaceisnear.game.objects.items.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 import spaceisnear.ItemsArchivable;
 import spaceisnear.game.GameContext;
 import spaceisnear.server.ServerContext;
@@ -19,15 +21,14 @@ import spaceisnear.server.ServerContext;
  *
  * @author White Oak
  */
-public class ItemsArchive implements ItemsArchivable {
+public class ServerItemsArchive implements ItemsArchivable {
 
     private final HashMap<String, Integer> ids = new HashMap<>();
-    private final Image[] images;
     private final ItemBundle[] bundles;
-    public static ItemsArchive itemsArchive;
+    public static ServerItemsArchive itemsArchive;
     public static int PLITKA_ID;
 
-    public ItemsArchive(ItemBundle[] bundles) throws SlickException, IOException {
+    public ServerItemsArchive(ItemBundle[] bundles) throws SlickException, IOException {
 	final int length = bundles.length;
 	this.bundles = bundles;
 	for (int i = 0; i < length; i++) {
@@ -35,17 +36,6 @@ public class ItemsArchive implements ItemsArchivable {
 	    ids.put(itemBundle.name, i);
 	    if (itemBundle.name.equals("plitka")) {
 		PLITKA_ID = i;
-	    }
-	}
-	SpriteSheet sheet;
-	try (InputStream resourceAsStream = getClass().getResourceAsStream("/res/sprites.png")) {
-	    sheet = new SpriteSheet("sprites", resourceAsStream, GameContext.TILE_WIDTH,
-		    GameContext.TILE_HEIGHT);
-	}
-	images = new Image[sheet.getHorizontalCount() * sheet.getVerticalCount()];
-	for (int i = 0; i < sheet.getVerticalCount(); i++) {
-	    for (int j = 0; j < sheet.getHorizontalCount(); j++) {
-		images[i * sheet.getVerticalCount() + j] = sheet.getSprite(j, i);
 	    }
 	}
     }
@@ -103,10 +93,6 @@ public class ItemsArchive implements ItemsArchivable {
     @Override
     public Type getType(String name) {
 	return getType(getIdByName(name));
-    }
-
-    public Image getImage(int id) {
-	return images[id];
     }
 
     @Override

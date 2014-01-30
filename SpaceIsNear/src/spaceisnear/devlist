@@ -98,6 +98,9 @@
 
 0.0.5
 -Basic items system
+    +stucked/unstucked items
+    +pushing unstucked items
+	+correctly moving obstacles and air
 -Atmosphere
     -knockbacking if big difference between two tiles in pressure
     -gasping if air is leaking 

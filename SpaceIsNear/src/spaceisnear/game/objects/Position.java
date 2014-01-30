@@ -18,4 +18,9 @@ import lombok.Setter;
 
     Position() {
     }
+
+    public boolean equals(int x, int y) {
+	return x == this.x && y == this.y;
+    }
+
 }

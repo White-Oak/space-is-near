@@ -27,8 +27,10 @@ import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessagePaused;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.MessageUnpaused;
+import spaceisnear.game.objects.items.ItemsReader;
 import spaceisnear.server.objects.ServerNetworkingObject;
 import spaceisnear.server.objects.items.ItemAdder;
+import spaceisnear.server.objects.items.ServerItemsArchive;
 
 /**
  * @author white_oak
@@ -40,7 +42,6 @@ public class ServerCore implements Runnable {
     private boolean paused = false;
     private static final long QUANT_TIME = 20;
     private boolean alreadyPaused;
-    private TiledLayer tiledLayer;
     public static final int OBJECTS_TO_SKIP = 1;
     private long timePassed;
     private AtmosphereThread at = new AtmosphereThread();
@@ -48,32 +49,17 @@ public class ServerCore implements Runnable {
     public ServerCore() throws IOException {
 	int width = GameContext.MAP_WIDTH;
 	int height = width;
-	//<editor-fold defaultstate="collapsed" desc="map generating">
+	final ArrayList<AbstractGameObject> objects = new ArrayList<>();
 	try {
-	    try (InputStream resourceAsStream = getClass().getResourceAsStream("/res/tiles1.png")) {
-		tiledLayer = new TiledLayer(new Image(resourceAsStream, "tiles", false),
-			spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
-	    }
-	    //tiledLayer.fillRectTile(0, 0, 128, 128, 1);
-	    //tiledLayer.fillRectTile(64, 0, 64, 128, 2);
-	    tiledLayer.fillRectTile(0, 0, width, height, 5);
-	    Random rnd = new Random();
-	    for (int i = 0; i < 5; i++) {
-		int blockx = rnd.nextInt(width - 1);
-		int blocky = rnd.nextInt(height - 1);
-		tiledLayer.setTile(blockx, blocky, 7);
-		tiledLayer.setTile(blockx + 1, blocky, 8);
-		tiledLayer.setTile(blockx, blocky + 1, 9);
-		tiledLayer.setTile(blockx + 1, blocky + 1, 10);
-	    }
-	} catch (SlickException | IOException ex) {
+	    ServerItemsArchive.itemsArchive = new ServerItemsArchive(ItemsReader.read());
+	} catch (SlickException ex) {
+	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (Exception ex) {
 	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	}
-	//</editor-fold>
-	final ArrayList<AbstractGameObject> objects = new ArrayList<>();
 	ObstaclesLayer obstacles = new ObstaclesLayer(width, height);
 	AtmosphericLayer atmosphere = new AtmosphericLayer(width, height);
-	context = new ServerContext(new ServerNetworking(this), objects, tiledLayer, obstacles, atmosphere);
+	context = new ServerContext(new ServerNetworking(this), objects, obstacles, atmosphere);
 	//ui objects etc
 	while (objects.size() < OBJECTS_TO_SKIP) {
 	    objects.add(null);
@@ -160,10 +146,6 @@ public class ServerCore implements Runnable {
 
     public boolean isAlreadyPaused() {
 	return this.alreadyPaused;
-    }
-
-    public TiledLayer getTiledLayer() {
-	return this.tiledLayer;
     }
 
     private class AtmosphereThread extends Thread {
