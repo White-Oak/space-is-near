@@ -3,19 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.components;
+package spaceisnear.game.components.client;
 
+import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageToSend;
-import spaceisnear.server.objects.ServerNetworkingObject;
+import spaceisnear.game.objects.NetworkingObject;
 
-public class ServerNetworkingComponent extends NetworkingComponent {
+public class NetworkingComponent extends Component {
+
+    public NetworkingComponent() {
+	super(ComponentType.NETWORKING);
+    }
 
     @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
 	    case NETWORKING:
-		((ServerNetworkingObject) getOwner()).send(((MessageToSend) message).getMessage());
+		((NetworkingObject) getOwner()).send(((MessageToSend) message).getMessage());
 		break;
 	}
     }

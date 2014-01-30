@@ -4,6 +4,7 @@
  */
 package spaceisnear.game.components;
 
+import spaceisnear.game.components.client.PaintableComponent;
 import org.newdawn.slick.Graphics;
 import spaceisnear.game.messages.Message;
 

@@ -6,7 +6,7 @@
 package spaceisnear.game.objects;
 
 import spaceisnear.game.GameContext;
-import spaceisnear.game.components.NetworkingComponent;
+import spaceisnear.game.components.client.NetworkingComponent;
 import spaceisnear.game.messages.NetworkableMessage;
 
 public class NetworkingObject extends ClientGameObject {

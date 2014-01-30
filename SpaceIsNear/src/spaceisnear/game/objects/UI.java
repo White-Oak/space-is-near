@@ -5,7 +5,7 @@
 package spaceisnear.game.objects;
 
 import spaceisnear.game.GameContext;
-import spaceisnear.game.components.UIComponent;
+import spaceisnear.game.components.client.UIComponent;
 
 public class UI extends ClientGameObject {
 

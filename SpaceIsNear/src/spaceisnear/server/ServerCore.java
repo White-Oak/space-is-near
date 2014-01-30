@@ -16,11 +16,14 @@ import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.components.HealthComponent;
+import spaceisnear.game.components.server.HealthComponent;
+import spaceisnear.game.console.LogLevel;
+import spaceisnear.game.console.LogString;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.MessageDied;
 import spaceisnear.game.messages.MessageKnockbacked;
+import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessagePaused;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.MessageUnpaused;
@@ -35,10 +38,12 @@ public class ServerCore implements Runnable {
     private final ServerContext context;
     private final boolean unbreakable = true;
     private boolean paused = false;
-    private static final int QUANT_TIME = 20;
+    private static final long QUANT_TIME = 20;
     private boolean alreadyPaused;
     private TiledLayer tiledLayer;
     public static final int OBJECTS_TO_SKIP = 1;
+    private long timePassed;
+    private AtmosphereThread at = new AtmosphereThread();
 
     public ServerCore() throws IOException {
 	int width = GameContext.MAP_WIDTH;
@@ -54,8 +59,8 @@ public class ServerCore implements Runnable {
 	    tiledLayer.fillRectTile(0, 0, width, height, 5);
 	    Random rnd = new Random();
 	    for (int i = 0; i < 5; i++) {
-		int blockx = rnd.nextInt(width-1);
-		int blocky = rnd.nextInt(height-1);
+		int blockx = rnd.nextInt(width - 1);
+		int blocky = rnd.nextInt(height - 1);
 		tiledLayer.setTile(blockx, blocky, 7);
 		tiledLayer.setTile(blockx + 1, blocky, 8);
 		tiledLayer.setTile(blockx, blocky + 1, 9);
@@ -80,6 +85,7 @@ public class ServerCore implements Runnable {
 
     @Override
     public void run() {
+	at.start();
 	while (unbreakable) {
 	    if (!paused) {
 		for (AbstractGameObject gameObject : getContext().getObjects()) {
@@ -87,23 +93,7 @@ public class ServerCore implements Runnable {
 			gameObject.process();
 		    }
 		}
-		for (Player player : getContext().getPlayers()) {
-		    HealthComponent hc = player.getHealthComponent();
-		    switch (hc.getState()) {
-			case CRITICICAL:
-			    MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
-			    getContext().sendToID(messageKnockbacked, player.getId());
-			    getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
-			    break;
-
-			case DEAD:
-			    MessageDied messageDied = new MessageDied(player.getId());
-			    getContext().sendToID(messageDied, player.getId());
-			    getContext().sendToID(new MessageToSend(messageDied), player.getId());
-			    break;
-
-		    }
-		}
+		checkHealthStatuses();
 	    } else {
 		if (!alreadyPaused) {
 		    alreadyPaused = true;
@@ -111,8 +101,35 @@ public class ServerCore implements Runnable {
 	    }
 	    try {
 		Thread.sleep(QUANT_TIME);
+		timePassed += QUANT_TIME;
+		if (timePassed > 2000 && !context.getPlayers().isEmpty()) {
+		    Player get = context.getPlayers().get(0);
+		    final int pressure = context.getAtmosphere().getPressure(get.getPosition().getX(), get.getPosition().getY());
+		    context.getNetworking().sendToAll(new MessageLog(new LogString("Pressure: " + pressure, LogLevel.DEBUG)));
+		    timePassed = 0;
+		}
 	    } catch (InterruptedException ex) {
 		Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+    }
+
+    private void checkHealthStatuses() {
+	for (Player player : getContext().getPlayers()) {
+	    HealthComponent hc = player.getHealthComponent();
+	    switch (hc.getState()) {
+		case CRITICICAL:
+		    MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
+		    getContext().sendToID(messageKnockbacked, player.getId());
+		    getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
+		    break;
+
+		case DEAD:
+		    MessageDied messageDied = new MessageDied(player.getId());
+		    getContext().sendToID(messageDied, player.getId());
+		    getContext().sendToID(new MessageToSend(messageDied), player.getId());
+		    break;
+
 	    }
 	}
     }
@@ -147,5 +164,24 @@ public class ServerCore implements Runnable {
 
     public TiledLayer getTiledLayer() {
 	return this.tiledLayer;
+    }
+
+    private class AtmosphereThread extends Thread {
+
+	@Override
+	public void run() {
+	    while (unbreakable) {
+		if (!paused) {
+		    context.getAtmosphere().tickAtmosphere(context);
+		}
+		try {
+		    Thread.sleep(ATMOSPHERE_DELAY);
+		} catch (InterruptedException ex) {
+		    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	    }
+	}
+	public static final long ATMOSPHERE_DELAY = 1000L;
+
     }
 }

@@ -21,8 +21,6 @@ public final class CameraMan {
     private TiledLayer tiledLayer;
     private int windowWidth;
     private int windowHeight;
-    private final ObstaclesLayer obstacles;
-    private final AtmosphericLayer atmosphere;
 
     public CameraMan() throws SlickException {
 	final int width = GameContext.MAP_WIDTH;
@@ -30,8 +28,6 @@ public final class CameraMan {
 	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "tiles", false),
 		spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
 	tiledLayer.fillRectTile(0, 0, width, height, 5);
-	obstacles = new ObstaclesLayer(width, height);
-	atmosphere = new AtmosphericLayer(width, height);
     }
 
     public void delegateWidth() {
@@ -115,14 +111,6 @@ public final class CameraMan {
 
     public void setWindowHeight(final int windowHeight) {
 	this.windowHeight = windowHeight;
-    }
-
-    public ObstaclesLayer getObstacles() {
-	return this.obstacles;
-    }
-
-    public AtmosphericLayer getAtmosphere() {
-	return this.atmosphere;
     }
 
     public boolean belongsToCamera(Position p) {

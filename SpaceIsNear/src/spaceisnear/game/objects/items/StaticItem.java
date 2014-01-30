@@ -9,7 +9,7 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.components.ItemPaintableComponent;
+import spaceisnear.game.components.client.ItemPaintableComponent;
 import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.objects.ClientGameObject;

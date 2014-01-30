@@ -2,7 +2,7 @@
 //x and y — are cell coordinates, not real
 //fillWithItem (name, x, y, end_x, end_y)
 
-fillWithItem {plitka, 0, 0, 31, 31}
+fillWithItem {plitka, 0, 0, 30, 31}
 fillWithItem {wall, 0, 0, 31, 0} 
 fillWithItem {wall, 0, 31, 31, 31} 
 fillWithItem {wall, 31, 0, 31, 31} 

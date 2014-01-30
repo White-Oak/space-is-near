@@ -52,10 +52,6 @@
     +adding items from a script
     +sending items over the net 
     +drawing items on the map
--Obstacles' system
--Atmosphere
--Inventory
--HealthComponent
 +added empty slots on server-side's objects list for networking, ui, etc 
 +Camera is always centered at player
 +Camera movement for teleporting messages
@@ -65,16 +61,47 @@
 +Send DiscoveredYourPlayerMessage to get client knowing which object is his player.
 *Networking -> ServerNetworking (renamed)
 
-0.0.4 
+0.0.4 r81
 -Basic items system
+    +items that block passing through
+    +items that prevents air going through
 +Obstacles' system
     +added items set blocking tile status
     +items block movement
+    *removed from client instance
 -Atmosphere
     +added items set blocking-air tile status
-    -the separate thread calculating atmosphere and/or hull breaches
+    +the separate thread calculating atmosphere and hull breaches
     +if there are no plitkas on the tile then it is counted as hull breach
 	+the pressure is set to zero in that point
+    *removed from client instance
+    +make items block air leaks (for blockingAir items of course)
++Animated player movement
++In-game console
+-In-game chat
+    +sending messages over the net
+    +logging all the messages the server get
+    +sending to player only messages that they can hear
+    +write player's name the message was sent
+    +scrolling
+-RADIOSYSTEM
+    +two type of messages: local and and frequency-message
+    +server discovers whether someone is in range of local message or not
+	+local messages are transfered in 4 ways from the player by 10 tiles
+*Client will connect properly with bad ping
++LoadingScreen has objects counter
++map sending removed
+*movement of players with different FPS was fixed
++Being able to enter nickname
+*draw only items that are in the screen (already was done)
+*now server (not client) decides whether player is able to move on next tile
+
+0.0.5
+-Basic items system
+-Atmosphere
+    -knockbacking if big difference between two tiles in pressure
+    -gasping if air is leaking 
+    -decreasing health if amount of air is not enough to live
 -Inventory
     -each inventory slot has his size, item field and name
 -HealthComponent
@@ -84,31 +111,16 @@
     -acceptance on client
 -Mouse interaction
     -selection of tile where player has clicked
-+Animated player movement
-+SINGL'TON PAWUH!!!
-+In-game console
 -In-game chat
-    +sending messages over the net
-    +logging all the messages the server get
-    -sending to player only messages that they can hear
-    +write player's name the message was sent
     -make PM
     -make OOC
     -make some DEBUG messages
     -make some broadcasting
-    +scrolling
     -ingame commands
 -RADIOSYSTEM
-    +two type of messages: local and and frequency-message
     +server discovers whether someone is in range of local message or not
-	+local messages are transfered in 4 ways from the player by 10 tiles
 	-air unrecheable tiles do not let local messages to get through
     -server discovers whether someone is in range of frequncy message or not
-*Client will connect properly with bad ping
-+LoadingScreen has objects counter
-+map sending removed
-*movement of players with different FPS was fixed
-+Being able to enter nickname
-*draw only items that are in the screen (already was done)
 -gotta do something with disconnected players
-*now server (not client) decides whether player is able to move on next tile
+-being able to run server in no-GUI mode
+-server should process incoming messages in the same thread as processing objects to avoid concurrent access

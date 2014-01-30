@@ -20,8 +20,6 @@ public abstract class Context {
 
     public final static int NETWORKING_ID = 0;
 
-    public abstract CameraMan getCameraMan();
-
     public abstract void sendThemAll(Message m);
 
     public abstract void sendToID(Message m, int id);
@@ -31,8 +29,4 @@ public abstract class Context {
     }
 
     public abstract List<AbstractGameObject> getObjects();
-
-    public abstract AtmosphericLayer getAtmosphere();
-
-    public abstract ObstaclesLayer getObstacles();
 }

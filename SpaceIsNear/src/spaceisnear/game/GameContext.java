@@ -11,7 +11,7 @@ import java.util.List;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.PaintableComponent;
+import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
@@ -71,7 +71,6 @@ public class GameContext extends Context {
 	CONTEXT = this;
     }
 
-    @Override
     public CameraMan getCameraMan() {
 	return this.cameraMan;
     }
@@ -103,16 +102,6 @@ public class GameContext extends Context {
 
     Corev2 getCore() {
 	return this.core;
-    }
-
-    @Override
-    public AtmosphericLayer getAtmosphere() {
-	return getCameraMan().getAtmosphere();
-    }
-
-    @Override
-    public ObstaclesLayer getObstacles() {
-	return getCameraMan().getObstacles();
     }
 
     public void setCameraToPlayer() {

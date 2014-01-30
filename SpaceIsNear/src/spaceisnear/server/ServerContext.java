@@ -11,7 +11,6 @@ import spaceisnear.server.objects.Player;
 import java.util.*;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
-import spaceisnear.game.CameraMan;
 import spaceisnear.game.console.LogString;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
@@ -65,11 +64,6 @@ public final class ServerContext extends Context {
 	return (Player) players.get(id);
     }
 
-    @Override
-    public CameraMan getCameraMan() {
-	return null;
-    }
-
     @java.beans.ConstructorProperties({"networking", "objects", "tiledLayer"})
     public ServerContext(final ServerNetworking networking, final List<AbstractGameObject> objects, final TiledLayer tiledLayer,
 	    ObstaclesLayer obstacles,
@@ -99,12 +93,10 @@ public final class ServerContext extends Context {
 	return this.tiledLayer;
     }
 
-    @Override
     public ObstaclesLayer getObstacles() {
 	return obstacles;
     }
 
-    @Override
     public AtmosphericLayer getAtmosphere() {
 	return atmosphere;
     }

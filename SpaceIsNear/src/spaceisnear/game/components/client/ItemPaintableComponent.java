@@ -2,10 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.components;
+package spaceisnear.game.components.client;
 
+import spaceisnear.game.components.client.PaintableComponent;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import spaceisnear.game.components.ComponentType;
+import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;

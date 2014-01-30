@@ -3,13 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.components;
+package spaceisnear.game.components.server;
 
+import spaceisnear.Context;
+import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.Position;
+import spaceisnear.server.ServerContext;
 
 public class PlayerControllableComponent extends Component {
 
@@ -26,28 +30,29 @@ public class PlayerControllableComponent extends Component {
 		Position position = getPosition();
 		int oldX = position.getX();
 		int oldY = position.getY();
+		final ServerContext context = (ServerContext) getContext();
 		switch (mc.getType()) {
 		    case UP:
 			oldY--;
-			if (getContext().getObstacles().isReacheable(oldX, oldY)) {
+			if (context.getObstacles().isReacheable(oldX, oldY)) {
 			    mm = new MessageMoved(0, -1, getOwnerId());
 			}
 			break;
 		    case DOWN:
 			oldY++;
-			if (getContext().getObstacles().isReacheable(oldX, oldY)) {
+			if (context.getObstacles().isReacheable(oldX, oldY)) {
 			    mm = new MessageMoved(0, 1, getOwnerId());
 			}
 			break;
 		    case LEFT:
 			oldX--;
-			if (getContext().getObstacles().isReacheable(oldX, oldY)) {
+			if (context.getObstacles().isReacheable(oldX, oldY)) {
 			    mm = new MessageMoved(-1, 0, getOwnerId());
 			}
 			break;
 		    case RIGHT:
 			oldX++;
-			if (getContext().getObstacles().isReacheable(oldX, oldY)) {
+			if (context.getObstacles().isReacheable(oldX, oldY)) {
 			    mm = new MessageMoved(1, 0, getOwnerId());
 			}
 			break;

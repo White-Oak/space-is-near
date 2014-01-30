@@ -17,7 +17,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import spaceisnear.AbstractGameObject;
-import spaceisnear.game.components.PaintableComponent;
+import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.console.LogString;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageTimePassed;

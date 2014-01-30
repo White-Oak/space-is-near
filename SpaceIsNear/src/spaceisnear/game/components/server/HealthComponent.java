@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.components;
+package spaceisnear.game.components.server;
 
+import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentState;
+import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.HurtMessage;
 import spaceisnear.game.messages.Message;
 

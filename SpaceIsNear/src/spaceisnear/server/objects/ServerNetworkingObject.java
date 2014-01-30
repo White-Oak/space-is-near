@@ -5,7 +5,7 @@
  */
 package spaceisnear.server.objects;
 
-import spaceisnear.game.components.ServerNetworkingComponent;
+import spaceisnear.game.components.server.ServerNetworkingComponent;
 import spaceisnear.game.messages.NetworkableMessage;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.server.ServerContext;

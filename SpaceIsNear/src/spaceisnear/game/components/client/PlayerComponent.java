@@ -2,9 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.components;
+package spaceisnear.game.components.client;
 
+import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.GameContext;
+import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 
 /**

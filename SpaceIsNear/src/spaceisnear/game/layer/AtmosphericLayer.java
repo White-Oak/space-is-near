@@ -8,7 +8,6 @@ package spaceisnear.game.layer;
 import java.util.Arrays;
 import java.util.List;
 import spaceisnear.AbstractGameObject;
-import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsArchive;
@@ -30,8 +29,8 @@ public class AtmosphericLayer extends Layer {
     /**
      * Maximum pressure which one node can distribute over to other nodes.
      */
-    private final static int MAX_CHANGE_OF_PRESSURE_PER_TICK = 30;
-    public final static int PRESSURE_HARD_TO_BREATH = 60, PRESSURE_ENOUGH_TO_BREATH = 40;
+    private final static int MAX_CHANGE_OF_PRESSURE_PER_TICK = 8;
+    public final static int PRESSURE_HARD_TO_BREATH = 60, PRESSURE_ENOUGH_TO_BREATH = 30;
 
     public AtmosphericLayer(int width, int height) {
 	super(width, height);
@@ -42,7 +41,7 @@ public class AtmosphericLayer extends Layer {
 	}
     }
 
-    public void tick() {
+    private void tick() {
 	//These are just four cycles to cycle every tick from different corner
 	//The full cycle of corners is 
 	//top left -> bottom right -> bottom left -> top right -> top left ->...
@@ -87,40 +86,49 @@ public class AtmosphericLayer extends Layer {
 	    getPressure(x, y + 1) //left
 	};
 	final int center = getPressure(x, y);
-	int sum = 0;
-	//Summing differences of pressures 
-	for (int i = 0; i < values.length; i++) {
-	    int j = values[i];
-	    if (j != -1 && j < center) {
-		//Adding difference between the center pressure and actual
-		sum += center - j;
+	if (center > 0) {
+	    int sum = 0;
+	    //Summing differences of pressures 
+	    for (int i = 0; i < values.length; i++) {
+		int j = values[i];
+		if (j != -1 && j < center) {
+		    //Adding difference between the center pressure and actual
+		    sum += center - j;
+		}
+	    }
+	    if (sum > 0) {
+		//Setting each difference's part of total sum
+		//i.e multiplier is what you need to multiply the sum on to get the difference
+		float multipliers[] = new float[values.length];
+		Arrays.fill(multipliers, -1f);
+		for (int i = 0; i < values.length; i++) {
+		    int j = values[i];
+		    if (j != -1 && j < center) {
+			multipliers[i] = (center - j) / (float) sum;
+		    }
+		}
+		if (sum > MAX_CHANGE_OF_PRESSURE_PER_TICK) {
+		    sum = MAX_CHANGE_OF_PRESSURE_PER_TICK;
+		}
+		if (sum > center) {
+		    sum = center;
+		}
+
+		for (int i = 0; i < multipliers.length; i++) {
+		    float f = multipliers[i];
+		    if (f > 0) {
+			values[i] += sum * f;
+		    }
+		}
+
+		//Setting back the values
+		setPressure(x - 1, y, values[0]); //left
+		setPressure(x, y - 1, values[1]); //top
+		setPressure(x + 1, y, values[2]); //right
+		setPressure(x, y + 1, values[3]); //left
+		setPressure(x, y, center - sum);//center
 	    }
 	}
-	//Setting each difference's part of total sum
-	//i.e multiplier is what you need to multiply the sum on to get the difference
-	float multipliers[] = new float[values.length];
-	Arrays.fill(multipliers, -1);
-	for (int i = 0; i < values.length; i++) {
-	    int j = values[i];
-	    if (j != -1 && j < center) {
-		multipliers[i] = (center - j) / (float) sum;
-	    }
-	}
-	if (sum > MAX_CHANGE_OF_PRESSURE_PER_TICK) {
-	    sum = MAX_CHANGE_OF_PRESSURE_PER_TICK;
-	}
-	for (int i = 0; i < multipliers.length; i++) {
-	    float f = multipliers[i];
-	    if (f > 0) {
-		values[i] += sum * f;
-	    }
-	}
-	//Setting back the values
-	setPressure(x - 1, y, values[0]); //left
-	setPressure(x, y - 1, values[1]); //top
-	setPressure(x + 1, y, values[2]); //right
-	setPressure(x, y + 1, values[3]); //left
-	setPressure(x, y, center - sum);//center
     }
 
     public int getPressure(int x, int y) {
@@ -174,7 +182,7 @@ public class AtmosphericLayer extends Layer {
      *
      * @param context
      */
-    public void checkHulls(ServerContext context) {
+    private void checkHulls(ServerContext context) {
 	for (boolean[] bs : plitkas) {
 	    Arrays.fill(bs, false);
 	}
@@ -193,15 +201,25 @@ public class AtmosphericLayer extends Layer {
     /**
      * Fills no-plitka areas with zero pressure.
      */
-    public void recheckPressureForHulls() {
+    private void recheckPressureForHulls() {
 	for (int i = 0; i < plitkas.length; i++) {
 	    boolean[] bs = plitkas[i];
 	    for (int j = 0; j < bs.length; j++) {
 		boolean b = bs[j];
-		if (!b) {
+		if (!b && getPressure(i, j) > 0) {
 		    setPressure(i, j, 0);
 		}
 	    }
 	}
+    }
+
+    private void processHulls(ServerContext context) {
+	checkHulls(context);
+	recheckPressureForHulls();
+    }
+
+    public void tickAtmosphere(ServerContext context) {
+	processHulls(context);
+	tick();
     }
 }

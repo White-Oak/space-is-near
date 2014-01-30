@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.components;
+package spaceisnear.game.components.server;
 
 import java.util.List;
 import spaceisnear.Context;
+import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.messages.HurtMessage;
 import spaceisnear.game.messages.Message;

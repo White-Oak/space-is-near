@@ -5,7 +5,7 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.NameComponent;
-import spaceisnear.game.components.PlayerComponent;
+import spaceisnear.game.components.client.PlayerComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.components.inventory.InventoryComponent;
 
@@ -16,11 +16,12 @@ import spaceisnear.game.components.inventory.InventoryComponent;
  */
 public class Player extends ClientGameObject {
 
-    public Player(GameContext context) {
+    protected Player(GameContext context) {
 	super(GameObjectType.PLAYER, context);
-	PositionComponent pc = new PositionComponent(24, 18);
+    }
 
-	addComponents(pc, new PlayerComponent(), new NameComponent(null), new InventoryComponent());
+    protected Player(GameContext context, GameObjectType type) {
+	super(type, context);
     }
 
     public String getNickname() {
@@ -47,6 +48,7 @@ public class Player extends ClientGameObject {
 	    }
 	}
 	player.setComponents(list);
+	player.addComponents(new PlayerComponent());
 	player.setId(bundle.getObjectID());
 	return player;
     }
