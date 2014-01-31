@@ -1,12 +1,15 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+ *//*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package spaceisnear.server.objects.items;
 
 import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.components.PositionComponent;
-import spaceisnear.game.components.server.ItemVariablePropertiesComponent;
+import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
@@ -19,13 +22,13 @@ import spaceisnear.server.objects.ServerGameObject;
 public class StaticItem extends ServerGameObject {
 
     private final ItemPropertiesComponent properties;
-    private final ItemVariablePropertiesComponent variableProperties;
+    private final VariablePropertiesComponent variableProperties;
 
     public StaticItem(ServerContext context, Position p, int itemId) {
 	super(GameObjectType.ITEM, context);
 	PositionComponent pc = new PositionComponent(p);
 	properties = new ItemPropertiesComponent(itemId);
-	variableProperties = new ItemVariablePropertiesComponent();
+	variableProperties = new VariablePropertiesComponent();
 	addComponents(pc, properties, variableProperties);
     }
 
@@ -37,7 +40,7 @@ public class StaticItem extends ServerGameObject {
 	return properties;
     }
 
-    public ItemVariablePropertiesComponent getVariableProperties() {
+    public VariablePropertiesComponent getVariableProperties() {
 	return variableProperties;
     }
 

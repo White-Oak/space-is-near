@@ -30,6 +30,7 @@ import static spaceisnear.Utils.GSON;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageCreatedItem;
 import spaceisnear.game.messages.MessageLog;
+import spaceisnear.game.messages.MessagePropertySet;
 import spaceisnear.game.messages.MessageRogerRequested;
 import spaceisnear.game.messages.MessageWorldInformation;
 import spaceisnear.game.messages.MessageYourPlayerDiscovered;
@@ -45,11 +46,11 @@ public class ServerNetworking extends Listener implements Runnable {
     public Server server;
     private final ServerCore core;
     private final ArrayList<Connection> connections = new ArrayList<>();
-    private final ArrayList<Player> players = new ArrayList<Player>();
+    private final ArrayList<Player> players = new ArrayList<>();
     private MessageClientInformation informationAboutLastConnected;
     private boolean[] rogered;
     private final static MessageRogerRequested ROGER_REQUSTED = new MessageRogerRequested();
-    private Queue<MessageBundle> messages = new LinkedList<MessageBundle>();
+    private final Queue<MessageBundle> messages = new LinkedList<>();
 
     @Override
     public void received(Connection connection, Object object) {
@@ -111,6 +112,12 @@ public class ServerNetworking extends Listener implements Runnable {
 		    }
 		}
 		break;
+	    case PROPERTY_SET:
+		MessagePropertySet mps = MessagePropertySet.getInstance(b);
+		System.out.println(mps.getName() + " " + mps.getValue().getClass().getName());
+		core.getContext().sendDirectedMessage(mps);
+		break;
+
 	}
 //	    System.out.println("Message received");
     }

@@ -61,7 +61,12 @@ public abstract class Component {
     }
 
     protected Object getStateValueNamed(String name) {
-	return getStateNamed(name).getValue();
+	final ComponentState stateNamed = getStateNamed(name);
+	if (stateNamed != null) {
+	    return stateNamed.getValue();
+	} else {
+	    return null;
+	}
     }
 
     protected AbstractGameObject getOwner() {

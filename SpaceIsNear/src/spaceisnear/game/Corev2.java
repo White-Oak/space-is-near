@@ -22,6 +22,7 @@ import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.LogString;
 import spaceisnear.game.messages.MessageControlled;
+import spaceisnear.game.messages.MessagePropertySet;
 import spaceisnear.game.messages.MessageTimePassed;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.NetworkingObject;
@@ -178,6 +179,9 @@ public class Corev2 extends BasicGameState {
 	    int calculatedY = y / GameContext.TILE_HEIGHT;
 	    int tileX = toAddX + calculatedX;
 	    int tileY = toAddY + calculatedY;
+	    if (tileX < 0 || tileY < 0) {
+		return;
+	    }
 	    console.pushMessage(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
 	    if (button == 1) {
 		if (menu == null) {
@@ -211,6 +215,13 @@ public class Corev2 extends BasicGameState {
 			case "Learn":
 			    String description = item.getProperties().getDescription();
 			    console.pushMessage(new LogString(description, LogLevel.TALKING));
+			    break;
+			case "Pull":
+			    int id = item.getId();
+			    int playerID = context.getPlayerID();
+			    MessagePropertySet messagePropertySet = new MessagePropertySet(playerID, "pull", id);
+			    MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+			    context.sendDirectedMessage(messageToSend);
 			    break;
 		    }
 		    menu = null;

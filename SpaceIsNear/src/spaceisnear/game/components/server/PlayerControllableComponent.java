@@ -33,7 +33,6 @@ public class PlayerControllableComponent extends Component {
 		Position position = getPosition();
 		int oldX = position.getX();
 		int oldY = position.getY();
-		final ServerContext context = (ServerContext) getContext();
 		switch (mc.getType()) {
 		    case UP:
 			mm = moveCheck(oldX, oldY, 0, -1);
@@ -56,14 +55,16 @@ public class PlayerControllableComponent extends Component {
 	}
     }
 
-    private MessageMoved moveCheck(int x, int y, int deltaX, int deltaY) {
-	x += deltaX;
-	y += deltaY;
+    private MessageMoved moveCheck(final int oldx, final int oldy, int deltaX, int deltaY) {
+	int x = oldx + deltaX;
+	int y = oldy + deltaY;
 	ServerContext context = (ServerContext) getContext();
 	MessageMoved mm = null;
 	if (context.getObstacles().isReacheable(x, y)) {
+	    //If cell is empty then simply move
 	    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
 	} else if (context.isOnMap(x, y)) {
+	    //else try to push item on that cell
 	    List<AbstractGameObject> itemsOn = context.itemsOn(x, y);
 	    for (AbstractGameObject abstractGameObject : itemsOn) {
 		StaticItem staticItem = (StaticItem) abstractGameObject;
@@ -79,6 +80,18 @@ public class PlayerControllableComponent extends Component {
 			break;
 		    }
 		}
+	    }
+	}
+	if (mm != null) {
+	    VariablePropertiesComponent variablePropertiesComponent = getOwner().getVariablePropertiesComponent();
+	    if (variablePropertiesComponent.getProperty("pull") != null && ((Integer) variablePropertiesComponent.getProperty("pull")) > -1) {
+		int toPull = (Integer) variablePropertiesComponent.getProperty("pull");
+		AbstractGameObject get = getContext().getObjects().get(toPull);
+		Position positionToPull = get.getPosition();
+		MessageMoved mm1 = new MessageMoved(oldx - positionToPull.getX(), oldy - positionToPull.getY(), get.getId());
+		getContext().sendDirectedMessage(mm1);
+		getContext().sendDirectedMessage(new MessageToSend(mm1));
+//		System.out.println("pulled " + mm1.getX() + " " + mm1.getY());
 	    }
 	}
 	return mm;

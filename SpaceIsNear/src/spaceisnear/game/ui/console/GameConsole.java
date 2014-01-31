@@ -32,7 +32,7 @@ public class GameConsole implements ComponentListener {
     private final int x, y, width, height;
     private final TextField ip;
     private final InGameLog log;
-    private final java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 15);
+    private final java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 16);
     @Getter private final UnicodeFont font = new UnicodeFont(awtFont);
 //    Font font = new TrueTypeFont(awtFont, false);
     private final Context context;
