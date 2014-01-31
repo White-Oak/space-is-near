@@ -183,4 +183,10 @@ public class Corev2 extends BasicGameState {
     public void mousePressed(int button, int x, int y) {
 	console.mousePressed(button, x, y);
     }
+
+    @Override
+    public void mouseWheelMoved(int newValue) {
+	console.mouseWheelMoved(newValue);
+    }
+
 }

@@ -47,7 +47,8 @@ public class GameConsole implements ComponentListener {
 	font.getEffects().add(new ColorEffect(java.awt.Color.black));
 	font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
 	font.getEffects().add(new ColorEffect(java.awt.Color.gray));
-	font.addGlyphs("йцукенгшщзхъфывапролджэячсмитьбю");
+//	font.addGlyphs("йцукенгшщзхъфывапролджэячсмитьбю");
+	font.addGlyphs(0x0400, 0x04FF);
 	font.addAsciiGlyphs();
 	try {
 	    font.loadGlyphs();
@@ -55,8 +56,8 @@ public class GameConsole implements ComponentListener {
 	    Logger.getLogger(GameConsole.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	final int lineHeight = font.getLineHeight();
-	log = new InGameLog(font);
 	ip = new TextField(container, x + 10, y + height - lineHeight - 2, width, lineHeight + 4, font);
+	log = new InGameLog(font, 30, 2, width - 30, height - 2 - ip.getHeight());
 	ip.setTextColor(Color.black);
 	ip.addListener(this);
 	ip.setFocus(false);
@@ -93,18 +94,41 @@ public class GameConsole implements ComponentListener {
     @Override
     public void componentActivated(AbstractComponent source) {
 	if (source == ip) {
-	    sendMessageFromPlayer();
+	    processInputedMessage();
 	}
     }
 
-    private void sendMessageFromPlayer() {
+    private void sendMessageFromPlayer(String message) {
 	GamerPlayer player = ((GameContext) context).getPlayer();
 	String nickname = player.getNickname();
-	LogString logString = new LogString(nickname + ": " + ip.getText(), LogLevel.TALKING, player.getPosition());
+	LogString logString = new LogString(nickname + ": " + message, LogLevel.TALKING, player.getPosition());
 	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 	context.sendDirectedMessage(messageToSend);
-	ip.setText("");
-	ip.setFocus(false);
+    }
+
+    private void processInputedMessage() {
+	String text = ip.getText();
+	if (text.startsWith("-")) {
+	    String substring = text.substring(1);
+	    String[] split = substring.split(" ");
+	    switch (split[0]) {
+		case "debug":
+		    if (split.length > 1) {
+			switch (split[1]) {
+			    case "on":
+				log.setAcceptDebugMessages(true);
+				break;
+			    case "off":
+				log.setAcceptDebugMessages(false);
+				break;
+			}
+		    }
+		    break;
+	    }
+	} else {
+	    sendMessageFromPlayer(text);
+	}
+	ip.clear();
     }
 
     public boolean hasFocus() {
@@ -138,12 +162,12 @@ public class GameConsole implements ComponentListener {
 
     public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 	if (scrollBarClicked) {
-	    processDrag(oldy, newy);
+	    int move = newy - oldy;
+	    processDrag(move);
 	}
     }
 
-    private void processDrag(int oldy, int newy) {
-	int move = newy - oldy;
+    private void processDrag(int move) {
 	scrollBarY += move;
 	if (scrollBarY + scrollBarSize > sizeOfGameLog()) {
 	    scrollBarY = sizeOfGameLog() - scrollBarSize;
@@ -182,5 +206,9 @@ public class GameConsole implements ComponentListener {
 
     private int sizeOfGameLog() {
 	return height - ip.getHeight() - 4;
+    }
+
+    public void mouseWheelMoved(int newValue) {
+	processDrag(-newValue >> 2);
     }
 }

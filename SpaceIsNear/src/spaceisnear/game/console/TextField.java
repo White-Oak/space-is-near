@@ -144,4 +144,9 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
 	text = new StringBuilder(string);
 	currentPosition = text.length();
     }
+
+    public void clear() {
+	setText("");
+	setFocus(false);
+    }
 }

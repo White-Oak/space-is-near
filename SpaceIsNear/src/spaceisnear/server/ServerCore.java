@@ -6,9 +6,6 @@
 package spaceisnear.server;
 
 import java.io.IOException;
-import java.io.InputStream;
-import org.newdawn.slick.Image;
-import spaceisnear.game.layer.TiledLayer;
 import spaceisnear.server.objects.Player;
 import java.util.*;
 import java.util.logging.Level;
@@ -28,7 +25,6 @@ import spaceisnear.game.messages.MessagePaused;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.MessageUnpaused;
 import spaceisnear.game.objects.items.ItemsReader;
-import spaceisnear.server.objects.ServerNetworkingObject;
 import spaceisnear.server.objects.items.ItemAdder;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 
@@ -73,6 +69,9 @@ public class ServerCore implements Runnable {
     public void run() {
 	at.start();
 	while (unbreakable) {
+	    //networking
+	    context.getNetworking().processReceivedQueue();
+	    //game
 	    if (!paused) {
 		for (AbstractGameObject gameObject : getContext().getObjects()) {
 		    if (gameObject != null) {
@@ -87,16 +86,20 @@ public class ServerCore implements Runnable {
 	    }
 	    try {
 		Thread.sleep(QUANT_TIME);
-		timePassed += QUANT_TIME;
-		if (timePassed > 2000 && !context.getPlayers().isEmpty()) {
-		    Player get = context.getPlayers().get(0);
-		    final int pressure = context.getAtmosphere().getPressure(get.getPosition().getX(), get.getPosition().getY());
-		    context.getNetworking().sendToAll(new MessageLog(new LogString("Pressure: " + pressure, LogLevel.DEBUG)));
-		    timePassed = 0;
-		}
 	    } catch (InterruptedException ex) {
 		Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	    }
+	    sendPressure();
+	}
+    }
+
+    private void sendPressure() {
+	timePassed += QUANT_TIME;
+	if (timePassed > 2000 && !context.getPlayers().isEmpty()) {
+	    Player get = context.getPlayers().get(0);
+	    final int pressure = context.getAtmosphere().getPressure(get.getPosition().getX(), get.getPosition().getY());
+	    context.getNetworking().sendToAll(new MessageLog(new LogString("Pressure: " + pressure, LogLevel.DEBUG)));
+	    timePassed = 0;
 	}
     }
 

@@ -33,6 +33,7 @@ public final class ServerContext extends Context {
     private final ObstaclesLayer obstacles;
     private final AtmosphericLayer atmosphere;
     private final ServerLog log = new ServerLog();
+    private static final int MAXIMUM_TILES_TO_BE_HEARD = 12;
 
     @Override
     public synchronized void sendThemAll(Message m) {
@@ -104,7 +105,7 @@ public final class ServerContext extends Context {
 	int initialX = said.getX();
 	int initialY = said.getY();
 	//how to name it???
-	START_RECURSION(bufferMap, initialX, initialY, 10);
+	START_RECURSION(bufferMap, initialX, initialY, MAXIMUM_TILES_TO_BE_HEARD);
 	return bufferMap[toHear.getX()][toHear.getY()] > 0;
     }
 

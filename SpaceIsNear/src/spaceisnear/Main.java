@@ -27,7 +27,9 @@ public class Main extends StateBasedGame {
     public static void main(String[] args) throws SlickException {
 	if (args.length > 0) {
 	    if (args[0].equals("host")) {
+		System.out.println("SIN is running in no-GUI mode");
 		try {
+		    System.out.println("Hosting...");
 		    ServerCore serverCore = new ServerCore();
 		    try {
 			serverCore.host();
@@ -35,7 +37,7 @@ public class Main extends StateBasedGame {
 			Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 		    }
 		    new Thread(serverCore).start();
-		    System.out.println("Hosting...");
+		    System.out.println("Hosted");
 		} catch (IOException ex) {
 		    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 		}

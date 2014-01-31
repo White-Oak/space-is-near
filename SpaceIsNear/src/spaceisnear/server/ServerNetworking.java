@@ -13,7 +13,9 @@ import spaceisnear.game.messages.NetworkableMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import spaceisnear.AbstractGameObject;
@@ -47,57 +49,70 @@ public class ServerNetworking extends Listener implements Runnable {
     private MessageClientInformation informationAboutLastConnected;
     private boolean[] rogered;
     private final static MessageRogerRequested ROGER_REQUSTED = new MessageRogerRequested();
+    private Queue<MessageBundle> messages = new LinkedList<MessageBundle>();
 
     @Override
     public void received(Connection connection, Object object) {
 	if (object instanceof MessageBundle) {
 	    MessageBundle bundle = (MessageBundle) object;
 	    MessageType mt = bundle.messageType;
-	    byte[] b = bundle.bytes;
 	    switch (mt) {
-		case CLIENT_INFO:
-		    informationAboutLastConnected = MessageClientInformation.getInstance(b);
-		    System.out.println("Client information received");
-		    break;
-
 		case ROGERED:
 		    connections.toArray(new Connection[connections.size()]);
 		    for (int i = 0; i < connections.size(); i++) {
 			Connection connection1 = connections.get(i);
 			if (connection1.equals(connection)) {
 			    rogered[i] = true;
-//			    System.out.println(i + " rogered");
 			}
 		    }
 		    break;
-
-		case CONTROLLED:
-//		    System.out.println("Somebody controlled his player");
-		    MessageControlled mc = MessageControlled.getInstance(b);
-		    core.getContext().sendDirectedMessage(mc);
-		    break;
-		case MOVED:
-		    MessageMoved mm = MessageMoved.getInstance(b);
-		    core.getContext().sendToID(mm, mm.getId());
-		    sendToAll(mm);
-		    break;
-		case LOG:
-		    MessageLog ml = MessageLog.getInstance(b);
-		    core.getContext().log(ml.getLog());
-		    for (int i = 0; i < players.size(); i++) {
-			Player player = players.get(i);
-			Position positionToHear = player.getPosition();
-			Position positionToSay = ml.getLog().getPosition();
-			if (core.getContext().isHearingLogMessage(positionToSay, positionToHear)) {
-			    sendToConnection(connections.get(i), ml);
-			}
-		    }
+		default:
+		    messages.add(bundle);
 		    break;
 	    }
-//	    System.out.println("Message received");
 	} else if (object instanceof String) {
 	    System.out.println(object);
 	}
+    }
+
+    public void processReceivedQueue() {
+	while (!messages.isEmpty()) {
+	    processBundle(messages.poll());
+	}
+    }
+
+    private void processBundle(MessageBundle bundle) {
+	MessageType mt = bundle.messageType;
+	byte[] b = bundle.bytes;
+	switch (mt) {
+	    case CLIENT_INFO:
+		informationAboutLastConnected = MessageClientInformation.getInstance(b);
+		System.out.println("Client information received");
+		break;
+	    case CONTROLLED:
+//		    System.out.println("Somebody controlled his player");
+		MessageControlled mc = MessageControlled.getInstance(b);
+		core.getContext().sendDirectedMessage(mc);
+		break;
+	    case MOVED:
+		MessageMoved mm = MessageMoved.getInstance(b);
+		core.getContext().sendToID(mm, mm.getId());
+		sendToAll(mm);
+		break;
+	    case LOG:
+		MessageLog ml = MessageLog.getInstance(b);
+		core.getContext().log(ml.getLog());
+		for (int i = 0; i < players.size(); i++) {
+		    Player player = players.get(i);
+		    Position positionToHear = player.getPosition();
+		    Position positionToSay = ml.getLog().getPosition();
+		    if (core.getContext().isHearingLogMessage(positionToSay, positionToHear)) {
+			sendToConnection(connections.get(i), ml);
+		    }
+		}
+		break;
+	}
+//	    System.out.println("Message received");
     }
 
     public void sendToAll(NetworkableMessage message) {

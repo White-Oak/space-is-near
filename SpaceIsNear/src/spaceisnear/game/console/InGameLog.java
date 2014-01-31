@@ -7,6 +7,7 @@ package spaceisnear.game.console;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import lombok.Setter;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -18,31 +19,44 @@ import org.newdawn.slick.Graphics;
 public class InGameLog {
 
     private final Stack<LogString> stack = new Stack<>();
-    private int x = 30, y = 2, width = 370, height = 700;
+    private final int x, y, width, height;
     private int linesNumber = 0;
     private final Font font;
+    @Setter private boolean acceptDebugMessages;
 
-    public InGameLog(Font font) {
+    public InGameLog(Font font, int x, int y, int width, int height) {
 	this.font = font;
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
     }
 
     public void paint(Graphics g, int startingLine) {
 	final int startingY = -startingLine * g.getFont().getLineHeight();
-	for (int i = 0, linesDrawn = 0; i < stack.size(); i++) {
+	for (int i = 0, linesGone = 0, linesDrawn = 0; i < stack.size(); i++) {
 	    LogString get = stack.get(i);
 	    g.setColor(getColorOfLevel(get));
 	    String[] strings = splitByLines(get.toString(), width, g.getFont());
-	    for (int j = 0; j < strings.length; j++, linesDrawn++) {
+	    for (int j = 0; j < strings.length && linesDrawn < linesPerHeight(font, height); j++, linesGone++) {
 		String string = strings[j];
-		final int ycoord = y + font.getLineHeight() * linesDrawn + startingY;
+		final int ycoord = y + font.getLineHeight() * linesGone + startingY;
 		if (ycoord > 0) {
 		    g.drawString(string, x, ycoord);
+		    linesDrawn++;
 		}
 	    }
 	}
     }
 
+    private int linesPerHeight(Font f, int height) {
+	return height / f.getLineHeight();
+    }
+
     public void pushMessage(LogString str) {
+	if (!acceptDebugMessages && str.getLevel() == LogLevel.DEBUG) {
+	    return;
+	}
 	if (!stack.empty() && str.getMessage().equals(pullActualMessage())) {
 	    increaseTimesOfLastMessage();
 	} else {

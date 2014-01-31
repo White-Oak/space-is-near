@@ -101,6 +101,7 @@
     +stucked/unstucked items
     +pushing unstucked items
 	+correctly moving obstacles and air
+    -pulling
 -Atmosphere
     -knockbacking if big difference between two tiles in pressure
     -gasping if air is leaking 
@@ -119,11 +120,13 @@
     -make OOC
     -make some DEBUG messages
     -make some broadcasting
-    -ingame commands
+    +ingame commands (like "-debug on/off")
+    +scrolling
+    *messages are drawn in-bound of log screen
 -RADIOSYSTEM
     +server discovers whether someone is in range of local message or not
 	+air unrecheable tiles do not let local messages to get through
     -server discovers whether someone is in range of frequncy message or not
 -gotta do something with disconnected players
--being able to run server in no-GUI mode
--server should process incoming messages in the same thread as processing objects to avoid concurrent access
++being able to run server in no-GUI mode
++server should process incoming messages in the same thread as processing objects to avoid concurrent modification
