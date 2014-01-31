@@ -126,6 +126,11 @@ public class Corev2 extends BasicGameState {
 		    mc = new MessageControlled(MessageControlled.Type.RIGHT, context.getPlayerID());
 		}
 		break;
+	    case Input.KEY_ESCAPE:
+		MessagePropertySet messagePropertySet = new MessagePropertySet(((GameContext) context).getPlayerID(), "pull", -1);
+		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+		context.sendDirectedMessage(messageToSend);
+		break;
 	}
 	return mc;
     }

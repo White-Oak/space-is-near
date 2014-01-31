@@ -102,9 +102,9 @@
     +pushing unstucked items
 	+correctly moving obstacles and air
     +pulling
-	-make pulling be able to be disabled
-	-stucked items are not pulled
-	-items are pulled only 1 tile away from you
+	+make pulling be able to be disabled
+	+stucked items are not pulled
+	+items are pulled only 1 tile away from you
 -Atmosphere
     -knockbacking if big difference between two tiles in pressure
     -gasping if air is leaking 

@@ -16,7 +16,7 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"imageIds": [0],
-	"stuckedByAddingFromScript": false,
+	"stuckedByAddingFromScript": true,
 	"description": "Universal covering for floor"
     },
     {

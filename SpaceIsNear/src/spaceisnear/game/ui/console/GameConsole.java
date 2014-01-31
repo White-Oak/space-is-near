@@ -20,6 +20,7 @@ import org.newdawn.slick.gui.ComponentListener;
 import spaceisnear.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageLog;
+import spaceisnear.game.messages.MessagePropertySet;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.GamerPlayer;
 
@@ -125,6 +126,11 @@ public class GameConsole implements ComponentListener {
 				break;
 			}
 		    }
+		    break;
+		case "stoppull":
+		    MessagePropertySet messagePropertySet = new MessagePropertySet(((GameContext) context).getPlayerID(), "pull", -1);
+		    MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+		    context.sendDirectedMessage(messageToSend);
 		    break;
 	    }
 	} else {

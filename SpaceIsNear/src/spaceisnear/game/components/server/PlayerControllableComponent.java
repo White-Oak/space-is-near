@@ -83,18 +83,21 @@ public class PlayerControllableComponent extends Component {
 	    }
 	}
 	if (mm != null) {
-	    VariablePropertiesComponent variablePropertiesComponent = getOwner().getVariablePropertiesComponent();
-	    if (variablePropertiesComponent.getProperty("pull") != null && ((Integer) variablePropertiesComponent.getProperty("pull")) > -1) {
-		int toPull = (Integer) variablePropertiesComponent.getProperty("pull");
-		AbstractGameObject get = getContext().getObjects().get(toPull);
-		Position positionToPull = get.getPosition();
-		MessageMoved mm1 = new MessageMoved(oldx - positionToPull.getX(), oldy - positionToPull.getY(), get.getId());
-		getContext().sendDirectedMessage(mm1);
-		getContext().sendDirectedMessage(new MessageToSend(mm1));
-//		System.out.println("pulled " + mm1.getX() + " " + mm1.getY());
-	    }
+	    checkPull(oldx, oldy);
 	}
 	return mm;
     }
 
+    private void checkPull(final int oldx, final int oldy) {
+	VariablePropertiesComponent variablePropertiesComponent = getOwner().getVariablePropertiesComponent();
+	if (variablePropertiesComponent.getProperty("pull") != null && ((Integer) variablePropertiesComponent.getProperty("pull")) > -1) {
+	    int toPull = (Integer) variablePropertiesComponent.getProperty("pull");
+	    AbstractGameObject get = getContext().getObjects().get(toPull);
+	    Position positionToPull = get.getPosition();
+	    MessageMoved mm1 = new MessageMoved(oldx - positionToPull.getX(), oldy - positionToPull.getY(), get.getId());
+	    getContext().sendDirectedMessage(mm1);
+	    getContext().sendDirectedMessage(new MessageToSend(mm1));
+//		System.out.println("pulled " + mm1.getX() + " " + mm1.getY());}
+	}
+    }
 }

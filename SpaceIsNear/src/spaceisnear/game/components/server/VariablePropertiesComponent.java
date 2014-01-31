@@ -14,6 +14,8 @@ import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessagePropertySet;
+import spaceisnear.game.objects.Position;
+import spaceisnear.server.objects.items.StaticItem;
 
 /**
  *
@@ -30,7 +32,27 @@ public class VariablePropertiesComponent extends Component {
 	switch (message.getMessageType()) {
 	    case PROPERTY_SET:
 		MessagePropertySet mps = (MessagePropertySet) message;
-		setProperty(mps.getName(), mps.getValue());
+		switch (mps.getName()) {
+		    case "pull":
+			if (((Integer) mps.getValue()) != -1) {
+			    Integer value = (Integer) mps.getValue();
+			    StaticItem get = (StaticItem) getContext().getObjects().get(value);
+			    //checked if unstucked
+			    Object property = get.getVariableProperties().getProperty("stucked");
+			    if (property != null && !(Boolean) property) {
+				//1-tile-range of pulling
+				Position positionToPull = get.getPosition();
+				Position position = getPosition();
+				if (Math.abs(positionToPull.getX() - position.getX()) <= 1 && Math.abs(
+					positionToPull.getY() - position.getY()) <= 1) {
+				    setProperty(mps.getName(), mps.getValue());
+				}
+			    }
+			} else {
+			    setProperty(mps.getName(), mps.getValue());
+			}
+			break;
+		}
 		break;
 	}
     }
