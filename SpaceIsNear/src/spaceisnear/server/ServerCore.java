@@ -24,6 +24,7 @@ import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessagePaused;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.MessageUnpaused;
+import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsReader;
 import spaceisnear.server.objects.items.ItemAdder;
 import spaceisnear.server.objects.items.ServerItemsArchive;
@@ -78,7 +79,6 @@ public class ServerCore implements Runnable {
 			gameObject.process();
 		    }
 		}
-		checkHealthStatuses();
 	    } else {
 		if (!alreadyPaused) {
 		    alreadyPaused = true;
@@ -89,13 +89,13 @@ public class ServerCore implements Runnable {
 	    } catch (InterruptedException ex) {
 		Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	    }
-//	    sendPressure();
+	    sendPressure();
 	}
     }
 
     private void sendPressure() {
 	timePassed += QUANT_TIME;
-	if (timePassed > 2000 && !context.getPlayers().isEmpty()) {
+	if (timePassed > 4000 && !context.getPlayers().isEmpty()) {
 	    Player get = context.getPlayers().get(0);
 	    final int pressure = context.getAtmosphere().getPressure(get.getPosition().getX(), get.getPosition().getY());
 	    context.getNetworking().sendToAll(new MessageLog(new LogString("Pressure: " + pressure, LogLevel.DEBUG)));
@@ -106,17 +106,27 @@ public class ServerCore implements Runnable {
     private void checkHealthStatuses() {
 	for (Player player : getContext().getPlayers()) {
 	    HealthComponent hc = player.getHealthComponent();
+	    Position position = player.getPosition();
+	    int pressure = context.getAtmosphere().getPressure(position.getX(), position.getY());
+	    if (pressure < AtmosphericLayer.PRESSURE_HARD_TO_BREATH) {
+		context.getNetworking().log(new LogString(player.getNickname() + " задыхается.", LogLevel.TALKING, position));
+		if (pressure < AtmosphericLayer.PRESSURE_ENOUGH_TO_BREATH) {
+		    hc.changeHealth(HealthComponent.SUFFOCATING_DAMAGE);
+		}
+	    }
 	    switch (hc.getState()) {
 		case CRITICICAL:
 		    MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
 		    getContext().sendToID(messageKnockbacked, player.getId());
 		    getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
+		    context.getNetworking().log(new LogString(player.getNickname() + " упал оземь.", LogLevel.TALKING, position));
 		    break;
 
 		case DEAD:
 		    MessageDied messageDied = new MessageDied(player.getId());
 		    getContext().sendToID(messageDied, player.getId());
 		    getContext().sendToID(new MessageToSend(messageDied), player.getId());
+		    context.getNetworking().log(new LogString(player.getNickname() + " перестал дышать.", LogLevel.TALKING, position));
 		    break;
 
 	    }
@@ -158,6 +168,7 @@ public class ServerCore implements Runnable {
 	    while (unbreakable) {
 		if (!paused) {
 		    context.getAtmosphere().tickAtmosphere(context);
+		    checkHealthStatuses();
 		}
 		try {
 		    Thread.sleep(ATMOSPHERE_DELAY);

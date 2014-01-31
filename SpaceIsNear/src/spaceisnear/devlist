@@ -97,18 +97,18 @@
 *now server (not client) decides whether player is able to move on next tile
 
 0.0.5
--Basic items system
++Basic items system
     +stucked/unstucked items
     +pushing unstucked items
 	+correctly moving obstacles and air
     +pulling
-	+make pulling be able to be disabled
+	+make pulling be able to be disabled (escape button or -stoppull)
 	+stucked items are not pulled
 	+items are pulled only 1 tile away from you
 -Atmosphere
     -knockbacking if big difference between two tiles in pressure
-    -gasping if air is leaking 
-    -decreasing health if amount of air is not enough to live
+    +gasping if air is leaking 
+    +decreasing health if amount of air is not enough to live
 -Inventory
     -each inventory slot has his size, item field and name
 -HealthComponent

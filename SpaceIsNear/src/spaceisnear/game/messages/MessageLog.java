@@ -15,7 +15,7 @@ import spaceisnear.game.ui.console.LogString;
 
 public class MessageLog extends Message implements NetworkableMessage {
 
-    @Getter private LogString log;
+    @Getter private final LogString log;
 
     public MessageLog(LogString log) {
 	super(MessageType.LOG);

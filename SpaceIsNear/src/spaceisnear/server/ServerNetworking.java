@@ -36,6 +36,7 @@ import spaceisnear.game.messages.MessageWorldInformation;
 import spaceisnear.game.messages.MessageYourPlayerDiscovered;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.objects.items.StaticItem;
 
 /**
@@ -102,15 +103,8 @@ public class ServerNetworking extends Listener implements Runnable {
 		break;
 	    case LOG:
 		MessageLog ml = MessageLog.getInstance(b);
-		core.getContext().log(ml.getLog());
-		for (int i = 0; i < players.size(); i++) {
-		    Player player = players.get(i);
-		    Position positionToHear = player.getPosition();
-		    Position positionToSay = ml.getLog().getPosition();
-		    if (core.getContext().isHearingLogMessage(positionToSay, positionToHear)) {
-			sendToConnection(connections.get(i), ml);
-		    }
-		}
+		final LogString log = ml.getLog();
+		log(log);
 		break;
 	    case PROPERTY_SET:
 		MessagePropertySet mps = MessagePropertySet.getInstance(b);
@@ -120,6 +114,18 @@ public class ServerNetworking extends Listener implements Runnable {
 
 	}
 //	    System.out.println("Message received");
+    }
+
+    public void log(final LogString log) {
+	core.getContext().log(log);
+	for (int i = 0; i < players.size(); i++) {
+	    Player player = players.get(i);
+	    Position positionToHear = player.getPosition();
+	    Position positionToSay = log.getPosition();
+	    if (core.getContext().isHearingLogMessage(positionToSay, positionToHear)) {
+		sendToConnection(connections.get(i), new MessageLog(log));
+	    }
+	}
     }
 
     public void sendToAll(NetworkableMessage message) {
