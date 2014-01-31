@@ -113,8 +113,11 @@
     -acceptance on client
 +MessageKnockbacked
     -acceptance on client
--Mouse interaction
-    -selection of tile where player has clicked
++Mouse interaction
+    +selection of tile where player has clicked
+    +rightclicking will call context menu with the list of items
+	+with actions (only Learn currently)
++Context menus
 -In-game chat
     -make PM
     -make OOC
@@ -130,3 +133,4 @@
 -gotta do something with disconnected players
 +being able to run server in no-GUI mode
 +server should process incoming messages in the same thread as processing objects to avoid concurrent modification
++lombokked code again

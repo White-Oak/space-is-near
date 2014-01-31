@@ -18,5 +18,6 @@ public class ItemBundle {
     public boolean blockingAir;
     public int[] imageIds;
     public boolean stuckedByAddingFromScript;
+    public String description;
     //script names reserved
 }

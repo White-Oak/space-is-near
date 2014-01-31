@@ -5,12 +5,12 @@
  */
 package spaceisnear;
 
+import java.util.LinkedList;
 import java.util.List;
-import spaceisnear.game.CameraMan;
-import spaceisnear.game.layer.AtmosphericLayer;
-import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.objects.GameObjectType;
+import spaceisnear.server.objects.items.StaticItem;
 
 /**
  *
@@ -29,4 +29,14 @@ public abstract class Context {
     }
 
     public abstract List<AbstractGameObject> getObjects();
+
+    public List<AbstractGameObject> itemsOn(int x, int y) {
+	LinkedList<AbstractGameObject> items = new LinkedList<>();
+	for (AbstractGameObject abstractGameObject : getObjects()) {
+	    if (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)) {
+		items.add(abstractGameObject);
+	    }
+	}
+	return items;
+    }
 }

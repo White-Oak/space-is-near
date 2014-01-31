@@ -11,7 +11,7 @@ import spaceisnear.server.objects.Player;
 import java.util.*;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
-import spaceisnear.game.console.LogString;
+import spaceisnear.game.ui.console.LogString;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.DirectedMessage;
@@ -148,13 +148,4 @@ public final class ServerContext extends Context {
 	return (x >= 0 && x < obstacles.getWidth()) && (y >= 0 && y < obstacles.getHeight());
     }
 
-    public List<StaticItem> itemsOn(int x, int y) {
-	LinkedList<StaticItem> items = new LinkedList<>();
-	for (AbstractGameObject abstractGameObject : objects) {
-	    if (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)) {
-		items.add((StaticItem) abstractGameObject);
-	    }
-	}
-	return items;
-    }
 }

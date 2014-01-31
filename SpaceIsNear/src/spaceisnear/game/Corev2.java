@@ -5,11 +5,12 @@
  */
 package spaceisnear.game;
 
-import spaceisnear.game.console.GameConsole;
+import spaceisnear.game.ui.console.GameConsole;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -18,13 +19,16 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.components.client.PaintableComponent;
-import spaceisnear.game.console.LogString;
+import spaceisnear.game.ui.console.LogLevel;
+import spaceisnear.game.ui.console.LogString;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageTimePassed;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.ItemsReader;
+import spaceisnear.game.ui.*;
+import spaceisnear.game.objects.items.StaticItem;
 
 /**
  * @author LPzhelud
@@ -36,8 +40,9 @@ public class Corev2 extends BasicGameState {
     private static final int QUANT_TIME = 50;
     private int key;
     public static String IP;
-    private boolean notpaused;
+    @Getter private boolean notpaused;
     private GameConsole console;
+    private ContextMenu menu;
 
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
@@ -136,6 +141,16 @@ public class Corev2 extends BasicGameState {
 //	context.getCameraMan().unmoveCamera(g);
 	g.popTransform();
 	console.paint(g, container);
+	if (menu != null) {
+	    menu.render(g);
+	}
+    }
+
+    @Override
+    public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+	if (menu != null) {
+	    menu.mouseMoved(newx, newy);
+	}
     }
 
     @Override
@@ -152,15 +167,70 @@ public class Corev2 extends BasicGameState {
 	System.out.println("Client has continued his work");
     }
 
-    public boolean isNotpaused() {
-	return this.notpaused;
-    }
-
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
 	if (console.intersects(x, y)) {
 	    console.mouseClicked(button, x, y, clickCount);
+	} else {
+	    int toAddX = context.getCameraMan().getX();
+	    int toAddY = context.getCameraMan().getY();
+	    int calculatedX = x / GameContext.TILE_WIDTH;
+	    int calculatedY = y / GameContext.TILE_HEIGHT;
+	    int tileX = toAddX + calculatedX;
+	    int tileY = toAddY + calculatedY;
+	    console.pushMessage(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
+	    if (button == 1) {
+		if (menu == null) {
+		    createContextMenuWithItems(x, y, tileX, tileY);
+		} else {
+		    menu = null;
+		}
+	    } else if (button == 0) {
+		if (menu != null) {
+		    menu.mouseClicked(button, x, y, clickCount);
+		}
+	    }
 	}
+    }
+
+    private void createContextMenuWithItems(int x, int y, int tileX, int tileY) {
+	ContextMenu contextMenu = new ContextMenu(x, y, console.getFont());
+	List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
+	for (AbstractGameObject staticItem : itemsOn) {
+	    final StaticItem item = (StaticItem) staticItem;
+	    ContextSubMenu contextSubMenu = new ContextSubMenu(item.getProperties().getName());
+	    contextMenu.add(contextSubMenu);
+	    contextSubMenu.add("Learn");
+	    contextSubMenu.add("Pull");
+	    contextSubMenu.add("Take");
+	    contextSubMenu.setActionListener(new ActionListener() {
+
+		@Override
+		public void itemActivated(ContextMenuItem e) {
+		    switch (e.getLabel()) {
+			case "Learn":
+			    String description = item.getProperties().getDescription();
+			    console.pushMessage(new LogString(description, LogLevel.TALKING));
+			    break;
+		    }
+		    menu = null;
+		}
+	    });
+	}
+	menu = contextMenu;
+//	testMenu(x, y);
+    }
+
+    private void testMenu(int x, int y) {
+	ContextMenu contextMenu = new ContextMenu(x, y, console.getFont());
+	contextMenu.add("lah");
+	contextMenu.add("contextmenu so cool");
+	contextMenu.add("pokemons");
+	final ContextSubMenu contextSubMenu = new ContextSubMenu("loh");
+	contextMenu.add(contextSubMenu);
+	contextSubMenu.add("test");
+	contextSubMenu.add("test2");
+	menu = contextMenu;
     }
 
     @Override

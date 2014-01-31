@@ -62,6 +62,10 @@ public class ItemPropertiesComponent extends Component {
 	return archivable.getBundle(getId());
     }
 
+    public String getDescription() {
+	return getBundle().description;
+    }
+
     private static ItemsArchivable getItemsArchive() {
 	if (ItemsArchive.itemsArchive != null) {
 	    return ItemsArchive.itemsArchive;

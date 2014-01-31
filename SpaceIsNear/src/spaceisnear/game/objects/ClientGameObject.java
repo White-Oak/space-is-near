@@ -7,6 +7,10 @@ package spaceisnear.game.objects;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.bundles.ObjectBundle;
@@ -18,19 +22,14 @@ import spaceisnear.game.messages.Message;
 /**
  * @author LPzhelud
  */
-public abstract class ClientGameObject extends AbstractGameObject {
+@RequiredArgsConstructor public abstract class ClientGameObject extends AbstractGameObject {
 
     private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
-    private int id = -1;
-    private boolean destroyed = false;
-    private List<Component> components = new LinkedList<>();
-    private final GameObjectType type;
-    private GameContext context;
-
-    public ClientGameObject(GameObjectType type, GameContext context) {
-	this.type = type;
-	this.context = context;
-    }
+    @Getter private int id = -1;
+    @Getter @Setter private boolean destroyed = false;
+    @Getter private List<Component> components = new LinkedList<>();
+    @NonNull @Getter private final GameObjectType type;
+    @NonNull @Getter @Setter private GameContext context;
 
     public void setId(int id) {
 	if (this.id == -1) {
@@ -87,37 +86,6 @@ public abstract class ClientGameObject extends AbstractGameObject {
 		component.processMessage(message);
 	    }
 	}
-    }
-
-    public int getId() {
-	return this.id;
-    }
-
-    public boolean isDestroyed() {
-	return this.destroyed;
-    }
-
-    protected void setDestroyed(final boolean destroyed) {
-	this.destroyed = destroyed;
-    }
-
-    @Override
-    public List<Component> getComponents() {
-	return this.components;
-    }
-
-    @Override
-    public GameObjectType getType() {
-	return this.type;
-    }
-
-    @Override
-    public GameContext getContext() {
-	return this.context;
-    }
-
-    public void setContext(final GameContext context) {
-	this.context = context;
     }
 
     protected void setComponents(List<Component> components) {

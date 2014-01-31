@@ -12,8 +12,8 @@ import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.server.Registerer;
 import static spaceisnear.Utils.GSON;
-import spaceisnear.game.console.LogLevel;
-import spaceisnear.game.console.LogString;
+import spaceisnear.game.ui.console.LogLevel;
+import spaceisnear.game.ui.console.LogString;
 import spaceisnear.game.objects.items.StaticItem;
 
 /**

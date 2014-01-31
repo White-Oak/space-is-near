@@ -8,13 +8,14 @@ package spaceisnear.game.messages;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
 import spaceisnear.Utils;
 import spaceisnear.game.bundles.MessageBundle;
-import spaceisnear.game.console.LogString;
+import spaceisnear.game.ui.console.LogString;
 
 public class MessageLog extends Message implements NetworkableMessage {
 
-    private final LogString log;
+    @Getter private LogString log;
 
     public MessageLog(LogString log) {
 	super(MessageType.LOG);
@@ -40,10 +41,6 @@ public class MessageLog extends Message implements NetworkableMessage {
 	    Logger.getLogger(MessageLog.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	return null;
-    }
-
-    public LogString getLog() {
-	return log;
     }
 
 }

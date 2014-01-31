@@ -14,8 +14,8 @@ import org.newdawn.slick.SlickException;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.HealthComponent;
-import spaceisnear.game.console.LogLevel;
-import spaceisnear.game.console.LogString;
+import spaceisnear.game.ui.console.LogLevel;
+import spaceisnear.game.ui.console.LogString;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.MessageDied;
@@ -89,7 +89,7 @@ public class ServerCore implements Runnable {
 	    } catch (InterruptedException ex) {
 		Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	    }
-	    sendPressure();
+//	    sendPressure();
 	}
     }
 

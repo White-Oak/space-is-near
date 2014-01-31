@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import spaceisnear.game.console.LogString;
+import spaceisnear.game.ui.console.LogString;
 
 /**
  *

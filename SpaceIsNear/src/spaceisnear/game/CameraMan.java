@@ -5,6 +5,7 @@
  */
 package spaceisnear.game;
 
+import lombok.Getter;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -16,8 +17,8 @@ import spaceisnear.game.objects.Position;
  */
 public final class CameraMan {
 
-    private int x;
-    private int y;
+    @Getter private int x;
+    @Getter private int y;
     private TiledLayer tiledLayer;
     private int windowWidth;
     private int windowHeight;

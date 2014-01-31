@@ -6,7 +6,8 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"imageIds": [1],
-	"stuckedByAddingFromScript": false
+	"stuckedByAddingFromScript": false,
+	"description": "Universal tool"
     },
     {
 	"name": "plitka",
@@ -15,7 +16,8 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"imageIds": [0],
-	"stuckedByAddingFromScript": false
+	"stuckedByAddingFromScript": false,
+	"description": "Universal covering for floor"
     },
     {
 	"name": "wall",
@@ -24,7 +26,8 @@
 	"blockingPath": true,
 	"blockingAir": true,
 	"imageIds": [1],
-	"stuckedByAddingFromScript": false
+	"stuckedByAddingFromScript": false,
+	"description": "Universal obstacle"
     },
     {
 	"name": "radio",
@@ -33,6 +36,7 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"imageIds": [1],
-	"stuckedByAddingFromScript": true
+	"stuckedByAddingFromScript": true,
+	"description": "Universal speaker system"
     }
 ]

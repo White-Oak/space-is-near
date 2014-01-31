@@ -6,7 +6,7 @@
 package spaceisnear.game.components.server;
 
 import java.util.List;
-import spaceisnear.Context;
+import spaceisnear.AbstractGameObject;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
@@ -14,7 +14,6 @@ import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.Position;
-import spaceisnear.game.objects.items.Size;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 import spaceisnear.server.objects.items.StaticItem;
@@ -65,8 +64,9 @@ public class PlayerControllableComponent extends Component {
 	if (context.getObstacles().isReacheable(x, y)) {
 	    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
 	} else if (context.isOnMap(x, y)) {
-	    List<StaticItem> itemsOn = context.itemsOn(x, y);
-	    for (StaticItem staticItem : itemsOn) {
+	    List<AbstractGameObject> itemsOn = context.itemsOn(x, y);
+	    for (AbstractGameObject abstractGameObject : itemsOn) {
+		StaticItem staticItem = (StaticItem) abstractGameObject;
 		int id = staticItem.getProperties().getId();
 		boolean blockingPath = ServerItemsArchive.itemsArchive.isBlockingPath(id);
 		if (blockingPath) {
