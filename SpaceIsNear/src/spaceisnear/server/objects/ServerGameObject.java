@@ -6,22 +6,13 @@
 package spaceisnear.server.objects;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
-import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentState;
-import spaceisnear.game.components.ComponentStateBundle;
-import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
 
 /**
@@ -63,29 +54,6 @@ public abstract class ServerGameObject extends AbstractGameObject {
 	messages.add(message);
     }
 
-    private synchronized GameObjectState getState() {
-	ComponentStateBundle[][] states = new ComponentStateBundle[components.size()][];
-	String[] classes = new String[components.size()];
-	for (int i = 0; i < classes.length; i++) {
-	    classes[i] = components.get(i).getClass().getName();
-	    HashMap<String, ComponentState> states1 = components.get(i).getStates();
-	    ComponentStateBundle[] bundles = new ComponentStateBundle[states1.size()];
-	    Collection<ComponentState> values = states1.values();
-	    int j = 0;
-	    for (ComponentState componentState : values) {
-		bundles[j] = new ComponentStateBundle(componentState);
-		j++;
-	    }
-	    states[i] = bundles;
-	}
-	return new GameObjectState(states, classes);
-    }
-
-    @Override
-    public final synchronized ObjectBundle getBundle() {
-	return new ObjectBundle(getState(), id, type);
-    }
-
     @Override
     public synchronized void process() {
 	if (destroyed) {
@@ -99,6 +67,7 @@ public abstract class ServerGameObject extends AbstractGameObject {
 	}
     }
 
+    @Override
     public int getId() {
 	return this.id;
     }

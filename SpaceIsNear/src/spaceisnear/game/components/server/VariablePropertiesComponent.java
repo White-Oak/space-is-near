@@ -13,7 +13,7 @@ import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.propertys.MessagePropertySet;
+import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.objects.items.StaticItem;
 

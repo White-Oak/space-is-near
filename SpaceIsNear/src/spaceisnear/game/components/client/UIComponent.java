@@ -7,7 +7,7 @@ package spaceisnear.game.components.client;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageNetworkState;
+import spaceisnear.game.messages.service.MessageNetworkState;
 
 public class UIComponent extends Component {
 

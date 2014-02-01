@@ -5,38 +5,28 @@
  */
 package spaceisnear.game.components;
 
+import lombok.AllArgsConstructor;
+
 /**
  * @author LPzhelud
  */
-public class ComponentState {
+@AllArgsConstructor public class ComponentState {
 
     private String name;
     private Object value;
 
-    @java.beans.ConstructorProperties({"name", "value"})
-    
-    public ComponentState(final String name, final Object value) {
-
-	this.name = name;
-	this.value = value;
-    }
-
-    
     public String getName() {
 	return this.name;
     }
 
-    
     public void setName(final String name) {
 	this.name = name;
     }
 
-    
     public Object getValue() {
 	return this.value;
     }
 
-    
     public void setValue(final Object value) {
 	this.value = value;
     }

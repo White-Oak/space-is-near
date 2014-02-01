@@ -3,11 +3,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.messages;
+package spaceisnear.game.messages.service.onceused;
 
 import com.google.gson.Gson;
 import spaceisnear.game.bundles.Bundle;
 import spaceisnear.game.bundles.MessageBundle;
+import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.MessageType;
+import spaceisnear.game.messages.NetworkableMessage;
 
 public class MessageWorldSent extends Message implements NetworkableMessage {
 	private final String world;

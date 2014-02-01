@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentState;
-import spaceisnear.game.components.ComponentStateBundle;
 import spaceisnear.game.messages.Message;
 
 /**
@@ -50,29 +47,6 @@ import spaceisnear.game.messages.Message;
     @Override
     public final void message(Message message) {
 	messages.add(message);
-    }
-
-    private synchronized GameObjectState getState() {
-	ComponentStateBundle[][] states = new ComponentStateBundle[components.size()][];
-	String[] classes = new String[components.size()];
-	for (int i = 0; i < classes.length; i++) {
-	    classes[i] = components.get(i).getClass().getName();
-	    HashMap<String, ComponentState> states1 = components.get(i).getStates();
-	    ComponentStateBundle[] bundles = new ComponentStateBundle[states1.size()];
-	    Collection<ComponentState> values = states1.values();
-	    int j = 0;
-	    for (ComponentState componentState : values) {
-		bundles[j] = new ComponentStateBundle(componentState);
-		j++;
-	    }
-	    states[i] = bundles;
-	}
-	return new GameObjectState(states, classes);
-    }
-
-    @Override
-    public final synchronized ObjectBundle getBundle() {
-	return new ObjectBundle(getState(), id, type);
     }
 
     @Override

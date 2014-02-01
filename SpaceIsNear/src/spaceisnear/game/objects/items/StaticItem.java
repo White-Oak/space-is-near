@@ -6,14 +6,12 @@ package spaceisnear.game.objects.items;
 
 import java.util.List;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.components.client.ItemPaintableComponent;
 import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.objects.ClientGameObject;
-import spaceisnear.game.objects.GameObjectState;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 

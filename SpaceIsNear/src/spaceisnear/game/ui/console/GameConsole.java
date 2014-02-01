@@ -20,7 +20,7 @@ import org.newdawn.slick.gui.ComponentListener;
 import spaceisnear.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageLog;
-import spaceisnear.game.messages.propertys.MessagePropertySet;
+import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.GamerPlayer;
 

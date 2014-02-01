@@ -38,24 +38,6 @@ public abstract class Component {
 	}
     }
 
-    public static Component getInstance(ComponentStateBundle[] states, Class component, Context c) throws ClassNotFoundException,
-	    NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-	try {
-	    final Constructor constructor = component.getDeclaredConstructor();
-	    constructor.setAccessible(true);
-	    Component newInstance = (Component) constructor.newInstance();
-	    for (ComponentStateBundle state : states) {
-		ComponentState componentState = state.getState();
-		newInstance.states.put(componentState.getName(), componentState);
-	    }
-	    newInstance.setContext(c);
-	    return newInstance;
-	} catch (InstantiationException | IllegalAccessException ex) {
-	    Logger.getLogger(Component.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return null;
-    }
-
     protected ComponentState getStateNamed(String name) {
 	return states.get(name);
     }

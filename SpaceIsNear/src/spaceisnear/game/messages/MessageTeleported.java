@@ -9,7 +9,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import spaceisnear.game.messages.propertys.MessagePropertable;
+import spaceisnear.game.messages.properties.MessagePropertable;
 import spaceisnear.game.objects.Position;
 
 public class MessageTeleported extends MessageMoved implements MessagePropertable {

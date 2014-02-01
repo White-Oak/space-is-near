@@ -6,7 +6,6 @@
 package spaceisnear;
 
 import java.util.List;
-import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.components.PositionComponent;
@@ -29,8 +28,6 @@ public abstract class AbstractGameObject {
     public abstract List<Component> getComponents();
 
     public abstract void process();
-
-    public abstract ObjectBundle getBundle();
 
     public abstract Context getContext();
 
