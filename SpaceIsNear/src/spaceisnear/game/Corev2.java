@@ -22,7 +22,7 @@ import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.LogString;
 import spaceisnear.game.messages.MessageControlled;
-import spaceisnear.game.messages.MessagePropertySet;
+import spaceisnear.game.messages.propertys.MessagePropertySet;
 import spaceisnear.game.messages.MessageTimePassed;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.NetworkingObject;
@@ -54,6 +54,7 @@ public class Corev2 extends BasicGameState {
 	}
 	context = new GameContext(new CameraMan(), objects, this);
 	context.addObject(new NetworkingObject(context));
+	context.checkSize();
 	context.getCameraMan().setWindowWidth(800);
 	context.getCameraMan().setWindowHeight(600);
 	context.getCameraMan().delegateWidth();

@@ -109,6 +109,8 @@
     -knockbacking if big difference between two tiles in pressure
     +gasping if air is leaking 
     +decreasing health if amount of air is not enough to live
+    -update health every atmosphere update
+    -send messages to client only once at some time
 -Inventory
     -each inventory slot has his size, item field and name
 -HealthComponent
@@ -137,3 +139,4 @@
 +being able to run server in no-GUI mode
 +server should process incoming messages in the same thread as processing objects to avoid concurrent modification
 +lombokked code again
++New objects' sending system

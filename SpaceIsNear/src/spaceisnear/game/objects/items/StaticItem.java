@@ -55,18 +55,4 @@ public class StaticItem extends ClientGameObject {
 	return properties;
     }
 
-    public static StaticItem getInstance(ObjectBundle bundle, GameContext context) {
-	GameObjectState state = bundle.getState();
-	Component[] components = state.getComponents(bundle.getObjectID(), context);
-	return new StaticItem(context, components);
-    }
-
-    public static StaticItem getInstance(int id, Position p, GameContext context) {
-	StaticItem newItem = ItemsArchive.itemsArchive.getNewItem(id, context);
-	Position position = newItem.getPosition();
-	position.setX(p.getX());
-	position.setY(p.getY());
-	return newItem;
-    }
-
 }

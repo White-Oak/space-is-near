@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.messages;
+package spaceisnear.game.messages.propertys;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,8 +15,11 @@ import java.util.logging.Logger;
 import lombok.Getter;
 import spaceisnear.Utils;
 import spaceisnear.game.bundles.MessageBundle;
+import spaceisnear.game.messages.DirectedMessage;
+import spaceisnear.game.messages.MessageType;
+import spaceisnear.game.messages.NetworkableMessage;
 
-public class MessagePropertySet extends DirectedMessage implements NetworkableMessage {
+public class MessagePropertySet extends DirectedMessage implements NetworkableMessage, MessagePropertable {
 
     @Getter private final String name;
     @Getter private final Object value;

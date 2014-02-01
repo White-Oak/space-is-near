@@ -108,8 +108,4 @@ public class ServerItemsArchive implements ItemsArchivable {
     public spaceisnear.server.objects.items.StaticItem getNewItemForServer(int id, ServerContext serverContext) {
 	return new spaceisnear.server.objects.items.StaticItem(serverContext, id);
     }
-
-    public spaceisnear.game.objects.items.StaticItem getNewItem(int id, GameContext serverContext) {
-	return new spaceisnear.game.objects.items.StaticItem(serverContext, id);
-    }
 }

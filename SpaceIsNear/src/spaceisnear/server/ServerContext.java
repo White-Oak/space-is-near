@@ -11,14 +11,13 @@ import spaceisnear.server.objects.Player;
 import java.util.*;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.ui.console.LogString;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.DirectedMessage;
-import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.objects.ServerNetworkingObject;
-import spaceisnear.server.objects.items.StaticItem;
 
 /**
  * @author LPzhelud
@@ -34,6 +33,7 @@ public final class ServerContext extends Context {
     private final AtmosphericLayer atmosphere;
     private final ServerLog log = new ServerLog();
     private static final int MAXIMUM_TILES_TO_BE_HEARD = 12;
+    public static final int HIDDEN_SERVER_OBJECTS = 1;
 
     @Override
     public synchronized void sendThemAll(Message m) {
@@ -51,7 +51,9 @@ public final class ServerContext extends Context {
 
     public synchronized void addObject(ServerGameObject gameObject) {
 	objects.add(gameObject);
-	gameObject.setId(objects.size() - 1);
+	if (gameObject != null) {
+	    gameObject.setId(objects.size() - 1);
+	}
     }
 
     public synchronized Player addPlayer(int connectionID) {
@@ -73,6 +75,13 @@ public final class ServerContext extends Context {
 	this.obstacles = obstacles;
 	this.atmosphere = atmosphere;
 	addObject(new ServerNetworkingObject(this));
+	checkSize();
+    }
+
+    public void checkSize() {
+	while (objects.size() < GameContext.HIDDEN_CLIENT_OBJECTS) {
+	    addObject(null);
+	}
     }
 
     public ServerNetworking getNetworking() {

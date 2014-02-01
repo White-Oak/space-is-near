@@ -1,8 +1,6 @@
 package spaceisnear.game.objects;
 
-import java.util.LinkedList;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.components.NameComponent;
@@ -17,12 +15,13 @@ import spaceisnear.game.components.inventory.InventoryComponent;
  */
 public class Player extends ClientGameObject {
 
-    protected Player(GameContext context) {
-	super(GameObjectType.PLAYER, context);
+    public Player(GameContext context) {
+	this(context, GameObjectType.PLAYER);
     }
 
     protected Player(GameContext context, GameObjectType type) {
 	super(type, context);
+	addComponents(new PlayerComponent(), new NameComponent(), new PositionComponent(0, 0), new InventoryComponent());
     }
 
     public String getNickname() {
@@ -40,26 +39,5 @@ public class Player extends ClientGameObject {
 
     public void setNickname(String nickname) {
 	getNameComponent().setNickname(nickname);
-    }
-
-    public static Player getInstance(ObjectBundle bundle, GameContext context) {
-	Player player = new Player(context);
-	player.setContext(context);
-	Component[] components = bundle.getState().getComponents(bundle.getObjectID(), context);
-	LinkedList<Component> list = new LinkedList<>();
-	for (Component component : components) {
-	    switch (component.getType()) {
-		case POSITION:
-		case NAME:
-		case INVENTORY:
-		case PLAYER:
-		    list.add(component);
-		    break;
-	    }
-	}
-	player.setComponents(list);
-	player.addComponents(new PlayerComponent());
-	player.setId(bundle.getObjectID());
-	return player;
     }
 }

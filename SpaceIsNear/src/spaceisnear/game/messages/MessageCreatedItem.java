@@ -5,61 +5,27 @@
  */
 package spaceisnear.game.messages;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lombok.Getter;
+import spaceisnear.Utils;
 import spaceisnear.game.bundles.MessageBundle;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.objects.GameObjectType;
 
 public class MessageCreatedItem extends MessageCreated {
 
-    private final int id;
-    private final Position p;
+    @Getter private final int id;
 
-    public MessageCreatedItem(int id, Position p) {
-	super(null);
+    public MessageCreatedItem(int id) {
+	super(GameObjectType.ITEM, MessageType.CREATED_SIMPLIFIED_ITEM);
 	this.id = id;
-	this.p = p;
     }
 
     @Override
     public MessageBundle getBundle() {
-	MessageBundle messageBundle = new MessageBundle(MessageType.CREATED_SIMPLIFIED);
-	try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-	    try (DataOutputStream dos = new DataOutputStream(baos)) {
-		dos.writeInt(id);
-		dos.writeInt(p.getX());
-		dos.writeInt(p.getY());
-	    }
-	    messageBundle.bytes = baos.toByteArray();
-	} catch (IOException iOException) {
-	}
+	MessageBundle messageBundle = new MessageBundle(Utils.GSON.toJson(this).getBytes(), getMessageType());
 	return messageBundle;
     }
 
     public static MessageCreatedItem getInstance(byte[] b) {
-	try (ByteArrayInputStream bais = new ByteArrayInputStream(b); DataInputStream dis = new DataInputStream(bais)) {
-	    int id = dis.readInt();
-	    int x = dis.readInt();
-	    int y = dis.readInt();
-	    Position p = new Position(x, y);
-	    return new MessageCreatedItem(id, p);
-	} catch (IOException ex) {
-	    Logger.getLogger(MessageCreatedItem.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return null;
+	return Utils.GSON.fromJson(new String(b), MessageCreatedItem.class);
     }
-
-    public int getId() {
-	return id;
-    }
-
-    public Position getP() {
-	return p;
-    }
-
 }

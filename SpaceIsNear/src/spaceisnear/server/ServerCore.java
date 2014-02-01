@@ -39,7 +39,6 @@ public class ServerCore implements Runnable {
     private boolean paused = false;
     private static final long QUANT_TIME = 20;
     private boolean alreadyPaused;
-    public static final int OBJECTS_TO_SKIP = 1;
     private long timePassed;
     private AtmosphereThread at = new AtmosphereThread();
 
@@ -57,10 +56,6 @@ public class ServerCore implements Runnable {
 	ObstaclesLayer obstacles = new ObstaclesLayer(width, height);
 	AtmosphericLayer atmosphere = new AtmosphericLayer(width, height);
 	context = new ServerContext(new ServerNetworking(this), objects, obstacles, atmosphere);
-	//ui objects etc
-	while (objects.size() < OBJECTS_TO_SKIP) {
-	    objects.add(null);
-	}
 	//items adding
 	ItemAdder itemAdder = new ItemAdder(context);
 	itemAdder.addItems();

@@ -19,6 +19,7 @@ import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.objects.Player;
+import spaceisnear.server.ServerContext;
 
 /**
  * @author LPzhelud
@@ -37,6 +38,7 @@ public class GameContext extends Context {
     private int playerID = -1;
     private final Corev2 core;
     public static GameContext CONTEXT;
+    public static final int HIDDEN_CLIENT_OBJECTS = 1;
 
     @Override
     public void sendThemAll(Message m) {
@@ -64,11 +66,18 @@ public class GameContext extends Context {
     }
 
     @java.beans.ConstructorProperties({"cameraMan", "objects", "core"})
-    public GameContext(CameraMan cameraMan, ArrayList<AbstractGameObject> objects, Corev2 core) {
+    public GameContext(CameraMan cameraMan, ArrayList<AbstractGameObject> objects,
+	    Corev2 core) {
 	this.cameraMan = cameraMan;
 	this.objects = objects;
 	this.core = core;
 	CONTEXT = this;
+    }
+
+    public void checkSize() {
+	while (objects.size() < ServerContext.HIDDEN_SERVER_OBJECTS) {
+	    objects.add(null);
+	}
     }
 
     public CameraMan getCameraMan() {

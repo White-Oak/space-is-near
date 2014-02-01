@@ -10,7 +10,6 @@ import java.util.List;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.server.objects.items.StaticItem;
 
 /**
  *

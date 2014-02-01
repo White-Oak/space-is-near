@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.messages;
+package spaceisnear.game.messages.propertys;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,8 +13,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import spaceisnear.game.bundles.MessageBundle;
+import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.MessageType;
+import spaceisnear.game.messages.NetworkableMessage;
 
-public class MessageYourPlayerDiscovered extends Message implements NetworkableMessage {
+public class MessageYourPlayerDiscovered extends Message implements NetworkableMessage, MessagePropertable {
 
     private final int playerID;
 

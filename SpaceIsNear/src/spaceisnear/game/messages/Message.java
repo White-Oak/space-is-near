@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.messages;
 
+import spaceisnear.Utils;
 import spaceisnear.game.bundles.MessageBundle;
 
 /**
@@ -15,7 +16,7 @@ public abstract class Message {
     private final MessageType messageType;
 
     public MessageBundle getBundle() {
-	return new MessageBundle(getMessageType());
+	return new MessageBundle(Utils.GSON.toJson(this).getBytes(), getMessageType());
     }
 
     @java.beans.ConstructorProperties({"messageType"})

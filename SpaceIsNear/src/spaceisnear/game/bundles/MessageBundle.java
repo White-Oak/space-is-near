@@ -17,9 +17,13 @@ public class MessageBundle extends Bundle {
     private MessageBundle() {
     }
 
+    public MessageBundle(byte[] b, final MessageType messageType) {
+	bytes = b;
+	this.messageType = messageType;
+    }
+
     @java.beans.ConstructorProperties({"messageType"})
     public MessageBundle(final MessageType messageType) {
-
 	this.messageType = messageType;
     }
 }

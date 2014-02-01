@@ -12,6 +12,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
 import spaceisnear.game.bundles.MessageBundle;
 
 /**
@@ -21,8 +22,8 @@ import spaceisnear.game.bundles.MessageBundle;
  */
 public class MessageMoved extends DirectedMessage implements NetworkableMessage {
 
-    private final int x;
-    private final int y;
+    @Getter private final int x;
+    @Getter private final int y;
 
     public MessageMoved(int x, int y, int id) {
 	super(MessageType.MOVED, id);
@@ -67,17 +68,5 @@ public class MessageMoved extends DirectedMessage implements NetworkableMessage 
 	    Logger.getLogger(MessageMoved.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	return null;
-    }
-
-    public int getX() {
-	return this.x;
-    }
-
-    public int getY() {
-	return this.y;
-    }
-
-    public int getId() {
-	return this.id;
     }
 }

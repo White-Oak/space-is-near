@@ -15,7 +15,7 @@ public class NameComponent extends PaintableComponent {
 	addState(new ComponentState("name", name));
     }
 
-    private NameComponent() {
+    public NameComponent() {
 	super(ComponentType.NAME);
     }
 

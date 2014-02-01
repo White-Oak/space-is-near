@@ -17,10 +17,12 @@ import spaceisnear.game.bundles.MessageBundle;
 public class MessageWorldInformation extends Message implements NetworkableMessage {
 
     public final int amountOfItems;
+    public final int propertyAmount;
 
-    public MessageWorldInformation(int amountOfItems) {
+    public MessageWorldInformation(int amountOfItems, int propertyAmount) {
 	super(MessageType.WORLD_INFO);
 	this.amountOfItems = amountOfItems;
+	this.propertyAmount = propertyAmount;
     }
 
     @Override
@@ -29,6 +31,7 @@ public class MessageWorldInformation extends Message implements NetworkableMessa
 	try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(4); DataOutputStream dataOutputStream = new DataOutputStream(
 		byteArrayOutputStream)) {
 	    dataOutputStream.writeInt(amountOfItems);
+	    dataOutputStream.writeInt(propertyAmount);
 	    messageBundle.bytes = byteArrayOutputStream.toByteArray();
 	} catch (IOException ex) {
 	    Logger.getLogger(MessageWorldInformation.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,7 +42,8 @@ public class MessageWorldInformation extends Message implements NetworkableMessa
     public static MessageWorldInformation getInstance(byte[] b) {
 	try (ByteArrayInputStream bais = new ByteArrayInputStream(b); DataInputStream dis = new DataInputStream(bais)) {
 	    int amount = dis.readInt();
-	    return new MessageWorldInformation(amount);
+	    int prop = dis.readInt();
+	    return new MessageWorldInformation(amount, prop);
 	} catch (IOException ex) {
 	    Logger.getLogger(MessageWorldInformation.class.getName()).log(Level.SEVERE, null, ex);
 	}

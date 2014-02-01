@@ -19,21 +19,21 @@ import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import spaceisnear.AbstractGameObject;
-import spaceisnear.game.bundles.ObjectBundle;
 import spaceisnear.game.messages.MessageClientInformation;
 import spaceisnear.game.messages.MessageConnectionBroken;
 import spaceisnear.game.messages.MessageCreated;
-import spaceisnear.game.messages.MessageMapSent;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.server.objects.Player;
-import static spaceisnear.Utils.GSON;
 import spaceisnear.game.messages.MessageControlled;
 import spaceisnear.game.messages.MessageCreatedItem;
 import spaceisnear.game.messages.MessageLog;
-import spaceisnear.game.messages.MessagePropertySet;
+import spaceisnear.game.messages.propertys.MessagePropertySet;
 import spaceisnear.game.messages.MessageRogerRequested;
+import spaceisnear.game.messages.MessageTeleported;
 import spaceisnear.game.messages.MessageWorldInformation;
-import spaceisnear.game.messages.MessageYourPlayerDiscovered;
+import spaceisnear.game.messages.propertys.MessageNicknameSet;
+import spaceisnear.game.messages.propertys.MessagePropertable;
+import spaceisnear.game.messages.propertys.MessageYourPlayerDiscovered;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.ui.console.LogString;
@@ -52,6 +52,8 @@ public class ServerNetworking extends Listener implements Runnable {
     private boolean[] rogered;
     private final static MessageRogerRequested ROGER_REQUSTED = new MessageRogerRequested();
     private final Queue<MessageBundle> messages = new LinkedList<>();
+
+    private List<MessagePropertable> propertys;
 
     @Override
     public void received(Connection connection, Object object) {
@@ -175,14 +177,16 @@ public class ServerNetworking extends Listener implements Runnable {
 	players.add(player);
 	player.setNickname(informationAboutLastConnected.getDesiredNickname());
 	//2
-	ObjectBundle bundle = player.getBundle();
-	System.out.println("lol");
-	MessageCreated messageCreated = new MessageCreated(GSON.toJson(bundle));
+	MessageCreated messageCreated = new MessageCreated(GameObjectType.PLAYER);
+	//properties
+	propertys.add(new MessageNicknameSet(player.getId(), player.getNickname()));
+	MessageTeleported messageTeleported = new MessageTeleported(player.getPosition(), player.getId());
+	propertys.add(messageTeleported);
 	return messageCreated;
     }
 
     public void host() throws IOException {
-	server = new Server(256 * 1024, 2 * 1024);
+	server = new Server(256 * 1024, 1 * 1024);
 	Registerer.registerEverything(server);
 	server.start();
 	server.addListener(this);
@@ -197,6 +201,8 @@ public class ServerNetworking extends Listener implements Runnable {
 	while (informationAboutLastConnected == null || !core.isAlreadyPaused()) {
 	    waitSomeTime();
 	}
+	//create list of properties
+	propertys = new LinkedList<>();
 	//@working r36, r37, r38, r39
 	//1. send the world to the new player
 	//2. add a player
@@ -204,9 +210,9 @@ public class ServerNetworking extends Listener implements Runnable {
 	//1
 	int lastConnected = connections.size() - 1;
 	MessageCreated[] world = getWorld();
-	MessageWorldInformation mwi = new MessageWorldInformation(world.length);
+	MessageWorldInformation mwi = new MessageWorldInformation(world.length, propertys.size());
 	sendToID(lastConnected, mwi);
-	for (int i = ServerCore.OBJECTS_TO_SKIP; i < world.length; i++) {
+	for (int i = 0; i < world.length; i++) {
 	    MessageCreated messageCreated = world[i];
 	    sendToID(lastConnected, messageCreated);
 	    if (i % 125 == 0) {
@@ -216,6 +222,8 @@ public class ServerNetworking extends Listener implements Runnable {
 		rogered[lastConnected] = false;
 	    }
 	}
+	sendProperties(lastConnected);
+	propertys = new LinkedList<>();
 //	MessageMapSent messageMapSent = getTiledLayerInOneJSON();
 //	sendToID(lastConnected, messageMapSent);
 //	System.out.println("Map has sent " + messageMapSent.getMap().length());
@@ -225,6 +233,16 @@ public class ServerNetworking extends Listener implements Runnable {
 	//3
 	sendToAll(messageCreated);
 	sendToID(lastConnected, mypd);
+	for (int i = 0; i < propertys.size(); i++) {
+	    MessagePropertable messagePropertable = propertys.get(i);
+	    sendToAll(messagePropertable);
+	    if (i % 125 == 0) {
+//		System.out.println("I've just sent a chunk of items");
+		sendToAll(ROGER_REQUSTED);
+		waitForToRoger(lastConnected);
+		rogered[lastConnected] = false;
+	    }
+	}
 	System.out.println("Player has sent");
 	//wait for client to receive his player
 	sendToAll(ROGER_REQUSTED);
@@ -235,20 +253,38 @@ public class ServerNetworking extends Listener implements Runnable {
 	System.out.println("Server has continued his work");
     }
 
+    private void sendProperties(int lastConnected) {
+	//sending properties
+	for (int i = 0; i < propertys.size(); i++) {
+	    MessagePropertable messagePropertable = propertys.get(i);
+	    sendToID(lastConnected, messagePropertable);
+	    if (i % 125 == 0) {
+//		System.out.println("I've just sent a chunk of items");
+		sendToID(lastConnected, ROGER_REQUSTED);
+		waitForToRoger(lastConnected);
+		rogered[lastConnected] = false;
+	    }
+	}
+    }
+
     private MessageCreated[] getWorld() {
 	ServerContext context = core.getContext();
 	List<AbstractGameObject> objects = context.getObjects();
 	List<MessageCreated> messages = new ArrayList<>();
 	for (AbstractGameObject object : objects) {
-	    if (object != null) {
+	    if (object != null && object.getId() >= ServerContext.HIDDEN_SERVER_OBJECTS) {
 		if (object.getType() == GameObjectType.ITEM) {
 		    StaticItem item = (StaticItem) object;
 		    int id = item.getProperties().getId();
-		    Position position = item.getPosition();
-		    messages.add(new MessageCreatedItem(id, position));
+		    messages.add(new MessageCreatedItem(id));
+		    //properties
 		} else {
-		    messages.add(new MessageCreated(GSON.toJson(object.getBundle())));
+		    messages.add(new MessageCreated(object.getType()));
+		    //properties
 		}
+		//properties
+		MessageTeleported messageTeleported = new MessageTeleported(object.getPosition(), object.getId());
+		propertys.add(messageTeleported);
 	    }
 	}
 	return messages.toArray(new MessageCreated[messages.size()]);
