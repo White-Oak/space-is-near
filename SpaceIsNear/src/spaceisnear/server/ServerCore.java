@@ -6,7 +6,6 @@
 package spaceisnear.server;
 
 import java.io.IOException;
-import spaceisnear.server.objects.Player;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,18 +13,18 @@ import org.newdawn.slick.SlickException;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.HealthComponent;
-import spaceisnear.game.ui.console.LogLevel;
-import spaceisnear.game.ui.console.LogString;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
-import spaceisnear.game.messages.MessageDied;
-import spaceisnear.game.messages.MessageKnockbacked;
+import spaceisnear.game.messages.HurtMessage;
 import spaceisnear.game.messages.MessageLog;
+import spaceisnear.game.messages.MessageTimePassed;
 import spaceisnear.game.messages.service.MessagePaused;
-import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.service.MessageUnpaused;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsReader;
+import spaceisnear.game.ui.console.LogLevel;
+import spaceisnear.game.ui.console.LogString;
+import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.items.ItemAdder;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 
@@ -37,7 +36,7 @@ public class ServerCore implements Runnable {
     private final ServerContext context;
     private final boolean unbreakable = true;
     private boolean paused = false;
-    private static final long QUANT_TIME = 20;
+    private static final int QUANT_TIME = 20;
     private boolean alreadyPaused;
     private long timePassed;
     private AtmosphereThread at = new AtmosphereThread();
@@ -69,6 +68,8 @@ public class ServerCore implements Runnable {
 	    context.getNetworking().processReceivedQueue();
 	    //game
 	    if (!paused) {
+		MessageTimePassed messageTimePassed = new MessageTimePassed(QUANT_TIME);
+		context.sendThemAll(messageTimePassed);
 		for (AbstractGameObject gameObject : getContext().getObjects()) {
 		    if (gameObject != null) {
 			gameObject.process();
@@ -100,30 +101,18 @@ public class ServerCore implements Runnable {
 
     private void checkHealthStatuses() {
 	for (Player player : getContext().getPlayers()) {
-	    HealthComponent hc = player.getHealthComponent();
 	    Position position = player.getPosition();
 	    int pressure = context.getAtmosphere().getPressure(position.getX(), position.getY());
 	    if (pressure < AtmosphericLayer.PRESSURE_HARD_TO_BREATH) {
-		context.getNetworking().log(new LogString(player.getNickname() + " задыхается.", LogLevel.TALKING, position));
+		HurtMessage hurtMessage;
 		if (pressure < AtmosphericLayer.PRESSURE_ENOUGH_TO_BREATH) {
-		    hc.changeHealth(HealthComponent.SUFFOCATING_DAMAGE);
+		    hurtMessage = new HurtMessage(HealthComponent.SUFFOCATING_DAMAGE, HurtMessage.Type.SUFFOCATING,
+			    player.getId());
+		} else {
+		    hurtMessage = new HurtMessage(HealthComponent.LIGHT_SUFFOCATING_DAMAGE, HurtMessage.Type.SUFFOCATING,
+			    player.getId());
 		}
-	    }
-	    switch (hc.getState()) {
-		case CRITICICAL:
-		    MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
-		    getContext().sendToID(messageKnockbacked, player.getId());
-		    getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
-		    context.getNetworking().log(new LogString(player.getNickname() + " упал оземь.", LogLevel.TALKING, position));
-		    break;
-
-		case DEAD:
-		    MessageDied messageDied = new MessageDied(player.getId());
-		    getContext().sendToID(messageDied, player.getId());
-		    getContext().sendToID(new MessageToSend(messageDied), player.getId());
-		    context.getNetworking().log(new LogString(player.getNickname() + " перестал дышать.", LogLevel.TALKING, position));
-		    break;
-
+		getContext().sendDirectedMessage(hurtMessage);
 	    }
 	}
     }
@@ -172,7 +161,7 @@ public class ServerCore implements Runnable {
 		}
 	    }
 	}
-	public static final long ATMOSPHERE_DELAY = 1000L;
+	public static final long ATMOSPHERE_DELAY = 2000L;
 
     }
 }

@@ -82,8 +82,6 @@ public class Corev2 extends BasicGameState {
     public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
 	if (notpaused) {
 	    MessageControlledByInput mc = checkKeys();
-	    //1 quant of time is 50L by default
-//	    int quants = delta / QUANT_TIME;
 	    MessageTimePassed messageTimePassed = new MessageTimePassed(delta);
 	    context.sendThemAll(messageTimePassed);
 	    //

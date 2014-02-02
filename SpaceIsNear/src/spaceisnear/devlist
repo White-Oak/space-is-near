@@ -96,7 +96,7 @@
 *draw only items that are in the screen (already was done)
 *now server (not client) decides whether player is able to move on next tile
 
-0.0.5
+0.0.5 r94
 +Basic items system
     +stucked/unstucked items
     +pushing unstucked items
@@ -105,38 +105,47 @@
 	+make pulling be able to be disabled (escape button or -stoppull)
 	+stucked items are not pulled
 	+items are pulled only 1 tile away from you
--Atmosphere
-    -knockbacking if big difference between two tiles in pressure
++Atmosphere
     +gasping if air is leaking 
     +decreasing health if amount of air is not enough to live
-    -update health every atmosphere update
-    -send messages to client only once at some time
--Inventory
-    -each inventory slot has his size, item field and name
--HealthComponent
+    +update health every atmosphere update
++HealthComponent
+    +suffocating if not enough air
 +HurtMessage
-    -acceptance on client
-+MessageKnockbacked
-    -acceptance on client
+    +processing on server
 +Mouse interaction
     +selection of tile where player has clicked
     +rightclicking will call context menu with the list of items
 	+with actions (only Learn currently)
 +Context menus
 -In-game chat
-    -make PM
-    -make OOC
-    -make some DEBUG messages
-    -make some broadcasting
     +ingame commands (like "-debug on/off")
     +scrolling
     *messages are drawn in-bound of log screen
 -RADIOSYSTEM
     +server discovers whether someone is in range of local message or not
 	+air unrecheable tiles do not let local messages to get through
-    -server discovers whether someone is in range of frequncy message or not
--gotta do something with disconnected players
 +being able to run server in no-GUI mode
 +server should process incoming messages in the same thread as processing objects to avoid concurrent modification
 +lombokked code again
 +New objects' sending system
+
+0.0.6
+-Developed items' system
+-Inventory
+    -each inventory slot has his size, item field and name
+-In-game chat
+    -make PM
+    -make OOC
+    -make some DEBUG messages
+    -make some broadcasting
+-RADIOSYSTEM
+    -server discovers whether someone is in range of frequncy message or not
+-gotta do something with disconnected players
++HealthComponent
+    -knockbacking if critical
+    -dying if dead
++Atmosphere
+    -knockbacking if big difference between two tiles in pressure
++MessageKnockbacked
+    -processing on server

@@ -29,7 +29,7 @@ public class AtmosphericLayer extends Layer {
     /**
      * Maximum pressure which one node can distribute over to other nodes.
      */
-    private final static int MAX_CHANGE_OF_PRESSURE_PER_TICK = 8;
+    private final static int MAX_CHANGE_OF_PRESSURE_PER_TICK = 10;
     public final static int PRESSURE_HARD_TO_BREATH = 60, PRESSURE_ENOUGH_TO_BREATH = 30;
 
     public AtmosphericLayer(int width, int height) {

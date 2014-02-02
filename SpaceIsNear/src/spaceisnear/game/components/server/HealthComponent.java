@@ -14,6 +14,14 @@ import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.HurtMessage;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.MessageDied;
+import spaceisnear.game.messages.MessageKnockbacked;
+import spaceisnear.game.messages.MessageToSend;
+import spaceisnear.game.ui.console.LogLevel;
+import spaceisnear.game.ui.console.LogString;
+import spaceisnear.server.ServerContext;
+import spaceisnear.server.ServerNetworking;
+import spaceisnear.server.objects.Player;
 
 /**
  *
@@ -26,6 +34,7 @@ public class HealthComponent extends Component {
     public static final int CRIT_HEALTH = 20;
     public static final int SICK_HEALTH = 80;
     public static final int SUFFOCATING_DAMAGE = -10;
+    public static final int LIGHT_SUFFOCATING_DAMAGE = -1;
 
     /**
      *
@@ -41,8 +50,32 @@ public class HealthComponent extends Component {
 	switch (message.getMessageType()) {
 	    case HURT:
 		HurtMessage hm = (HurtMessage) message;
-		ComponentState health = getStateNamed("health");
-		health.setValue(((Integer) health.getValue()) - hm.getDamage());
+		changeHealth(hm.getDamage());
+		final ServerContext context = (ServerContext) getContext();
+		final Player player = (Player) getOwner();
+		switch (hm.getType()) {
+		    case SUFFOCATING:
+			final String nickname = player.getNickname();
+			final ServerNetworking networking = context.getNetworking();
+			networking.log(new LogString(nickname + " задыхается.", LogLevel.TALKING, getPosition()));
+			break;
+		}
+		//
+		switch (getState()) {
+		    case CRITICICAL:
+			MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
+//			getContext().sendToID(messageKnockbacked, player.getId());
+			getOwner().getVariablePropertiesComponent().setProperty("knockbacked", true);
+			getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
+			break;
+
+		    case DEAD:
+			MessageDied messageDied = new MessageDied(player.getId());
+			getOwner().getVariablePropertiesComponent().setProperty("dead", true);
+			getContext().sendToID(new MessageToSend(messageDied), player.getId());
+			break;
+
+		}
 		break;
 	}
     }
