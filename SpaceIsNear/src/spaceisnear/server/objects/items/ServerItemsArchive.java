@@ -26,6 +26,7 @@ public class ServerItemsArchive implements ItemsArchivable {
     private final ItemBundle[] bundles;
     public static ServerItemsArchive itemsArchive;
     public static int PLITKA_ID;
+    public static int RADIO_ID;
 
     public ServerItemsArchive(ItemBundle[] bundles) throws SlickException, IOException {
 	final int length = bundles.length;
@@ -33,8 +34,13 @@ public class ServerItemsArchive implements ItemsArchivable {
 	for (int i = 0; i < length; i++) {
 	    ItemBundle itemBundle = bundles[i];
 	    ids.put(itemBundle.name, i);
-	    if (itemBundle.name.equals("plitka")) {
-		PLITKA_ID = i;
+	    switch (itemBundle.name) {
+		case "plitka":
+		    PLITKA_ID = i;
+		    break;
+		case "radio":
+		    RADIO_ID = i;
+		    break;
 	    }
 	}
     }

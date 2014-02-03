@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.ui.console;
 
+import spaceisnear.game.ui.TextField;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
@@ -63,6 +64,7 @@ public class GameConsole implements ComponentListener {
 	font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
 	font.getEffects().add(new ColorEffect(java.awt.Color.gray));
 	font.getEffects().add(new ColorEffect(java.awt.Color.white));
+	font.getEffects().add(new ColorEffect(java.awt.Color.green));
 	font.addGlyphs(0x0400, 0x04FF);
 	font.addAsciiGlyphs();
 	try {
@@ -121,27 +123,76 @@ public class GameConsole implements ComponentListener {
 	    String[] split = substring.split(" ");
 	    switch (split[0]) {
 		case "debug":
-		    if (split.length > 1) {
-			switch (split[1]) {
-			    case "on":
-				log.setAcceptDebugMessages(true);
-				break;
-			    case "off":
-				log.setAcceptDebugMessages(false);
-				break;
-			}
-		    }
+		    processDebugRequestMessage(split);
 		    break;
 		case "stoppull":
 		    MessagePropertySet messagePropertySet = new MessagePropertySet(((GameContext) context).getPlayerID(), "pull", -1);
 		    MessageToSend messageToSend = new MessageToSend(messagePropertySet);
 		    context.sendDirectedMessage(messageToSend);
 		    break;
+		case "h":
+		    if (split.length > 2) {
+			processBroadcastingMessageFromPlayer(split[1], split);
+		    }
+		    break;
 	    }
 	} else {
 	    sendMessageFromPlayer(text);
 	}
 	ip.clear();
+    }
+
+    private void processBroadcastingMessageFromPlayer(String frequency, String[] message) {
+	if (frequency.equals("all")) {
+	    frequency = "145.9";
+	}
+	if (isGoodFrequency(frequency)) {
+	    GamerPlayer player = ((GameContext) context).getPlayer();
+	    String nickname = player.getNickname();
+	    String standAloneMessage;
+	    if (message.length == 3) {
+		standAloneMessage = message[2];
+	    } else {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 2; i < message.length; i++) {
+		    String string = message[i];
+		    sb.append(string);
+		    sb.append(' ');
+		}
+		standAloneMessage = sb.toString();
+	    }
+	    LogString logString = new LogString(nickname + ": " + standAloneMessage, LogLevel.BROADCASTING, frequency);
+	    MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
+	    context.sendDirectedMessage(messageToSend);
+	}
+    }
+
+    private boolean isGoodFrequency(String frequency) {
+	String[] split1 = frequency.split("\\.");
+	if (split1.length == 2) {
+	    if (split1[0].length() <= 3 && split1[1].length() == 1) {
+		String regex = "[0-9]+";
+		if (split1[0].matches(regex)) {
+		    if (split1[1].length() == 1) {
+			return split1[1].matches(regex);
+		    }
+		}
+	    }
+	}
+	return false;
+    }
+
+    private void processDebugRequestMessage(String[] split) {
+	if (split.length > 1) {
+	    switch (split[1]) {
+		case "on":
+		    log.setAcceptDebugMessages(true);
+		    break;
+		case "off":
+		    log.setAcceptDebugMessages(false);
+		    break;
+	    }
+	}
     }
 
     public boolean hasFocus() {

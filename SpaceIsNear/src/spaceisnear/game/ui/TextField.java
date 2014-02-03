@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear.game.ui.console;
+package spaceisnear.game.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -93,11 +93,6 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
     @Override
     public void render(GUIContext container, Graphics g) {
 	g.setFont(font);
-//	try {
-//	    GameConsole.setColor(java.awt.Color.black, (UnicodeFont) g.getFont());
-//	} catch (SlickException ex) {
-//	    Logger.getLogger(TextField.class.getName()).log(Level.SEVERE, null, ex);
-//	}
 	g.setColor(textColor);
 	g.drawString(text.toString(), x, y);
 	if (hasFocus()) {

@@ -51,14 +51,14 @@ public class LogString {
 
     @Override
     public String toString() {
-	String message = this.message;
+	String messageToReturn = this.message;
 	if (frequency != null) {
-	    message = "[" + frequency + "]: " + message;
+	    messageToReturn = "[" + frequency + "]: " + messageToReturn;
 	}
 	if (timesMessaged == 1) {
-	    return message;
+	    return messageToReturn;
 	} else {
-	    return message + ": x" + timesMessaged;
+	    return messageToReturn + ": x" + timesMessaged;
 	}
     }
 

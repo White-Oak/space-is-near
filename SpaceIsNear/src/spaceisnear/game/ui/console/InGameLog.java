@@ -54,6 +54,9 @@ public class InGameLog {
     }
 
     public void pushMessage(LogString str) {
+	if (str.getLevel() == LogLevel.BROADCASTING) {
+	    System.out.println("oh lol");
+	}
 	if (!acceptDebugMessages && str.getLevel() == LogLevel.DEBUG) {
 	    return;
 	}
@@ -80,6 +83,8 @@ public class InGameLog {
 		return Color.lightGray;
 	    case TALKING:
 		return Color.black;
+	    case BROADCASTING:
+		return Color.green;
 	    default:
 		return Color.gray;
 	}

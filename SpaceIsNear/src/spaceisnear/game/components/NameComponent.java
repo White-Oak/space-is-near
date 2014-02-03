@@ -32,6 +32,6 @@ public class NameComponent extends PaintableComponent {
     }
 
     public void setNickname(String name) {
-	getStateNamed("name").setValue(name);
+	getStates().put("name", new ComponentState("name", name));
     }
 }

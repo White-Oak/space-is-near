@@ -13,10 +13,9 @@ import spaceisnear.game.messages.*;
 import java.io.IOException;
 import spaceisnear.LoadingScreen;
 import spaceisnear.Menu;
-import spaceisnear.game.objects.Player;
-import spaceisnear.game.objects.ClientGameObject;
+import spaceisnear.game.messages.properties.MessageNicknameSet;
+import spaceisnear.game.objects.*;
 import spaceisnear.server.Registerer;
-import static spaceisnear.Utils.GSON;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.LogString;
@@ -110,6 +109,11 @@ public class Networking extends Listener {
 		case TELEPORTED:
 		    MessageTeleported mte = MessageTeleported.getInstance(b);
 		    gameContext.sendToID(mte, mte.getId());
+		    break;
+		case NICKNAME_SET:
+		    MessageNicknameSet mns = MessageNicknameSet.getInstance(b);
+		    GamerPlayer player = gameContext.getPlayer();
+		    player.setNickname(mns.getNickname());
 		    break;
 	    }
 //	    System.out.println("Message received");

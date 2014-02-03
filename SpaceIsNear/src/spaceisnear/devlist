@@ -133,16 +133,17 @@
 0.0.6
 -Developed items' system
     +items' images can be rotated by 90, 180, 270
-    +items' properties are send if they differ from default
+    +items' properties are sent if they differ from default
 -Inventory
     -each inventory slot has his size, item field and name
 -In-game chat
     -make PM
     -make OOC
-    -make some DEBUG messages
-    -make some broadcasting
--RADIOSYSTEM
-    -server discovers whether someone is in range of frequncy message or not
+    +make some DEBUG messages
+    +make some broadcasting
+    +make some broadcasting when new player is connected
++RADIOSYSTEM
+    +server discovers whether someone is in range of frequncy message or not
 -gotta do something with disconnected players
 +HealthComponent
     -knockbacking if critical

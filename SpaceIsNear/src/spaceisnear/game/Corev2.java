@@ -9,6 +9,10 @@
  */
 package spaceisnear.game;
 
+import spaceisnear.game.ui.context.ContextSubMenu;
+import spaceisnear.game.ui.context.ActionListener;
+import spaceisnear.game.ui.context.ContextMenu;
+import spaceisnear.game.ui.context.ContextMenuItem;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -23,7 +27,6 @@ import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.objects.items.*;
-import spaceisnear.game.ui.*;
 import spaceisnear.game.ui.console.*;
 
 /**
