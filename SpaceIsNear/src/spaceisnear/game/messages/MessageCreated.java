@@ -16,28 +16,6 @@ import spaceisnear.game.objects.GameObjectType;
  * @author White Oak
  */
 public class MessageCreated extends Message implements NetworkableMessage {
-//
-//    private final String json;
-//
-//    public MessageCreated(String json) {
-//	super(MessageType.CREATED);
-//	this.json = json;
-//    }
-//
-//    @Override
-//    public MessageBundle getBundle() {
-//	MessageBundle messageBundle = new MessageBundle(getMessageType());
-//	messageBundle.bytes = json.getBytes();
-//	return messageBundle;
-//    }
-//
-//    public static MessageCreated getInstance(byte[] b) {
-//	return new MessageCreated(new String(b));
-//    }
-//
-//    public String getJson() {
-//	return this.json;
-//    }
 
     @Getter private final GameObjectType type;
 

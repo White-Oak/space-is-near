@@ -39,23 +39,23 @@ public class ItemPropertiesComponent extends Component {
     }
 
     public boolean isBlockingAir() {
-	return archivable.isBlockingAir(getId());
+	return getBundle().blockingAir;
     }
 
     public boolean isBlockingPath() {
-	return archivable.isBlockingPath(getId());
+	return getBundle().blockingPath;
     }
 
     public Size getSize() {
-	return archivable.getSize(getId());
+	return getBundle().size;
     }
 
     public String getName() {
-	return archivable.getName(getId());
+	return getBundle().name;
     }
 
     public Type getTypeOfItem() {
-	return archivable.getType(getId());
+	return getBundle().type;
     }
 
     public ItemBundle getBundle() {

@@ -5,7 +5,7 @@
  */
 package spaceisnear.game.messages.service.onceused;
 
-import com.google.gson.Gson;
+import lombok.Getter;
 import spaceisnear.game.bundles.MessageBundle;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageType;
@@ -17,26 +17,22 @@ import spaceisnear.game.messages.NetworkableMessage;
  * @author White Oak
  */
 public class MessageClientInformation extends Message implements NetworkableMessage {
-	private final String desiredNickname;
-	
-	public MessageClientInformation(String desiredNickname) {
-		super(MessageType.CLIENT_INFO);
-		this.desiredNickname = desiredNickname;
-	}
-	
-	@Override
-	public MessageBundle getBundle() {
-		MessageBundle messageBundle = new MessageBundle(getMessageType());
-		messageBundle.bytes = new Gson().toJson(this).getBytes();
-		return messageBundle;
-	}
-	
-	public static MessageClientInformation getInstance(byte[] b) {
-		return new Gson().fromJson(new String(b), MessageClientInformation.class);
-	}
-	
-	
-	public String getDesiredNickname() {
-		return this.desiredNickname;
-	}
+
+    @Getter private final String desiredNickname;
+
+    public MessageClientInformation(String desiredNickname) {
+	super(MessageType.CLIENT_INFO);
+	this.desiredNickname = desiredNickname;
+    }
+
+    @Override
+    public MessageBundle getBundle() {
+	MessageBundle messageBundle = new MessageBundle(getMessageType());
+	messageBundle.bytes = desiredNickname.getBytes();
+	return messageBundle;
+    }
+
+    public static MessageClientInformation getInstance(byte[] b) {
+	return new MessageClientInformation(new String(b));
+    }
 }

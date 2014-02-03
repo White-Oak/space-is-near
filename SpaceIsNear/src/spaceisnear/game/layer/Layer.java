@@ -5,51 +5,18 @@
  */
 package spaceisnear.game.layer;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+
 /**
  * @author LPzhelud
  */
-public abstract class Layer {
+@Data public abstract class Layer {
 
-    private int width;
-    private int height;
+    @NonNull private int width;
+    @NonNull private int height;
     private int x;
     private int y;
-
-    public Layer(int width, int height) {
-
-	this.width = width;
-	this.height = height;
-    }
-
-    public int getWidth() {
-	return this.width;
-    }
-
-    public int getHeight() {
-	return this.height;
-    }
-
-    protected void setWidth(final int width) {
-	this.width = width;
-    }
-
-    protected void setHeight(final int height) {
-	this.height = height;
-    }
-
-    public int getX() {
-	return this.x;
-    }
-
-    public int getY() {
-	return this.y;
-    }
-
-    public void setX(final int x) {
-	this.x = x;
-    }
-
-    public void setY(final int y) {
-	this.y = y;
-    }
 }

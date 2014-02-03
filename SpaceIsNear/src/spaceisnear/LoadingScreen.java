@@ -5,6 +5,7 @@
  */
 package spaceisnear;
 
+import lombok.RequiredArgsConstructor;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -18,7 +19,7 @@ import spaceisnear.game.Corev2;
 /**
  * @author White Oak
  */
-public class LoadingScreen extends BasicGameState {
+@RequiredArgsConstructor public class LoadingScreen extends BasicGameState {
 
     private final Corev2 core;
     public static int LOADING_AMOUNT, CURRENT_AMOUNT;
@@ -56,10 +57,5 @@ public class LoadingScreen extends BasicGameState {
 	    System.out.println("Moving to Core...");
 	    game.enterState(3, new FadeOutTransition(Color.white, 400), new FadeInTransition(Color.white, 400));
 	}
-    }
-
-    @java.beans.ConstructorProperties({"core"})
-    public LoadingScreen(final Corev2 core) {
-	this.core = core;
     }
 }

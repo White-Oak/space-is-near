@@ -1,6 +1,8 @@
 //addItem (name, x, y)
 //x and y — are cell coordinates, not real
 //fillWithItem (name, x, y, end_x, end_y)
+//addItem (name, x, y, rotate)
+//fillWithItem(name, x, y, end_x, end_y, rotate)
 
 fillWithItem {plitka, 0, 0, 30, 31}
 fillWithItem {wall, 0, 0, 31, 0} 
@@ -19,3 +21,4 @@ fillWithItem {wall, 12, 20, 19, 20}
 fillWithItem {wall, 9, 27, 10, 27}
 fillWithItem {wall, 14, 27, 17, 27}
 fillWithItem {wall, 21, 27, 22, 27}
+addItem {radio, 22, 27}

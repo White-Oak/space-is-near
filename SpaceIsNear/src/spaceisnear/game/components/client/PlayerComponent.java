@@ -4,7 +4,6 @@
  */
 package spaceisnear.game.components.client;
 
-import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;

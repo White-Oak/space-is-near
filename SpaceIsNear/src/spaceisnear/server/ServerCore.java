@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
 import org.newdawn.slick.SlickException;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.GameContext;
@@ -33,11 +34,11 @@ import spaceisnear.server.objects.items.ServerItemsArchive;
  */
 public class ServerCore implements Runnable {
 
-    private final ServerContext context;
+    @Getter private final ServerContext context;
     private final boolean unbreakable = true;
     private boolean paused = false;
     private static final int QUANT_TIME = 20;
-    private boolean alreadyPaused;
+    @Getter private boolean alreadyPaused;
     private long timePassed;
     private AtmosphereThread at = new AtmosphereThread();
 
@@ -135,14 +136,6 @@ public class ServerCore implements Runnable {
 
     public Player addPlayer(int connectionID) {
 	return context.addPlayer(connectionID);
-    }
-
-    ServerContext getContext() {
-	return this.context;
-    }
-
-    public boolean isAlreadyPaused() {
-	return this.alreadyPaused;
     }
 
     private class AtmosphereThread extends Thread {

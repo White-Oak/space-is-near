@@ -9,31 +9,22 @@
  */
 package spaceisnear.game;
 
-import spaceisnear.game.ui.console.GameConsole;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.components.client.PaintableComponent;
-import spaceisnear.game.ui.console.LogLevel;
-import spaceisnear.game.ui.console.LogString;
-import spaceisnear.game.messages.MessageControlledByInput;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
-import spaceisnear.game.messages.MessageTimePassed;
-import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.objects.NetworkingObject;
-import spaceisnear.game.objects.items.ItemsArchive;
-import spaceisnear.game.objects.items.ItemsReader;
+import spaceisnear.game.objects.items.*;
 import spaceisnear.game.ui.*;
-import spaceisnear.game.objects.items.StaticItem;
+import spaceisnear.game.ui.console.*;
 
 /**
  * @author LPzhelud
@@ -107,7 +98,7 @@ public class Corev2 extends BasicGameState {
 
     private MessageControlledByInput checkKeys() {
 	MessageControlledByInput mc = null;
-	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimation() && !console.hasFocus();
+	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimated() && !console.hasFocus();
 	switch (key) {
 	    case Input.KEY_UP:
 		if (ableToMove) {
@@ -140,6 +131,7 @@ public class Corev2 extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame sbg, Graphics g) throws SlickException {
+//	g.setAntiAlias(true);
 	g.scale(GameContext.SCALING_X, GameContext.SCALING_Y);
 	g.pushTransform();
 	context.getCameraMan().moveCamera(g);

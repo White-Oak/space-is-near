@@ -6,6 +6,7 @@
 package spaceisnear.game;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -19,9 +20,9 @@ public final class CameraMan {
 
     @Getter private int x;
     @Getter private int y;
-    private TiledLayer tiledLayer;
-    private int windowWidth;
-    private int windowHeight;
+    @Getter @Setter private TiledLayer tiledLayer;
+    @Setter private int windowWidth;
+    @Setter private int windowHeight;
 
     public CameraMan() throws SlickException {
 	final int width = GameContext.MAP_WIDTH;
@@ -96,22 +97,6 @@ public final class CameraMan {
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-    }
-
-    public TiledLayer getTiledLayer() {
-	return this.tiledLayer;
-    }
-
-    public void setTiledLayer(final TiledLayer tiledLayer) {
-	this.tiledLayer = tiledLayer;
-    }
-
-    public void setWindowWidth(final int windowWidth) {
-	this.windowWidth = windowWidth;
-    }
-
-    public void setWindowHeight(final int windowHeight) {
-	this.windowHeight = windowHeight;
     }
 
     public boolean belongsToCamera(Position p) {

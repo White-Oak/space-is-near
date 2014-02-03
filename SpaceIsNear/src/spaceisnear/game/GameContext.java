@@ -5,39 +5,37 @@
  */
 package spaceisnear.game;
 
-import spaceisnear.game.objects.ClientGameObject;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.components.PositionComponent;
-import spaceisnear.game.layer.AtmosphericLayer;
-import spaceisnear.game.layer.ObstaclesLayer;
+import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.objects.GamerPlayer;
-import spaceisnear.game.objects.Player;
+import spaceisnear.game.objects.*;
 import spaceisnear.server.ServerContext;
 
 /**
  * @author LPzhelud
  */
-public class GameContext extends Context {
+@RequiredArgsConstructor public class GameContext extends Context {
 
-    private final CameraMan cameraMan;
-    private final ArrayList<PaintableComponent> paintables = new ArrayList<>();
+    @Getter private final CameraMan cameraMan;
+    @Getter private final ArrayList<PaintableComponent> paintables = new ArrayList<>();
     public static final int TILE_HEIGHT = 32;
     public static final int TILE_WIDTH = 32;
     public static final int MAP_WIDTH = 32;
     public static final int MAP_HEIGHT = 32;
     public static float SCALING_X = 1f, SCALING_Y = 1f;
-    private final Networking networking = new Networking(this);
-    private final List<AbstractGameObject> objects;
-    private int playerID = -1;
-    private final Corev2 core;
-    public static GameContext CONTEXT;
+    @Getter private final Networking networking = new Networking(this);
+    @Getter private final List<AbstractGameObject> objects;
+    @Getter @Setter private int playerID = -1;
+    @Getter private final Corev2 core;
     public static final int HIDDEN_CLIENT_OBJECTS = 1;
 
     @Override
@@ -65,52 +63,14 @@ public class GameContext extends Context {
 	gameObject.setId(objects.size() - 1);
     }
 
-    @java.beans.ConstructorProperties({"cameraMan", "objects", "core"})
-    public GameContext(CameraMan cameraMan, ArrayList<AbstractGameObject> objects,
-	    Corev2 core) {
-	this.cameraMan = cameraMan;
-	this.objects = objects;
-	this.core = core;
-	CONTEXT = this;
-    }
-
     public void checkSize() {
 	while (objects.size() < ServerContext.HIDDEN_SERVER_OBJECTS) {
 	    objects.add(null);
 	}
     }
 
-    public CameraMan getCameraMan() {
-	return this.cameraMan;
-    }
-
-    public ArrayList<PaintableComponent> getPaintables() {
-	return this.paintables;
-    }
-
-    public Networking getNetworking() {
-	return this.networking;
-    }
-
-    @Override
-    public List<AbstractGameObject> getObjects() {
-	return this.objects;
-    }
-
-    public int getPlayerID() {
-	return this.playerID;
-    }
-
     public GamerPlayer getPlayer() {
 	return (GamerPlayer) objects.get(playerID);
-    }
-
-    public void setPlayerID(final int playerID) {
-	this.playerID = playerID;
-    }
-
-    Corev2 getCore() {
-	return this.core;
     }
 
     public void setCameraToPlayer() {

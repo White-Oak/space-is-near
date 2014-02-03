@@ -7,11 +7,12 @@ package spaceisnear;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
+import lombok.Getter;
+import org.newdawn.slick.*;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
 import spaceisnear.game.Corev2;
+import spaceisnear.game.ui.console.GameConsole;
 import spaceisnear.server.ServerCore;
 
 /**
@@ -46,9 +47,30 @@ public class Main extends StateBasedGame {
 	    AppGameContainer appGameContainer = new AppGameContainer(new Main("Space is Near"), 1200, 600, false);
 	    appGameContainer.setMinimumLogicUpdateInterval(100);
 	    appGameContainer.setVSync(true);
-	    appGameContainer.setTargetFrameRate(60);
+	    appGameContainer.setUpdateOnlyWhenVisible(false);
+	    appGameContainer.setSmoothDeltas(true);
+//	    appGameContainer.setTargetFrameRate(60);
 	    appGameContainer.start();
+//	    UnicodeFont font = getFont();
+//	    appGameContainer.setDefaultFont(font);
 	}
+    }
+
+    private static UnicodeFont getFont() {
+	final java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 16);
+	final UnicodeFont font = new UnicodeFont(awtFont);
+	font.getEffects().add(new ColorEffect(java.awt.Color.black));
+	font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
+	font.getEffects().add(new ColorEffect(java.awt.Color.gray));
+	font.getEffects().add(new ColorEffect(java.awt.Color.white));
+	font.addGlyphs(0x0400, 0x04FF);
+	font.addAsciiGlyphs();
+	try {
+	    font.loadGlyphs();
+	} catch (SlickException ex) {
+	    Logger.getLogger(GameConsole.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	return font;
     }
 
     @Override

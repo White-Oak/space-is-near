@@ -33,8 +33,7 @@ public class GameConsole implements ComponentListener {
     private final int x, y, width, height;
     private final TextField ip;
     private final InGameLog log;
-    private final java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 16);
-    @Getter private final UnicodeFont font = new UnicodeFont(awtFont);
+    @Getter private final UnicodeFont font;
 //    Font font = new TrueTypeFont(awtFont, false);
     private final Context context;
     private int scrollBarSize;
@@ -46,18 +45,7 @@ public class GameConsole implements ComponentListener {
 	this.y = y;
 	this.width = width;
 	this.height = height;
-	font.getEffects().add(new ColorEffect(java.awt.Color.black));
-	font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
-	font.getEffects().add(new ColorEffect(java.awt.Color.gray));
-	font.getEffects().add(new ColorEffect(java.awt.Color.white));
-//	font.addGlyphs("йцукенгшщзхъфывапролджэячсмитьбю");
-	font.addGlyphs(0x0400, 0x04FF);
-	font.addAsciiGlyphs();
-	try {
-	    font.loadGlyphs();
-	} catch (SlickException ex) {
-	    Logger.getLogger(GameConsole.class.getName()).log(Level.SEVERE, null, ex);
-	}
+	font = getFontAtStart();
 	final int lineHeight = font.getLineHeight();
 	ip = new TextField(container, x + 10, y + height - lineHeight - 2, width, lineHeight + 4, font);
 	log = new InGameLog(font, 30, 2, width - 30, height - 2 - ip.getHeight());
@@ -66,6 +54,23 @@ public class GameConsole implements ComponentListener {
 	ip.setFocus(false);
 	this.context = context;
 	scrollBarSize = sizeOfScrollBar();
+    }
+
+    private static UnicodeFont getFontAtStart() {
+	final java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 16);
+	final UnicodeFont font = new UnicodeFont(awtFont);
+	font.getEffects().add(new ColorEffect(java.awt.Color.black));
+	font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
+	font.getEffects().add(new ColorEffect(java.awt.Color.gray));
+	font.getEffects().add(new ColorEffect(java.awt.Color.white));
+	font.addGlyphs(0x0400, 0x04FF);
+	font.addAsciiGlyphs();
+	try {
+	    font.loadGlyphs();
+	} catch (SlickException ex) {
+	    Logger.getLogger(GameConsole.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	return font;
     }
 
     public void paint(Graphics g, GameContainer container) {

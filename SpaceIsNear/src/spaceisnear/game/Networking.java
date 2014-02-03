@@ -3,7 +3,6 @@ package spaceisnear.game;
 
 import spaceisnear.game.messages.service.MessageNetworkState;
 import spaceisnear.game.messages.service.MessageRogered;
-import spaceisnear.game.messages.service.onceused.MessageMapSent;
 import spaceisnear.game.messages.service.onceused.MessageClientInformation;
 import spaceisnear.game.messages.service.onceused.MessageWorldInformation;
 import spaceisnear.game.messages.properties.MessageYourPlayerDiscovered;
@@ -85,10 +84,6 @@ public class Networking extends Listener {
 		case DIED:
 		    processMessageDied();
 		    break;
-		case MAP_SENT:
-		    MessageMapSent mms = MessageMapSent.getInstance(b);
-		    processMessageMapSent(mms);
-		    break;
 		case DISCOVERED_PLAYER:
 		    MessageYourPlayerDiscovered dypm = MessageYourPlayerDiscovered.getInstance(b);
 		    processDiscoveredYourPlayerMessage(dypm);
@@ -137,13 +132,6 @@ public class Networking extends Listener {
 
     private void processDiscoveredYourPlayerMessage(MessageYourPlayerDiscovered dypm) {
 	gameContext.setNewGamerPlayer(dypm.getPlayerID());
-    }
-
-    private void processMessageMapSent(MessageMapSent mms) throws JsonSyntaxException {
-	int[][] map = GSON.fromJson(mms.getMap(), int[][].class);
-	gameContext.getCameraMan().getTiledLayer().setMap(map);
-	gameContext.getCameraMan().delegateWidth();
-	System.out.println("got tiled layer");
     }
 
     private void processMessageMoved(MessageMoved mm) {

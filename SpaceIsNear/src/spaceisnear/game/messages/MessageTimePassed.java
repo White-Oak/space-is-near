@@ -5,16 +5,14 @@
  */
 package spaceisnear.game.messages;
 
+import lombok.Getter;
+
 public class MessageTimePassed extends Message {
-	private int timePassed;
-	
-	public MessageTimePassed(int time) {
-		super(MessageType.TIME_PASSED);
-		this.timePassed = time;
-	}
-	
-	
-	public int getTimePassed() {
-		return this.timePassed;
-	}
+
+    @Getter private final int timePassed;
+
+    public MessageTimePassed(int time) {
+	super(MessageType.TIME_PASSED);
+	this.timePassed = time;
+    }
 }

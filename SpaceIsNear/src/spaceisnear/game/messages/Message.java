@@ -5,27 +5,19 @@
  */
 package spaceisnear.game.messages;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import spaceisnear.Utils;
 import spaceisnear.game.bundles.MessageBundle;
 
 /**
  * @author LPzhelud
  */
-public abstract class Message {
+@RequiredArgsConstructor public abstract class Message {
 
-    private final MessageType messageType;
+    @Getter private final MessageType messageType;
 
     public MessageBundle getBundle() {
 	return new MessageBundle(Utils.GSON.toJson(this).getBytes(), getMessageType());
-    }
-
-    @java.beans.ConstructorProperties({"messageType"})
-    public Message(final MessageType messageType) {
-
-	this.messageType = messageType;
-    }
-
-    public MessageType getMessageType() {
-	return this.messageType;
     }
 }

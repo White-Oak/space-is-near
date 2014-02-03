@@ -1,14 +1,10 @@
 package spaceisnear.server.objects.items;
 
 import java.io.IOException;
-import org.whiteoak.parsing.interpretating.ExceptionHandler;
-import org.whiteoak.parsing.interpretating.IAcceptable;
-import org.whiteoak.parsing.interpretating.Interpretator;
-import org.whiteoak.parsing.interpretating.ast.Constant;
-import org.whiteoak.parsing.interpretating.ast.Function;
-import org.whiteoak.parsing.interpretating.ast.NativeFunction;
-import org.whiteoak.parsing.interpretating.ast.Value;
+import org.whiteoak.parsing.interpretating.*;
+import org.whiteoak.parsing.interpretating.ast.*;
 import spaceisnear.game.objects.Position;
+import spaceisnear.game.objects.items.ItemBundle;
 import spaceisnear.server.ServerContext;
 
 /**
@@ -20,19 +16,29 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
     private final ServerContext context;
     Function[] f = {
 	new NativeFunction("addItem", 3),
-	new NativeFunction("fillWithItem", 5)
+	new NativeFunction("fillWithItem", 5),
+	new NativeFunction("addItem", 4),
+	new NativeFunction("fillWithItem", 6)
     };
     Constant[] c = {};
 
     @Override
     public String callNativeFunction(String name, Value[] values) {
+	int rotate = 0;
 	switch (name) {
 	    case "addItem":
+		if (values.length == 4) {
+		    rotate = Integer.parseInt(values[3].getValue());
+		}
 		int idByName = ServerItemsArchive.itemsArchive.getIdByName(values[0].getValue());
 		Position p = new Position(Integer.valueOf(values[1].getValue()), Integer.valueOf(values[2].getValue()));
-		addItem(p, idByName);
+		StaticItem addItem = addItem(p, idByName);
+		addItem.getVariableProperties().setProperty("rotate", rotate);
 		break;
 	    case "fillWithItem":
+		if (values.length == 6) {
+		    rotate = Integer.parseInt(values[3].getValue());
+		}
 		int idByName1 = ServerItemsArchive.itemsArchive.getIdByName(values[0].getValue());
 		int x = Integer.valueOf(values[1].getValue());
 		int y = Integer.valueOf(values[2].getValue());
@@ -41,20 +47,32 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 		for (int i = x; i <= endX; i++) {
 		    for (int j = y; j <= endY; j++) {
 			Position p1 = new Position(i, j);
-			addItem(p1, idByName1);
+			StaticItem addItem1 = addItem(p1, idByName1);
+			addItem1.getVariableProperties().setProperty("rotate", rotate);
 		    }
 		}
 	}
 	return null;
     }
 
-    private void addItem(Position p, int id) {
+    private StaticItem addItem(Position p, int id) {
 	StaticItem staticItem1 = new StaticItem(context, p, id);
 	context.addObject(staticItem1);
-	context.getObstacles().setReacheable(p.getX(), p.getY(), !ServerItemsArchive.itemsArchive.isBlockingPath(id));
+	final boolean blockingPath = ServerItemsArchive.itemsArchive.isBlockingPath(id);
+	if (blockingPath) {
+	    context.getObstacles().setReacheable(p.getX(), p.getY(), false);
+	}
 	context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ServerItemsArchive.itemsArchive.isBlockingAir(id));
-	boolean st = ServerItemsArchive.itemsArchive.getBundle(id).stuckedByAddingFromScript;
+	final ItemBundle bundle = ServerItemsArchive.itemsArchive.getBundle(id);
+	boolean st = bundle.stuckedByAddingFromScript;
 	staticItem1.getVariableProperties().setProperty("stucked", st);
+	//properties
+	if (bundle.defaultProperties != null) {
+	    for (ItemBundle.Property property : bundle.defaultProperties) {
+		staticItem1.getVariableProperties().setProperty(property.getName(), property.getValue());
+	    }
+	}
+	return staticItem1;
     }
 
     public ItemAdder(ServerContext context) {

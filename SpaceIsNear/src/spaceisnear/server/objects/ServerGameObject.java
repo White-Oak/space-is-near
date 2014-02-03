@@ -8,6 +8,9 @@ package spaceisnear.server.objects;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.components.Component;
@@ -18,20 +21,14 @@ import spaceisnear.server.ServerContext;
 /**
  * @author White Oak
  */
-public abstract class ServerGameObject extends AbstractGameObject {
+@RequiredArgsConstructor public abstract class ServerGameObject extends AbstractGameObject {
 
     private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
-    private int id = -1;
-    private boolean destroyed = false;
-    private final LinkedList<Component> components = new LinkedList<>();
-    private final GameObjectType type;
-    private final ServerContext context;
-
-    public ServerGameObject(GameObjectType type, ServerContext context) {
-
-	this.type = type;
-	this.context = context;
-    }
+    @Getter private int id = -1;
+    @Getter @Setter private boolean destroyed = false;
+    @Getter private final LinkedList<Component> components = new LinkedList<>();
+    @Getter private final GameObjectType type;
+    @Getter private final ServerContext context;
 
     public void setId(int id) {
 	if (this.id == -1) {
@@ -59,39 +56,11 @@ public abstract class ServerGameObject extends AbstractGameObject {
 	if (destroyed) {
 	    return;
 	}
-	while (messages.size() > 0) {
+	while (!messages.isEmpty()) {
 	    Message message = messages.poll();
 	    for (Component component : components) {
 		component.processMessage(message);
 	    }
 	}
-    }
-
-    @Override
-    public int getId() {
-	return this.id;
-    }
-
-    public boolean isDestroyed() {
-	return this.destroyed;
-    }
-
-    protected void setDestroyed(final boolean destroyed) {
-	this.destroyed = destroyed;
-    }
-
-    @Override
-    public LinkedList<Component> getComponents() {
-	return this.components;
-    }
-
-    @Override
-    public GameObjectType getType() {
-	return this.type;
-    }
-
-    @Override
-    public Context getContext() {
-	return this.context;
     }
 }

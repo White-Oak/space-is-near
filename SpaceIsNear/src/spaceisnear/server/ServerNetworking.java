@@ -10,39 +10,21 @@
 package spaceisnear.server;
 
 import com.esotericsoftware.kryonet.*;
-import spaceisnear.game.bundles.Bundle;
-import spaceisnear.game.bundles.MessageBundle;
-import spaceisnear.game.messages.MessageType;
-import spaceisnear.game.messages.NetworkableMessage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import lombok.RequiredArgsConstructor;
-import spaceisnear.AbstractGameObject;
-import spaceisnear.game.messages.service.onceused.MessageClientInformation;
-import spaceisnear.game.messages.service.MessageConnectionBroken;
-import spaceisnear.game.messages.MessageCreated;
-import spaceisnear.game.messages.MessageMoved;
+import java.io.*;
+import java.util.*;
+import java.util.logging.*;
+import lombok.*;
+import spaceisnear.*;
+import spaceisnear.game.bundles.*;
+import spaceisnear.game.components.*;
+import spaceisnear.game.messages.*;
+import spaceisnear.game.messages.properties.*;
+import spaceisnear.game.messages.service.*;
+import spaceisnear.game.messages.service.onceused.*;
+import spaceisnear.game.objects.*;
+import spaceisnear.game.ui.console.*;
 import spaceisnear.server.objects.Player;
-import spaceisnear.game.messages.MessageControlledByInput;
-import spaceisnear.game.messages.MessageCreatedItem;
-import spaceisnear.game.messages.MessageLog;
-import spaceisnear.game.messages.properties.MessagePropertySet;
-import spaceisnear.game.messages.service.MessageRogerRequested;
-import spaceisnear.game.messages.MessageTeleported;
-import spaceisnear.game.messages.service.onceused.MessageWorldInformation;
-import spaceisnear.game.messages.properties.MessageNicknameSet;
-import spaceisnear.game.messages.properties.MessagePropertable;
-import spaceisnear.game.messages.properties.MessageYourPlayerDiscovered;
-import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
-import spaceisnear.game.ui.console.LogString;
-import spaceisnear.server.objects.items.StaticItem;
+import spaceisnear.server.objects.items.*;
 
 /**
  * @author white_oak
@@ -204,7 +186,9 @@ import spaceisnear.server.objects.items.StaticItem;
 	//and for server to finally pause
 	//@done use this info
 	while (informationAboutLastConnected == null || !core.isAlreadyPaused()) {
-	    waitSomeTime();
+	    while (!messages.isEmpty()) {
+		waitSomeTime();
+	    }
 	}
 	//create list of properties
 	propertys = new ArrayList<>();
@@ -283,6 +267,26 @@ import spaceisnear.server.objects.items.StaticItem;
 		    int id = item.getProperties().getId();
 		    messages.add(new MessageCreatedItem(id));
 		    //properties
+		    HashMap<String, ComponentState> states = item.getVariableProperties().getStates();
+		    Set<Map.Entry<String, ComponentState>> entrySet = states.entrySet();
+		    for (Map.Entry<String, ComponentState> entry : entrySet) {
+			switch (entry.getKey()) {
+			    case "rotate": {
+				int value = (int) entry.getValue().getValue();
+				if (value != 0) {
+				    propertys.add(new MessagePropertySet(item.getId(), "rotate", value));
+				}
+			    }
+			    break;
+			    case "stucked": {
+				boolean stucked = (boolean) entry.getValue().getValue();
+				if (stucked != item.getProperties().getBundle().stuckedByAddingFromScript) {
+				    propertys.add(new MessagePropertySet(item.getId(), "stucked", stucked));
+				}
+			    }
+			    break;
+			}
+		    }
 		} else {
 		    messages.add(new MessageCreated(object.getType()));
 		    //properties

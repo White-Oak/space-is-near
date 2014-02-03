@@ -9,6 +9,7 @@ import spaceisnear.game.messages.Message;
 import spaceisnear.server.objects.ServerGameObject;
 import spaceisnear.server.objects.Player;
 import java.util.*;
+import lombok.Getter;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.GameContext;
@@ -26,11 +27,11 @@ public final class ServerContext extends Context {
 
     public static final int TILE_HEIGHT = 16;
     public static final int TILE_WIDTH = 16;
-    private final ServerNetworking networking;
-    private final List<AbstractGameObject> objects;
-    private final List<Player> players = new LinkedList<>();
-    private final ObstaclesLayer obstacles;
-    private final AtmosphericLayer atmosphere;
+    @Getter private final ServerNetworking networking;
+    @Getter private final List<AbstractGameObject> objects;
+    @Getter private final List<Player> players = new LinkedList<>();
+    @Getter private final ObstaclesLayer obstacles;
+    @Getter private final AtmosphericLayer atmosphere;
     private final ServerLog log = new ServerLog();
     private static final int MAXIMUM_TILES_TO_BE_HEARD = 12;
     public static final int HIDDEN_SERVER_OBJECTS = 1;
@@ -82,27 +83,6 @@ public final class ServerContext extends Context {
 	while (objects.size() < GameContext.HIDDEN_CLIENT_OBJECTS) {
 	    addObject(null);
 	}
-    }
-
-    public ServerNetworking getNetworking() {
-	return this.networking;
-    }
-
-    @Override
-    public List<AbstractGameObject> getObjects() {
-	return this.objects;
-    }
-
-    public List<Player> getPlayers() {
-	return this.players;
-    }
-
-    public ObstaclesLayer getObstacles() {
-	return obstacles;
-    }
-
-    public AtmosphericLayer getAtmosphere() {
-	return atmosphere;
     }
 
     public void log(LogString string) {

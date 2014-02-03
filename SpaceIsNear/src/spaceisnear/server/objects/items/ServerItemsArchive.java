@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import org.newdawn.slick.SlickException;
 import spaceisnear.ItemsArchivable;
-import spaceisnear.game.GameContext;
 import spaceisnear.server.ServerContext;
 
 /**

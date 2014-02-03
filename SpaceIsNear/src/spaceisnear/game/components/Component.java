@@ -5,12 +5,11 @@
  */
 package spaceisnear.game.components;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.messages.Message;
 import spaceisnear.Context;
@@ -19,16 +18,12 @@ import spaceisnear.game.objects.Position;
 /**
  * @author LPzhelud
  */
-public abstract class Component {
+@RequiredArgsConstructor public abstract class Component {
 
-    private final HashMap<String, ComponentState> states = new HashMap<>();
-    private Context context = null;
+    @Getter private final HashMap<String, ComponentState> states = new HashMap<>();
+    @Getter private Context context = null;
     private final ComponentType type;
-    private int ownerId = -1;
-
-    public Component(ComponentType type) {
-	this.type = type;
-    }
+    @Getter @Setter private int ownerId = -1;
 
     public abstract void processMessage(Message message);
 
@@ -60,26 +55,8 @@ public abstract class Component {
 	return objects.get(getOwnerId());
     }
 
-    public int getOwnerId() {
-//	return (Integer) getStateValueNamed("owner");
-	return ownerId;
-    }
-
-    public final void setOwnerId(int id) {
-//	states.put("owner", new ComponentState("owner", id));
-	ownerId = id;
-    }
-
     protected void addState(ComponentState state) {
 	states.put(state.getName(), state);
-    }
-
-    public HashMap<String, ComponentState> getStates() {
-	return this.states;
-    }
-
-    protected Context getContext() {
-	return this.context;
     }
 
     public Position getPosition() {

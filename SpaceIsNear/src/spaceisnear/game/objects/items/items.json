@@ -7,7 +7,8 @@
 	"blockingAir": false,
 	"imageIds": [1],
 	"stuckedByAddingFromScript": false,
-	"description": "Universal tool"
+	"description": "Universal tool",
+	"defaultProperties": null
     },
     {
 	"name": "plitka",
@@ -16,8 +17,9 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"imageIds": [0],
-	"stuckedByAddingFromScript": false,
-	"description": "Universal covering for floor"
+	"stuckedByAddingFromScript": true,
+	"description": "Universal covering for floor",
+	"defaultProperties": null
     },
     {
 	"name": "wall",
@@ -26,8 +28,9 @@
 	"blockingPath": true,
 	"blockingAir": true,
 	"imageIds": [1],
-	"stuckedByAddingFromScript": false,
-	"description": "Universal obstacle"
+	"stuckedByAddingFromScript": true,
+	"description": "Universal obstacle",
+	"defaultProperties": null
     },
     {
 	"name": "radio",
@@ -35,8 +38,9 @@
 	"type": "ENVIRONMENT",
 	"blockingPath": false,
 	"blockingAir": false,
-	"imageIds": [1],
+	"imageIds": [2],
 	"stuckedByAddingFromScript": true,
-	"description": "Universal speaker system"
+	"description": "Universal speaker system",
+	"defaultProperties": [{"name": "frequency", "value": "145.9"}, {"name": "enabled", "value": true}]
     }
 ]

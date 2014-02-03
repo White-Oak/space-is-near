@@ -6,18 +6,15 @@
  */
 package spaceisnear.game.messages;
 
+import lombok.Getter;
 import spaceisnear.Context;
 
 public class MessageToSend extends DirectedMessage {
 
-    private final NetworkableMessage message;
+    @Getter private final NetworkableMessage message;
 
     public MessageToSend(NetworkableMessage m) {
 	super(MessageType.NETWORKING, Context.NETWORKING_ID);
 	message = m;
-    }
-
-    public NetworkableMessage getMessage() {
-	return this.message;
     }
 }

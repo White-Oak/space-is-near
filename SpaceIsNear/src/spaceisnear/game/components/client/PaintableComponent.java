@@ -36,9 +36,10 @@ public abstract class PaintableComponent extends Component {
 	if (((GameContext) getContext()).getCameraMan().belongsToCamera(getPosition())) {
 	    int xto = getX() * GameContext.TILE_WIDTH - getDelayX();
 	    int yto = getY() * GameContext.TILE_HEIGHT - getDelayY();
+	    g.pushTransform();
 	    g.translate(xto, yto);
 	    paintComponent(g);
-	    g.translate(-xto, -yto);
+	    g.popTransform();
 	}
     }
 }

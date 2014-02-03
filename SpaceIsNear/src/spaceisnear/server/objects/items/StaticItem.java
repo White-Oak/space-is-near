@@ -1,12 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spaceisnear.server.objects.items;
 
+import lombok.Getter;
 import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
@@ -21,8 +15,8 @@ import spaceisnear.server.objects.ServerGameObject;
  */
 public class StaticItem extends ServerGameObject {
 
-    private final ItemPropertiesComponent properties;
-    private final VariablePropertiesComponent variableProperties;
+    @Getter private final ItemPropertiesComponent properties;
+    @Getter private final VariablePropertiesComponent variableProperties;
 
     public StaticItem(ServerContext context, Position p, int itemId) {
 	super(GameObjectType.ITEM, context);
@@ -35,13 +29,4 @@ public class StaticItem extends ServerGameObject {
     public StaticItem(ServerContext context, int itemId) {
 	this(context, new Position(0, 0), itemId);
     }
-
-    public ItemPropertiesComponent getProperties() {
-	return properties;
-    }
-
-    public VariablePropertiesComponent getVariableProperties() {
-	return variableProperties;
-    }
-
 }
