@@ -13,6 +13,7 @@ import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.GUIContext;
+import spaceisnear.game.ui.console.GameConsole;
 
 /**
  *
@@ -93,7 +94,7 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
     @Override
     public void render(GUIContext container, Graphics g) {
 	g.setFont(font);
-	g.setColor(textColor);
+	GameConsole.setColor(g, textColor);
 	g.drawString(text.toString(), x, y);
 	if (hasFocus()) {
 	    final int spaceWidth = g.getFont().getWidth("w");

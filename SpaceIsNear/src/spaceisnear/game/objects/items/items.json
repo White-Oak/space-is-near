@@ -22,14 +22,47 @@
 	"defaultProperties": null
     },
     {
+	"name": "plitka_danger",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": false,
+	"blockingAir": false,
+	"imageIds": [4],
+	"stuckedByAddingFromScript": true,
+	"description": "Universal obstacle. Now reinforced",
+	"defaultProperties": null
+    },
+    {
 	"name": "wall",
 	"size": "TOO_BIG",
 	"type": "ENVIRONMENT",
 	"blockingPath": true,
 	"blockingAir": true,
 	"imageIds": [1],
-	"stuckedByAddingFromScript": true,
+	"stuckedByAddingFromScript": false,
 	"description": "Universal obstacle",
+	"defaultProperties": null
+    },
+    {
+	"name": "wall_reinforced",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": true,
+	"blockingAir": true,
+	"imageIds": [3],
+	"stuckedByAddingFromScript": true,
+	"description": "Universal obstacle. Now reinforced",
+	"defaultProperties": null
+    },
+    {
+	"name": "wall_glass_reinforced",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": true,
+	"blockingAir": true,
+	"imageIds": [6],
+	"stuckedByAddingFromScript": true,
+	"description": "Universal obstacle with glass. Now reinforced",
 	"defaultProperties": null
     },
     {

@@ -152,3 +152,4 @@
     -knockbacking if big difference between two tiles in pressure
 +MessageKnockbacked
     -processing on server
+*fixed blurred font and wrong colors of font

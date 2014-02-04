@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Setter;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
+import org.newdawn.slick.*;
+import spaceisnear.game.ui.console.GameConsole;
 
 /**
  *
@@ -59,12 +58,16 @@ public class ContextSubMenu extends ContextMenuItem {
 		    g.pushTransform();
 		    g.translate(x, y);
 		}
-		g.setColor(Color.white);
 	    } else {
 		g.setColor(Color.black);
 		if (contextMenuItem instanceof ContextSubMenu) {
 		    g.fillRect(maxWidth - 10, i * font.getLineHeight() + (font.getLineHeight() >> 1) - 1, 3, 3);
 		}
+	    }
+	    if (i == selected) {
+		GameConsole.setColor(g, Color.white);
+	    } else {
+		GameConsole.setColor(g, Color.black);
 	    }
 	    g.drawString(contextMenuItem.getLabel(), 0, i * font.getLineHeight());
 	}

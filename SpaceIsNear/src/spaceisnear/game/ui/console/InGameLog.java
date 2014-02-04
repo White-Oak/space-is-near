@@ -36,7 +36,7 @@ public class InGameLog {
 	final int startingY = -startingLine * g.getFont().getLineHeight();
 	for (int i = 0, linesGone = 0, linesDrawn = 0; i < stack.size(); i++) {
 	    LogString get = stack.get(i);
-	    g.setColor(getColorOfLevel(get));
+	    GameConsole.setColor(g, getColorOfLevel(get));
 	    String[] strings = splitByLines(get.toString(), width, g.getFont());
 	    for (int j = 0; j < strings.length && linesDrawn < linesPerHeight(font, height); j++, linesGone++) {
 		String string = strings[j];

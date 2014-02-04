@@ -4,21 +4,40 @@
 //addItem (name, x, y, rotate)
 //fillWithItem(name, x, y, end_x, end_y, rotate)
 
-fillWithItem {plitka, 0, 0, 30, 31}
-fillWithItem {wall, 0, 0, 31, 0} 
-fillWithItem {wall, 0, 31, 31, 31} 
-fillWithItem {wall, 31, 0, 31, 31} 
-fillWithItem {wall, 0, 0, 0, 31}
-fillWithItem {wall, 7, 8, 14, 8}
-fillWithItem {wall, 17, 8, 24, 8}
-fillWithItem {wall, 14, 8, 14, 12}
-fillWithItem {wall, 17, 8, 17, 12}
-fillWithItem {wall, 11, 12, 14, 12}
-fillWithItem {wall, 18, 12, 20, 12}
-fillWithItem {wall, 11, 12, 11, 27}
-fillWithItem {wall, 20, 12, 20, 27}
-fillWithItem {wall, 12, 20, 19, 20}
-fillWithItem {wall, 9, 27, 10, 27}
-fillWithItem {wall, 14, 27, 17, 27}
-fillWithItem {wall, 21, 27, 22, 27}
-addItem {radio, 22, 27}
+//main plitka
+fillWithItem {plitka, 0, 0, 31, 10}
+fillWithItem {plitka, 0, 19, 31, 31}
+fillWithItem {plitka, 0, 11, 10, 18}
+fillWithItem {plitka, 19, 11, 31, 18}
+//
+fillWithItem {plitka_danger, 11, 11, 18, 18}
+//
+//walls
+fillWithItem {wall, 4, 10, 9, 10}
+fillWithItem {wall, 20, 10, 25, 10} 
+fillWithItem {wall, 4, 19, 9, 19} 
+fillWithItem {wall, 20, 19, 25, 19} 
+
+fillWithItem {wall, 10, 3, 10, 9}
+fillWithItem {wall, 10, 20, 10, 25}
+fillWithItem {wall, 19, 3, 19, 9}
+fillWithItem {wall, 19, 20, 19, 25}
+//
+//reinforced walls
+fillWithItem {wall_reinforced, 10, 10, 13, 10}
+fillWithItem {wall_reinforced, 16, 10, 19, 10}
+fillWithItem {wall_reinforced, 10, 19, 13, 19}
+fillWithItem {wall_reinforced, 16, 19, 19, 19}
+
+fillWithItem {wall_reinforced, 10, 11, 10, 13}
+fillWithItem {wall_reinforced, 10, 16, 10, 18}
+fillWithItem {wall_reinforced, 19, 11, 19, 13}
+fillWithItem {wall_reinforced, 19, 16, 19, 18}
+
+fillWithItem {wall_reinforced, 14, 14, 15, 15}
+//
+//reinforced glass
+fillWithItem {wall_glass_reinforced, 10, 14, 10, 15}
+fillWithItem {wall_glass_reinforced, 19, 14, 19, 15}
+fillWithItem {wall_glass_reinforced, 14, 10, 15, 10}
+fillWithItem {wall_glass_reinforced, 14, 19, 15, 19}

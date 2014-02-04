@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package spaceisnear.game.ui.console;
 
 import spaceisnear.game.ui.TextField;
@@ -34,19 +29,33 @@ public class GameConsole implements ComponentListener {
     private final int x, y, width, height;
     private final TextField ip;
     private final InGameLog log;
-    @Getter private final UnicodeFont font;
 //    Font font = new TrueTypeFont(awtFont, false);
     private final Context context;
     private int scrollBarSize;
     private int scrollBarY;
     private boolean scrollBarClicked;
+    @Getter private final UnicodeFont font;
+    //
+    private final static UnicodeFont[] fonts = new UnicodeFont[10];
+
+    public GameConsole() {
+	this.x = 0;
+	this.y = 0;
+	this.width = 0;
+	this.height = 0;
+	this.ip = null;
+	this.log = null;
+	this.context = null;
+	this.font = null;
+    }
 
     public GameConsole(int x, int y, int width, int height, GameContainer container, Context context) {
 	this.x = x;
 	this.y = y;
 	this.width = width;
 	this.height = height;
-	font = getFontAtStart();
+	getFontsAtStart();
+	font = fonts[0];
 	final int lineHeight = font.getLineHeight();
 	ip = new TextField(container, x + 10, y + height - lineHeight - 2, width, lineHeight + 4, font);
 	log = new InGameLog(font, 30, 2, width - 30, height - 2 - ip.getHeight());
@@ -57,22 +66,56 @@ public class GameConsole implements ComponentListener {
 	scrollBarSize = sizeOfScrollBar();
     }
 
-    private static UnicodeFont getFontAtStart() {
-	final java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 16);
-	final UnicodeFont font = new UnicodeFont(awtFont);
-	font.getEffects().add(new ColorEffect(java.awt.Color.black));
-	font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
-	font.getEffects().add(new ColorEffect(java.awt.Color.gray));
-	font.getEffects().add(new ColorEffect(java.awt.Color.white));
-	font.getEffects().add(new ColorEffect(java.awt.Color.green));
-	font.addGlyphs(0x0400, 0x04FF);
-	font.addAsciiGlyphs();
-	try {
-	    font.loadGlyphs();
-	} catch (SlickException ex) {
-	    Logger.getLogger(GameConsole.class.getName()).log(Level.SEVERE, null, ex);
+    private static void getFontsAtStart() {
+	final java.awt.Font awtFont = new java.awt.Font("Monospaced", java.awt.Font.BOLD, 16);
+	for (int i = 0; i < fonts.length; i++) {
+	    fonts[i] = new UnicodeFont(awtFont);
+	    UnicodeFont font = fonts[i];
+	    switch (i) {
+		case 0:
+		    font.getEffects().add(new ColorEffect(java.awt.Color.white));
+		    break;
+		case 1:
+		    font.getEffects().add(new ColorEffect(java.awt.Color.black));
+		    break;
+		case 2:
+		    font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
+		    break;
+		case 3:
+		    font.getEffects().add(new ColorEffect(java.awt.Color.gray));
+		    break;
+		case 4:
+		    font.getEffects().add(new ColorEffect(java.awt.Color.green));
+		    break;
+		default:
+		    font.getEffects().add(new ColorEffect(java.awt.Color.lightGray));
+		    break;
+	    }
+	    font.addGlyphs(0x0400, 0x04FF);
+	    font.addAsciiGlyphs();
+	    try {
+		font.loadGlyphs();
+	    } catch (SlickException ex) {
+		Logger.getLogger(GameConsole.class.getName()).log(Level.SEVERE, null, ex);
+	    }
 	}
-	return font;
+    }
+
+    public static void setColor(Graphics g, Color c) {
+	UnicodeFont unicodeFont = fonts[0];
+	if (c == Color.black) {
+	    unicodeFont = fonts[1];
+	} else if (c == Color.white) {
+	    unicodeFont = fonts[0];
+	} else if (c == Color.lightGray) {
+	    unicodeFont = fonts[2];
+	} else if (c == Color.gray) {
+	    unicodeFont = fonts[3];
+	} else if (c == Color.green) {
+	    unicodeFont = fonts[4];
+	}
+	g.setFont(unicodeFont);
+	g.setColor(c);
     }
 
     public void paint(Graphics g, GameContainer container) {
@@ -202,14 +245,6 @@ public class GameConsole implements ComponentListener {
     public void pushMessage(LogString str) {
 	log.pushMessage(str);
 	scrollBarSize = sizeOfScrollBar();
-    }
-
-    public static void setColor(java.awt.Color color, UnicodeFont font) throws SlickException {
-	font.getEffects().clear();
-	font.getEffects().add(new ColorEffect(color));
-	font.clearGlyphs();
-	font.addGlyphs(0x0400, 0x04FF);
-	font.addAsciiGlyphs();
     }
 
     public void mouseClicked(int button, int x, int y, int clickCount) {
