@@ -27,13 +27,13 @@ public class GamePlayerPositionComponent extends PositionComponent {
 	    case MOVED:
 		MessageMoved messagem = (MessageMoved) message;
 		if (oldX != getX() || oldY != getY()) {
-		    context.getCameraMan().setNewCameraPositionForMove(messagem.getX(), messagem.getY());
+		    context.getCameraMan().setNewCameraPositionForMove(messagem.getP().getX(), messagem.getP().getY());
 		}
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
 		MessageMoved messagetMessageMoved = (MessageMoved) message;
-		context.getCameraMan().moveCameraToPlayer(messagetMessageMoved.getX(), messagetMessageMoved.getY());
+		context.getCameraMan().moveCameraToPlayer(messagetMessageMoved.getP().getX(), messagetMessageMoved.getP().getY());
 		break;
 	    case TIME_PASSED:
 		break;

@@ -37,6 +37,15 @@ public class Player extends ClientGameObject {
 	return null;
     }
 
+    public InventoryComponent getInventoryComponent() {
+	for (Component component : getComponents()) {
+	    if (component.getType() == ComponentType.INVENTORY) {
+		return (InventoryComponent) component;
+	    }
+	}
+	return null;
+    }
+
     public void setNickname(String nickname) {
 	getNameComponent().setNickname(nickname);
     }

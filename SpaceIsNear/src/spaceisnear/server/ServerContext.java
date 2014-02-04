@@ -139,11 +139,14 @@ public final class ServerContext extends Context {
 		if (item.getProperties().getId() == ServerItemsArchive.RADIO_ID) {
 		    String property = (String) item.getVariableProperties().getProperty("frequency");
 		    if (property.equals(frequency)) {
-			Position position = item.getPosition();
-			START_RECURSION(bufferMap, position.getX() - 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
-			START_RECURSION(bufferMap, position.getX() + 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
-			START_RECURSION(bufferMap, position.getX(), position.getY() - 1, MAXIMUM_TILES_TO_BE_HEARD - 1);
-			START_RECURSION(bufferMap, position.getX(), position.getY() + 1, MAXIMUM_TILES_TO_BE_HEARD - 1);
+			boolean enabled = (boolean) item.getVariableProperties().getProperty("enabled");
+			if (enabled) {
+			    Position position = item.getPosition();
+			    START_RECURSION(bufferMap, position.getX() - 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
+			    START_RECURSION(bufferMap, position.getX() + 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
+			    START_RECURSION(bufferMap, position.getX(), position.getY() - 1, MAXIMUM_TILES_TO_BE_HEARD - 1);
+			    START_RECURSION(bufferMap, position.getX(), position.getY() + 1, MAXIMUM_TILES_TO_BE_HEARD - 1);
+			}
 		    }
 		}
 	    }

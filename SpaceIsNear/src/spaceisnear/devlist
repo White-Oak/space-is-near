@@ -135,7 +135,9 @@
     +items' images can be rotated by 90, 180, 270
     +items' properties are sent if they differ from default
 -Inventory
-    -each inventory slot has his size, item field and name
+    +each inventory slot has his size, item field and name
+    +inventory is sent over the net
+    +radio for ear
 -In-game chat
     -make PM
     -make OOC

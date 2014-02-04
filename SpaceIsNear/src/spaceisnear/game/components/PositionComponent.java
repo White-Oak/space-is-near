@@ -13,6 +13,7 @@ import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
+import spaceisnear.game.messages.MessageTeleported;
 import spaceisnear.game.messages.MessageTimePassed;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
@@ -49,6 +50,10 @@ public class PositionComponent extends Component {
 	return p;
     }
 
+    public void setPosition(Position p) {
+	setStateValueNamed("position", p);
+    }
+
     public boolean isAnimated() {
 	return animation;
     }
@@ -71,8 +76,7 @@ public class PositionComponent extends Component {
 
     @Override
     public void processMessage(Message message) {
-	int oldX = getX();
-	int oldY = getY();
+	int oldX = getX(), oldY = getY();
 	switch (message.getMessageType()) {
 	    case MOVED:
 		MessageMoved messagem = (MessageMoved) message;
@@ -87,10 +91,10 @@ public class PositionComponent extends Component {
 		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
-		MessageMoved messagetMessageMoved = (MessageMoved) message;
+		MessageTeleported messagetMessageMoved = (MessageTeleported) message;
 		//here no check for obstacles
-		setX(messagetMessageMoved.getX());
-		setY(messagetMessageMoved.getY());
+		setX(messagetMessageMoved.getP().getX());
+		setY(messagetMessageMoved.getP().getY());
 		break;
 	    case TIME_PASSED:
 		checkAnimation(message);

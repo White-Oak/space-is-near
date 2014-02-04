@@ -32,7 +32,7 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 		}
 		int idByName = ServerItemsArchive.itemsArchive.getIdByName(values[0].getValue());
 		Position p = new Position(Integer.valueOf(values[1].getValue()), Integer.valueOf(values[2].getValue()));
-		StaticItem addItem = addItem(p, idByName);
+		StaticItem addItem = addItem(p, idByName, context);
 		addItem.getVariableProperties().setProperty("rotate", rotate);
 		break;
 	    case "fillWithItem":
@@ -47,7 +47,7 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 		for (int i = x; i <= endX; i++) {
 		    for (int j = y; j <= endY; j++) {
 			Position p1 = new Position(i, j);
-			StaticItem addItem1 = addItem(p1, idByName1);
+			StaticItem addItem1 = addItem(p1, idByName1, context);
 			addItem1.getVariableProperties().setProperty("rotate", rotate);
 		    }
 		}
@@ -55,14 +55,16 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 	return null;
     }
 
-    private StaticItem addItem(Position p, int id) {
+    public static StaticItem addItem(Position p, int id, ServerContext context) {
 	StaticItem staticItem1 = new StaticItem(context, p, id);
 	context.addObject(staticItem1);
-	final boolean blockingPath = ServerItemsArchive.itemsArchive.isBlockingPath(id);
-	if (blockingPath) {
-	    context.getObstacles().setReacheable(p.getX(), p.getY(), false);
+	if (p != null) {
+	    final boolean blockingPath = ServerItemsArchive.itemsArchive.isBlockingPath(id);
+	    if (blockingPath) {
+		context.getObstacles().setReacheable(p.getX(), p.getY(), false);
+	    }
+	    context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ServerItemsArchive.itemsArchive.isBlockingAir(id));
 	}
-	context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ServerItemsArchive.itemsArchive.isBlockingAir(id));
 	final ItemBundle bundle = ServerItemsArchive.itemsArchive.getBundle(id);
 	boolean st = bundle.stuckedByAddingFromScript;
 	staticItem1.getVariableProperties().setProperty("stucked", st);

@@ -4,6 +4,7 @@
  */
 package spaceisnear.game.components.inventory;
 
+import lombok.Getter;
 import spaceisnear.game.objects.items.Size;
 
 /**
@@ -12,7 +13,7 @@ import spaceisnear.game.objects.items.Size;
  */
 public class TypicalInventorySlotsSet {
 
-    private final InventorySlot head = new InventorySlot(Size.MEDIUM, "head"),
+    @Getter private final InventorySlot head = new InventorySlot(Size.MEDIUM, "head"),
 	    body = new InventorySlot(Size.MEDIUM, "body"),
 	    leftHand = new InventorySlot(Size.MEDIUM, "left hand"),
 	    rightHand = new InventorySlot(Size.MEDIUM, "right hand"),
@@ -22,5 +23,12 @@ public class TypicalInventorySlotsSet {
 	    bag = new InventorySlot(Size.MEDIUM, "bag"),
 	    belt = new InventorySlot(Size.MEDIUM, "belt"),
 	    id = new InventorySlot(Size.SMALL, "id");
-    
+
+    private int[] getItemsIdsForTransferring() {
+	return new int[]{head.getItemId(), body.getItemId(), leftHand.getItemId(), rightHand.getItemId(), legs.getItemId(), shoes.getItemId(),
+	    ear.getItemId(), bag.getItemId(), belt.getItemId(), id.getItemId()};
+    }
+    private void setItemsIdsFromTransferring(int id[]){
+	
+    }
 }

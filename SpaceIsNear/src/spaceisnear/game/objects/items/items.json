@@ -75,5 +75,16 @@
 	"stuckedByAddingFromScript": true,
 	"description": "Universal speaker system",
 	"defaultProperties": [{"name": "frequency", "value": "145.9"}, {"name": "enabled", "value": true}]
+    },
+    {
+	"name": "ear_radio",
+	"size": "SMALL",
+	"type": "TOOL",
+	"blockingPath": false,
+	"blockingAir": false,
+	"imageIds": [7],
+	"stuckedByAddingFromScript": false,
+	"description": "Universal radio system for wearing on ear",
+	"defaultProperties": [{"name": "frequency", "value": "145.9"}, {"name": "enabled", "value": true}]
     }
 ]

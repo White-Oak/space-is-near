@@ -96,10 +96,13 @@ public final class CameraMan {
     public boolean belongsToCamera(Position p) {
 	int px = p.getX();
 	int py = p.getY();
+	if (px < 0 || py < 0) {
+	    return false;
+	}
 //	final boolean xBelongs = px + 1 > this.x + 6 && px - this.x < getMaxXTiles() + 1 - 7;
 //	final boolean yBelongs = py + 1 > this.y + 4 && py - this.y < getMaxYTiles() + 1 - 5;
-	final boolean xBelongs = px + 1 > this.x  && px - this.x < getMaxXTiles() + 1 ;
-	final boolean yBelongs = py + 1 > this.y  && py - this.y < getMaxYTiles() + 1 ;
+	final boolean xBelongs = px + 1 > this.x && px - this.x < getMaxXTiles() + 1;
+	final boolean yBelongs = py + 1 > this.y && py - this.y < getMaxYTiles() + 1;
 	return xBelongs && yBelongs;
     }
 

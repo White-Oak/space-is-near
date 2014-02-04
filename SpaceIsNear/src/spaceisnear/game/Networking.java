@@ -112,13 +112,22 @@ public class Networking extends Listener {
 		    break;
 		case NICKNAME_SET:
 		    MessageNicknameSet mns = MessageNicknameSet.getInstance(b);
+		    processMessageNicknameSet(mns);
+		    break;
+		case INVENTORY_SET:
+		    MessageInventorySet mis = MessageInventorySet.getInstance(b);
 		    GamerPlayer player = gameContext.getPlayer();
-		    player.setNickname(mns.getNickname());
+		    player.getInventoryComponent().setSlots(mis.getSet());
 		    break;
 	    }
 //	    System.out.println("Message received");
 	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));
 	}
+    }
+
+    private void processMessageNicknameSet(MessageNicknameSet mns) {
+	GamerPlayer player = gameContext.getPlayer();
+	player.setNickname(mns.getNickname());
     }
 
     private void processMessageWorldInformation(MessageWorldInformation mwi) {

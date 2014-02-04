@@ -5,15 +5,9 @@
  */
 package spaceisnear.game.messages;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
-import spaceisnear.game.bundles.MessageBundle;
+import spaceisnear.Utils;
+import spaceisnear.game.objects.Position;
 
 /**
  * Sent only by server.
@@ -22,51 +16,31 @@ import spaceisnear.game.bundles.MessageBundle;
  */
 public class MessageMoved extends DirectedMessage implements NetworkableMessage {
 
-    @Getter private final int x;
-    @Getter private final int y;
+    @Getter private final Position p;
+
+    public MessageMoved(Position p, int id) {
+	super(MessageType.MOVED, id);
+	this.p = p;
+    }
 
     public MessageMoved(int x, int y, int id) {
-	super(MessageType.MOVED, id);
-	this.x = x;
-	this.y = y;
+	this(new Position(x, y), id);
     }
 
-    protected MessageMoved(int x, int y, int id, int unused) {
+    public int getX() {
+	return p.getX();
+    }
+
+    public int getY() {
+	return p.getY();
+    }
+
+    protected MessageMoved(Position p, int id, int unused) {
 	super(MessageType.TELEPORTED, id);
-	this.x = x;
-	this.y = y;
-    }
-
-    @Override
-    public MessageBundle getBundle() {
-	ByteArrayOutputStream b = null;
-	try (final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		final DataOutputStream daos = new DataOutputStream(baos);) {
-	    daos.writeInt(x);
-	    daos.writeInt(y);
-	    daos.writeInt(id);
-	    daos.close();
-	    b = baos;
-	} catch (IOException ex) {
-	    Logger.getLogger(MessageMoved.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	byte[] by = b.toByteArray();
-	MessageBundle mb = new MessageBundle(getMessageType());
-	mb.bytes = by;
-	mb.messageType = getMessageType();
-	return mb;
+	this.p = p;
     }
 
     public static MessageMoved getInstance(byte[] b) {
-	try (final ByteArrayInputStream bais = new ByteArrayInputStream(b);
-		final DataInputStream dais = new DataInputStream(bais);) {
-	    int x = dais.readInt();
-	    int y = dais.readInt();
-	    int id = dais.readInt();
-	    return new MessageMoved(x, y, id);
-	} catch (IOException ex) {
-	    Logger.getLogger(MessageMoved.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return null;
+	return Utils.GSON.fromJson(new String(b), MessageMoved.class);
     }
 }

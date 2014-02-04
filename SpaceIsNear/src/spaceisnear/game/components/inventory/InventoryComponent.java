@@ -8,11 +8,19 @@ import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 
-public class InventoryComponent extends Component {
+public final class InventoryComponent extends Component {
 
     public InventoryComponent() {
 	super(ComponentType.INVENTORY);
 	addState("slots", new TypicalInventorySlotsSet());
+    }
+
+    public TypicalInventorySlotsSet getSlots() {
+	return (TypicalInventorySlotsSet) getStateValueNamed("slots");
+    }
+
+    public void setSlots(TypicalInventorySlotsSet slots) {
+	setStateValueNamed("slots", slots);
     }
 
     @Override
