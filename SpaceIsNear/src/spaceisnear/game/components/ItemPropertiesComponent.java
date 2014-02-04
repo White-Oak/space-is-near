@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.components;
 
+import lombok.Getter;
 import spaceisnear.ItemsArchivable;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.items.ItemBundle;
@@ -16,6 +17,7 @@ import spaceisnear.server.objects.items.ServerItemsArchive;
 public class ItemPropertiesComponent extends Component {
 
     private static ItemsArchivable archivable;
+    @Getter private final int id;
 
     static {
 	archivable = getItemsArchive();
@@ -27,15 +29,12 @@ public class ItemPropertiesComponent extends Component {
 
     public ItemPropertiesComponent(int id) {
 	super(ComponentType.ITEM_PROPERTIES);
-	addState(new ComponentState("id", id));
+	this.id = id;
     }
 
     ItemPropertiesComponent() {
 	super(ComponentType.ITEM_PROPERTIES);
-    }
-
-    public int getId() {
-	return (int) getStateNamed("id").getValue();
+	id = -1;
     }
 
     public boolean isBlockingAir() {

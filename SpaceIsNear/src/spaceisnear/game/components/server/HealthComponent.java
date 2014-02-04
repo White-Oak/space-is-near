@@ -10,7 +10,6 @@
 package spaceisnear.game.components.server;
 
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.HurtMessage;
 import spaceisnear.game.messages.Message;
@@ -42,7 +41,7 @@ public class HealthComponent extends Component {
      */
     public HealthComponent() {
 	super(ComponentType.HEALTH);
-	addState(new ComponentState("health", 100));
+	addState("health", 100);
     }
 
     @Override
@@ -98,7 +97,7 @@ public class HealthComponent extends Component {
     }
 
     public void changeHealth(int delta) {
-	getStateNamed("health").setValue(getHealth() + delta);
+	setStateValueNamed("health", getHealth() + delta);
 	System.out.println(getHealth());
     }
 

@@ -12,7 +12,7 @@ public class NameComponent extends PaintableComponent {
 
     public NameComponent(String name) {
 	super(ComponentType.NAME);
-	addState(new ComponentState("name", name));
+	addState("name", name);
     }
 
     public NameComponent() {
@@ -32,6 +32,6 @@ public class NameComponent extends PaintableComponent {
     }
 
     public void setNickname(String name) {
-	getStates().put("name", new ComponentState("name", name));
+	setStateValueNamed("name", name);
     }
 }

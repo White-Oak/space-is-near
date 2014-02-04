@@ -10,7 +10,6 @@
 package spaceisnear.game.components.server;
 
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentState;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.properties.MessagePropertySet;
@@ -58,7 +57,7 @@ public class VariablePropertiesComponent extends Component {
     }
 
     public void setProperty(String name, Object value) {
-	addState(new ComponentState(name, value));
+	addState(name, value);
     }
 
     public Object getProperty(String name) {

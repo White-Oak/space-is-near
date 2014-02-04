@@ -24,9 +24,13 @@ public class ItemPaintableComponent extends PaintableComponent {
 	int[] imageIds = ItemsArchive.itemsArchive.getImageIds(id);
 	//curently drawing zero state image
 	Image image = ItemsArchive.itemsArchive.getImage(imageIds[0]);
-	image.rotate(rotate);
+	if (rotate != 0) {
+	    image.rotate(rotate);
+	}
 	g.drawImage(image, 0, 0);
-	image.rotate(-rotate);
+	if (rotate != 0) {
+	    image.rotate(-rotate);
+	}
     }
 
     @Override

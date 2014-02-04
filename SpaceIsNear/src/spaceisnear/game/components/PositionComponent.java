@@ -30,7 +30,7 @@ public class PositionComponent extends Component {
 
     public PositionComponent(Position p) {
 	super(ComponentType.POSITION);
-	addState(new ComponentState("position", p));
+	addState("position", p);
     }
 
     public PositionComponent(int x, int y) {

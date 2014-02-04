@@ -48,28 +48,26 @@ public class ContextSubMenu extends ContextMenuItem {
 	g.fillRect(0, selected * font.getLineHeight(), maxWidth, font.getLineHeight());
 	for (int i = 0; i < items.size(); i++) {
 	    ContextMenuItem contextMenuItem = items.get(i);
+	    final int currentPosition = i * font.getLineHeight();
 	    if (i == selected) {
 		g.setColor(Color.white);
 		if (contextMenuItem instanceof ContextSubMenu) {
-		    g.fillRect(maxWidth - 10, i * font.getLineHeight() + (font.getLineHeight() >> 1) - 1, 3, 3);
+		    g.fillRect(maxWidth - 10, currentPosition + (font.getLineHeight() >> 1) - 1, 3, 3);
 		    ContextSubMenu subMenu = (ContextSubMenu) contextMenuItem;
 		    g.popTransform();
 		    subMenu.render(g);
 		    g.pushTransform();
 		    g.translate(x, y);
 		}
+		GameConsole.setColor(g, Color.white);
 	    } else {
 		g.setColor(Color.black);
 		if (contextMenuItem instanceof ContextSubMenu) {
-		    g.fillRect(maxWidth - 10, i * font.getLineHeight() + (font.getLineHeight() >> 1) - 1, 3, 3);
+		    g.fillRect(maxWidth - 10, currentPosition + (font.getLineHeight() >> 1) - 1, 3, 3);
 		}
-	    }
-	    if (i == selected) {
-		GameConsole.setColor(g, Color.white);
-	    } else {
 		GameConsole.setColor(g, Color.black);
 	    }
-	    g.drawString(contextMenuItem.getLabel(), 0, i * font.getLineHeight());
+	    g.drawString(contextMenuItem.getLabel(), 0, currentPosition);
 	}
 	g.popTransform();
     }

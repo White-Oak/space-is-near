@@ -63,7 +63,7 @@ public class ServerCore implements Runnable {
 
     @Override
     public void run() {
-	at.start();
+//	at.start();
 	while (unbreakable) {
 	    //networking
 	    context.getNetworking().processReceivedQueue();

@@ -298,19 +298,19 @@ import spaceisnear.server.objects.items.*;
 		    int id = item.getProperties().getId();
 		    messagesToReturn.add(new MessageCreatedItem(id));
 		    //properties
-		    HashMap<String, ComponentState> states = item.getVariableProperties().getStates();
-		    Set<Map.Entry<String, ComponentState>> entrySet = states.entrySet();
-		    for (Map.Entry<String, ComponentState> entry : entrySet) {
+		    HashMap<String, Object> states = item.getVariableProperties().getStates();
+		    Set<Map.Entry<String, Object>> entrySet = states.entrySet();
+		    for (Map.Entry<String, Object> entry : entrySet) {
 			switch (entry.getKey()) {
 			    case "rotate": {
-				int value = (int) entry.getValue().getValue();
+				int value = (int) entry.getValue();
 				if (value != 0) {
 				    propertys.add(new MessagePropertySet(item.getId(), "rotate", value));
 				}
 			    }
 			    break;
 			    case "stucked": {
-				boolean stucked = (boolean) entry.getValue().getValue();
+				boolean stucked = (boolean) entry.getValue();
 				if (stucked != item.getProperties().getBundle().stuckedByAddingFromScript) {
 				    propertys.add(new MessagePropertySet(item.getId(), "stucked", stucked));
 				}

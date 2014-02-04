@@ -15,8 +15,14 @@ import lombok.Setter;
  */
 @Data public abstract class Layer {
 
-    @NonNull private int width;
-    @NonNull private int height;
+    private int width;
+    private int height;
     private int x;
     private int y;
+
+    public Layer(int width, int height) {
+	this.width = width;
+	this.height = height;
+    }
+
 }

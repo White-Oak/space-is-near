@@ -41,3 +41,8 @@ fillWithItem {wall_glass_reinforced, 10, 14, 10, 15}
 fillWithItem {wall_glass_reinforced, 19, 14, 19, 15}
 fillWithItem {wall_glass_reinforced, 14, 10, 15, 10}
 fillWithItem {wall_glass_reinforced, 14, 19, 15, 19}
+//radio
+addItem {radio, 19, 11}
+addItem {radio, 18, 19}
+addItem {radio, 10, 18}
+addItem {radio, 11, 10}

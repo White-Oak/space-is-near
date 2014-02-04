@@ -29,7 +29,6 @@ public final class CameraMan {
 	final int height = width;
 	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "tiles", false),
 		spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
-	tiledLayer.fillRectTile(0, 0, width, height, 5);
     }
 
     public void delegateWidth() {
@@ -92,17 +91,16 @@ public final class CameraMan {
     }
 
     void paint(Graphics g) {
-	try {
-	    tiledLayer.paintLayer(g);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
     }
 
     public boolean belongsToCamera(Position p) {
 	int px = p.getX();
 	int py = p.getY();
-	return (px + 1 > this.x && px - this.x < getMaxXTiles() + 1) && (py + 1 > this.y && py - this.y < getMaxYTiles() + 1);
+//	final boolean xBelongs = px + 1 > this.x + 6 && px - this.x < getMaxXTiles() + 1 - 7;
+//	final boolean yBelongs = py + 1 > this.y + 4 && py - this.y < getMaxYTiles() + 1 - 5;
+	final boolean xBelongs = px + 1 > this.x  && px - this.x < getMaxXTiles() + 1 ;
+	final boolean yBelongs = py + 1 > this.y  && py - this.y < getMaxYTiles() + 1 ;
+	return xBelongs && yBelongs;
     }
 
     public int getHorizontalTilesNumber() {
