@@ -13,10 +13,7 @@ import java.util.List;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageControlledByInput;
-import spaceisnear.game.messages.MessageMoved;
-import spaceisnear.game.messages.MessageToSend;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.ServerItemsArchive;
@@ -73,7 +70,7 @@ public class PlayerControllableComponent extends Component {
 	    for (AbstractGameObject abstractGameObject : itemsOn) {
 		StaticItem staticItem = (StaticItem) abstractGameObject;
 		int id = staticItem.getProperties().getId();
-		boolean blockingPath = ServerItemsArchive.itemsArchive.isBlockingPath(id);
+		boolean blockingPath = ServerItemsArchive.ITEMS_ARCHIVE.isBlockingPath(id);
 		if (blockingPath) {
 		    Boolean property = (Boolean) staticItem.getVariableProperties().getProperty("stucked");
 		    if (property != null && !property && context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {

@@ -30,7 +30,7 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 		if (values.length == 4) {
 		    rotate = Integer.parseInt(values[3].getValue());
 		}
-		int idByName = ServerItemsArchive.itemsArchive.getIdByName(values[0].getValue());
+		int idByName = ServerItemsArchive.ITEMS_ARCHIVE.getIdByName(values[0].getValue());
 		Position p = new Position(Integer.valueOf(values[1].getValue()), Integer.valueOf(values[2].getValue()));
 		StaticItem addItem = addItem(p, idByName, context);
 		addItem.getVariableProperties().setProperty("rotate", rotate);
@@ -39,7 +39,7 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 		if (values.length == 6) {
 		    rotate = Integer.parseInt(values[3].getValue());
 		}
-		int idByName1 = ServerItemsArchive.itemsArchive.getIdByName(values[0].getValue());
+		int idByName1 = ServerItemsArchive.ITEMS_ARCHIVE.getIdByName(values[0].getValue());
 		int x = Integer.valueOf(values[1].getValue());
 		int y = Integer.valueOf(values[2].getValue());
 		int endX = Integer.valueOf(values[3].getValue());
@@ -59,13 +59,13 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 	StaticItem staticItem1 = new StaticItem(context, p, id);
 	context.addObject(staticItem1);
 	if (p != null) {
-	    final boolean blockingPath = ServerItemsArchive.itemsArchive.isBlockingPath(id);
+	    final boolean blockingPath = ServerItemsArchive.ITEMS_ARCHIVE.isBlockingPath(id);
 	    if (blockingPath) {
 		context.getObstacles().setReacheable(p.getX(), p.getY(), false);
 	    }
-	    context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ServerItemsArchive.itemsArchive.isBlockingAir(id));
+	    context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ServerItemsArchive.ITEMS_ARCHIVE.isBlockingAir(id));
 	}
-	final ItemBundle bundle = ServerItemsArchive.itemsArchive.getBundle(id);
+	final ItemBundle bundle = ServerItemsArchive.ITEMS_ARCHIVE.getBundle(id);
 	boolean st = bundle.stuckedByAddingFromScript;
 	staticItem1.getVariableProperties().setProperty("stucked", st);
 	//properties

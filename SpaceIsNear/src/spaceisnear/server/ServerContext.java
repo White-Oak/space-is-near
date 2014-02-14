@@ -1,20 +1,18 @@
 package spaceisnear.server;
 
-import spaceisnear.game.messages.Message;
-import spaceisnear.server.objects.ServerGameObject;
-import spaceisnear.server.objects.Player;
 import java.util.*;
 import lombok.Getter;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.Context;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.ui.console.LogString;
+import spaceisnear.game.components.inventory.InventorySlot;
+import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
-import spaceisnear.game.messages.DirectedMessage;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
-import spaceisnear.server.objects.ServerNetworkingObject;
+import spaceisnear.server.objects.*;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 import spaceisnear.server.objects.items.StaticItem;
 
@@ -67,8 +65,8 @@ public final class ServerContext extends Context {
     }
 
     public ServerContext(final ServerNetworking networking, final List<AbstractGameObject> objects,
-	    ObstaclesLayer obstacles,
-	    AtmosphericLayer atmosphere) {
+			 ObstaclesLayer obstacles,
+			 AtmosphericLayer atmosphere) {
 	this.networking = networking;
 	this.objects = objects;
 	this.obstacles = obstacles;
@@ -82,10 +80,10 @@ public final class ServerContext extends Context {
 	    addObject(null);
 	}
     }
-
-    public void log(LogString string) {
-	log.log(string);
-    }
+//
+//    public void logToServerLog(LogString string) {
+//	log.log(string);
+//    }
 
     public boolean isHearingLogMessage(Position said, Position toHear) {
 	int[][] bufferMap = new int[obstacles.getWidth()][obstacles.getHeight()];
@@ -156,6 +154,53 @@ public final class ServerContext extends Context {
 
     public boolean isOnMap(int x, int y) {
 	return (x >= 0 && x < obstacles.getWidth()) && (y >= 0 && y < obstacles.getHeight());
+    }
+//
+//    public void log(final LogString log) {
+//	logToServerLog(log);
+//	switch (log.getLevel()) {
+//	    case TALKING:
+//		processIncomingTalkingLogMessage(log);
+//		break;
+//	    case BROADCASTING:
+//		int[][] bufferMap = getAvailabilityMatrixOfHearingFrequency(log.getFrequency());
+//		for (int i = 0; i < players.size(); i++) {
+//		    Player player = players.get(i);
+//		    boolean radioPlayer = doesPlayerHasEnabledRadioOnFrequency(player, log.getFrequency());
+//		    if (radioPlayer || bufferMap[player.getPosition().getX()][player.getPosition().getY()] > 0) {
+//			getNetworking().sendToID(i, new MessageLog(log));
+//		    }
+//		}
+//		break;
+//	}
+//    }
+//
+//    private void processIncomingTalkingLogMessage(final LogString log) {
+//	for (int i = 0; i < players.size(); i++) {
+//	    Player player = players.get(i);
+//	    Position positionToHear = player.getPosition();
+//	    Position positionToSay = log.getPosition();
+//	    if (isHearingLogMessage(positionToSay, positionToHear)) {
+//		getNetworking().sendToID(i, new MessageLog(log));
+//	    }
+//	}
+//    }
+
+    private boolean doesPlayerHasEnabledRadioOnFrequency(Player player, String frequency) {
+	InventorySlot ear = player.getInventoryComponent().getSlots().getEar();
+	boolean radioPlayer = false;
+	final int itemId = ear.getItemId();
+	if (itemId != -1) {
+	    StaticItem get = (StaticItem) getObjects().get(itemId);
+	    String name = get.getProperties().getName();
+	    if (name.equals("ear_radio")) {
+		VariablePropertiesComponent variableProperties = get.getVariableProperties();
+		if (frequency.equals(variableProperties.getProperty("frequency"))) {
+		    radioPlayer = (boolean) variableProperties.getProperty("enabled");
+		}
+	    }
+	}
+	return radioPlayer;
     }
 
 }

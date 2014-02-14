@@ -4,8 +4,8 @@
  */
 package spaceisnear.game.components;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import spaceisnear.game.components.client.PaintableComponent;
-import org.newdawn.slick.Graphics;
 import spaceisnear.game.messages.Message;
 
 public class NameComponent extends PaintableComponent {
@@ -23,15 +23,15 @@ public class NameComponent extends PaintableComponent {
     public void processMessage(Message message) {
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-    }
-
     public String getNickname() {
 	return (String) getStateValueNamed("name");
     }
 
     public void setNickname(String name) {
 	setStateValueNamed("name", name);
+    }
+
+    @Override
+    public void paintComponent(SpriteBatch batch, int x, int y) {
     }
 }

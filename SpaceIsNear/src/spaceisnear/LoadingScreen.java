@@ -5,57 +5,82 @@
  */
 package spaceisnear;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import lombok.RequiredArgsConstructor;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
-import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 import spaceisnear.game.Corev2;
 
 /**
  * @author White Oak
  */
-@RequiredArgsConstructor public class LoadingScreen extends BasicGameState {
+@RequiredArgsConstructor public class LoadingScreen implements Screen {
 
     private final Corev2 core;
     public static int LOADING_AMOUNT, CURRENT_AMOUNT;
+    private final Stage stage;
+    Table table;
+    private Label progress;
 
-    @Override
-    public int getID() {
-	return 2;
+    public LoadingScreen() {
+	this.core = Main.main.core;
+	stage = new Stage();
+	table = new Table();
+	BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), false);
+	final Skin skin = new Skin(Gdx.files.classpath("uiskin.json"));
+	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.YELLOW);
+	Label loadingLabel = new Label("Loading", labelStyle);
+	progress = new Label("0/0", labelStyle);
+	table.setFillParent(true);
+	table.add(loadingLabel);
+	table.row();
+	table.add(progress);
+	stage.addActor(table);
+    }
+
+    public void update() {
+	if (core.isNotpaused()) {
+	    System.out.println("Moving to Core...");
+	    Main.main.setScreen(core);
+	}
     }
 
     @Override
-    public void init(GameContainer container, StateBasedGame game) throws SlickException {
+    public void render(float delta) {
+	Gdx.gl.glClearColor(0, 0, 0, 1);
+	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	progress.setText(CURRENT_AMOUNT + " / " + LOADING_AMOUNT);
+	stage.draw();
+	update();
     }
 
     @Override
-    public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void show() {
 	System.out.println("Entered loading screen");
 	core.callToConnect();
     }
 
     @Override
-    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-	g.setColor(Color.black);
-	g.fillRect(0, 0, game.getContainer().getWidth(), game.getContainer().getHeight());
-	g.setColor(Color.yellow);
-	g.drawString("Loading...", (game.getContainer().getWidth() >> 1) - (g.getFont().getWidth("Loading...") >> 1),
-		(game.getContainer().getHeight() >> 1) - 100);
-	g.drawString(CURRENT_AMOUNT + " / " + LOADING_AMOUNT,
-		(game.getContainer().getWidth() >> 1) - (g.getFont().getWidth("Loading...") >> 1),
-		(game.getContainer().getHeight() >> 1) - 50);
+    public void hide() {
     }
 
     @Override
-    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-	if (core.isNotpaused()) {
-	    System.out.println("Moving to Core...");
-	    game.enterState(3, new FadeOutTransition(Color.white, 400), new FadeInTransition(Color.white, 400));
-	}
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void dispose() {
     }
 }

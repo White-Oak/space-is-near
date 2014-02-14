@@ -4,9 +4,11 @@
  */
 package spaceisnear.game.components.client;
 
-import spaceisnear.game.GameContext;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.objects.items.ItemsArchive;
 
 /**
  *
@@ -19,14 +21,12 @@ public class PlayerComponent extends PaintableComponent {
     }
 
     @Override
-    public void paintComponent(org.newdawn.slick.Graphics g) {
-	g.setColor(org.newdawn.slick.Color.black);
-	int w = GameContext.TILE_WIDTH;
-	int h = GameContext.TILE_HEIGHT;
-	g.drawLine(0, 0, w, h);
-	g.drawLine(0, 1, w - 1, h);
-	g.drawLine(w - 1, 0, 0, h);
-	g.drawLine(w - 1, 1, 1, h);
+    public void paintComponent(SpriteBatch batch, int x, int y) {
+	int id = 2;
+	int[] imageIds = ItemsArchive.itemsArchive.getImageIds(id);
+	//curently drawing zero state image
+	TextureRegion image = ItemsArchive.itemsArchive.getTextureRegion(imageIds[0]);
+	batch.draw(image, x, y);
     }
 
     @Override

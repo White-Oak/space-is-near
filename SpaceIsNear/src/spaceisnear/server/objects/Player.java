@@ -2,15 +2,9 @@
 package spaceisnear.server.objects;
 
 import lombok.Getter;
-import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.components.server.BreathingComponent;
-import spaceisnear.game.components.server.HealthComponent;
-import spaceisnear.game.components.NameComponent;
-import spaceisnear.game.components.server.PlayerControllableComponent;
-import spaceisnear.game.components.PositionComponent;
+import spaceisnear.game.components.*;
 import spaceisnear.game.components.inventory.InventoryComponent;
-import spaceisnear.game.components.server.VariablePropertiesComponent;
+import spaceisnear.game.components.server.*;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.server.ServerContext;
 
@@ -24,7 +18,7 @@ public class Player extends ServerGameObject {
 
     public Player(ServerContext context, int connectionID) {
 	super(GameObjectType.PLAYER, context);
-	PositionComponent pc = new PositionComponent(24, 18);
+	PositionComponent pc = new PositionComponent(2, 3);
 	healthComponent = new HealthComponent();
 	addComponents(pc, healthComponent, new BreathingComponent(),
 		new InventoryComponent(), new PlayerControllableComponent(), new NameComponent(null),

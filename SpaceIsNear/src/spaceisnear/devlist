@@ -130,7 +130,7 @@
 +lombokked code again
 +New objects' sending system
 
-0.0.6
+0.0.6 r100
 -Developed items' system
     +items' images can be rotated by 90, 180, 270
     +items' properties are sent if they differ from default
@@ -139,13 +139,22 @@
     +inventory is sent over the net
     +radio for ear
 -In-game chat
-    -make PM
-    -make OOC
     +make some DEBUG messages
     +make some broadcasting
     +make some broadcasting when new player is connected
 +RADIOSYSTEM
     +server discovers whether someone is in range of frequncy message or not
+*fixed blurred font and wrong colors of font
+*graphics performance update
++editor
++porting SIN from Slick to libGDX
+
+0.0.7
+-Inventory
+    -UI
+-In-game chat
+    -make PM
+    -make OOC
 -gotta do something with disconnected players
 +HealthComponent
     -knockbacking if critical
@@ -154,5 +163,4 @@
     -knockbacking if big difference between two tiles in pressure
 +MessageKnockbacked
     -processing on server
-*fixed blurred font and wrong colors of font
-*graphics performance update
+-optimizing MessageCreateds

@@ -4,8 +4,9 @@
  */
 package spaceisnear.game.components.client;
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.messages.Message;
@@ -18,18 +19,20 @@ public class ItemPaintableComponent extends PaintableComponent {
     private int rotate;
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(SpriteBatch batch, int x, int y) {
 	ItemPropertiesComponent properties = ((StaticItem) getOwner()).getProperties();
 	int id = properties.getId();
 	int[] imageIds = ItemsArchive.itemsArchive.getImageIds(id);
 	//curently drawing zero state image
-	Image image = ItemsArchive.itemsArchive.getImage(imageIds[0]);
+	TextureRegion image = ItemsArchive.itemsArchive.getTextureRegion(imageIds[0]);
 	if (rotate != 0) {
-	    image.rotate(rotate);
-	}
-	g.drawImage(image, 0, 0);
-	if (rotate != 0) {
-	    image.rotate(-rotate);
+	    batch.draw(image, x, y,
+		    GameContext.TILE_WIDTH >> 1, GameContext.TILE_HEIGHT >> 1,
+		    GameContext.TILE_WIDTH, GameContext.TILE_HEIGHT,
+		    1, 1,
+		    rotate, true);
+	} else {
+	    batch.draw(image, x, y);
 	}
     }
 

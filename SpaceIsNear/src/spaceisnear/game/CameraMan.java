@@ -5,12 +5,9 @@
  */
 package spaceisnear.game;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import lombok.Getter;
 import lombok.Setter;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import spaceisnear.game.layer.*;
 import spaceisnear.game.objects.Position;
 
 /**
@@ -20,20 +17,16 @@ public final class CameraMan {
 
     @Getter private int x;
     @Getter private int y;
-    @Getter @Setter private TiledLayer tiledLayer;
     @Setter private int windowWidth;
     @Setter private int windowHeight;
+    @Getter private final OrthographicCamera camera = new OrthographicCamera();
+    @Getter private final int horizontalTilesNumber;
+    @Getter private final int verticalTilesNumber;
 
-    public CameraMan() throws SlickException {
-	final int width = GameContext.MAP_WIDTH;
-	final int height = width;
-	tiledLayer = new TiledLayer(new Image(getClass().getResourceAsStream("/res/tiles1.png"), "tiles", false),
-		spaceisnear.game.GameContext.TILE_WIDTH, spaceisnear.game.GameContext.TILE_HEIGHT, width, height);
-    }
-
-    public void delegateWidth() {
-	tiledLayer.setWindowHeight(windowHeight);
-	tiledLayer.setWindowWidth(windowWidth);
+    public CameraMan() {
+	verticalTilesNumber = GameContext.MAP_WIDTH;
+	horizontalTilesNumber = verticalTilesNumber;
+	camera.setToOrtho(true);
     }
 
     public void setNewCameraPositionForMove(int deltax, int deltay) {
@@ -55,42 +48,37 @@ public final class CameraMan {
     public void moveCameraTo(int x, int y) {
 	this.x = x;
 	this.y = y;
-	tiledLayer.moveCameraTo(x, y);
+//	tiledLayer.moveCameraTo(x, y);
     }
 
     public void moveCameraToPlayer(int x, int y) {
-	moveCameraTo(x - (tiledLayer.getMaxXTiles() >> 1), y - (tiledLayer.getMaxYTiles() >> 1));
+	moveCameraTo(x - (getMaxXTiles() >> 1), y - (getMaxYTiles() >> 1));
     }
 
     private void cameraUp() {
 	y--;
-	tiledLayer.moveUp();
     }
 
     private void cameraDown() {
 	y++;
-	tiledLayer.moveDown();
     }
 
     private void cameraLeft() {
 	x--;
-	tiledLayer.moveLeft();
     }
 
     private void cameraRight() {
 	x++;
-	tiledLayer.moveRight();
     }
 
-    public void moveCamera(Graphics g) {
-	g.translate(-x * tiledLayer.getTileWidth(), -y * tiledLayer.getTileHeight());
+    public void moveCamera() {
+	camera.translate(x * GameContext.TILE_WIDTH, y * GameContext.TILE_HEIGHT);
+	camera.update();
     }
 
-    public void unmoveCamera(Graphics g) {
-	g.translate(x * tiledLayer.getTileWidth(), y * tiledLayer.getTileHeight());
-    }
-
-    void paint(Graphics g) {
+    public void unmoveCamera() {
+	camera.translate(-x * GameContext.TILE_WIDTH, -y * GameContext.TILE_HEIGHT);
+	camera.update();
     }
 
     public boolean belongsToCamera(Position p) {
@@ -106,20 +94,12 @@ public final class CameraMan {
 	return xBelongs && yBelongs;
     }
 
-    public int getHorizontalTilesNumber() {
-	return tiledLayer.getHorizontalTilesNumber();
-    }
-
-    public int getVerticalTilesNumber() {
-	return tiledLayer.getVerticalTilesNumber();
-    }
-
     public int getMaxXTiles() {
-	return tiledLayer.getMaxXTiles();
+	return windowWidth / GameContext.TILE_WIDTH + 2;
     }
 
     public int getMaxYTiles() {
-	return tiledLayer.getMaxYTiles();
+	return windowHeight / GameContext.TILE_HEIGHT + 2;
     }
 
 }

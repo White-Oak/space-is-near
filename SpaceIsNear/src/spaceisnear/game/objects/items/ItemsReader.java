@@ -5,9 +5,7 @@
  */
 package spaceisnear.game.objects.items;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import spaceisnear.Utils;
 
 /**
@@ -25,7 +23,7 @@ public class ItemsReader {
 	}
     }
 
-    public static byte[] getContents(InputStream is) {
+    private static byte[] getContents(InputStream is) {
 	try {
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    int c;

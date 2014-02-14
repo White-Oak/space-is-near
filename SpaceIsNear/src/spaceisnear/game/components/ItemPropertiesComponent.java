@@ -8,10 +8,7 @@ package spaceisnear.game.components;
 import lombok.Getter;
 import spaceisnear.ItemsArchivable;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.objects.items.ItemBundle;
-import spaceisnear.game.objects.items.ItemsArchive;
-import spaceisnear.game.objects.items.Size;
-import spaceisnear.game.objects.items.Type;
+import spaceisnear.game.objects.items.*;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 
 public class ItemPropertiesComponent extends Component {
@@ -69,7 +66,7 @@ public class ItemPropertiesComponent extends Component {
 	if (ItemsArchive.itemsArchive != null) {
 	    return ItemsArchive.itemsArchive;
 	} else {
-	    return ServerItemsArchive.itemsArchive;
+	    return ServerItemsArchive.ITEMS_ARCHIVE;
 	}
     }
 }

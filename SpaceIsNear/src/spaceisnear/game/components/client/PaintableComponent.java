@@ -4,11 +4,19 @@
  */
 package spaceisnear.game.components.client;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 
 public abstract class PaintableComponent extends Component {
+
+    private final static OrthographicCamera camera = new OrthographicCamera();
+
+    static {
+	camera.setToOrtho(true);
+    }
 
     protected PaintableComponent(ComponentType type) {
 	super(type);
@@ -30,9 +38,9 @@ public abstract class PaintableComponent extends Component {
 	return getPositionComponent().getDelayY();
     }
 
-    public abstract void paintComponent(org.newdawn.slick.Graphics g);
+    public abstract void paintComponent(SpriteBatch batch, int x, int y);
 
-    public final void paint(org.newdawn.slick.Graphics g) {
+    public final void paint(SpriteBatch batch) {
 	if (((GameContext) getContext()).getCameraMan().belongsToCamera(getPosition())) {
 	    int xto, yto;
 //	    if (GameContext.TILE_WIDTH == 32) {
@@ -42,10 +50,7 @@ public abstract class PaintableComponent extends Component {
 	    xto = getX() * GameContext.TILE_WIDTH - getDelayX();
 	    yto = getY() * GameContext.TILE_HEIGHT - getDelayY();
 //	    }
-	    g.pushTransform();
-	    g.translate(xto, yto);
-	    paintComponent(g);
-	    g.popTransform();
+	    paintComponent(batch, xto, yto);
 	}
     }
 }

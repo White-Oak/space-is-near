@@ -23,12 +23,4 @@ public class TypicalInventorySlotsSet {
 	    bag = new InventorySlot(Size.MEDIUM, "bag"),
 	    belt = new InventorySlot(Size.MEDIUM, "belt"),
 	    id = new InventorySlot(Size.SMALL, "id");
-
-    private int[] getItemsIdsForTransferring() {
-	return new int[]{head.getItemId(), body.getItemId(), leftHand.getItemId(), rightHand.getItemId(), legs.getItemId(), shoes.getItemId(),
-	    ear.getItemId(), bag.getItemId(), belt.getItemId(), id.getItemId()};
-    }
-    private void setItemsIdsFromTransferring(int id[]){
-	
-    }
 }

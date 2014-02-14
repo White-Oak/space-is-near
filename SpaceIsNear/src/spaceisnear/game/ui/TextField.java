@@ -5,36 +5,83 @@
  */
 package spaceisnear.game.ui;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.KeyListener;
-import org.newdawn.slick.MouseListener;
-import org.newdawn.slick.gui.AbstractComponent;
-import org.newdawn.slick.gui.GUIContext;
-import spaceisnear.game.ui.console.GameConsole;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
  *
  * @author White Oak
  */
-public class TextField extends AbstractComponent implements MouseListener, KeyListener {
+public final class TextField extends Widget {
 
     private StringBuilder text = new StringBuilder();
     private int currentPosition;
-    private int x, y;
-    private final int width, height;
-    private final Font font;
+    private final BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
     private Color textColor;
+    private final InputListener inputListener;
 
-    public TextField(GUIContext container, int x, int y, int width, int height, Font font) {
-	super(container);
-	this.x = x;
-	this.y = y;
-	this.width = width;
-	this.height = height;
-	this.font = font;
+    public TextField() {
+	addListener(inputListener = new ClickListener() {
+	    @Override
+	    public void clicked(InputEvent event, float x, float y) {
+//				if (getTapCount() > 1) setSelection(0, text.length());
+	    }
+
+	    @Override
+	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		System.out.println("truee");
+		Stage stage = getStage();
+		if (stage != null) {
+		    stage.setKeyboardFocus(TextField.this);
+		}
+		return true;
+	    }
+
+	    @Override
+	    public void touchDragged(InputEvent event, float x, float y, int pointer) {
+//		super.touchDragged(event, x, y, pointer);
+//		lastBlink = 0;
+//		cursorOn = false;
+//		setCursorPosition(x);
+//		hasSelection = true;
+	    }
+
+	    @Override
+	    public boolean keyDown(InputEvent event, int keycode) {
+		return true;
+	    }
+
+	    @Override
+	    public boolean keyTyped(InputEvent event, char character) {
+		System.out.println("hey");
+		if (font.containsCharacter(character)) {
+		    addCharacter(character);
+		}
+		addCharacter(character);
+		return true;
+	    }
+
+	    @Override
+	    public boolean keyUp(InputEvent event, int keycode) {
+		return true;
+	    }
+	});
+	setHeight(getPrefHeight());
+	camera.setToOrtho(true);
+	camera.update();
+	renderer.setProjectionMatrix(camera.combined);
+    }
+
+    @Override
+    public float getPrefHeight() {
+	return font.getLineHeight() + 4;
     }
 
     public void addCharacter(char c) {
@@ -53,79 +100,26 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
 	}
     }
 
-    @Override
-    public void keyPressed(int key, char c) {
-	super.keyPressed(key, c);
-	if (hasFocus()) {
-	    switch (key) {
-		case Input.KEY_ENTER:
-		    notifyListeners();
-		    setFocus(false);
-		    break;
-		case Input.KEY_BACK:
-		    removeCharacter();
-		    break;
-		case Input.KEY_RIGHT:
-		    if (currentPosition > 0) {
-			currentPosition--;
-		    }
-		    break;
-		case Input.KEY_LEFT:
-		    if (currentPosition < text.length()) {
-			currentPosition++;
-		    }
-		    break;
-		default:
-//		    if (Character.isLetterOrDigit(c) || Character.isWhitespace(c)) {
-//			addCharacter(c);
-//		    }
-		    if (!Character.isIdentifierIgnorable(c)) {
-			addCharacter(c);
-		    }
-		    break;
-	    }
-	} else {
-	    if (key == Input.KEY_ENTER) {
-		setFocus(true);
-	    }
-	}
-    }
+    private final ShapeRenderer renderer = new ShapeRenderer();
+    private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
 
     @Override
-    public void render(GUIContext container, Graphics g) {
-	g.setFont(font);
-	GameConsole.setColor(g, textColor);
-	g.drawString(text.toString(), x, y);
-	if (hasFocus()) {
-	    final int spaceWidth = g.getFont().getWidth("w");
-	    g.fillRect(x + spaceWidth * currentPosition, y + g.getFont().getLineHeight(), spaceWidth, 2);
-	}
-    }
-
-    @Override
-    public void setLocation(int x, int y) {
-	this.x = x;
-	this.y = y;
-    }
-
-    @Override
-    public int getX() {
-	return x;
-    }
-
-    @Override
-    public int getY() {
-	return y;
-    }
-
-    @Override
-    public int getWidth() {
-	return width;
-    }
-
-    @Override
-    public int getHeight() {
-	return height;
+    public void draw(SpriteBatch batch, float parentAlpha) {
+	batch.end();
+	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+	renderer.setColor(Color.WHITE);
+	final float y = Gdx.graphics.getHeight() - getY() - getPrefHeight();
+	renderer.filledRect(getX(), y, getWidth(), getHeight());
+	renderer.end();
+	renderer.begin(ShapeRenderer.ShapeType.Line);
+	renderer.setColor(Color.BLACK);
+	renderer.line(getX(), y, getX() + getWidth(), y);
+	renderer.end();
+//	batch.setProjectionMatrix(camera.combined);
+	batch.begin();
+	font.setColor(Color.BLACK);
+	font.draw(batch, "hey man", getX() + 10, y + 2);
+	batch.flush();
     }
 
     public void setTextColor(Color textColor) {
@@ -142,7 +136,6 @@ public class TextField extends AbstractComponent implements MouseListener, KeyLi
     }
 
     public void clear() {
-	setText("");
-	setFocus(false);
+	text.setLength(0);
     }
 }

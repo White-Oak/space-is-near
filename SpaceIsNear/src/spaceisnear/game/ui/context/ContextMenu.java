@@ -5,23 +5,24 @@
  */
 package spaceisnear.game.ui.context;
 
-import org.newdawn.slick.Font;
-import org.newdawn.slick.Graphics;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
  *
  * @author White Oak
  */
-public class ContextMenu {
+public class ContextMenu extends Actor {
 
     private final ContextSubMenu subMenu;
 
-    public ContextMenu(int x, int y, Font font) {
+    public ContextMenu(int x, int y, BitmapFont font) {
 	subMenu = new ContextSubMenu(null, x, y, font);
     }
 
-    public void render(Graphics g) {
-	subMenu.render(g);
+    public void render(SpriteBatch batch) {
+	subMenu.render(batch);
     }
 
     public boolean add(ContextMenuItem e) {

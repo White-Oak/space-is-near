@@ -7,15 +7,11 @@ import java.util.logging.*;
 import lombok.*;
 import spaceisnear.*;
 import spaceisnear.game.bundles.*;
-import spaceisnear.game.components.*;
-import spaceisnear.game.components.inventory.InventorySlot;
-import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.objects.*;
-import spaceisnear.game.ui.console.*;
 import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.items.*;
 
@@ -30,10 +26,11 @@ import spaceisnear.server.objects.items.*;
     private final ArrayList<Player> players = new ArrayList<>();
     private MessageClientInformation informationAboutLastConnected;
     private boolean[] rogered;
-    private final static MessageRogerRequested ROGER_REQUSTED = new MessageRogerRequested();
+    private final static MessageBundle ROGER_REQUSTED_BUNDLE = new MessageRogerRequested().getBundle();
     private final Queue<MessageBundle> messages = new LinkedList<>();
 
     private List<MessagePropertable> propertys;
+    private List<MessagePropertable> propertysForNewPlayer;
 
     @Override
     public void received(Connection connection, Object object) {
@@ -74,7 +71,6 @@ import spaceisnear.server.objects.items.*;
 		System.out.println("Client information received");
 		break;
 	    case CONTROLLED:
-//		    System.out.println("Somebody controlled his player");
 		MessageControlledByInput mc = MessageControlledByInput.getInstance(b);
 		core.getContext().sendDirectedMessage(mc);
 		break;
@@ -84,9 +80,9 @@ import spaceisnear.server.objects.items.*;
 		sendToAll(mm);
 		break;
 	    case LOG:
-		MessageLog ml = MessageLog.getInstance(b);
-		final LogString log = ml.getLog();
-		log(log);
+//		MessageLog ml = MessageLog.getInstance(b);
+//		final LogString log = ml.getLog();
+//		log(log);
 		break;
 	    case PROPERTY_SET:
 		MessagePropertySet mps = MessagePropertySet.getInstance(b);
@@ -97,65 +93,22 @@ import spaceisnear.server.objects.items.*;
 	}
 //	    System.out.println("Message received");
     }
-
-    public void log(final LogString log) {
-	core.getContext().log(log);
-	switch (log.getLevel()) {
-	    case TALKING:
-		processIncomingTalkingLogMessage(log);
-		break;
-	    case BROADCASTING:
-		int[][] bufferMap = core.getContext().getAvailabilityMatrixOfHearingFrequency(log.getFrequency());
-		for (int i = 0; i < players.size(); i++) {
-		    Player player = players.get(i);
-		    boolean radioPlayer = doesPlayerHasEnabledRadioOnFrequency(player, log.getFrequency());
-		    if (radioPlayer || bufferMap[player.getPosition().getX()][player.getPosition().getY()] > 0) {
-			sendToConnection(connections.get(i), new MessageLog(log));
-		    }
-		}
-		break;
-	}
-    }
-
-    private boolean doesPlayerHasEnabledRadioOnFrequency(Player player, String frequency) {
-	InventorySlot ear = player.getInventoryComponent().getSlots().getEar();
-	boolean radioPlayer = false;
-	final int itemId = ear.getItemId();
-	if (itemId != -1) {
-	    StaticItem get = (StaticItem) core.getContext().getObjects().get(itemId);
-	    String name = get.getProperties().getName();
-	    if (name.equals("ear_radio")) {
-		VariablePropertiesComponent variableProperties = get.getVariableProperties();
-		if (frequency.equals(variableProperties.getProperty("frequency"))) {
-		    radioPlayer = (boolean) variableProperties.getProperty("enabled");
-		}
-	    }
-	}
-	return radioPlayer;
-    }
-
-    private void processIncomingTalkingLogMessage(final LogString log) {
-	for (int i = 0; i < players.size(); i++) {
-	    Player player = players.get(i);
-	    Position positionToHear = player.getPosition();
-	    Position positionToSay = log.getPosition();
-	    if (core.getContext().isHearingLogMessage(positionToSay, positionToHear)) {
-		sendToConnection(connections.get(i), new MessageLog(log));
-	    }
-	}
-    }
+//
+//    public void log(final LogString log) {
+////	core.getContext().log(log);
+//    }
 
     public void sendToAll(NetworkableMessage message) {
 	Bundle b = message.getBundle();
 	server.sendToAllTCP(b);
-//	System.out.println("Message sent");
+    }
+
+    public void sendToAll(Bundle b) {
+	server.sendToAllTCP(b);
     }
 
     public void sendToID(int id, NetworkableMessage message) {
 	Bundle b = message.getBundle();
-	if (b.getBytes() != null && b.getBytes().length > 2048) {
-	    System.out.println("l");
-	}
 	sendToID(id, b);
     }
 
@@ -167,9 +120,18 @@ import spaceisnear.server.objects.items.*;
 	Bundle b = message.getBundle();
 	sendToConnection(c, b);
     }
+    private int messagesSent;
+    private final int MESSAGES_TO_SENT_BEFORE_REQUESTING_ROGERING = 255;
 
     private void sendToConnection(Connection c, Bundle bundle) {
+	if (messagesSent == MESSAGES_TO_SENT_BEFORE_REQUESTING_ROGERING) {
+	    server.sendToTCP(c.getID(), ROGER_REQUSTED_BUNDLE);
+	    waitForToRoger(c.getID() - 1);
+	    rogered[c.getID() - 1] = false;
+	    messagesSent = 0;
+	}
 	server.sendToTCP(c.getID(), bundle);
+	messagesSent++;
 //	System.out.println("Message sent");
     }
 
@@ -192,14 +154,14 @@ import spaceisnear.server.objects.items.*;
 	players.add(player);
 	player.setNickname(informationAboutLastConnected.getDesiredNickname());
 	final ServerContext context = core.getContext();
-	final ServerItemsArchive itemsArchive = ServerItemsArchive.itemsArchive;
+	final ServerItemsArchive itemsArchive = ServerItemsArchive.ITEMS_ARCHIVE;
 	final int idByName = itemsArchive.getIdByName("ear_radio");
 	StaticItem item = ItemAdder.addItem(new Position(-1, -1), idByName, context);
 	player.getInventoryComponent().getSlots().getEar().setItemId(item.getId());
     }
 
     public void host() throws IOException {
-	server = new Server(256 * 1024, 1 * 1024);
+	server = new Server(256 * 1024, 1024);
 	Registerer.registerEverything(server);
 	server.start();
 	server.addListener(this);
@@ -208,6 +170,10 @@ import spaceisnear.server.objects.items.*;
 
     @Override
     public void run() {
+	processNewPlayer();
+    }
+
+    private void processNewPlayer() {
 	waitForServerToStop();
 	//create list of properties
 	propertys = new ArrayList<>();
@@ -230,7 +196,7 @@ import spaceisnear.server.objects.items.*;
 	}
 	Player get = players.get(players.size() - 1);
 	String message = get.getNickname() + " has connected to SIN!";
-	log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
+//	log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
     }
 
     private void waitForServerToStop() {
@@ -245,7 +211,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void orderEveryoneToRogerAndWait() {
-	sendToAll(ROGER_REQUSTED);
+	sendToAll(ROGER_REQUSTED_BUNDLE);
 	waitForAllToRoger();
 	resetRogeredStatuses();
     }
@@ -254,15 +220,8 @@ import spaceisnear.server.objects.items.*;
 	MessageCreated[] world = getWorld();
 	MessageWorldInformation mwi = new MessageWorldInformation(world.length + 1, propertys.size());
 	sendToID(lastConnected, mwi);
-	for (int i = 0; i < world.length; i++) {
-	    MessageCreated messageCreated = world[i];
+	for (MessageCreated messageCreated : world) {
 	    sendToID(lastConnected, messageCreated);
-	    if (i % 125 == 0) {
-//		System.out.println("I've just sent a chunk of items");
-		sendToID(lastConnected, ROGER_REQUSTED);
-		waitForToRoger(lastConnected);
-		rogered[lastConnected] = false;
-	    }
 	}
     }
 
@@ -273,16 +232,8 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void sendProperties(int lastConnected) {
-	//sending properties
-	for (int i = 0; i < propertys.size(); i++) {
-	    MessagePropertable messagePropertable = propertys.get(i);
+	for (MessagePropertable messagePropertable : propertys) {
 	    sendToID(lastConnected, messagePropertable);
-	    if (i % 125 == 0) {
-//		System.out.println("I've just sent a chunk of items");
-		sendToID(lastConnected, ROGER_REQUSTED);
-		waitForToRoger(lastConnected);
-		rogered[lastConnected] = false;
-	    }
 	}
     }
 

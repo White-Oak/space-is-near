@@ -10,24 +10,18 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
-import org.newdawn.slick.SlickException;
 import spaceisnear.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.HealthComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
-import spaceisnear.game.messages.HurtMessage;
-import spaceisnear.game.messages.MessageLog;
-import spaceisnear.game.messages.MessageTimePassed;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.service.MessagePaused;
 import spaceisnear.game.messages.service.MessageUnpaused;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsReader;
-import spaceisnear.game.ui.console.LogLevel;
-import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.objects.Player;
-import spaceisnear.server.objects.items.ItemAdder;
-import spaceisnear.server.objects.items.ServerItemsArchive;
+import spaceisnear.server.objects.items.*;
 
 /**
  * @author white_oak
@@ -47,9 +41,7 @@ public class ServerCore implements Runnable {
 	int height = width;
 	final ArrayList<AbstractGameObject> objects = new ArrayList<>();
 	try {
-	    ServerItemsArchive.itemsArchive = new ServerItemsArchive(ItemsReader.read());
-	} catch (SlickException ex) {
-	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+	    ServerItemsArchive.ITEMS_ARCHIVE = new ServerItemsArchive(ItemsReader.read());
 	} catch (Exception ex) {
 	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -59,6 +51,7 @@ public class ServerCore implements Runnable {
 	//items adding
 	ItemAdder itemAdder = new ItemAdder(context);
 	itemAdder.addItems();
+	System.out.println("done");
     }
 
     @Override
@@ -95,7 +88,7 @@ public class ServerCore implements Runnable {
 	if (timePassed > 4000 && !context.getPlayers().isEmpty()) {
 	    Player get = context.getPlayers().get(0);
 	    final int pressure = context.getAtmosphere().getPressure(get.getPosition().getX(), get.getPosition().getY());
-	    context.getNetworking().sendToAll(new MessageLog(new LogString("Pressure: " + pressure, LogLevel.DEBUG)));
+//	    context.getNetworking().sendToAll(new MessageLog(new LogString("Pressure: " + pressure, LogLevel.DEBUG)));
 	    timePassed = 0;
 	}
     }

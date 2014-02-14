@@ -5,39 +5,86 @@
  */
 package spaceisnear;
 
-import spaceisnear.game.objects.items.ItemBundle;
-import spaceisnear.game.objects.items.Size;
-import spaceisnear.game.objects.items.Type;
+import java.util.HashMap;
+import spaceisnear.game.objects.items.*;
 
 /**
  *
  * @author White Oak
  */
-public interface ItemsArchivable {
+public abstract class ItemsArchivable {
 
-    public int getIdByName(String name);
+    private final HashMap<String, Integer> ids = new HashMap<>();
+    private final ItemBundle[] bundles;
+    public static int PLITKA_ID;
+    public static int RADIO_ID;
 
-    public boolean isBlockingAir(int id);
+    public ItemsArchivable(ItemBundle[] bundles) {
+	final int length = bundles.length;
+	this.bundles = bundles;
+	for (int i = 0; i < length; i++) {
+	    ItemBundle itemBundle = bundles[i];
+	    ids.put(itemBundle.name, i);
+	    switch (itemBundle.name) {
+		case "plitka":
+		    PLITKA_ID = i;
+		    break;
+		case "radio":
+		    RADIO_ID = i;
+		    break;
+	    }
+	}
+    }
 
-    public boolean isBlockingAir(String name);
+    public int getIdByName(String name) {
+	return ids.get(name);
+    }
 
-    public boolean isBlockingPath(int id);
+    public boolean isBlockingAir(int id) {
+	return bundles[id].blockingAir;
+    }
 
-    public boolean isBlockingPath(String name);
+    public boolean isBlockingAir(String name) {
+	return isBlockingAir(getIdByName(name));
+    }
 
-    public Size getSize(int id);
+    public boolean isBlockingPath(int id) {
+	return bundles[id].blockingPath;
+    }
 
-    public Size getSize(String name);
+    public boolean isBlockingPath(String name) {
+	return isBlockingPath(getIdByName(name));
+    }
 
-    public String getName(int id);
+    public Size getSize(int id) {
+	return bundles[id].size;
+    }
 
-    public String getName(String name);
+    public Size getSize(String name) {
+	return getSize(getIdByName(name));
+    }
 
-    public Type getType(int id);
+    public String getName(int id) {
+	return bundles[id].name;
+    }
 
-    public Type getType(String name);
+    public String getName(String name) {
+	return name;
+    }
 
-    public int[] getImageIds(int id);
+    public Type getType(int id) {
+	return bundles[id].type;
+    }
 
-    public ItemBundle getBundle(int id);
+    public Type getType(String name) {
+	return getType(getIdByName(name));
+    }
+
+    public int[] getImageIds(int id) {
+	return bundles[id].imageIds;
+    }
+
+    public ItemBundle getBundle(int id) {
+	return bundles[id];
+    }
 }
