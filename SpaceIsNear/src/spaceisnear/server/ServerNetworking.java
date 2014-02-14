@@ -1,18 +1,18 @@
 package spaceisnear.server;
 
-import spaceisnear.abstracts.AbstractGameObject;
 import com.esotericsoftware.kryonet.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 import lombok.*;
-import spaceisnear.*;
+import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.objects.*;
+import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.items.*;
 
@@ -81,9 +81,9 @@ import spaceisnear.server.objects.items.*;
 		sendToAll(mm);
 		break;
 	    case LOG:
-//		MessageLog ml = MessageLog.getInstance(b);
-//		final LogString log = ml.getLog();
-//		log(log);
+		MessageLog ml = MessageLog.getInstance(b);
+		final LogString log = ml.getLog();
+		log(log);
 		break;
 	    case PROPERTY_SET:
 		MessagePropertySet mps = MessagePropertySet.getInstance(b);
@@ -94,10 +94,11 @@ import spaceisnear.server.objects.items.*;
 	}
 //	    System.out.println("Message received");
     }
-//
-//    public void log(final LogString log) {
-////	core.getContext().log(log);
-//    }
+
+    public void log(final LogString log) {
+	System.out.println("Checking out!");
+	core.getContext().log(log);
+    }
 
     public void sendToAll(NetworkableMessage message) {
 	Bundle b = message.getBundle();

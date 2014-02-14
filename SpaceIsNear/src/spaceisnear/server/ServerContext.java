@@ -12,6 +12,7 @@ import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.objects.*;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 import spaceisnear.server.objects.items.StaticItem;
@@ -80,10 +81,10 @@ public final class ServerContext extends Context {
 	    addObject(null);
 	}
     }
-//
-//    public void logToServerLog(LogString string) {
-//	log.log(string);
-//    }
+
+    public void logToServerLog(LogString string) {
+	log.log(string);
+    }
 
     public boolean isHearingLogMessage(Position said, Position toHear) {
 	int[][] bufferMap = new int[obstacles.getWidth()][obstacles.getHeight()];
@@ -155,36 +156,36 @@ public final class ServerContext extends Context {
     public boolean isOnMap(int x, int y) {
 	return (x >= 0 && x < obstacles.getWidth()) && (y >= 0 && y < obstacles.getHeight());
     }
-//
-//    public void log(final LogString log) {
-//	logToServerLog(log);
-//	switch (log.getLevel()) {
-//	    case TALKING:
-//		processIncomingTalkingLogMessage(log);
-//		break;
-//	    case BROADCASTING:
-//		int[][] bufferMap = getAvailabilityMatrixOfHearingFrequency(log.getFrequency());
-//		for (int i = 0; i < players.size(); i++) {
-//		    Player player = players.get(i);
-//		    boolean radioPlayer = doesPlayerHasEnabledRadioOnFrequency(player, log.getFrequency());
-//		    if (radioPlayer || bufferMap[player.getPosition().getX()][player.getPosition().getY()] > 0) {
-//			getNetworking().sendToID(i, new MessageLog(log));
-//		    }
-//		}
-//		break;
-//	}
-//    }
-//
-//    private void processIncomingTalkingLogMessage(final LogString log) {
-//	for (int i = 0; i < players.size(); i++) {
-//	    Player player = players.get(i);
-//	    Position positionToHear = player.getPosition();
-//	    Position positionToSay = log.getPosition();
-//	    if (isHearingLogMessage(positionToSay, positionToHear)) {
-//		getNetworking().sendToID(i, new MessageLog(log));
-//	    }
-//	}
-//    }
+
+    public void log(final LogString log) {
+	logToServerLog(log);
+	switch (log.getLevel()) {
+	    case TALKING:
+		processIncomingTalkingLogMessage(log);
+		break;
+	    case BROADCASTING:
+		int[][] bufferMap = getAvailabilityMatrixOfHearingFrequency(log.getFrequency());
+		for (int i = 0; i < players.size(); i++) {
+		    Player player = players.get(i);
+		    boolean radioPlayer = doesPlayerHasEnabledRadioOnFrequency(player, log.getFrequency());
+		    if (radioPlayer || bufferMap[player.getPosition().getX()][player.getPosition().getY()] > 0) {
+			getNetworking().sendToID(i, new MessageLog(log));
+		    }
+		}
+		break;
+	}
+    }
+
+    private void processIncomingTalkingLogMessage(final LogString log) {
+	for (int i = 0; i < players.size(); i++) {
+	    Player player = players.get(i);
+	    Position positionToHear = player.getPosition();
+	    Position positionToSay = log.getPosition();
+	    if (isHearingLogMessage(positionToSay, positionToHear)) {
+		getNetworking().sendToID(i, new MessageLog(log));
+	    }
+	}
+    }
 
     private boolean doesPlayerHasEnabledRadioOnFrequency(Player player, String frequency) {
 	InventorySlot ear = player.getInventoryComponent().getSlots().getEar();

@@ -6,37 +6,32 @@
 package spaceisnear.game.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import lombok.Setter;
 
 /**
  *
  * @author White Oak
  */
-public final class TextField extends Widget {
+public final class TextField extends Actor {
 
     private StringBuilder text = new StringBuilder();
     private int currentPosition;
     private final BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
     private Color textColor;
     private final InputListener inputListener;
+    @Setter private UIListener UIListener;
 
     public TextField() {
-	addListener(inputListener = new ClickListener() {
-	    @Override
-	    public void clicked(InputEvent event, float x, float y) {
-//				if (getTapCount() > 1) setSelection(0, text.length());
-	    }
-
+	addCaptureListener(inputListener = new InputListener() {
 	    @Override
 	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		System.out.println("truee");
 		Stage stage = getStage();
 		if (stage != null) {
 		    stage.setKeyboardFocus(TextField.this);
@@ -55,16 +50,21 @@ public final class TextField extends Widget {
 
 	    @Override
 	    public boolean keyDown(InputEvent event, int keycode) {
+		switch (keycode) {
+		    case Input.Keys.ENTER:
+			if (UIListener != null) {
+			    UIListener.componentActivated(TextField.this);
+			}
+			break;
+		}
 		return true;
 	    }
 
 	    @Override
 	    public boolean keyTyped(InputEvent event, char character) {
-		System.out.println("hey");
 		if (font.containsCharacter(character)) {
 		    addCharacter(character);
 		}
-		addCharacter(character);
 		return true;
 	    }
 
@@ -79,7 +79,6 @@ public final class TextField extends Widget {
 	renderer.setProjectionMatrix(camera.combined);
     }
 
-    @Override
     public float getPrefHeight() {
 	return font.getLineHeight() + 4;
     }
@@ -106,9 +105,11 @@ public final class TextField extends Widget {
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
 	batch.end();
+	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
 	renderer.setColor(Color.WHITE);
-	final float y = Gdx.graphics.getHeight() - getY() - getPrefHeight();
+//	final float y = Gdx.graphics.getHeight() - getY() - getPrefHeight();
+	float y = getY();
 	renderer.filledRect(getX(), y, getWidth(), getHeight());
 	renderer.end();
 	renderer.begin(ShapeRenderer.ShapeType.Line);
@@ -118,7 +119,7 @@ public final class TextField extends Widget {
 //	batch.setProjectionMatrix(camera.combined);
 	batch.begin();
 	font.setColor(Color.BLACK);
-	font.draw(batch, "hey man", getX() + 10, y + 2);
+	font.draw(batch, text, getX() + 10, y + 2);
     }
 
     public void setTextColor(Color textColor) {

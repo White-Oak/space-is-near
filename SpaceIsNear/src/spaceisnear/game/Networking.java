@@ -101,8 +101,8 @@ public class Networking extends Listener {
 		    processMessageWorldInformation(mwi);
 		    break;
 		case LOG:
-//		    MessageLog ml = MessageLog.getInstance(b);
-//		    gameContext.getCore().log(ml.getLog());
+		    MessageLog ml = MessageLog.getInstance(b);
+		    gameContext.getCore().log(ml.getLog());
 		    break;
 		case TELEPORTED:
 		    MessageTeleported mte = MessageTeleported.getInstance(b);

@@ -3,8 +3,8 @@ package spaceisnear.game;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.*;
@@ -15,6 +15,7 @@ import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.objects.items.*;
+import spaceisnear.game.ui.UIListener;
 import spaceisnear.game.ui.console.*;
 import spaceisnear.game.ui.context.*;
 import spaceisnear.game.ui.inventory.Inventory;
@@ -22,7 +23,7 @@ import spaceisnear.game.ui.inventory.Inventory;
 /**
  * @author LPzhelud
  */
-public class Corev2 implements Screen, Runnable {
+public class Corev2 implements Screen, Runnable, UIListener {
 
     private GameContext context;
     private final ArrayList<AbstractGameObject> objects = new ArrayList<>();
@@ -30,7 +31,6 @@ public class Corev2 implements Screen, Runnable {
     public static String IP;
     @Getter private boolean notpaused;
     private Stage stage;
-    private Table table;
     private GameConsole console;
     private ContextMenu menu;
     private Inventory inventory;
@@ -52,29 +52,22 @@ public class Corev2 implements Screen, Runnable {
 	camera.update();
 	stage = new Stage();
 	stage.setCamera(camera);
-	table = new Table();
-	table.setTransform(false);
 	font = new BitmapFont(Gdx.files.classpath("default.fnt"), false);
-	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.YELLOW);
 	final spaceisnear.game.ui.TextField textField = new spaceisnear.game.ui.TextField();
 	console = new GameConsole(800, 0, 400, 600, context, textField);
-	table.setFillParent(true);
-	table.add(new Label("", labelStyle)).expand();
-	table.add(console).width(400);
-	table.row();
-	table.add(new Label("", labelStyle));
-	table.add(textField).width(400);
+	textField.setUIListener(this);
 //	stage.addActor(table);
 	console.setPosition(800, 0);
 	stage.addActor(console);
-	textField.setPosition(800, textField.getPrefHeight());
+	textField.setBounds(800, Gdx.graphics.getHeight() - textField.getPrefHeight(), 400, textField.getPrefHeight());
 	stage.addActor(textField);
-	final InputCatcher inputCatcher = new InputCatcher(this);
+	inputCatcher = new InputCatcher(this);
 	inputCatcher.setBounds(0, 0, 800, 600);
 	stage.addActor(inputCatcher);
 	stage.setKeyboardFocus(inputCatcher);
 	camera.setToOrtho(true);
     }
+    private InputCatcher inputCatcher;
 
     public void callToConnect() {
 	try {
@@ -283,6 +276,12 @@ public class Corev2 implements Screen, Runnable {
 		Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
+    }
+
+    @Override
+    public void componentActivated(Actor actor) {
+	console.processInputedMessage();
+	stage.setKeyboardFocus(inputCatcher);
     }
 
 }

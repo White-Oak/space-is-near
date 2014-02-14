@@ -6,8 +6,10 @@
 package spaceisnear.server;
 
 import java.io.*;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import spaceisnear.game.ui.console.LogString;
 
 /**
  *
@@ -32,19 +34,20 @@ public class ServerLog {
 	}
     }
 
-//    public void log(LogString string) {
-//	try {
-//	    Date date = new Date(System.currentTimeMillis());
-//	    logFOS.write(("[" + date.toString() + "]").getBytes("UTF-8"));
-//	    logFOS.write((" [" + string.getLevel().toString() + "]: ").getBytes("UTF-8"));
-//	    logFOS.write(string.getMessage().getBytes("UTF-8"));
-//	    logFOS.write(System.lineSeparator().getBytes("UTF-8"));
-//	} catch (UnsupportedEncodingException ex) {
-//	    Logger.getLogger(ServerLog.class.getName()).log(Level.SEVERE, null, ex);
-//	} catch (IOException ex) {
-//	    Logger.getLogger(ServerLog.class.getName()).log(Level.SEVERE, null, ex);
-//	}
-//    }
+    public void log(LogString string) {
+	try {
+	    Date date = new Date(System.currentTimeMillis());
+	    logFOS.write(("[" + date.toString() + "]").getBytes("UTF-8"));
+	    logFOS.write((" [" + string.getLevel().toString() + "]: ").getBytes("UTF-8"));
+	    logFOS.write(string.getMessage().getBytes("UTF-8"));
+	    logFOS.write(System.lineSeparator().getBytes("UTF-8"));
+	} catch (UnsupportedEncodingException ex) {
+	    Logger.getLogger(ServerLog.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (IOException ex) {
+	    Logger.getLogger(ServerLog.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }
+
     @Override
     protected void finalize() throws Throwable {
 	try {

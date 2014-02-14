@@ -23,7 +23,7 @@ public class InGameLog {
     private final int x, y, width, height;
     private int linesNumber = 0;
     private final BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
-    @Setter private boolean acceptDebugMessages = true;
+    @Setter private boolean acceptDebugMessages;
 
     public InGameLog(int x, int y, int width, int height) {
 	this.x = x;
@@ -36,9 +36,8 @@ public class InGameLog {
 	final int startingY = -startingLine * (int) font.getLineHeight();
 	for (int i = 0, linesGone = 0, linesDrawn = 0; i < stack.size(); i++) {
 	    LogString get = stack.get(i);
-	    batch.setColor(getColorOfLevel(get));
+	    font.setColor(getColorOfLevel(get));
 	    String[] strings = splitByLines(get.toString(), width, font);
-//	    String[] strings = new String[]{get.toString()};
 	    for (int j = 0; j < strings.length && linesDrawn < linesPerHeight(font, height); j++, linesGone++) {
 		String string = strings[j];
 		final int ycoord = y + ((int) font.getLineHeight()) * linesGone + startingY;

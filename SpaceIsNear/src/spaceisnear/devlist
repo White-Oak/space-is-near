@@ -168,5 +168,7 @@
     +context menu appearance/disappearance
     +log drawing
     +text field drawing
-    -chatting
+    +chatting
     -context menu working
+    -nickname entering
+-rework starting UI

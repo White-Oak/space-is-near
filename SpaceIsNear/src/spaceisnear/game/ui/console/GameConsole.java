@@ -33,17 +33,6 @@ public class GameConsole extends Actor {
     @Getter private final BitmapFont font;
     //
 
-    public GameConsole() {
-	this.x = 0;
-	this.y = 0;
-	this.width = 0;
-	this.height = 0;
-	this.ip = null;
-	this.log = null;
-	this.context = null;
-	this.font = null;
-    }
-
     public GameConsole(int x, int y, int width, int height, Context context, TextField tf) {
 	this.x = x;
 	this.y = y;
@@ -89,7 +78,7 @@ public class GameConsole extends Actor {
 	context.sendDirectedMessage(messageToSend);
     }
 
-    private void processInputedMessage() {
+    public void processInputedMessage() {
 	String text = ip.getText();
 	if (text.startsWith("-")) {
 	    String substring = text.substring(1);
@@ -241,4 +230,5 @@ public class GameConsole extends Actor {
     public void mouseWheelMoved(int newValue) {
 	processDrag(-newValue >> 2);
     }
+
 }
