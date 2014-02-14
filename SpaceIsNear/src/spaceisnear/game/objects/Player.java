@@ -1,11 +1,7 @@
 package spaceisnear.game.objects;
 
-import spaceisnear.game.GameContext;
-import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.components.NameComponent;
+import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.PlayerComponent;
-import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.components.inventory.InventoryComponent;
 
 /**
@@ -15,12 +11,12 @@ import spaceisnear.game.components.inventory.InventoryComponent;
  */
 public class Player extends ClientGameObject {
 
-    public Player(GameContext context) {
-	this(context, GameObjectType.PLAYER);
+    public Player() {
+	this(GameObjectType.PLAYER);
     }
 
-    protected Player(GameContext context, GameObjectType type) {
-	super(type, context);
+    protected Player(GameObjectType type) {
+	super(type);
 	addComponents(new PlayerComponent(), new NameComponent(), new PositionComponent(0, 0), new InventoryComponent());
     }
 

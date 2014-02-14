@@ -220,10 +220,35 @@ import spaceisnear.server.objects.items.*;
 
     private void sendWorld(int lastConnected) {
 	MessageCreated[] world = getWorld();
-	MessageWorldInformation mwi = new MessageWorldInformation(world.length + 1, propertys.size());
+	MessageWorldInformation mwi = new MessageWorldInformation(world.length, propertys.size());
 	sendToID(lastConnected, mwi);
-	for (MessageCreated messageCreated : world) {
+	MessageCloned cloned = null;
+	for (int i = 0; i < world.length; i++) {
+	    MessageCreated messageCreated = world[i];
+	    if (i > 0 && messageCreated instanceof MessageCreatedItem && world[i - 1] instanceof MessageCreatedItem) {
+		MessageCreatedItem mci = (MessageCreatedItem) messageCreated;
+		MessageCreatedItem mcilast = (MessageCreatedItem) world[i - 1];
+		if (mci.getId() == mcilast.getId()) {
+		    int amount = cloned == null ? 1 : cloned.amount + 1;
+		    cloned = new MessageCloned();
+		    cloned.amount = amount;
+		    continue;
+		} else {
+		    if (cloned != null) {
+			sendToID(lastConnected, cloned);
+			cloned = null;
+		    }
+		}
+	    } else {
+		if (cloned != null) {
+		    sendToID(lastConnected, cloned);
+		    cloned = null;
+		}
+	    }
 	    sendToID(lastConnected, messageCreated);
+	}
+	if (cloned != null) {
+	    sendToID(lastConnected, cloned);
 	}
     }
 

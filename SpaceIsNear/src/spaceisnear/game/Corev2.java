@@ -44,7 +44,7 @@ public class Corev2 implements Screen, Runnable, UIListener {
 	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	context = new GameContext(new CameraMan(), objects, this);
-	context.addObject(new NetworkingObject(context));
+	context.addObject(new NetworkingObject());
 	context.checkSize();
 	context.getCameraMan().setWindowWidth(800);
 	context.getCameraMan().setWindowHeight(600);

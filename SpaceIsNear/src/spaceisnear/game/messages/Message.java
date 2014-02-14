@@ -20,4 +20,8 @@ import spaceisnear.game.bundles.MessageBundle;
     public MessageBundle getBundle() {
 	return new MessageBundle(Utils.GSON.toJson(this).getBytes(), getMessageType());
     }
+
+    public static <T> T createInstance(byte[] b, Class<T> c) {
+	return Utils.GSON.fromJson(new String(b), c);
+    }
 }

@@ -7,10 +7,7 @@ package spaceisnear.game.objects;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
@@ -26,7 +23,7 @@ import spaceisnear.game.messages.Message;
     @Getter @Setter private boolean destroyed = false;
     @Getter private List<Component> components = new LinkedList<>();
     @NonNull @Getter private final GameObjectType type;
-    @NonNull @Getter @Setter private GameContext context;
+    @Getter private GameContext context;
 
     public void setId(int id) {
 	if (this.id == -1) {
@@ -59,6 +56,13 @@ import spaceisnear.game.messages.Message;
 	    for (Component component : components) {
 		component.processMessage(message);
 	    }
+	}
+    }
+
+    public void setContext(GameContext context) {
+	this.context = context;
+	for (Component component : components) {
+	    component.setContext(context);
 	}
     }
 

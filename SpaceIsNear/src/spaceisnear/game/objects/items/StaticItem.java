@@ -6,14 +6,9 @@ package spaceisnear.game.objects.items;
 
 import java.util.List;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentType;
+import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.ItemPaintableComponent;
-import spaceisnear.game.components.ItemPropertiesComponent;
-import spaceisnear.game.components.PositionComponent;
-import spaceisnear.game.objects.ClientGameObject;
-import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.objects.*;
 
 /**
  *
@@ -23,19 +18,19 @@ public class StaticItem extends ClientGameObject {
 
     private final ItemPropertiesComponent properties;
 
-    public StaticItem(GameContext context, Position p, int itemId) {
-	super(GameObjectType.ITEM, context);
+    public StaticItem(Position p, int itemId) {
+	super(GameObjectType.ITEM);
 	PositionComponent pc = new PositionComponent(p);
 	properties = new ItemPropertiesComponent(itemId);
 	addComponents(pc, properties, new ItemPaintableComponent());
     }
 
-    public StaticItem(GameContext context, int itemId) {
-	this(context, new Position(0, 0), itemId);
+    public StaticItem(int itemId) {
+	this(new Position(0, 0), itemId);
     }
 
     private StaticItem(GameContext context, Component[] components) {
-	super(GameObjectType.ITEM, context);
+	super(GameObjectType.ITEM);
 	addComponents(components);
 	addComponents(new ItemPaintableComponent());
 	List<Component> components1 = getComponents();

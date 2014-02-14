@@ -48,7 +48,11 @@ public class ItemsArchive extends ItemsArchivable {
 	return regions[id];
     }
 
-    public spaceisnear.game.objects.items.StaticItem getNewItem(int id, GameContext serverContext) {
-	return new spaceisnear.game.objects.items.StaticItem(serverContext, id);
+    public StaticItem getNewItem(int id) {
+	return new spaceisnear.game.objects.items.StaticItem(id);
+    }
+
+    public StaticItem clone(StaticItem item) {
+	return getNewItem(item.getProperties().getId());
     }
 }

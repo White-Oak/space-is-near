@@ -80,6 +80,7 @@ import spaceisnear.server.ServerContext;
     public void setNewGamerPlayer(int playerID) {
 	this.playerID = playerID;
 	Player get = (Player) objects.get(playerID);
-	objects.set(playerID, new GamerPlayer(this, get));
+	final GamerPlayer gamerPlayer = new GamerPlayer(get);
+	objects.set(playerID, gamerPlayer);
     }
 }

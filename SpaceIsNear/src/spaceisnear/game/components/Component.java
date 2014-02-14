@@ -3,12 +3,10 @@ package spaceisnear.game.components;
 
 import java.util.HashMap;
 import java.util.List;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
-import spaceisnear.game.messages.Message;
 import spaceisnear.abstracts.Context;
+import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.Position;
 
 /**

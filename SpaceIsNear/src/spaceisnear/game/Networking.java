@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.*;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import spaceisnear.LoadingScreen;
+import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessageNicknameSet;
@@ -88,10 +89,11 @@ public class Networking extends Listener {
 		case ROGER_REQUESTED:
 		    send(ROGERED);
 		    break;
-		case CREATED_SIMPLIFIED:
+		case CREATED_SIMPLIFIED: {
 		    MessageCreated mc = MessageCreated.getInstance(b);
 		    processMessageCreated(mc);
-		    break;
+		}
+		break;
 		case CREATED_SIMPLIFIED_ITEM:
 		    MessageCreatedItem mci = MessageCreatedItem.getInstance(b);
 		    processMessageCreatedItem(mci);
@@ -117,9 +119,22 @@ public class Networking extends Listener {
 		    GamerPlayer player = gameContext.getPlayer();
 		    player.getInventoryComponent().setSlots(mis.getSet());
 		    break;
+		case CLONED:
+		    MessageCloned mc = Message.createInstance(b, MessageCloned.class);
+		    processMessageCloned(mc);
+		    break;
 	    }
 //	    System.out.println("Message received");
 //	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));
+	}
+    }
+
+    private void processMessageCloned(MessageCloned mc) {
+	AbstractGameObject get = gameContext.getObjects().get(gameContext.getObjects().size() - 1);
+	for (int i = 0; i < mc.amount; i++) {
+	    StaticItem item = ItemsArchive.itemsArchive.clone((StaticItem) get);
+	    gameContext.addObject(item);
+	    LoadingScreen.CURRENT_AMOUNT++;
 	}
     }
 
@@ -134,7 +149,7 @@ public class Networking extends Listener {
     }
 
     private void processMessageCreatedItem(MessageCreatedItem mci) {
-	StaticItem item = ItemsArchive.itemsArchive.getNewItem(mci.getId(), gameContext);
+	StaticItem item = ItemsArchive.itemsArchive.getNewItem(mci.getId());
 	if (item != null) {
 	    gameContext.addObject(item);
 	    LoadingScreen.CURRENT_AMOUNT++;
@@ -157,7 +172,7 @@ public class Networking extends Listener {
 	ClientGameObject gameObject = null;
 	switch (mc.getType()) {
 	    case PLAYER:
-		gameObject = new Player(gameContext);
+		gameObject = new Player();
 		break;
 	}
 	if (gameObject != null) {
