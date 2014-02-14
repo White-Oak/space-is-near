@@ -42,42 +42,54 @@ public class ContextSubMenu extends ContextMenuItem {
     private final ShapeRenderer renderer = new ShapeRenderer();
 
     public void render(SpriteBatch batch) {
+	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.translate(x, y, 0);
 	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
-	renderer.setColor(Color.WHITE);
-	renderer.filledRect(0, 0, maxWidth, height);
-	renderer.setColor(Color.BLACK);
-	renderer.filledRect(0, selected * font.getLineHeight(), maxWidth, font.getLineHeight());
+	{
+	    renderer.setColor(Color.WHITE);
+	    renderer.filledRect(0, 0, maxWidth, height);
+	    renderer.setColor(Color.BLACK);
+	    renderer.filledRect(0, selected * font.getLineHeight(), maxWidth, font.getLineHeight());
+	}
+	renderer.end();
 	renderer.begin(ShapeRenderer.ShapeType.Rectangle);
-	renderer.rect(-1, -1, maxWidth + 1, height + 1);
+	{
+	    renderer.rect(-1, -1, maxWidth + 1, height + 1);
+	}
 	renderer.end();
 	for (int i = 0; i < items.size(); i++) {
-	    renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
 	    ContextMenuItem contextMenuItem = items.get(i);
 	    final int currentPosition = (int) (i * font.getLineHeight());
-	    if (i == selected) {
-		renderer.setColor(Color.WHITE);
-		if (contextMenuItem instanceof ContextSubMenu) {
-		    renderer.filledRect(maxWidth - 10, currentPosition + ((int) font.getLineHeight() >> 1) - 1, 3, 3);
-		    ContextSubMenu subMenu = (ContextSubMenu) contextMenuItem;
-//		    g.popTransform();
-		    subMenu.render(batch);
-//		    g.pushTransform();
-//		    g.translate(x, y);
+	    renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+	    {
+		if (i == selected) {
+		    renderer.setColor(Color.WHITE);
+		    if (contextMenuItem instanceof ContextSubMenu) {
+			renderer.filledRect(maxWidth - 10, currentPosition + ((int) font.getLineHeight() >> 1) - 1, 3, 3);
+			ContextSubMenu subMenu = (ContextSubMenu) contextMenuItem;
+			renderer.end();
+			renderer.translate(-x, -y, 0);
+			subMenu.render(batch);
+			renderer.translate(x, y, 0);
+			renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+		    }
+		    font.setColor(Color.WHITE);
+		} else {
+		    renderer.setColor(Color.BLACK);
+		    if (contextMenuItem instanceof ContextSubMenu) {
+			renderer.filledRect(maxWidth - 10, currentPosition + ((int) font.getLineHeight() >> 1) - 1, 3, 3);
+		    }
+		    font.setColor(Color.BLACK);
 		}
-		font.setColor(Color.WHITE);
-	    } else {
-		renderer.setColor(Color.BLACK);
-		if (contextMenuItem instanceof ContextSubMenu) {
-		    renderer.filledRect(maxWidth - 10, currentPosition + ((int) font.getLineHeight() >> 1) - 1, 3, 3);
-		}
-		font.setColor(Color.BLACK);
 	    }
 	    renderer.end();
 	    batch.begin();
-	    font.draw(batch, contextMenuItem.getLabel(), x, y + currentPosition);
+	    {
+		font.draw(batch, contextMenuItem.getLabel(), x, y + currentPosition);
+	    }
 	    batch.end();
 	}
+	renderer.translate(-x, -y, 0);
     }
 
     public boolean add(String str) {

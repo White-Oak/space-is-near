@@ -119,7 +119,6 @@ public final class TextField extends Widget {
 	batch.begin();
 	font.setColor(Color.BLACK);
 	font.draw(batch, "hey man", getX() + 10, y + 2);
-	batch.flush();
     }
 
     public void setTextColor(Color textColor) {

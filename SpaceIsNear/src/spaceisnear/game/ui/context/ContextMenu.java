@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.ui.context;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,12 +18,20 @@ public class ContextMenu extends Actor {
 
     private final ContextSubMenu subMenu;
 
-    public ContextMenu(int x, int y, BitmapFont font) {
+    public ContextMenu(int x, int y) {
+	BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
 	subMenu = new ContextSubMenu(null, x, y, font);
     }
 
     public void render(SpriteBatch batch) {
+	batch.end();
 	subMenu.render(batch);
+	batch.begin();
+    }
+
+    @Override
+    public void draw(SpriteBatch batch, float parentAlpha) {
+	render(batch);
     }
 
     public boolean add(ContextMenuItem e) {

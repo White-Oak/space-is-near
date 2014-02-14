@@ -31,7 +31,7 @@ import lombok.*;
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-
+	batch.end();
 	if (minimized) {
 	    deltaX += DELTA_DELTA_X;
 	    if (deltaX > MAX_DELTA_X) {
@@ -51,6 +51,7 @@ import lombok.*;
 	drawBackground(startingX, startingY);
 	drawTiles(startingX, startingY);
 	renderer.end();
+	batch.begin();
     }
     private final ShapeRenderer renderer = new ShapeRenderer();
 

@@ -51,7 +51,7 @@ public class GameConsole extends Actor {
 	this.height = height;
 	font = new BitmapFont(Gdx.files.classpath("default.fnt"), false);
 	ip = tf;
-	log = new InGameLog(font, 30, 2, width - 30, (int) (height - 2 - ip.getHeight()));
+	log = new InGameLog(830, 2, width - 30, (int) (height - 2 - ip.getHeight()));
 	this.context = context;
 	scrollBarSize = sizeOfScrollBar();
 	camera.setToOrtho(true);
@@ -63,7 +63,6 @@ public class GameConsole extends Actor {
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-	final float heightOfTextField = ip.getHeight();
 	renderer.translate(x, 0, 0);
 	batch.end();
 	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
@@ -77,15 +76,8 @@ public class GameConsole extends Actor {
 	renderer.translate(-x, 0, 0);
 	renderer.end();
 	batch.begin();
-	//bottom input window
-//	renderer.setColor(Color.LIGHT_GRAY);
-//	g.drawLine(0, height - heightOfTextField - 2, width, height - heightOfTextField - 2);
-//	renderer.setColor(Color.DARK_GRAY);
-//	g.drawLine(0, height - heightOfTextField - 1, width, height - heightOfTextField - 1);
-//	renderer.setColor(Color.LIGHT_GRAY);
-//	g.drawLine(0, height - heightOfTextField, width, height - heightOfTextField);
-	//log
-//	log.paint(getLineByScrollBarY());
+	//
+	log.paint(batch, getLineByScrollBarY());
 	//
     }
 

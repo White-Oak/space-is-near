@@ -164,3 +164,9 @@
 +MessageKnockbacked
     -processing on server
 -optimizing MessageCreateds
+*Brought back:
+    +context menu appearance/disappearance
+    +log drawing
+    +text field drawing
+    -chatting
+    -context menu working

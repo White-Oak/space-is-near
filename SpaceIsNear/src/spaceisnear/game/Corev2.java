@@ -26,7 +26,6 @@ public class Corev2 implements Screen, Runnable {
 
     private GameContext context;
     private final ArrayList<AbstractGameObject> objects = new ArrayList<>();
-    private static final int QUANT_TIME = 50;
     @Setter private int key;
     public static String IP;
     @Getter private boolean notpaused;
@@ -65,12 +64,16 @@ public class Corev2 implements Screen, Runnable {
 	table.row();
 	table.add(new Label("", labelStyle));
 	table.add(textField).width(400);
-	stage.addActor(table);
+//	stage.addActor(table);
+	console.setPosition(800, 0);
+	stage.addActor(console);
+	textField.setPosition(800, textField.getPrefHeight());
+	stage.addActor(textField);
 	final InputCatcher inputCatcher = new InputCatcher(this);
+	inputCatcher.setBounds(0, 0, 800, 600);
 	stage.addActor(inputCatcher);
 	stage.setKeyboardFocus(inputCatcher);
 	camera.setToOrtho(true);
-	Gdx.input.setInputProcessor(stage);
     }
 
     public void callToConnect() {
@@ -193,7 +196,7 @@ public class Corev2 implements Screen, Runnable {
     }
 
     private void createContextMenuWithItems(int x, int y, int tileX, int tileY) {
-	ContextMenu contextMenu = new ContextMenu(x, y, console.getFont());
+	ContextMenu contextMenu = new ContextMenu(x, y);
 	java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
 	for (AbstractGameObject staticItem : itemsOn) {
 	    final StaticItem item = (StaticItem) staticItem;
@@ -229,7 +232,7 @@ public class Corev2 implements Screen, Runnable {
     }
 
     private void testMenu(int x, int y) {
-	ContextMenu contextMenu = new ContextMenu(x, y, console.getFont());
+	ContextMenu contextMenu = new ContextMenu(x, y);
 	contextMenu.add("lah");
 	contextMenu.add("contextmenu so cool");
 	contextMenu.add("pokemons");
@@ -254,6 +257,7 @@ public class Corev2 implements Screen, Runnable {
     public void show() {
 	update(20);
 	context.setCameraToPlayer();
+	Gdx.input.setInputProcessor(stage);
 	new Thread(this).start();
     }
 
