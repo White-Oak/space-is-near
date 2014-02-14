@@ -11,7 +11,7 @@ import lombok.Getter;
  *
  * @author White Oak
  */
-public class ContextMenuItem {
+public class ContextMenuItem implements ContextMenuItemable {
 
     @Getter private final String label;
 

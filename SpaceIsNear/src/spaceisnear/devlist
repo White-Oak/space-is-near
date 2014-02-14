@@ -169,6 +169,9 @@
     +log drawing
     +text field drawing
     +chatting
-    -context menu working
+    +context menu working
+    -text field features
     -nickname entering
 -rework starting UI
+*Moved to GitHub
+-Introduce new map

@@ -11,5 +11,5 @@ package spaceisnear.game.ui.context;
  */
 public interface ActionListener {
 
-    public void itemActivated(ContextMenuItem e);
+    public void itemActivated(ContextMenuItemable e);
 }

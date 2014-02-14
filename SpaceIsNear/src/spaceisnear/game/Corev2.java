@@ -182,18 +182,19 @@ public class Corev2 implements Screen, Runnable, UIListener {
 	    if (menu == null) {
 		createContextMenuWithItems(x, y, tileX, tileY);
 	    } else {
-		stage.getActors().removeValue(menu, true);
+		menu.hide();
 		menu = null;
 	    }
 	}
     }
 
     private void createContextMenuWithItems(int x, int y, int tileX, int tileY) {
-	ContextMenu contextMenu = new ContextMenu(x, y);
+	ContextMenu contextMenu = new ContextMenu(null, stage);
+	contextMenu.setPosition(x, y);
 	java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
 	for (AbstractGameObject staticItem : itemsOn) {
 	    final StaticItem item = (StaticItem) staticItem;
-	    ContextSubMenu contextSubMenu = new ContextSubMenu(item.getProperties().getName());
+	    ContextMenu contextSubMenu = new ContextMenu(item.getProperties().getName(), stage);
 	    contextMenu.add(contextSubMenu);
 	    contextSubMenu.add("Learn");
 	    contextSubMenu.add("Pull");
@@ -201,7 +202,7 @@ public class Corev2 implements Screen, Runnable, UIListener {
 	    contextSubMenu.setActionListener(new ActionListener() {
 
 		@Override
-		public void itemActivated(ContextMenuItem e) {
+		public void itemActivated(ContextMenuItemable e) {
 		    switch (e.getLabel()) {
 			case "Learn":
 			    String description = item.getProperties().getDescription();
@@ -215,6 +216,7 @@ public class Corev2 implements Screen, Runnable, UIListener {
 			    context.sendDirectedMessage(messageToSend);
 			    break;
 		    }
+		    menu.hide();
 		    menu = null;
 		}
 	    });
@@ -222,18 +224,6 @@ public class Corev2 implements Screen, Runnable, UIListener {
 	menu = contextMenu;
 	stage.addActor(menu);
 //	testMenu(x, y);
-    }
-
-    private void testMenu(int x, int y) {
-	ContextMenu contextMenu = new ContextMenu(x, y);
-	contextMenu.add("lah");
-	contextMenu.add("contextmenu so cool");
-	contextMenu.add("pokemons");
-	final ContextSubMenu contextSubMenu = new ContextSubMenu("loh");
-	contextMenu.add(contextSubMenu);
-	contextSubMenu.add("test");
-	contextSubMenu.add("test2");
-	menu = contextMenu;
     }
 
     public void log(LogString log) {
