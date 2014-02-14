@@ -31,13 +31,8 @@ public class Main extends Game {
 		case "host":
 		    System.out.println("SIN is running in no-GUI mode");
 		    try {
-			System.out.println("Hosting...");
 			ServerCore serverCore = new ServerCore();
-			try {
-			    serverCore.host();
-			} catch (IOException ex) {
-			    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-			}
+			serverCore.host();
 			new Thread(serverCore).start();
 			System.out.println("Hosted");
 		    } catch (IOException ex) {
@@ -54,6 +49,7 @@ public class Main extends Game {
 	    cfg.width = 1200;
 	    cfg.height = 600;
 	    cfg.vSyncEnabled = true;
+	    cfg.useGL20 = true;
 	    LwjglApplication lwjglApplication = new LwjglApplication(new Main(), cfg);
 	}
     }

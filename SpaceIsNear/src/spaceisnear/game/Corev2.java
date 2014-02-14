@@ -64,6 +64,9 @@ public class Corev2 implements Screen, Runnable, UIListener {
 	inputCatcher = new InputCatcher(this);
 	inputCatcher.setBounds(0, 0, 800, 600);
 	stage.addActor(inputCatcher);
+	inventory = new Inventory();
+	inventory.setBounds(800 - Inventory.INVENTORY_WIDTH, 0, Inventory.INVENTORY_WIDTH, 600);
+	stage.addActor(inventory);
 	stage.setKeyboardFocus(inputCatcher);
 	camera.setToOrtho(true);
     }
@@ -79,10 +82,11 @@ public class Corev2 implements Screen, Runnable, UIListener {
 
     public void update(int delta) {
 	if (notpaused) {
-	    MessageControlledByInput mc = checkKeys();
 	    MessageTimePassed messageTimePassed = new MessageTimePassed(delta);
 	    context.sendThemAll(messageTimePassed);
 	    //
+	    checkKeys();
+	    MessageControlledByInput mc = checkMovementDesired();
 	    int playerID = context.getPlayerID();
 	    if (mc != null && playerID != -1) {
 		context.sendDirectedMessage(new MessageToSend(mc));
@@ -100,41 +104,55 @@ public class Corev2 implements Screen, Runnable, UIListener {
     public void keyReleased(int key, char c) {
 	this.key = 0;
     }
+    private long lastTimeMoved;
+    private final static long MINIMUM_TIME_TO_MOVE = 60L;
 
-    private MessageControlledByInput checkKeys() {
+    private MessageControlledByInput checkMovementDesired() {
 	MessageControlledByInput mc = null;
-	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimated() && !console.hasFocus();
-	switch (key) {
-	    case Input.Keys.UP:
-		if (ableToMove) {
+	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimated() && !console.hasFocus()
+		&& System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE;
+	if (ableToMove) {
+	    switch (key) {
+		case Input.Keys.UP:
 		    mc = new MessageControlledByInput(MessageControlledByInput.Type.UP, context.getPlayerID());
-		}
-		break;
-	    case Input.Keys.DOWN:
-		if (ableToMove) {
+		    break;
+		case Input.Keys.DOWN:
 		    mc = new MessageControlledByInput(MessageControlledByInput.Type.DOWN, context.getPlayerID());
-		}
-		break;
-	    case Input.Keys.LEFT:
-		if (ableToMove) {
+		    break;
+		case Input.Keys.LEFT:
 		    mc = new MessageControlledByInput(MessageControlledByInput.Type.LEFT, context.getPlayerID());
-		}
-		break;
-	    case Input.Keys.RIGHT:
-		if (ableToMove) {
+		    break;
+		case Input.Keys.RIGHT:
 		    mc = new MessageControlledByInput(MessageControlledByInput.Type.RIGHT, context.getPlayerID());
-		}
-		break;
+		    break;
+		case Input.Keys.M:
+		    inventory.setMinimized(!inventory.isMinimized());
+		    lastTimeMoved = System.currentTimeMillis();
+		    break;
+	    }
+	    if (mc != null) {
+		lastTimeMoved = System.currentTimeMillis();
+	    }
+	}
+	return mc;
+    }
+
+    private void checkKeys() {
+	switch (key) {
 	    case Input.Keys.ESCAPE:
 		MessagePropertySet messagePropertySet = new MessagePropertySet(((GameContext) context).getPlayerID(), "pull", -1);
 		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
 		context.sendDirectedMessage(messageToSend);
 		break;
-	    case Input.Keys.M:
-		inventory.setMinimized(!inventory.isMinimized());
+	    case Input.Keys.ENTER:
+		final boolean focused = console.getTextField().isFocused();
+		console.getTextField().setFocused(!focused);
+		if (!focused) {
+		    key = 0;
+		    stage.setKeyboardFocus(console.getTextField());
+		}
 		break;
 	}
-	return mc;
     }
     private final SpriteBatch batch = new SpriteBatch();
 
@@ -272,6 +290,6 @@ public class Corev2 implements Screen, Runnable, UIListener {
     public void componentActivated(Actor actor) {
 	console.processInputedMessage();
 	stage.setKeyboardFocus(inputCatcher);
+	console.setFocusForTextField(false);
     }
-
 }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -27,6 +28,7 @@ public final class TextField extends Actor {
     private Color textColor;
     private final InputListener inputListener;
     @Setter private UIListener UIListener;
+    @Getter @Setter private boolean focused;
 
     public TextField() {
 	addCaptureListener(inputListener = new InputListener() {
@@ -35,6 +37,7 @@ public final class TextField extends Actor {
 		Stage stage = getStage();
 		if (stage != null) {
 		    stage.setKeyboardFocus(TextField.this);
+		    setFocused(true);
 		}
 		return true;
 	    }
@@ -108,15 +111,19 @@ public final class TextField extends Actor {
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
 	renderer.setColor(Color.WHITE);
-//	final float y = Gdx.graphics.getHeight() - getY() - getPrefHeight();
 	float y = getY();
 	renderer.filledRect(getX(), y, getWidth(), getHeight());
 	renderer.end();
 	renderer.begin(ShapeRenderer.ShapeType.Line);
 	renderer.setColor(Color.BLACK);
 	renderer.line(getX(), y, getX() + getWidth(), y);
+	//cursor
+	if (focused) {
+	    final float x = getX() + 10 + font.getBounds(text).width;
+	    renderer.line(x, y, x, y + font.getLineHeight());
+	    renderer.line(x + 1, y, x + 1, y + font.getLineHeight());
+	}
 	renderer.end();
-//	batch.setProjectionMatrix(camera.combined);
 	batch.begin();
 	font.setColor(Color.BLACK);
 	font.draw(batch, text, getX() + 10, y + 2);

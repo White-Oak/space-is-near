@@ -23,7 +23,7 @@ import spaceisnear.game.ui.TextField;
 public class GameConsole extends Actor {
 
     private final int x, y, width, height;
-    private final TextField ip;
+    @Getter private final TextField textField;
     private final InGameLog log;
 //    Font font = new TrueTypeFont(awtFont, false);
     private final Context context;
@@ -39,8 +39,8 @@ public class GameConsole extends Actor {
 	this.width = width;
 	this.height = height;
 	font = new BitmapFont(Gdx.files.classpath("default.fnt"), false);
-	ip = tf;
-	log = new InGameLog(830, 2, width - 30, (int) (height - 2 - ip.getHeight()));
+	textField = tf;
+	log = new InGameLog(830, 2, width - 30, (int) (height - 2 - textField.getHeight()));
 	this.context = context;
 	scrollBarSize = sizeOfScrollBar();
 	camera.setToOrtho(true);
@@ -79,7 +79,7 @@ public class GameConsole extends Actor {
     }
 
     public void processInputedMessage() {
-	String text = ip.getText();
+	String text = textField.getText();
 	if (text.startsWith("-")) {
 	    String substring = text.substring(1);
 	    String[] split = substring.split(" ");
@@ -101,7 +101,7 @@ public class GameConsole extends Actor {
 	} else {
 	    sendMessageFromPlayer(text);
 	}
-	ip.setText("");
+	textField.setText("");
     }
 
     private void processBroadcastingMessageFromPlayer(String frequency, String[] message) {
@@ -224,11 +224,14 @@ public class GameConsole extends Actor {
     }
 
     private int sizeOfGameLog() {
-	return (int) (height - ip.getHeight() - 4);
+	return (int) (height - textField.getHeight() - 4);
     }
 
     public void mouseWheelMoved(int newValue) {
 	processDrag(-newValue >> 2);
     }
 
+    public void setFocusForTextField(boolean focused) {
+	textField.setFocused(focused);
+    }
 }
