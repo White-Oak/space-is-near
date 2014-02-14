@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
-import spaceisnear.AbstractGameObject;
+import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.HealthComponent;
 import spaceisnear.game.layer.AtmosphericLayer;

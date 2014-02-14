@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import lombok.Getter;
-import spaceisnear.Context;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessageToSend;

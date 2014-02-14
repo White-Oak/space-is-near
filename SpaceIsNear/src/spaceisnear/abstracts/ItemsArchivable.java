@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceisnear;
+package spaceisnear.abstracts;
 
 import java.util.HashMap;
 import spaceisnear.game.objects.items.*;

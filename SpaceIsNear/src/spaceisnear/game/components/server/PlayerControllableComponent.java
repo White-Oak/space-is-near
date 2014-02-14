@@ -10,7 +10,7 @@
 package spaceisnear.game.components.server;
 
 import java.util.List;
-import spaceisnear.AbstractGameObject;
+import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.*;

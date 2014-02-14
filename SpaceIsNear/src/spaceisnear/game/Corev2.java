@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.*;
 import lombok.*;
-import spaceisnear.AbstractGameObject;
+import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;

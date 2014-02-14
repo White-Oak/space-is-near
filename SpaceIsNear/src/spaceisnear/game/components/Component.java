@@ -6,9 +6,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import spaceisnear.AbstractGameObject;
+import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.messages.Message;
-import spaceisnear.Context;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.objects.Position;
 
 /**

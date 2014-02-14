@@ -2,8 +2,8 @@ package spaceisnear.server;
 
 import java.util.*;
 import lombok.Getter;
-import spaceisnear.AbstractGameObject;
-import spaceisnear.Context;
+import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.inventory.InventorySlot;
 import spaceisnear.game.components.server.VariablePropertiesComponent;

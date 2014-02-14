@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import lombok.Getter;
-import spaceisnear.ItemsArchivable;
+import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.GameContext;
 
 /**

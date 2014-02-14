@@ -7,7 +7,7 @@
 package spaceisnear.game.messages;
 
 import lombok.Getter;
-import spaceisnear.Context;
+import spaceisnear.abstracts.Context;
 
 public class MessageToSend extends DirectedMessage {
 

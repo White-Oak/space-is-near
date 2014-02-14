@@ -6,7 +6,7 @@
 package spaceisnear.game.components;
 
 import lombok.Getter;
-import spaceisnear.ItemsArchivable;
+import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.server.objects.items.ServerItemsArchive;

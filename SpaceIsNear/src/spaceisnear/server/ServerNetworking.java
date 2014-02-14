@@ -1,5 +1,6 @@
 package spaceisnear.server;
 
+import spaceisnear.abstracts.AbstractGameObject;
 import com.esotericsoftware.kryonet.*;
 import java.io.*;
 import java.util.*;

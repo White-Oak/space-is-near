@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import spaceisnear.AbstractGameObject;
+import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.messages.Message;

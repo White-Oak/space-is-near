@@ -7,7 +7,7 @@ package spaceisnear.game.layer;
 
 import java.util.Arrays;
 import java.util.List;
-import spaceisnear.AbstractGameObject;
+import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsArchive;

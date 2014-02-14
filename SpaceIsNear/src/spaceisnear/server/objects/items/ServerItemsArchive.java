@@ -9,7 +9,7 @@
  */
 package spaceisnear.server.objects.items;
 
-import spaceisnear.ItemsArchivable;
+import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.server.ServerContext;
 

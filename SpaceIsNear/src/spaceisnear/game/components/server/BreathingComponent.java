@@ -6,7 +6,7 @@
 package spaceisnear.game.components.server;
 
 import java.util.List;
-import spaceisnear.Context;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.layer.AtmosphericLayer;
