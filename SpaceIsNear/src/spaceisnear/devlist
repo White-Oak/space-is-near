@@ -150,19 +150,6 @@
 +porting SIN from Slick to libGDX
 
 0.0.7
--Inventory
-    -UI
--In-game chat
-    -make PM
-    -make OOC
--gotta do something with disconnected players
-+HealthComponent
-    -knockbacking if critical
-    -dying if dead
-+Atmosphere
-    -knockbacking if big difference between two tiles in pressure
-+MessageKnockbacked
-    -processing on server
 +optimizing MessageCreateds
 *Brought back:
     +context menu appearance/disappearance
@@ -171,9 +158,32 @@
     +chatting
     +context menu working
     +text field features
-    -nickname entering
     +inventory
--rework starting UI
+-In-game chat
+    -make OOC
+-total rework of starting UI and logic
 *Moved to GitHub
--Introduce new map
 *fixed bug when hero could move for wrong number of tiles
+
+0.0.8
+-Professions' basics
+-IDs' basics (ID of player, his profession)
+-PDAs basics (working as radio)
+-Inventory
+    -UI
+-In-game chat
+    -make PM using PDAs
+
+
+0.0.9
++HealthComponent
+    -knockbacking if critical
+    -dying if dead
++Atmosphere
+    -knockbacking if big difference between two tiles in pressure
++MessageKnockbacked
+    -processing on server
+-gotta do something with disconnected players
+-Introduce new map
+-place simmilar objects near in objects array on start
+-place properties of objects that are near connected player near in array for faster connection

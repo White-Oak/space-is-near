@@ -139,15 +139,18 @@ import spaceisnear.server.objects.items.*;
 
     @Override
     public synchronized void connected(Connection connection) {
-	if (!core.isAlreadyPaused()) {
-	    core.pause();
-	    connections.add(connection);
-	    rogered = new boolean[connections.size()];
-	    new Thread(this).start();
-	} else {
+	connections.add(connection);
+	rogered = new boolean[connections.size()];
+	//make some kind of queue or something like that to prevent blocking
+	if (core.isAlreadyPaused()) {
 	    sendToConnection(connection, new MessageConnectionBroken());
 	    connection.close();
 	}
+    }
+
+    private synchronized void connectedWantsPlayer() {
+	core.pause();
+	new Thread(this).start();
     }
 
     private void createPlayer() {

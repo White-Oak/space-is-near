@@ -22,7 +22,7 @@ import spaceisnear.game.ui.TextField;
  */
 public class GameConsole extends Actor {
 
-    private final int x, y, width, height;
+    private final int x, y;
     @Getter private final TextField textField;
     private final InGameLog log;
 //    Font font = new TrueTypeFont(awtFont, false);
@@ -36,8 +36,8 @@ public class GameConsole extends Actor {
     public GameConsole(int x, int y, int width, int height, Context context, TextField tf) {
 	this.x = x;
 	this.y = y;
-	this.width = width;
-	this.height = height;
+	setWidth(width);
+	setHeight(height);
 	font = new BitmapFont(Gdx.files.classpath("default.fnt"), false);
 	textField = tf;
 	log = new InGameLog(830, 2, width - 30, (int) (height - 2 - textField.getHeight()));
@@ -56,14 +56,17 @@ public class GameConsole extends Actor {
 	batch.end();
 	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
 	renderer.setColor(Color.WHITE);
-	renderer.filledRect(0, 0, width, height);
+	renderer.filledRect(0, 0, getWidth(), getHeight());
 	//left scrollbar 
 	renderer.setColor(Color.GRAY);
-	renderer.filledRect(0, 2 + scrollBarY, 20, scrollBarSize);
-	renderer.setColor(Color.WHITE);
-	renderer.filledRect(0, 0, 2, height);
-	renderer.translate(-x, 0, 0);
+	renderer.filledRect(2, 2 + scrollBarY, 18, scrollBarSize);
 	renderer.end();
+	//
+	renderer.begin(ShapeRenderer.ShapeType.Line);
+	renderer.setColor(Color.BLACK);
+	renderer.line(0, 0, 0, getHeight());
+	renderer.end();
+	renderer.translate(-x, 0, 0);
 	batch.begin();
 	//
 	log.paint(batch, getLineByScrollBarY());
@@ -200,8 +203,8 @@ public class GameConsole extends Actor {
     }
 
     public boolean intersects(int x, int y) {
-	boolean xB = x > this.x && x < x + width;
-	boolean yB = y > this.y && y < y + height;
+	boolean xB = x > this.x && x < x + getWidth();
+	boolean yB = y > this.y && y < y + getHeight();
 	return xB && yB;
     }
 
@@ -219,19 +222,15 @@ public class GameConsole extends Actor {
 
     private int getLineByScrollBarY() {
 	float multiplier = scrollBarY / (float) (sizeOfGameLog() - sizeOfScrollBar());
-	int unseenLines = log.getLinesNumber() - linesPerHeight(font, height);
+	int unseenLines = log.getLinesNumber() - linesPerHeight(font, (int) getHeight());
 	return (int) (unseenLines * multiplier);
     }
 
     private int sizeOfGameLog() {
-	return (int) (height - textField.getHeight() - 4);
+	return (int) (getHeight() - textField.getHeight() - 4);
     }
 
     public void mouseWheelMoved(int newValue) {
 	processDrag(-newValue >> 2);
-    }
-
-    public void setFocusForTextField(boolean focused) {
-	textField.setFocused(focused);
     }
 }

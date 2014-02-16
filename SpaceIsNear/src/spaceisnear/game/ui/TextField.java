@@ -5,30 +5,24 @@
  */
 package spaceisnear.game.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
  * @author White Oak
  */
-public final class TextField extends Actor {
+public final class TextField extends UIElement {
 
     private StringBuilder text = new StringBuilder();
     private int currentPosition;
-    private final BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
     private Color textColor;
     private final InputListener inputListener;
-    @Setter private UIListener UIListener;
-    @Getter @Setter private boolean focused;
+    @Getter private boolean focused;
 
     public TextField() {
 	addCaptureListener(inputListener = new InputListener() {
@@ -37,7 +31,6 @@ public final class TextField extends Actor {
 		Stage stage = getStage();
 		if (stage != null) {
 		    stage.setKeyboardFocus(TextField.this);
-		    setFocused(true);
 		}
 		return true;
 	    }
@@ -55,8 +48,21 @@ public final class TextField extends Actor {
 	    public boolean keyDown(InputEvent event, int keycode) {
 		switch (keycode) {
 		    case Input.Keys.ENTER:
-			if (UIListener != null) {
-			    UIListener.componentActivated(TextField.this);
+			activated();
+			break;
+		    case Input.Keys.BACKSPACE:
+			removeCharacter();
+			break;
+		    case Input.Keys.LEFT:
+			currentPosition--;
+			if (currentPosition < 0) {
+			    currentPosition = 0;
+			}
+			break;
+		    case Input.Keys.RIGHT:
+			currentPosition++;
+			if (currentPosition > text.length()) {
+			    currentPosition = text.length();
 			}
 			break;
 		}
@@ -77,13 +83,17 @@ public final class TextField extends Actor {
 	    }
 	});
 	setHeight(getPrefHeight());
-	camera.setToOrtho(true);
-	camera.update();
-	renderer.setProjectionMatrix(camera.combined);
+	setWidth(getPrefWidth());
     }
 
+    @Override
     public float getPrefHeight() {
 	return font.getLineHeight() + 4;
+    }
+
+    @Override
+    public float getPrefWidth() {
+	return 200;
     }
 
     public void addCharacter(char c) {
@@ -102,32 +112,45 @@ public final class TextField extends Actor {
 	}
     }
 
-    private final ShapeRenderer renderer = new ShapeRenderer();
-    private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
-
     @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-	batch.end();
+    public void paint(SpriteBatch batch) {
+	ShapeRenderer renderer = getRenderer();
+	focused = getStage().getKeyboardFocus() == this;
+	int start = 0;
+	int end = text.length();
+	int startingXText = 0;
+	if (font.getBounds(text).width > getWidth() - WIDTH_PADDING * 2) {
+	    end = text.length();
+	    start = end - 1;
+	    while (start > 0 && font.getBounds(text, start, end).width < getWidth() - WIDTH_PADDING * 2) {
+		start--;
+	    }
+	    startingXText = (int) -font.getBounds(text, 0, start).width;
+	}
+	//
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
 	renderer.setColor(Color.WHITE);
-	float y = getY();
-	renderer.filledRect(getX(), y, getWidth(), getHeight());
+	renderer.filledRect(0, 0, getWidth(), getHeight());
 	renderer.end();
-	renderer.begin(ShapeRenderer.ShapeType.Line);
+	renderer.begin(ShapeRenderer.ShapeType.Rectangle);
 	renderer.setColor(Color.BLACK);
-	renderer.line(getX(), y, getX() + getWidth(), y);
+	renderer.rect(0, 0, getWidth() + 1, getHeight());
+	renderer.end();
 	//cursor
+	renderer.begin(ShapeRenderer.ShapeType.Line);
 	if (focused) {
-	    final float x = getX() + 10 + font.getBounds(text).width;
-	    renderer.line(x, y, x, y + font.getLineHeight());
-	    renderer.line(x + 1, y, x + 1, y + font.getLineHeight());
+	    final float x = 10 + font.getBounds(text, 0, currentPosition).width + startingXText;
+	    renderer.line(x, 3, x, font.getLineHeight() + 2);
+	    renderer.line(x + 1, 3, x + 1, font.getLineHeight() + 2);
 	}
 	renderer.end();
 	batch.begin();
 	font.setColor(Color.BLACK);
-	font.draw(batch, text, getX() + 10, y + 2);
+	font.draw(batch, text.subSequence(start, end), WIDTH_PADDING, 3);
+	batch.end();
     }
+    private static final int WIDTH_PADDING = 10;
 
     public void setTextColor(Color textColor) {
 	this.textColor = textColor;

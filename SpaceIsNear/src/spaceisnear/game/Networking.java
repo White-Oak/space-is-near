@@ -4,7 +4,7 @@ package spaceisnear.game;
 import com.esotericsoftware.kryonet.*;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
-import spaceisnear.LoadingScreen;
+import spaceisnear.starting.LoadingScreen;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
