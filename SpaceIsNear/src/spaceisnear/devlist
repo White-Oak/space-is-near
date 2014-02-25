@@ -149,7 +149,7 @@
 +editor
 +porting SIN from Slick to libGDX
 
-0.0.7
+0.0.7 r104
 +optimizing MessageCreateds
 *Brought back:
     +context menu appearance/disappearance

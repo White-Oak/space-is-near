@@ -125,6 +125,9 @@ public class GameConsole extends Actor {
 		    processBroadcastingMessageFromPlayer(split[1], split);
 		}
 		break;
+	    case "ooc":
+		sendOOC(text);
+		break;
 	}
     }
 
