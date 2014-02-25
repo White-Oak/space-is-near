@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import spaceisnear.game.Corev3;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.ui.*;
+import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
  *
@@ -28,7 +29,6 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 	nickname = new TextField("kek");
 	join = new Button("Join!");
 
-	System.out.println(nickname.getHeight() + " " + join.getHeight());
 	int x = (Gdx.graphics.getWidth() - 400) >> 1;
 	int y = (int) (Gdx.graphics.getHeight() - 20 - nickname.getHeight() * 2 - join.getHeight());
 	loginLabel.setPosition(x - loginLabel.getWidth() - 20, y);

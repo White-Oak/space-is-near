@@ -1,4 +1,4 @@
-package spaceisnear.starting;
+package spaceisnear.starting.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -43,6 +43,10 @@ public abstract class ScreenImprovedGreatly implements ScreenImproved {
 
     public boolean isCoreNotPaused() {
 	return corev3.isCoreNotPaused();
+    }
+
+    public boolean isConnected() {
+	return corev3.isConnected();
     }
 
     @Override

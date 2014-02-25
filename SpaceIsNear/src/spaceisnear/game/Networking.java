@@ -38,6 +38,10 @@ import spaceisnear.starting.LoadingScreen;
 	client.connect(5000, host, tcpPort);
     }
 
+    public boolean isConnected() {
+	return client != null;
+    }
+
     public boolean isAbleToTalkIC() {
 	return mpi != null;
     }

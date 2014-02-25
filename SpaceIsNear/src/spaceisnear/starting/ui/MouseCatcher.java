@@ -1,4 +1,4 @@
-package spaceisnear.starting;
+package spaceisnear.starting.ui;
 
 import com.badlogic.gdx.scenes.scene2d.*;
 

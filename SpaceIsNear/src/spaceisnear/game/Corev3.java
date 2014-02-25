@@ -17,6 +17,8 @@ import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.console.GameConsole;
 import spaceisnear.starting.*;
+import spaceisnear.starting.ui.ScreenImproved;
+import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
  *
@@ -133,5 +135,9 @@ public class Corev3 extends Game implements ActivationListener {
 
     public boolean isCoreNotPaused() {
 	return core.isNotpaused();
+    }
+
+    public boolean isConnected() {
+	return core.getNetworking().isConnected();
     }
 }

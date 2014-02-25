@@ -17,7 +17,7 @@ import spaceisnear.game.objects.items.*;
 import spaceisnear.game.ui.console.*;
 import spaceisnear.game.ui.context.*;
 import spaceisnear.game.ui.inventory.Inventory;
-import spaceisnear.starting.ScreenImprovedGreatly;
+import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
  * @author LPzhelud

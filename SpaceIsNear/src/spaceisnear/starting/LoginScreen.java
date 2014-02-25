@@ -8,6 +8,7 @@ import spaceisnear.game.Corev3;
 import spaceisnear.game.messages.service.onceused.MessageClientInformation;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.TextField;
+import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
  *
@@ -54,7 +55,7 @@ public final class LoginScreen extends ScreenImprovedGreatly implements Activati
 
     @Override
     public void componentActivated(Actor actor) {
-	if (actor == ok) {
+	if (isConnected() && actor == ok) {
 	    send(new MessageClientInformation(login.getText(), password.getText()));
 	    setScreen(1);
 	}
