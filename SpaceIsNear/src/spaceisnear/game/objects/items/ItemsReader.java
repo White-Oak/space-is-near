@@ -16,24 +16,11 @@ public class ItemsReader {
 
     public static ItemBundle[] read() throws Exception {
 	try (InputStream items = ItemsReader.class.getResourceAsStream("/spaceisnear/game/objects/items/items.json")) {
-	    byte[] contents = getContents(items);
+	    byte[] contents = Utils.getContents(items);
 	    return Utils.GSON.fromJson(new String(contents), ItemBundle[].class);
 	} catch (Exception e) {
 	    throw e;
 	}
     }
 
-    private static byte[] getContents(InputStream is) {
-	try {
-	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    int c;
-	    while ((c = is.read()) != -1) {
-		baos.write(c);
-	    }
-	    return baos.toByteArray();
-	} catch (IOException ex) {
-	    ex.printStackTrace();
-	}
-	return null;
-    }
 }

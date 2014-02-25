@@ -125,6 +125,11 @@ public class Corev3 extends Game implements ActivationListener {
 		NetworkingObject get = (NetworkingObject) core.getContext().getObjects().get(Context.NETWORKING_ID);
 		get.process();
 	    }
+	    if (getScreen() == screens[0]) {
+		if (isLogined()) {
+		    setScreen(1);
+		}
+	    }
 	    try {
 		Thread.sleep(50);
 	    } catch (InterruptedException ex) {
@@ -135,6 +140,10 @@ public class Corev3 extends Game implements ActivationListener {
 
     public boolean isCoreNotPaused() {
 	return core.isNotpaused();
+    }
+
+    public boolean isLogined() {
+	return core.getNetworking().isLogined();
     }
 
     public boolean isConnected() {

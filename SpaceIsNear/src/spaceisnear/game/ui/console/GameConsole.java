@@ -126,7 +126,7 @@ public class GameConsole extends Actor {
 		}
 		break;
 	    case "ooc":
-		sendOOC(text);
+		sendOOC(split[1]);
 		break;
 	}
     }

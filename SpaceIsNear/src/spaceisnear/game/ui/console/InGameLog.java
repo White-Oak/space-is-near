@@ -84,7 +84,7 @@ public class InGameLog {
 	    case TALKING:
 		return Color.BLACK;
 	    case BROADCASTING:
-		return Color.GREEN;
+		return new Color(0, 0.5f, 0, 1);
 	    case WARNING:
 		return Color.RED;
 	    case OOC:

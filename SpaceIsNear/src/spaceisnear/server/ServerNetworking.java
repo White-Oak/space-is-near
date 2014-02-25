@@ -37,6 +37,8 @@ import spaceisnear.server.objects.items.*;
     private List<MessagePropertable> propertys;
     private List<MessagePropertable> propertysForNewPlayer;
 
+    private AccountManager accountManager = new AccountManager();
+
     @Override
     public void received(Connection connection, Object object) {
 	if (object instanceof MessageBundle) {
@@ -94,9 +96,11 @@ import spaceisnear.server.objects.items.*;
 	    case CLIENT_INFO:
 		MessageClientInformation mci = Message.createInstance(b, MessageClientInformation.class);
 		getClientByConnection(connection).setClientInformation(mci);
-		core.getContext().logToServerLog(new LogString(mci.getLogin() + " requested access with password " + mci.getPassword(),
-			LogLevel.DEBUG));
-		sendToConnection(connection, new MessageAccess(true));
+		String message = mci.getLogin() + " requested access with password " + mci.getPassword();
+		boolean accessible = accountManager.isAccessible(mci.getLogin(), mci.getPassword());
+		message += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
+		core.getContext().logToServerLog(new LogString(message, LogLevel.DEBUG));
+		sendToConnection(connection, new MessageAccess(accessible));
 		System.out.println("Client information received");
 	    case CONTROLLED:
 		MessageControlledByInput mc = MessageControlledByInput.getInstance(b);

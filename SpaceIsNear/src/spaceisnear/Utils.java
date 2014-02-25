@@ -6,6 +6,7 @@
 package spaceisnear;
 
 import com.google.gson.Gson;
+import java.io.*;
 
 /**
  * Just utils.
@@ -18,4 +19,18 @@ public class Utils {
      * Replacement for all the 'new Gson()' lines.
      */
     public static final Gson GSON = new Gson();
+
+    public static byte[] getContents(InputStream is) {
+	try {
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    int c;
+	    while ((c = is.read()) != -1) {
+		baos.write(c);
+	    }
+	    return baos.toByteArray();
+	} catch (IOException ex) {
+	    ex.printStackTrace();
+	}
+	return null;
+    }
 }

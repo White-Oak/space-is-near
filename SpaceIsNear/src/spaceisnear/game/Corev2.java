@@ -65,7 +65,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	stage.setKeyboardFocus(inputCatcher);
 
 	inventory = new Inventory();
-	inventory.setBounds(800 - Inventory.INVENTORY_WIDTH, 0, Inventory.INVENTORY_WIDTH, 600);
+	inventory.setBounds(800 - Inventory.INVENTORY_WIDTH, 0, Inventory.INVENTORY_WIDTH, Inventory.INVENTORY_HEIGHT);
 	stage.addActor(inventory);
 
 	callToConnect();

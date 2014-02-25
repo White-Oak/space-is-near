@@ -15,6 +15,8 @@ import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.objects.*;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;
+import spaceisnear.game.ui.console.LogLevel;
+import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.Registerer;
 import spaceisnear.starting.LoadingScreen;
 
@@ -97,6 +99,7 @@ import spaceisnear.starting.LoadingScreen;
 		case DISCOVERED_PLAYER:
 		    MessageYourPlayerDiscovered dypm = MessageYourPlayerDiscovered.getInstance(b);
 		    processDiscoveredYourPlayerMessage(dypm);
+		    joined = true;
 		    break;
 		case ROGER_REQUESTED:
 		    send(ROGERED);
@@ -138,6 +141,9 @@ import spaceisnear.starting.LoadingScreen;
 		case ACCESS:
 		    MessageAccess ma = Message.createInstance(b, MessageAccess.class);
 		    logined = ma.isAccess();
+		    if (!logined) {
+			core.log(new LogString("Incorrect pair of login/password", LogLevel.WARNING));
+		    }
 		    break;
 	    }
 //	    System.out.println("Message received");

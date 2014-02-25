@@ -57,7 +57,6 @@ public final class LoginScreen extends ScreenImprovedGreatly implements Activati
     public void componentActivated(Actor actor) {
 	if (isConnected() && actor == ok) {
 	    send(new MessageClientInformation(login.getText(), password.getText()));
-	    setScreen(1);
 	}
     }
 }
