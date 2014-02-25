@@ -159,13 +159,20 @@
     +context menu working
     +text field features
     +inventory
--In-game chat
-    -make OOC
--total rework of starting UI and logic
++In-game chat
+    +make OOC
+    +make some warnings
++total rework of starting UI and logic
+    +login and password inputting
+    +nickname inputting
 *Moved to GitHub
 *fixed bug when hero could move for wrong number of tiles
 
 0.0.8
++total rework of starting UI and logic
+    -login and password checking
+    -login and password saving
+    -professions' choosing
 -Professions' basics
 -IDs' basics (ID of player, his profession)
 -PDAs basics (working as radio)
