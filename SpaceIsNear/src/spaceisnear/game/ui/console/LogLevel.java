@@ -11,5 +11,6 @@ package spaceisnear.game.ui.console;
  */
 public enum LogLevel {
 
-    DEBUG, TALKING, WARNING, BROADCASTING, WHISPERING
+    DEBUG, TALKING, WARNING, BROADCASTING, WHISPERING,
+    OOC,
 }

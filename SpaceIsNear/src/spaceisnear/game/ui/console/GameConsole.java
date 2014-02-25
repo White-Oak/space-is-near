@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import lombok.Getter;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.properties.MessagePropertySet;
+import spaceisnear.game.messages.service.onceused.MessageClientInformation;
 import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.ui.TextField;
 
@@ -26,14 +26,14 @@ public class GameConsole extends Actor {
     @Getter private final TextField textField;
     private final InGameLog log;
 //    Font font = new TrueTypeFont(awtFont, false);
-    private final Context context;
+    private final GameContext context;
     private int scrollBarSize;
     private int scrollBarY;
     private boolean scrollBarClicked;
     @Getter private final BitmapFont font;
     //
 
-    public GameConsole(int x, int y, int width, int height, Context context, TextField tf) {
+    public GameConsole(int x, int y, int width, int height, GameContext context, TextField tf) {
 	this.x = x;
 	this.y = y;
 	setWidth(width);
@@ -76,39 +76,56 @@ public class GameConsole extends Actor {
     private void sendMessageFromPlayer(String message) {
 	GamerPlayer player = ((GameContext) context).getPlayer();
 	String nickname = player.getNickname();
-	LogString logString = new LogString(nickname + ": " + message, LogLevel.TALKING, player.getPosition());
+	message = nickname + ": " + message;
+	LogString logString = new LogString(message, LogLevel.TALKING, player.getPosition());
 	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 	context.sendDirectedMessage(messageToSend);
     }
 
     public void processInputedMessage() {
 	String text = textField.getText();
-	if (((GameContext) context).isLogined()) {
-	    if (text.startsWith("-")) {
-		String substring = text.substring(1);
-		String[] split = substring.split(" ");
-		switch (split[0]) {
-		    case "debug":
-			processDebugRequestMessage(split);
-			break;
-		    case "stoppull":
-			MessagePropertySet messagePropertySet = new MessagePropertySet(((GameContext) context).getPlayerID(), "pull", -1);
-			MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-			context.sendDirectedMessage(messageToSend);
-			break;
-		    case "h":
-			if (split.length > 2) {
-			    processBroadcastingMessageFromPlayer(split[1], split);
-			}
-			break;
+	if (context.isLogined()) {
+	    if (context.isJoined()) {
+		if (text.startsWith("-")) {
+		    processControlSequence(text);
+		} else {
+		    sendMessageFromPlayer(text);
 		}
 	    } else {
-		sendMessageFromPlayer(text);
+		sendOOC(text);
 	    }
 	} else {
 	    pushMessage(new LogString("You cannot write messages while not connected!", LogLevel.WARNING));
 	}
 	textField.setText("");
+    }
+
+    private void sendOOC(String text) {
+	MessageClientInformation mci = context.getCore().getNetworking().getMci();
+	text = mci.getLogin() + ": " + text;
+	LogString logString = new LogString(text, LogLevel.OOC);
+	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
+	context.sendDirectedMessage(messageToSend);
+    }
+
+    private void processControlSequence(String text) {
+	String substring = text.substring(1);
+	String[] split = substring.split(" ");
+	switch (split[0]) {
+	    case "debug":
+		processDebugRequestMessage(split);
+		break;
+	    case "stoppull":
+		MessagePropertySet messagePropertySet = new MessagePropertySet(context.getPlayerID(), "pull", -1);
+		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+		context.sendDirectedMessage(messageToSend);
+		break;
+	    case "h":
+		if (split.length > 2) {
+		    processBroadcastingMessageFromPlayer(split[1], split);
+		}
+		break;
+	}
     }
 
     private void processBroadcastingMessageFromPlayer(String frequency, String[] message) {

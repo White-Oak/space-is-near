@@ -42,17 +42,11 @@ public abstract class UIElement extends Actor {
 
     @Override
     public float getWidth() {
-	if (super.getWidth() == 0) {
-	    setWidth(getPrefWidth());
-	}
 	return super.getWidth();
     }
 
     @Override
     public float getHeight() {
-	if (super.getHeight() == 0) {
-	    setWidth(getPrefHeight());
-	}
 	return super.getHeight();
     }
 

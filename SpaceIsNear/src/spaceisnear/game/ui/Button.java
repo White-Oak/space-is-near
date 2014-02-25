@@ -12,7 +12,7 @@ import lombok.Setter;
  *
  * @author White Oak
  */
-public class Button extends UIElement {
+public final class Button extends UIElement {
 
     @Getter @Setter private String label;
     private static final int WIDTH_PADDING = 5, HEIGHT_PADDING = 2;
@@ -27,6 +27,8 @@ public class Button extends UIElement {
 		return false;
 	    }
 	});
+	setHeight(getPrefHeight());
+	setWidth(getPrefWidth());
     }
 
     @Override

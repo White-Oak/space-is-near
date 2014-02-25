@@ -27,8 +27,8 @@ public final class LoginScreen extends ScreenImprovedGreatly implements Activati
 	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 	Label loginLabel = new Label("Login", labelStyle);
 	Label passwordLabel = new Label("Password", labelStyle);
-	login = new TextField();
-	password = new TextField();
+	login = new TextField("true");
+	password = new TextField("lel");
 
 	int x = (Gdx.graphics.getWidth() - 400) >> 1;
 	int y = Gdx.graphics.getHeight() >> 1;

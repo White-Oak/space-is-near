@@ -173,6 +173,9 @@ public final class ServerContext extends Context {
 		    }
 		}
 		break;
+	    case OOC:
+		getNetworking().sendToAll(new MessageLog(log));
+		break;
 	}
     }
 

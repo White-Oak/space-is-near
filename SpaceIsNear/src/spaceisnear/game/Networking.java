@@ -3,8 +3,7 @@ package spaceisnear.game;
 import com.esotericsoftware.kryonet.*;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
@@ -27,8 +26,8 @@ import spaceisnear.starting.LoadingScreen;
     private final Corev2 core;
     private Client client;
     private final static MessageRogered ROGERED = new MessageRogered();
-    private MessagePlayerInformation mpi;
-    private MessageClientInformation mci;
+    @Getter @Setter private MessagePlayerInformation mpi;
+    @Getter @Setter private MessageClientInformation mci;
     @Getter private boolean logined, joined;
 
     public void connect(String host, int tcpPort) throws IOException {

@@ -21,11 +21,20 @@ public final class TextField extends UIElement {
     private StringBuilder text = new StringBuilder();
     private int currentPosition;
     private Color textColor;
-    private final InputListener inputListener;
     @Getter private boolean focused;
+    private static final int HEIGHT_PADDING = 2;
 
     public TextField() {
-	addCaptureListener(inputListener = new InputListener() {
+	init();
+    }
+
+    public TextField(CharSequence text) {
+	init();
+	this.text.append(text);
+    }
+
+    private void init() {
+	addCaptureListener(new InputListener() {
 	    @Override
 	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 		Stage stage = getStage();
@@ -88,7 +97,7 @@ public final class TextField extends UIElement {
 
     @Override
     public float getPrefHeight() {
-	return font.getLineHeight() + 4;
+	return font.getLineHeight() + HEIGHT_PADDING * 2;
     }
 
     @Override

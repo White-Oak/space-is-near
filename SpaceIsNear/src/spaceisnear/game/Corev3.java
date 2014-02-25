@@ -5,8 +5,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.Getter;
+import spaceisnear.abstracts.Context;
+import spaceisnear.game.messages.MessageType;
 import spaceisnear.game.messages.NetworkableMessage;
+import spaceisnear.game.messages.service.onceused.MessageClientInformation;
+import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
+import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.console.GameConsole;
 import spaceisnear.starting.*;
@@ -41,6 +48,13 @@ public class Corev3 extends Game implements ActivationListener {
 	initializeConsole();
 	screens = new ScreenImprovedGreatly[]{loginScreen, lobby, core};
 	setScreen(0);
+	new Thread(new Runnable() {
+
+	    @Override
+	    public void run() {
+		update();
+	    }
+	}).start();
     }
 
     public void setScreen(int number) {
@@ -92,6 +106,26 @@ public class Corev3 extends Game implements ActivationListener {
     }
 
     public void send(NetworkableMessage m) {
+	if (m.getMessageType() == MessageType.CLIENT_INFO) {
+	    core.getNetworking().setMci((MessageClientInformation) m);
+	}
+	if (m.getMessageType() == MessageType.PLAYER_INFO) {
+	    core.getNetworking().setMpi((MessagePlayerInformation) m);
+	}
 	core.getNetworking().send(m);
+    }
+
+    private void update() {
+	while (true) {
+	    if (!core.isNotpaused()) {
+		NetworkingObject get = (NetworkingObject) core.getContext().getObjects().get(Context.NETWORKING_ID);
+		get.process();
+	    }
+	    try {
+		Thread.sleep(50);
+	    } catch (InterruptedException ex) {
+		Logger.getLogger(Corev3.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
     }
 }

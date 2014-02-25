@@ -87,4 +87,8 @@ import spaceisnear.server.ServerContext;
 	return core.getNetworking().isLogined();
     }
 
+    public boolean isJoined() {
+	return core.getNetworking().isJoined();
+    }
+
 }
