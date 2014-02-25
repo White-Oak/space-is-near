@@ -85,6 +85,8 @@ public class InGameLog {
 		return Color.BLACK;
 	    case BROADCASTING:
 		return Color.GREEN;
+	    case WARNING:
+		return Color.RED;
 	    default:
 		return Color.GRAY;
 	}

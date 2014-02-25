@@ -3,11 +3,11 @@ package spaceisnear.game;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.*;
 import lombok.*;
+import spaceisnear.Main;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.messages.*;
@@ -17,23 +17,30 @@ import spaceisnear.game.objects.items.*;
 import spaceisnear.game.ui.console.*;
 import spaceisnear.game.ui.context.*;
 import spaceisnear.game.ui.inventory.Inventory;
+import spaceisnear.starting.ScreenImprovedGreatly;
 
 /**
  * @author LPzhelud
  */
-public class Corev2 implements Screen, Runnable {
+public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
-    private GameContext context;
+    @Getter private GameContext context;
     private final ArrayList<AbstractGameObject> objects = new ArrayList<>();
     @Setter private int key;
-    public static String IP;
+    public static String IP = "127.0.0.1";
     @Getter private boolean notpaused;
-    private Stage stage;
-    @Getter private GameConsole console;
+
+    @Getter private final Networking networking;
     private ContextMenu menu;
     private Inventory inventory;
-    @Getter private final BitmapFont font = Corev3.font;
     private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
+    private InputCatcher inputCatcher;
+
+    public Corev2(Corev3 corev3) {
+	super(corev3);
+	networking = new Networking(this);
+	init();
+    }
 
     public void init() {
 	try {
@@ -41,32 +48,50 @@ public class Corev2 implements Screen, Runnable {
 	} catch (Exception ex) {
 	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
 	}
+
 	context = new GameContext(new CameraMan(), objects, this);
-	context.addObject(new NetworkingObject());
+	context.addObject(new NetworkingObject(networking));
 	context.checkSize();
 	context.getCameraMan().setWindowWidth(800);
 	context.getCameraMan().setWindowHeight(600);
+
 	camera.setToOrtho(true, 1200, 600);
 	camera.update();
-	stage = new Stage();
 	stage.setCamera(camera);
+
 	inputCatcher = new InputCatcher(this);
 	inputCatcher.setBounds(0, 0, 800, 600);
 	stage.addActor(inputCatcher);
+	stage.setKeyboardFocus(inputCatcher);
+
 	inventory = new Inventory();
 	inventory.setBounds(800 - Inventory.INVENTORY_WIDTH, 0, Inventory.INVENTORY_WIDTH, 600);
 	stage.addActor(inventory);
-	stage.setKeyboardFocus(inputCatcher);
-	camera.setToOrtho(true);
-    }
-    private InputCatcher inputCatcher;
 
-    public void callToConnect() {
-	try {
-	    context.getNetworking().connect(IP, 54555);
-	} catch (IOException ex) {
-	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
-	}
+	callToConnect();
+    }
+
+    private void callToConnect() {
+	new Thread() {
+	    @Override
+	    public void run() {
+		try {
+		    networking.connect(IP, 54555);
+		} catch (IOException ex) {
+		    Main.main(new String[]{"host"});
+		    synchronized (Corev2.this) {
+			try {
+			    log(new LogString("Couldn't find a host on " + IP, LogLevel.WARNING));
+			    IP = "127.0.0.1";
+			    log(new LogString("Starting server on " + IP, LogLevel.WARNING));
+			    networking.connect(IP, 54555);
+			} catch (IOException ex1) {
+			    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex1);
+			}
+		    }
+		}
+	    }
+	}.start();
     }
 
     public void update(int delta) {
@@ -98,7 +123,7 @@ public class Corev2 implements Screen, Runnable {
 
     private MessageControlledByInput checkMovementDesired() {
 	MessageControlledByInput mc = null;
-	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimated() && !console.hasFocus()
+	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimated() && !getConsole().hasFocus()
 		&& System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE;
 	if (ableToMove) {
 	    switch (key) {
@@ -134,10 +159,10 @@ public class Corev2 implements Screen, Runnable {
 		context.sendDirectedMessage(messageToSend);
 		break;
 	    case Input.Keys.ENTER:
-		final boolean focused = console.getTextField().isFocused();
+		final boolean focused = getConsole().getTextField().isFocused();
 		if (!focused) {
 		    key = 0;
-		    stage.setKeyboardFocus(console.getTextField());
+		    stage.setKeyboardFocus(getConsole().getTextField());
 		}
 		break;
 	}
@@ -145,7 +170,7 @@ public class Corev2 implements Screen, Runnable {
     private final SpriteBatch batch = new SpriteBatch();
 
     @Override
-    public void render(float delta) {
+    public void draw() {
 	context.getCameraMan().moveCamera();
 	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
 	batch.begin();
@@ -153,7 +178,6 @@ public class Corev2 implements Screen, Runnable {
 	    paintableComponent.paint(batch);
 	}
 	batch.end();
-	stage.draw();
 	context.getCameraMan().unmoveCamera();
     }
 
@@ -181,7 +205,7 @@ public class Corev2 implements Screen, Runnable {
 	if (tileX < 0 || tileY < 0) {
 	    return;
 	}
-	console.pushMessage(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
+	log(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
 	if (button == 1) {
 	    if (menu == null) {
 		createContextMenuWithItems(x, y, tileX, tileY);
@@ -210,7 +234,7 @@ public class Corev2 implements Screen, Runnable {
 		    switch (e.getLabel()) {
 			case "Learn":
 			    String description = item.getProperties().getDescription();
-			    console.pushMessage(new LogString(description, LogLevel.TALKING));
+			    log(new LogString(description, LogLevel.TALKING));
 			    break;
 			case "Pull":
 			    int id = item.getId();
@@ -231,8 +255,8 @@ public class Corev2 implements Screen, Runnable {
     }
 
     public void log(LogString log) {
-	if (console != null) {
-	    console.pushMessage(log);
+	if (getConsole() != null) {
+	    getConsole().pushMessage(log);
 	}
     }
 

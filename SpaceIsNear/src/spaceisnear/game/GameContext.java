@@ -30,7 +30,6 @@ import spaceisnear.server.ServerContext;
     public static final int MAP_WIDTH = 64;
     public static final int MAP_HEIGHT = 64;
     public static float SCALING_X = 1f, SCALING_Y = 1f;
-    @Getter private final Networking networking = new Networking(this);
     @Getter private final List<AbstractGameObject> objects;
     @Getter @Setter private int playerID = -1;
     @Getter private final Corev2 core;
@@ -83,4 +82,9 @@ import spaceisnear.server.ServerContext;
 	final GamerPlayer gamerPlayer = new GamerPlayer(get);
 	objects.set(playerID, gamerPlayer);
     }
+
+    public boolean isLogined() {
+	return core.getNetworking().isLogined();
+    }
+
 }

@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import lombok.Getter;
+import spaceisnear.game.messages.NetworkableMessage;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.console.GameConsole;
-import spaceisnear.starting.LoginScreen;
-import spaceisnear.starting.ScreenImproved;
+import spaceisnear.starting.*;
 
 /**
  *
@@ -18,10 +19,13 @@ public class Corev3 extends Game implements ActivationListener {
 
     private final InputMultiplexer multiplexer = new InputMultiplexer();
     private OrthographicCamera camera;
-    private GameConsole console;
+    @Getter private GameConsole console;
     private GameContext context;
     public static BitmapFont font;
     private LoginScreen loginScreen;
+    private Lobby lobby;
+    private Corev2 core;
+    private ScreenImprovedGreatly[] screens = new ScreenImprovedGreatly[3];
 
     @Override
     public void create() {
@@ -29,12 +33,28 @@ public class Corev3 extends Game implements ActivationListener {
 	Gdx.input.setInputProcessor(multiplexer);
 	camera.setToOrtho(true);
 	camera.update();
+	font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
+	loginScreen = new LoginScreen(this);
+	lobby = new Lobby(this);
+	core = new Corev2(this);
+	context = core.getContext();
 	initializeConsole();
-	loginScreen = new LoginScreen();
-	setScreenImproved(loginScreen);
+	screens = new ScreenImprovedGreatly[]{loginScreen, lobby, core};
+	setScreen(0);
     }
 
-    private void setScreenImproved(ScreenImproved screenImproved) {
+    public void setScreen(int number) {
+	setScreenImproved(screens[number]);
+    }
+
+    public void setScreenImproved(ScreenImprovedGreatly screenImproved) {
+	if (getScreen() != null) {
+	    if (getScreen() instanceof ScreenImprovedGreatly) {
+		removeScreenImproved((ScreenImprovedGreatly) getScreen());
+	    } else {
+		setScreen(null);
+	    }
+	}
 	setScreen(screenImproved);
 	Stage stage = screenImproved.getStage();
 	multiplexer.addProcessor(stage);
@@ -43,14 +63,15 @@ public class Corev3 extends Game implements ActivationListener {
     }
 
     private void removeScreenImproved(ScreenImproved screenImproved) {
-	Stage stage = screenImproved.getStage();
-	multiplexer.removeProcessor(stage);
-	stage.getActors().removeValue(console, true);
-	stage.getActors().removeValue(console.getTextField(), true);
+	if (getScreen() != screenImproved) {
+	    Stage stage = screenImproved.getStage();
+	    multiplexer.removeProcessor(stage);
+	    stage.getActors().removeValue(console, true);
+	    stage.getActors().removeValue(console.getTextField(), true);
+	}
     }
 
     private void initializeConsole() {
-	font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
 	final spaceisnear.game.ui.TextField textField = new spaceisnear.game.ui.TextField();
 	textField.setActivationListener(this);
 	textField.setBounds(800, Gdx.graphics.getHeight() - textField.getPrefHeight(), 400, textField.getPrefHeight());
@@ -66,7 +87,11 @@ public class Corev3 extends Game implements ActivationListener {
 
     @Override
     public void componentActivated(Actor actor) {
-//	console.processInputedMessage();
+	console.processInputedMessage();
 	((ScreenImproved) getScreen()).getStage().setKeyboardFocus(null);
+    }
+
+    public void send(NetworkableMessage m) {
+	core.getNetworking().send(m);
     }
 }

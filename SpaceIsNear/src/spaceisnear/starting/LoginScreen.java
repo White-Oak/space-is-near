@@ -2,30 +2,24 @@ package spaceisnear.starting;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import lombok.Getter;
 import spaceisnear.game.Corev3;
+import spaceisnear.game.messages.service.onceused.MessageClientInformation;
+import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.TextField;
 
 /**
  *
  * @author LPzhelud
  */
-public final class LoginScreen implements ScreenImproved {
+public final class LoginScreen extends ScreenImprovedGreatly implements ActivationListener {
 
     public static TextField login, password;
     private spaceisnear.game.ui.Button ok;
-    @Getter private final Stage stage;
-    BitmapFont font = Corev3.font;
 
-    public LoginScreen() {
-	this.stage = new Stage();
-	camera = new OrthographicCamera();
-	camera.setToOrtho(true);
-	camera.update();
-	stage.setCamera(camera);
+    public LoginScreen(Corev3 corev3) {
+	super(corev3);
 	init();
     }
 
@@ -45,43 +39,24 @@ public final class LoginScreen implements ScreenImproved {
 
 	ok = new spaceisnear.game.ui.Button("OK");
 	ok.setPosition(x, y + password.getHeight() + 20);
+	ok.setActivationListener(this);
+
+	addMouseCatcher();
 
 	stage.addActor(loginLabel);
 	stage.addActor(login);
 	stage.addActor(passwordLabel);
 	stage.addActor(password);
 	stage.addActor(ok);
+
+	setBackgroundColor(Color.WHITE);
     }
 
     @Override
-    public void render(float delta) {
-	Gdx.gl.glClearColor(1, 1, 1, 1);
-	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	stage.draw();
-    }
-    private final OrthographicCamera camera;
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void show() {
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void dispose() {
+    public void componentActivated(Actor actor) {
+	if (actor == ok) {
+	    send(new MessageClientInformation(login.getText(), password.getText()));
+	    setScreen(1);
+	}
     }
 }

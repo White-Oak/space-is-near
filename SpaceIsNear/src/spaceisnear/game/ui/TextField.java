@@ -147,7 +147,7 @@ public final class TextField extends UIElement {
 	renderer.end();
 	batch.begin();
 	font.setColor(Color.BLACK);
-	font.draw(batch, text.subSequence(start, end), WIDTH_PADDING, 3);
+	font.draw(batch, text.subSequence(start, end), WIDTH_PADDING + getX(), 3 + getY());
 	batch.end();
     }
     private static final int WIDTH_PADDING = 10;

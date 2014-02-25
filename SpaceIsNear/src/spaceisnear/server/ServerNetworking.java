@@ -1,5 +1,6 @@
 package spaceisnear.server;
 
+import spaceisnear.game.messages.service.onceused.MessageAccess;
 import com.esotericsoftware.kryonet.*;
 import java.io.*;
 import java.util.*;
@@ -12,7 +13,9 @@ import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.objects.*;
+import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.LogString;
+import spaceisnear.server.Client;
 import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.items.*;
 
@@ -23,12 +26,16 @@ import spaceisnear.server.objects.items.*;
 
     public Server server;
     private final ServerCore core;
-    private final ArrayList<Connection> connections = new ArrayList<>();
-    private final ArrayList<Player> players = new ArrayList<>();
-    private MessageClientInformation informationAboutLastConnected;
+
+    private final List<Client> clients = new ArrayList<>();
+
+    private MessagePlayerInformation informationAboutLastConnected;
+
     private boolean[] rogered;
     private final static MessageBundle ROGER_REQUSTED_BUNDLE = new MessageRogerRequested().getBundle();
+
     private final Queue<MessageBundle> messages = new LinkedList<>();
+    private final Queue<Connection> connectionsForMessages = new LinkedList<>();
 
     private List<MessagePropertable> propertys;
     private List<MessagePropertable> propertysForNewPlayer;
@@ -36,21 +43,10 @@ import spaceisnear.server.objects.items.*;
     @Override
     public void received(Connection connection, Object object) {
 	if (object instanceof MessageBundle) {
-	    MessageBundle bundle = (MessageBundle) object;
-	    MessageType mt = bundle.messageType;
-	    switch (mt) {
-		case ROGERED:
-		    connections.toArray(new Connection[connections.size()]);
-		    for (int i = 0; i < connections.size(); i++) {
-			Connection connection1 = connections.get(i);
-			if (connection1.equals(connection)) {
-			    rogered[i] = true;
-			}
-		    }
-		    break;
-		default:
-		    messages.add(bundle);
-		    break;
+	    synchronized (messages) {
+		MessageBundle bundle = (MessageBundle) object;
+		connectionsForMessages.add(connection);
+		messages.add(bundle);
 	    }
 	} else if (object instanceof String) {
 	    System.out.println(object);
@@ -58,19 +54,50 @@ import spaceisnear.server.objects.items.*;
     }
 
     public void processReceivedQueue() {
-	while (!messages.isEmpty()) {
-	    processBundle(messages.poll());
+	synchronized (messages) {
+	    while (!messages.isEmpty()) {
+		processBundle(messages.poll(), connectionsForMessages.poll());
+	    }
 	}
     }
 
-    private void processBundle(MessageBundle bundle) {
+    private int getClientIDByConnection(Connection connection) {
+	for (int i = 0; i < clients.size(); i++) {
+	    Client client = clients.get(i);
+	    if (client.getConnection() == connection) {
+		return i;
+	    }
+	}
+	return -1;
+    }
+
+    private Client getClientByConnection(Connection connection) {
+	final int clientIDByConnection = getClientIDByConnection(connection);
+	return clientIDByConnection >= 0 ? clients.get(clientIDByConnection) : null;
+    }
+
+    private void processBundle(MessageBundle bundle, Connection connection) {
 	MessageType mt = bundle.messageType;
 	byte[] b = bundle.bytes;
 	switch (mt) {
-	    case CLIENT_INFO:
-		informationAboutLastConnected = MessageClientInformation.getInstance(b);
-		System.out.println("Client information received");
+	    case ROGERED:
+		for (int i = 0; i < clients.size(); i++) {
+		    Connection connection1 = clients.get(i).getConnection();
+		    if (connection1.equals(connection)) {
+			rogered[i] = true;
+		    }
+		}
 		break;
+	    case PLAYER_INFO:
+		MessagePlayerInformation mpi = MessagePlayerInformation.getInstance(b);
+		getClientByConnection(connection).setPlayerInformation(mpi);
+		System.out.println("Player information received");
+		break;
+	    case CLIENT_INFO:
+		MessageClientInformation mci = Message.createInstance(b, MessageClientInformation.class);
+		getClientByConnection(connection).setClientInformation(mci);
+		sendToConnection(connection, new MessageAccess(true));
+		System.out.println("Client information received");
 	    case CONTROLLED:
 		MessageControlledByInput mc = MessageControlledByInput.getInstance(b);
 		core.getContext().sendDirectedMessage(mc);
@@ -115,7 +142,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void sendToID(int id, Bundle bundle) {
-	sendToConnection(connections.get(id), bundle);
+	sendToConnection(clients.get(id).getConnection(), bundle);
     }
 
     private void sendToConnection(Connection c, NetworkableMessage message) {
@@ -139,12 +166,15 @@ import spaceisnear.server.objects.items.*;
 
     @Override
     public synchronized void connected(Connection connection) {
-	connections.add(connection);
-	rogered = new boolean[connections.size()];
-	//make some kind of queue or something like that to prevent blocking
-	if (core.isAlreadyPaused()) {
-	    sendToConnection(connection, new MessageConnectionBroken());
-	    connection.close();
+	synchronized (clients) {
+	    Client client = new Client(connection);
+	    clients.add(client);
+	    rogered = new boolean[clients.size()];
+	    //make some kind of queue or something like that to prevent blocking
+	    if (core.isAlreadyPaused()) {
+		sendToConnection(connection, new MessageConnectionBroken());
+		connection.close();
+	    }
 	}
     }
 
@@ -153,10 +183,10 @@ import spaceisnear.server.objects.items.*;
 	new Thread(this).start();
     }
 
-    private void createPlayer() {
+    private void createPlayer(Client client) {
 	//1
-	Player player = core.addPlayer(connections.size());
-	players.add(player);
+	Player player = core.addPlayer(client.getConnection().getID());
+	client.setPlayer(player);
 	player.setNickname(informationAboutLastConnected.getDesiredNickname());
 	final ServerContext context = core.getContext();
 	final ServerItemsArchive itemsArchive = ServerItemsArchive.ITEMS_ARCHIVE;
@@ -175,19 +205,19 @@ import spaceisnear.server.objects.items.*;
 
     @Override
     public void run() {
-	processNewPlayer();
+	processNewPlayer(null);
     }
 
-    private void processNewPlayer() {
+    private void processNewPlayer(Client client) {
 	waitForServerToStop();
 	//create list of properties
 	propertys = new ArrayList<>();
-	int lastConnected = connections.size() - 1;
+	int lastConnected = clients.size() - 1;
 	//
-	createPlayer();
+	createPlayer(client);
 	sendWorld(lastConnected);
 	sendPlayer(lastConnected);
-	for (int i = 0; i < connections.size(); i++) {
+	for (int i = 0; i < clients.size(); i++) {
 	    sendProperties(i);
 	}
 	//
@@ -199,9 +229,9 @@ import spaceisnear.server.objects.items.*;
 	for (int i = 0; i < 20; i++) {
 	    waitSomeTime();
 	}
-	Player get = players.get(players.size() - 1);
+	Player get = client.getPlayer();
 	String message = get.getNickname() + " has connected to SIN!";
-//	log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
+	log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
     }
 
     private void waitForServerToStop() {
@@ -256,7 +286,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void sendPlayer(int lastConnected) {
-	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(players.get(players.size() - 1).getId());
+	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(clients.get(lastConnected).getPlayer().getId());
 	sendToID(lastConnected, mypd);
 	System.out.println("Player has sent");
     }

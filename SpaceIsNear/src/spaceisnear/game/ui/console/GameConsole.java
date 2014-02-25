@@ -83,26 +83,30 @@ public class GameConsole extends Actor {
 
     public void processInputedMessage() {
 	String text = textField.getText();
-	if (text.startsWith("-")) {
-	    String substring = text.substring(1);
-	    String[] split = substring.split(" ");
-	    switch (split[0]) {
-		case "debug":
-		    processDebugRequestMessage(split);
-		    break;
-		case "stoppull":
-		    MessagePropertySet messagePropertySet = new MessagePropertySet(((GameContext) context).getPlayerID(), "pull", -1);
-		    MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-		    context.sendDirectedMessage(messageToSend);
-		    break;
-		case "h":
-		    if (split.length > 2) {
-			processBroadcastingMessageFromPlayer(split[1], split);
-		    }
-		    break;
+	if (((GameContext) context).isLogined()) {
+	    if (text.startsWith("-")) {
+		String substring = text.substring(1);
+		String[] split = substring.split(" ");
+		switch (split[0]) {
+		    case "debug":
+			processDebugRequestMessage(split);
+			break;
+		    case "stoppull":
+			MessagePropertySet messagePropertySet = new MessagePropertySet(((GameContext) context).getPlayerID(), "pull", -1);
+			MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+			context.sendDirectedMessage(messageToSend);
+			break;
+		    case "h":
+			if (split.length > 2) {
+			    processBroadcastingMessageFromPlayer(split[1], split);
+			}
+			break;
+		}
+	    } else {
+		sendMessageFromPlayer(text);
 	    }
 	} else {
-	    sendMessageFromPlayer(text);
+	    pushMessage(new LogString("You cannot write messages while not connected!", LogLevel.WARNING));
 	}
 	textField.setText("");
     }
@@ -233,4 +237,9 @@ public class GameConsole extends Actor {
     public void mouseWheelMoved(int newValue) {
 	processDrag(-newValue >> 2);
     }
+
+    public void setAcceptDebugMessages(boolean acceptDebugMessages) {
+	log.setAcceptDebugMessages(acceptDebugMessages);
+    }
+
 }
