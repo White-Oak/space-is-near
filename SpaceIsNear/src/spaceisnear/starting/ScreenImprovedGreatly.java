@@ -14,7 +14,7 @@ public abstract class ScreenImprovedGreatly implements ScreenImproved {
     @Getter(AccessLevel.PROTECTED) private final Corev3 corev3;
     @Getter protected final Stage stage = new Stage();
     private final OrthographicCamera camera;
-    @Setter private Color backgroundColor;
+    @Setter private Color backgroundColor = Color.BLACK;
     protected static BitmapFont font = Corev3.font;
 
     public ScreenImprovedGreatly(Corev3 corev3) {

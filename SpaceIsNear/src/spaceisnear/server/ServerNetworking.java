@@ -1,6 +1,5 @@
 package spaceisnear.server;
 
-import spaceisnear.game.messages.service.onceused.MessageAccess;
 import com.esotericsoftware.kryonet.*;
 import java.io.*;
 import java.util.*;
@@ -22,14 +21,12 @@ import spaceisnear.server.objects.items.*;
 /**
  * @author white_oak
  */
-@RequiredArgsConstructor public class ServerNetworking extends Listener implements Runnable {
+@RequiredArgsConstructor public class ServerNetworking extends Listener {
 
     public Server server;
     private final ServerCore core;
 
     private final List<Client> clients = new ArrayList<>();
-
-    private MessagePlayerInformation informationAboutLastConnected;
 
     private boolean[] rogered;
     private final static MessageBundle ROGER_REQUSTED_BUNDLE = new MessageRogerRequested().getBundle();
@@ -92,10 +89,13 @@ import spaceisnear.server.objects.items.*;
 		MessagePlayerInformation mpi = MessagePlayerInformation.getInstance(b);
 		getClientByConnection(connection).setPlayerInformation(mpi);
 		System.out.println("Player information received");
+		connectedWantsPlayer(getClientByConnection(connection));
 		break;
 	    case CLIENT_INFO:
 		MessageClientInformation mci = Message.createInstance(b, MessageClientInformation.class);
 		getClientByConnection(connection).setClientInformation(mci);
+		core.getContext().logToServerLog(new LogString(mci.getLogin() + " requested access with password " + mci.getPassword(),
+			LogLevel.DEBUG));
 		sendToConnection(connection, new MessageAccess(true));
 		System.out.println("Client information received");
 	    case CONTROLLED:
@@ -178,16 +178,22 @@ import spaceisnear.server.objects.items.*;
 	}
     }
 
-    private synchronized void connectedWantsPlayer() {
+    private synchronized void connectedWantsPlayer(final Client client) {
 	core.pause();
-	new Thread(this).start();
+	new Thread(new Runnable() {
+
+	    @Override
+	    public void run() {
+		processNewPlayer(client);
+	    }
+	}).start();
     }
 
     private void createPlayer(Client client) {
 	//1
 	Player player = core.addPlayer(client.getConnection().getID());
 	client.setPlayer(player);
-	player.setNickname(informationAboutLastConnected.getDesiredNickname());
+	player.setNickname(client.getPlayerInformation().getDesiredNickname());
 	final ServerContext context = core.getContext();
 	final ServerItemsArchive itemsArchive = ServerItemsArchive.ITEMS_ARCHIVE;
 	final int idByName = itemsArchive.getIdByName("ear_radio");
@@ -203,22 +209,16 @@ import spaceisnear.server.objects.items.*;
 	server.bind(54555);
     }
 
-    @Override
-    public void run() {
-	processNewPlayer(null);
-    }
-
     private void processNewPlayer(Client client) {
 	waitForServerToStop();
 	//create list of properties
 	propertys = new ArrayList<>();
-	int lastConnected = clients.size() - 1;
 	//
 	createPlayer(client);
-	sendWorld(lastConnected);
-	sendPlayer(lastConnected);
-	for (int i = 0; i < clients.size(); i++) {
-	    sendProperties(i);
+	sendWorld(client);
+	sendPlayer(client);
+	for (Client client1 : clients) {
+	    sendProperties(client1);
 	}
 	//
 	core.unpause();
@@ -238,7 +238,7 @@ import spaceisnear.server.objects.items.*;
 	//wait for client to send information about clien
 	//and for server to finally pause
 	//@done use this info
-	while (informationAboutLastConnected == null || !core.isAlreadyPaused()) {
+	while (!core.isAlreadyPaused()) {
 	    while (!messages.isEmpty()) {
 		waitSomeTime();
 	    }
@@ -251,10 +251,10 @@ import spaceisnear.server.objects.items.*;
 	resetRogeredStatuses();
     }
 
-    private void sendWorld(int lastConnected) {
+    private void sendWorld(Client client) {
 	MessageCreated[] world = getWorld();
 	MessageWorldInformation mwi = new MessageWorldInformation(world.length, propertys.size());
-	sendToID(lastConnected, mwi);
+	sendToConnection(client.getConnection(), mwi);
 	MessageCloned cloned = null;
 	for (int i = 0; i < world.length; i++) {
 	    MessageCreated messageCreated = world[i];
@@ -268,32 +268,32 @@ import spaceisnear.server.objects.items.*;
 		    continue;
 		} else {
 		    if (cloned != null) {
-			sendToID(lastConnected, cloned);
+			sendToConnection(client.getConnection(), cloned);
 			cloned = null;
 		    }
 		}
 	    } else {
 		if (cloned != null) {
-		    sendToID(lastConnected, cloned);
+		    sendToConnection(client.getConnection(), cloned);
 		    cloned = null;
 		}
 	    }
-	    sendToID(lastConnected, messageCreated);
+	    sendToConnection(client.getConnection(), messageCreated);
 	}
 	if (cloned != null) {
-	    sendToID(lastConnected, cloned);
+	    sendToConnection(client.getConnection(), cloned);
 	}
     }
 
-    private void sendPlayer(int lastConnected) {
-	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(clients.get(lastConnected).getPlayer().getId());
-	sendToID(lastConnected, mypd);
+    private void sendPlayer(Client client) {
+	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(client.getPlayer().getId());
+	sendToConnection(client.getConnection(), mypd);
 	System.out.println("Player has sent");
     }
 
-    private void sendProperties(int lastConnected) {
+    private void sendProperties(Client client) {
 	for (MessagePropertable messagePropertable : propertys) {
-	    sendToID(lastConnected, messagePropertable);
+	    sendToConnection(client.getConnection(), messagePropertable);
 	}
     }
 

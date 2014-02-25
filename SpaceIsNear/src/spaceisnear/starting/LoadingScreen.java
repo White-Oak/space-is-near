@@ -33,7 +33,7 @@ public class LoadingScreen extends ScreenImprovedGreatly {
     public void update() {
 	if (isCoreNotPaused()) {
 	    System.out.println("Moving to Core...");
-//	    Main.main.setScreen(core);
+	    setScreen(3);
 	}
     }
 
