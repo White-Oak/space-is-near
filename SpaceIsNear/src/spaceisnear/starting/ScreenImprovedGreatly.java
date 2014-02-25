@@ -49,8 +49,8 @@ public abstract class ScreenImprovedGreatly implements ScreenImproved {
     public final void render(float delta) {
 	Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	stage.draw();
 	draw();
+	stage.draw();
     }
 
     public void draw() {

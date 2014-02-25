@@ -89,8 +89,8 @@ public final class CameraMan {
 	}
 //	final boolean xBelongs = px + 1 > this.x + 6 && px - this.x < getMaxXTiles() + 1 - 7;
 //	final boolean yBelongs = py + 1 > this.y + 4 && py - this.y < getMaxYTiles() + 1 - 5;
-	final boolean xBelongs = px + 1 > this.x && px - this.x < getMaxXTiles() + 1;
-	final boolean yBelongs = py + 1 > this.y && py - this.y < getMaxYTiles() + 1;
+	final boolean xBelongs = px + 2 > this.x && px - this.x < getMaxXTiles() + 1;
+	final boolean yBelongs = py + 2 > this.y && py - this.y < getMaxYTiles() + 1;
 	return xBelongs && yBelongs;
     }
 
