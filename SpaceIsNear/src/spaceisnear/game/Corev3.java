@@ -30,6 +30,7 @@ public class Corev3 extends Game implements ActivationListener {
     private GameContext context;
     public static BitmapFont font;
     private LoginScreen loginScreen;
+    private LoadingScreen loading;
     private Lobby lobby;
     private Corev2 core;
     private ScreenImprovedGreatly[] screens = new ScreenImprovedGreatly[3];
@@ -44,9 +45,10 @@ public class Corev3 extends Game implements ActivationListener {
 	loginScreen = new LoginScreen(this);
 	lobby = new Lobby(this);
 	core = new Corev2(this);
+	loading = new LoadingScreen(this);
 	context = core.getContext();
 	initializeConsole();
-	screens = new ScreenImprovedGreatly[]{loginScreen, lobby, core};
+	screens = new ScreenImprovedGreatly[]{loginScreen, lobby, loading, core};
 	setScreen(0);
 	new Thread(new Runnable() {
 
@@ -127,5 +129,9 @@ public class Corev3 extends Game implements ActivationListener {
 		Logger.getLogger(Corev3.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
+    }
+
+    public boolean isCoreNotPaused() {
+	return core.isNotpaused();
     }
 }

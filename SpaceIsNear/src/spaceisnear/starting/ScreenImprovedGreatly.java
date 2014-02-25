@@ -41,6 +41,10 @@ public abstract class ScreenImprovedGreatly implements ScreenImproved {
 	corev3.send(m);
     }
 
+    public boolean isCoreNotPaused() {
+	return corev3.isCoreNotPaused();
+    }
+
     @Override
     public final void render(float delta) {
 	Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
