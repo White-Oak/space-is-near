@@ -81,6 +81,7 @@ import spaceisnear.server.ServerContext;
 	Player get = (Player) objects.get(playerID);
 	final GamerPlayer gamerPlayer = new GamerPlayer(get);
 	objects.set(playerID, gamerPlayer);
+	core.newGamerPlayerReceived();
     }
 
     public boolean isLogined() {

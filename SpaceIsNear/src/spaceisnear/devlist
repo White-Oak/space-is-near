@@ -178,7 +178,9 @@
 -PDAs basics (working as radio)
 -Inventory
     *now based on HashMap
-    -UI
+    +UI
+	+different placement of items for full and hidden inventory 
+	-animation
 -In-game chat
     -make PM using PDAs
 

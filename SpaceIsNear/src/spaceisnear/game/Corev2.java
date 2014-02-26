@@ -296,4 +296,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	}
     }
 
+    public void newGamerPlayerReceived() {
+	inventory.setInventoryComponent(context.getPlayer().getInventoryComponent());
+    }
 }
