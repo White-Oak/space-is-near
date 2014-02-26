@@ -115,13 +115,19 @@ import spaceisnear.game.objects.items.StaticItem;
 		for (int i = 0; i < itemsPlacement.length; i++) {
 		    String[] strings = itemsPlacement[i];
 		    for (int j = 0; j < strings.length; j++) {
+			int localDeltaX = deltaX;
+			if (j == 1) {
+			    localDeltaX = localDeltaX >> 1;
+			} else if (j == 0) {
+			    localDeltaX = 0;
+			}
 			String string = strings[strings.length - 1 - j];
 			int itemId = slots.get(string).getItemId();
 			if (itemId > 0) {
 			    StaticItem get = (StaticItem) inventoryComponent.getContext().getObjects().get(itemId);
 			    int id = get.getProperties().getId();
 			    TextureRegion textureRegion = ItemsArchive.itemsArchive.getTextureRegion(id);
-			    batch.draw(textureRegion, startingX + (strings.length - 1 - j) * (TILE_WIDTH + TILE_PADDING),
+			    batch.draw(textureRegion, startingX + localDeltaX + (strings.length - 1 - j) * (TILE_WIDTH + TILE_PADDING),
 				    startingY + i * (TILE_HEIGHT + TILE_PADDING));
 			}
 		    }

@@ -176,11 +176,11 @@
 -Professions' basics
 -IDs' basics (ID of player, his profession)
 -PDAs basics (working as radio)
--Inventory
++Inventory basics
     *now based on HashMap
     +UI
 	+different placement of items for full and hidden inventory 
-	-animation
+	+animation
 -In-game chat
     -make PM using PDAs
 
