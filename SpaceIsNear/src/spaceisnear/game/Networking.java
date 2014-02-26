@@ -132,7 +132,7 @@ import spaceisnear.starting.LoadingScreen;
 		case INVENTORY_SET:
 		    MessageInventorySet mis = MessageInventorySet.getInstance(b);
 		    GamerPlayer player = core.getContext().getPlayer();
-		    player.getInventoryComponent().setSlots(mis.getSet());
+		    player.getInventoryComponent().getSlots().setSlots(mis.getSlots());
 		    break;
 		case CLONED:
 		    MessageCloned mc = Message.createInstance(b, MessageCloned.class);

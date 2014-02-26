@@ -177,6 +177,7 @@
 -IDs' basics (ID of player, his profession)
 -PDAs basics (working as radio)
 -Inventory
+    *now based on HashMap
     -UI
 -In-game chat
     -make PM using PDAs

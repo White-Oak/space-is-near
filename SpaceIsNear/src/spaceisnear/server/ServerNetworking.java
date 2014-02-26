@@ -37,7 +37,7 @@ import spaceisnear.server.objects.items.*;
     private List<MessagePropertable> propertys;
     private List<MessagePropertable> propertysForNewPlayer;
 
-    private AccountManager accountManager = new AccountManager();
+    private final AccountManager accountManager = new AccountManager();
 
     @Override
     public void received(Connection connection, Object object) {
@@ -202,7 +202,7 @@ import spaceisnear.server.objects.items.*;
 	final ServerItemsArchive itemsArchive = ServerItemsArchive.ITEMS_ARCHIVE;
 	final int idByName = itemsArchive.getIdByName("ear_radio");
 	StaticItem item = ItemAdder.addItem(new Position(-1, -1), idByName, context);
-	player.getInventoryComponent().getSlots().getEar().setItemId(item.getId());
+	player.getInventoryComponent().getSlots().get("ear").setItemId(item.getId());
     }
 
     public void host() throws IOException {

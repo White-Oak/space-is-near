@@ -191,7 +191,7 @@ public final class ServerContext extends Context {
     }
 
     private boolean doesPlayerHasEnabledRadioOnFrequency(Player player, String frequency) {
-	InventorySlot ear = player.getInventoryComponent().getSlots().getEar();
+	InventorySlot ear = player.getInventoryComponent().getSlots().get("ear");
 	boolean radioPlayer = false;
 	final int itemId = ear.getItemId();
 	if (itemId != -1) {
