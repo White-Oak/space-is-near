@@ -182,10 +182,14 @@
 	+different placement of items for full and hidden inventory 
 	+animation
 -In-game chat
+    +whisper
     -make PM using PDAs
 
 
 0.0.9
+-System of viewers for server
+    -atmosphere viewer
+    -log viewer
 +HealthComponent
     -knockbacking if critical
     -dying if dead

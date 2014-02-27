@@ -30,7 +30,7 @@ public final class ServerContext extends Context {
     @Getter private final ObstaclesLayer obstacles;
     @Getter private final AtmosphericLayer atmosphere;
     private final ServerLog log = new ServerLog();
-    private static final int MAXIMUM_TILES_TO_BE_HEARD = 20;
+    private static final int MAXIMUM_TILES_TO_BE_HEARD = 20, MAXIMUM_TILES_TO_BE_WHISPERED = 2;
     public static final int HIDDEN_SERVER_OBJECTS = 1;
 
     @Override
@@ -92,6 +92,15 @@ public final class ServerContext extends Context {
 	int initialY = said.getY();
 	//how to name it???
 	START_RECURSION(bufferMap, initialX, initialY, MAXIMUM_TILES_TO_BE_HEARD);
+	return bufferMap[toHear.getX()][toHear.getY()] > 0;
+    }
+
+    public boolean isHearingWhispering(Position said, Position toHear) {
+	int[][] bufferMap = new int[obstacles.getWidth()][obstacles.getHeight()];
+	int initialX = said.getX();
+	int initialY = said.getY();
+	//how to name it???
+	START_RECURSION(bufferMap, initialX, initialY, MAXIMUM_TILES_TO_BE_WHISPERED);
 	return bufferMap[toHear.getX()][toHear.getY()] > 0;
     }
 
@@ -176,10 +185,24 @@ public final class ServerContext extends Context {
 	    case OOC:
 		getNetworking().sendToAll(new MessageLog(log));
 		break;
+	    case WHISPERING:
+		processIncomingWhisperingLogMessage(log);
+		break;
 	}
     }
 
     private void processIncomingTalkingLogMessage(final LogString log) {
+	for (int i = 0; i < players.size(); i++) {
+	    Player player = players.get(i);
+	    Position positionToHear = player.getPosition();
+	    Position positionToSay = log.getPosition();
+	    if (isHearingLogMessage(positionToSay, positionToHear)) {
+		getNetworking().sendToID(i, new MessageLog(log));
+	    }
+	}
+    }
+
+    private void processIncomingWhisperingLogMessage(final LogString log) {
 	for (int i = 0; i < players.size(); i++) {
 	    Player player = players.get(i);
 	    Position positionToHear = player.getPosition();

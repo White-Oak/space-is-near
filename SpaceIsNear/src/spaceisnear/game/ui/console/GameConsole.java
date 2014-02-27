@@ -76,7 +76,7 @@ public class GameConsole extends Actor {
     private void sendMessageFromPlayer(String message) {
 	GamerPlayer player = ((GameContext) context).getPlayer();
 	String nickname = player.getNickname();
-	message = nickname + ": " + message;
+	message = nickname + " says: " + message;
 	LogString logString = new LogString(message, LogLevel.TALKING, player.getPosition());
 	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 	context.sendDirectedMessage(messageToSend);
@@ -108,10 +108,22 @@ public class GameConsole extends Actor {
 	context.sendDirectedMessage(messageToSend);
     }
 
+    private void sendWhisper(String message) {
+	GamerPlayer player = context.getPlayer();
+	String nickname = player.getNickname();
+	message = nickname + " whispers: " + message;
+	LogString logString = new LogString(message, LogLevel.WHISPERING, player.getPosition());
+	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
+	context.sendDirectedMessage(messageToSend);
+    }
+
     private void processControlSequence(String text) {
 	String substring = text.substring(1);
 	String[] split = substring.split(" ");
+	String cs = split[0];
+	String message = substring.substring(split[0].length() + 1);
 	switch (split[0]) {
+	    case "d":
 	    case "debug":
 		processDebugRequestMessage(split);
 		break;
@@ -120,13 +132,18 @@ public class GameConsole extends Actor {
 		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
 		context.sendDirectedMessage(messageToSend);
 		break;
+	    case "broadcast":
 	    case "h":
 		if (split.length > 2) {
 		    processBroadcastingMessageFromPlayer(split[1], split);
 		}
 		break;
 	    case "ooc":
-		sendOOC(split[1]);
+		sendOOC(message);
+		break;
+	    case "w":
+	    case "whisper":
+		sendWhisper(message);
 		break;
 	}
     }
