@@ -86,5 +86,17 @@
 	"stuckedByAddingFromScript": false,
 	"description": "Universal radio system for wearing on ear",
 	"defaultProperties": [{"name": "frequency", "value": "145.9"}, {"name": "enabled", "value": true}]
+    },
+    {
+
+	"name": "pda",
+	"size": "SMALL",
+	"type": "TOOL",
+	"blockingPath": false,
+	"blockingAir": false,
+	"imageIds": [7],
+	"stuckedByAddingFromScript": false,
+	"description": "Universal pda to wok with",
+	"defaultProperties": null
     }
 ]

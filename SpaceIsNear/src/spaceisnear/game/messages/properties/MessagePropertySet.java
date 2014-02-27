@@ -5,19 +5,13 @@
  */
 package spaceisnear.game.messages.properties;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
 import spaceisnear.Utils;
 import spaceisnear.game.bundles.MessageBundle;
-import spaceisnear.game.messages.DirectedMessage;
-import spaceisnear.game.messages.MessageType;
-import spaceisnear.game.messages.NetworkableMessage;
+import spaceisnear.game.messages.*;
 
 public class MessagePropertySet extends DirectedMessage implements NetworkableMessage, MessagePropertable {
 
@@ -27,6 +21,13 @@ public class MessagePropertySet extends DirectedMessage implements NetworkableMe
 
     public MessagePropertySet(int id, String name, Object value) {
 	super(MessageType.PROPERTY_SET, id);
+	this.name = name;
+	this.value = value;
+	valueClass = value.getClass().getName();
+    }
+
+    public MessagePropertySet(MessageType type, int id, String name, Object value) {
+	super(type, id);
 	this.name = name;
 	this.value = value;
 	valueClass = value.getClass().getName();
