@@ -185,12 +185,13 @@
     +whisper
     -make PM using PDAs
 	"[XXX]->[YYY] %name% messages: %text%"
-
-
-0.0.9
 -Developed items' system
     +ItemScriptBundle
     +reading ItemScriptBundles from scripts.json
+
+
+
+0.0.9
 -System of viewers for server
     -atmosphere viewer
     -log viewer

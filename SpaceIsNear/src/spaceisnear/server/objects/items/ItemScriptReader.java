@@ -8,7 +8,7 @@ import spaceisnear.game.objects.items.ItemsReader;
  *
  * @author White Oak
  */
-public class ItemScriptAdder {
+public class ItemScriptReader {
 
     public static ItemScriptBundle[] read() throws Exception {
 	try (InputStream items = ItemsReader.class.getResourceAsStream("/spaceisnear/server/objects/items/scrupts.json")) {

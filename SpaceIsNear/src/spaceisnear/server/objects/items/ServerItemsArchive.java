@@ -9,6 +9,7 @@
  */
 package spaceisnear.server.objects.items;
 
+import lombok.Getter;
 import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.server.ServerContext;
@@ -20,9 +21,11 @@ import spaceisnear.server.ServerContext;
 public class ServerItemsArchive extends ItemsArchivable {
 
     public static ServerItemsArchive ITEMS_ARCHIVE;
+    @Getter private final ItemScriptBundle[] scripts;
 
-    public ServerItemsArchive(ItemBundle[] bundles) {
+    public ServerItemsArchive(ItemBundle[] bundles, ItemScriptBundle[] scripts) {
 	super(bundles);
+	this.scripts = scripts;
     }
 
     public spaceisnear.server.objects.items.StaticItem getNewItemForServer(int id, ServerContext serverContext) {

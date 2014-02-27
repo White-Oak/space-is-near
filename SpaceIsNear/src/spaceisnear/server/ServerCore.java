@@ -41,7 +41,7 @@ public class ServerCore implements Runnable {
 	int height = width;
 	final ArrayList<AbstractGameObject> objects = new ArrayList<>();
 	try {
-	    ServerItemsArchive.ITEMS_ARCHIVE = new ServerItemsArchive(ItemsReader.read());
+	    ServerItemsArchive.ITEMS_ARCHIVE = new ServerItemsArchive(ItemsReader.read(), ItemScriptReader.read());
 	} catch (Exception ex) {
 	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
 	}
