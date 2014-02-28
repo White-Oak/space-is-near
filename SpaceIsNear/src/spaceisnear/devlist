@@ -188,8 +188,10 @@
 -Developed items' system
     +ItemScriptBundle
     +reading ItemScriptBundles from scripts.json
-
-
+	+scripts.json only contains boolean values for SIN to know if there is a need to search for a file with script
+    +scripts are named after "name" field like "pda" has "pda.script"
++Separate thread calculating animations
+*Inventory has moved into InventoryPaintableComponent
 
 0.0.9
 -System of viewers for server

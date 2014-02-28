@@ -7,6 +7,6 @@ package spaceisnear.server.objects.items;
 public class ItemScriptBundle {
 
     private String name;
-    private String contextMenuInit;
-    private String messageProcessing;
+    private boolean contextMenuInit;
+    private boolean messageProcessing;
 }

@@ -10,13 +10,13 @@ import lombok.*;
 import spaceisnear.Main;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.client.PaintableComponent;
+import spaceisnear.game.components.inventory.InventoryPaintableComponent;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.game.ui.console.*;
 import spaceisnear.game.ui.context.*;
-import spaceisnear.game.ui.inventory.Inventory;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
@@ -32,9 +32,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     @Getter private final Networking networking;
     private ContextMenu menu;
-    private Inventory inventory;
     private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
     private InputCatcher inputCatcher;
+
+    private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
 
     public Corev2(Corev3 corev3) {
 	super(corev3);
@@ -64,10 +65,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	stage.addActor(inputCatcher);
 	stage.setKeyboardFocus(inputCatcher);
 
-	inventory = new Inventory();
-	inventory.setBounds(800 - Inventory.INVENTORY_WIDTH, 0, Inventory.INVENTORY_WIDTH, Inventory.INVENTORY_HEIGHT);
-	stage.addActor(inventory);
-
 	callToConnect();
     }
 
@@ -94,10 +91,14 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	}.start();
     }
 
+    private void animate() {
+	context.sendThemAll(MESSAGE_ANIMATION_STEP);
+    }
+
     public void update(int delta) {
 	if (notpaused) {
-	    MessageTimePassed messageTimePassed = new MessageTimePassed(delta);
-	    context.sendThemAll(messageTimePassed);
+//	    MessageTimePassed messageTimePassed = new MessageTimePassed(delta);
+//	    context.sendThemAll(messageTimePassed);
 	    //
 	    checkKeys();
 	    MessageControlledByInput mc = checkMovementDesired();
@@ -140,6 +141,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    mc = new MessageControlledByInput(MessageControlledByInput.Type.RIGHT, context.getPlayerID());
 		    break;
 		case Input.Keys.M:
+		    final InventoryPaintableComponent inventory = context.getPlayer().getInventoryPaintableComponent();
 		    inventory.setMinimized(!inventory.isMinimized());
 		    lastTimeMoved = System.currentTimeMillis();
 		    break;
@@ -270,6 +272,20 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.setCameraToPlayer();
 	Gdx.input.setInputProcessor(stage);
 	new Thread(this).start();
+	new Thread(new Runnable() {
+
+	    @Override
+	    public void run() {
+		while (true) {
+		    animate();
+		    try {
+			Thread.sleep(MessageAnimationStep.STEP);
+		    } catch (InterruptedException ex) {
+			Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+		}
+	    }
+	}).start();
     }
 
     @Override
@@ -294,9 +310,5 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
-    }
-
-    public void newGamerPlayerReceived() {
-	inventory.setInventoryComponent(context.getPlayer().getInventoryComponent());
     }
 }

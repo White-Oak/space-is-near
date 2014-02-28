@@ -6,6 +6,7 @@ package spaceisnear.game.objects;
 
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.GamePlayerPositionComponent;
+import spaceisnear.game.components.inventory.InventoryPaintableComponent;
 
 public class GamerPlayer extends Player {
 
@@ -23,7 +24,17 @@ public class GamerPlayer extends Player {
 		getComponents().set(i, newPositionComponent);
 	    }
 	}
+	addComponents(new InventoryPaintableComponent());
 	setContext(p.getContext());
 	setId(p.getId());
+    }
+
+    public InventoryPaintableComponent getInventoryPaintableComponent() {
+	for (Component component : getComponents()) {
+	    if (component.getType() == ComponentType.INVENTORY_PAINTABLE) {
+		return (InventoryPaintableComponent) component;
+	    }
+	}
+	return null;
     }
 }

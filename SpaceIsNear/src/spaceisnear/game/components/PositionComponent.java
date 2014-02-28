@@ -11,10 +11,7 @@ import lombok.Getter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
-import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageMoved;
-import spaceisnear.game.messages.MessageTeleported;
-import spaceisnear.game.messages.MessageTimePassed;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
@@ -96,7 +93,7 @@ public class PositionComponent extends Component {
 		setX(messagetMessageMoved.getP().getX());
 		setY(messagetMessageMoved.getP().getY());
 		break;
-	    case TIME_PASSED:
+	    case ANIMATION_STEP:
 		checkAnimation(message);
 	}
 	checkConsequnces(oldX, oldY);
@@ -133,8 +130,7 @@ public class PositionComponent extends Component {
 
     private void checkAnimation(Message message) {
 	if (animation) {
-	    MessageTimePassed mtp = (MessageTimePassed) message;
-	    int timePassed = mtp.getTimePassed();
+	    int timePassed = MessageAnimationStep.STEP;
 	    timeAccumulated += timePassed;
 //		    if (timeAccumulated >= TIME_NEDEED_TO_MOVE_ON_TO_NEXT_PHASE_OF_ANIMATION) {
 	    if (delayX != 0 || delayY != 0) {

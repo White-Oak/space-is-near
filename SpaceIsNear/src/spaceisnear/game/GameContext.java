@@ -5,16 +5,12 @@
  */
 package spaceisnear.game;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import lombok.*;
-import spaceisnear.abstracts.AbstractGameObject;
-import spaceisnear.abstracts.Context;
-import spaceisnear.game.components.Component;
-import spaceisnear.game.components.PositionComponent;
+import spaceisnear.abstracts.*;
+import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.PaintableComponent;
-import spaceisnear.game.messages.DirectedMessage;
-import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.*;
 import spaceisnear.server.ServerContext;
 
@@ -49,14 +45,13 @@ import spaceisnear.server.ServerContext;
 	objects.get(id).message(m);
     }
 
+    public void addPaintable(PaintableComponent pc) {
+	paintables.add(pc);
+    }
+
     public synchronized void addObject(ClientGameObject gameObject) {
 	gameObject.setContext(this);
 	objects.add(gameObject);
-	for (Component component : gameObject.getComponents()) {
-	    if (component instanceof PaintableComponent) {
-		paintables.add((PaintableComponent) component);
-	    }
-	}
 	gameObject.setId(objects.size() - 1);
     }
 
@@ -81,7 +76,6 @@ import spaceisnear.server.ServerContext;
 	Player get = (Player) objects.get(playerID);
 	final GamerPlayer gamerPlayer = new GamerPlayer(get);
 	objects.set(playerID, gamerPlayer);
-	core.newGamerPlayerReceived();
     }
 
     public boolean isLogined() {

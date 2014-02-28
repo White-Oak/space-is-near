@@ -11,7 +11,7 @@ import spaceisnear.game.objects.items.ItemsReader;
 public class ItemScriptReader {
 
     public static ItemScriptBundle[] read() throws Exception {
-	try (InputStream items = ItemsReader.class.getResourceAsStream("/spaceisnear/server/objects/items/scrupts.json")) {
+	try (InputStream items = ItemsReader.class.getResourceAsStream("/spaceisnear/server/objects/items/scripts.json")) {
 	    byte[] contents = Utils.getContents(items);
 	    return Utils.GSON.fromJson(new String(contents), ItemScriptBundle[].class);
 	} catch (Exception e) {

@@ -11,6 +11,7 @@ import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
+import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.messages.Message;
 
 /**
@@ -63,6 +64,9 @@ import spaceisnear.game.messages.Message;
 	this.context = context;
 	for (Component component : components) {
 	    component.setContext(context);
+	    if (component instanceof PaintableComponent) {
+		context.addPaintable((PaintableComponent) component);
+	    }
 	}
     }
 

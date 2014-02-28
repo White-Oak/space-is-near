@@ -1,41 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package spaceisnear.game.ui.inventory;
+package spaceisnear.game.components.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import lombok.*;
-import spaceisnear.game.components.inventory.InventoryComponent;
-import spaceisnear.game.components.inventory.TypicalInventorySlotsSet;
+import lombok.Getter;
+import lombok.Setter;
+import spaceisnear.game.components.ComponentType;
+import spaceisnear.game.components.client.PaintableComponent;
+import spaceisnear.game.messages.Message;
+import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;
 
-/**
- *
- * @author White Oak
- */
-@RequiredArgsConstructor public class Inventory extends Actor {
+public class InventoryPaintableComponent extends PaintableComponent {
 
     private final static int TILE_HEIGHT = 40, TILE_WIDTH = 40;
     private final static int TILE_PADDING = 5;
     public final static int INVENTORY_WIDTH = (TILE_WIDTH + TILE_PADDING) * 3;
     public final static int INVENTORY_HEIGHT = TILE_PADDING + (TILE_HEIGHT + TILE_PADDING) * 7;
     private int deltaX;
-    private final static int DELTA_DELTA_X = 1;
+    private final static int DELTA_DELTA_X = 12;
     private final static int MAX_DELTA_X = (TILE_WIDTH + TILE_PADDING) * 2;
     @Getter @Setter private boolean minimized;
-    @Setter private InventoryComponent inventoryComponent;
+    private InventoryComponent inventoryComponent;
     private final static String[][] itemsPlacement = {{"mask", "head", "ear"},
 						      {"costume", "body", "gloves"},
 						      {"costume slot", "shoes", "belt"},
@@ -51,38 +40,7 @@ import spaceisnear.game.objects.items.StaticItem;
 							  "left hand",
 							  "bag"};
 
-    @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-	batch.end();
-	if (minimized) {
-	    deltaX += DELTA_DELTA_X;
-	    if (deltaX > MAX_DELTA_X) {
-		deltaX = MAX_DELTA_X;
-	    }
-	} else {
-	    deltaX -= DELTA_DELTA_X;
-	    if (deltaX < 0) {
-		deltaX = 0;
-	    }
-	}
-	int startingX = (int) getX();
-	int startingY = TILE_PADDING;
-	renderer.setProjectionMatrix(batch.getProjectionMatrix());
-	renderer.setTransformMatrix(batch.getTransformMatrix());
-	Gdx.gl.glEnable(GL20.GL_BLEND);
-	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
-	drawBackground(startingX, startingY);
-	drawTiles(startingX, startingY);
-	renderer.end();
-	Gdx.gl.glDisable(GL20.GL_BLEND);
-	drawItems(batch, startingX, startingY);
-	batch.begin();
-//	batch.draw(pixmapTexture, getX(), getY());
-    }
-    private final ShapeRenderer renderer = new ShapeRenderer();
-
-    private void drawTiles(int startingX, int startingY) {
+    private void drawTiles(int startingX, int startingY, ShapeRenderer renderer) {
 	Color tileColor = new Color(0, 0, 0, 0.7f);
 	//first two lines of tiles
 	//hidden if animation
@@ -102,13 +60,21 @@ import spaceisnear.game.objects.items.StaticItem;
 	}
 	//last line of tiles
 	for (int i = 0; i < 7; i++) {
-	    renderer.filledRect(getX() + (TILE_WIDTH + TILE_PADDING) * 2, startingY + i * (TILE_HEIGHT + TILE_PADDING),
+	    renderer.filledRect(startingX + (TILE_WIDTH + TILE_PADDING) * 2, startingY + i * (TILE_HEIGHT + TILE_PADDING),
 		    TILE_WIDTH, TILE_HEIGHT);
 	}
     }
 
+    private InventoryComponent getInventoryComponent() {
+	if (inventoryComponent == null) {
+	    Player owner = (Player) getOwner();
+	    inventoryComponent = owner.getInventoryComponent();
+	}
+	return inventoryComponent;
+    }
+
     private void drawItems(SpriteBatch batch, int startingX, int startingY) {
-	if (inventoryComponent != null) {
+	if (getInventoryComponent() != null) {
 	    batch.begin();
 	    TypicalInventorySlotsSet slots = inventoryComponent.getSlots();
 	    if (deltaX != MAX_DELTA_X) {
@@ -149,13 +115,59 @@ import spaceisnear.game.objects.items.StaticItem;
 	}
     }
 
-    private void drawBackground(int startingX, int startingY) {
+    private void drawBackground(int startingX, int startingY, ShapeRenderer renderer) {
 	Color backgroundColor = new Color(1, 1, 1, 0.5f);
 	renderer.setColor(backgroundColor);
 	renderer.filledRect(startingX - TILE_PADDING + deltaX, startingY - TILE_PADDING,
 		MAX_DELTA_X - deltaX, TILE_PADDING + (TILE_HEIGHT + TILE_PADDING) * 4);
-	renderer.filledRect(getX() + (TILE_WIDTH + TILE_PADDING) * 2 - TILE_PADDING, startingY - TILE_PADDING,
+	renderer.filledRect(startingX + (TILE_WIDTH + TILE_PADDING) * 2 - TILE_PADDING, startingY - TILE_PADDING,
 		TILE_WIDTH + TILE_PADDING * 2, INVENTORY_HEIGHT);
 
     }
+
+    @Override
+    public void processMessage(Message message) {
+	switch (message.getMessageType()) {
+	    case ANIMATION_STEP:
+		if (minimized) {
+		    deltaX += DELTA_DELTA_X;
+		    if (deltaX > MAX_DELTA_X) {
+			deltaX = MAX_DELTA_X;
+		    }
+		} else {
+		    deltaX -= DELTA_DELTA_X;
+		    if (deltaX < 0) {
+			deltaX = 0;
+		    }
+		}
+		break;
+	}
+    }
+
+    public InventoryPaintableComponent() {
+	super(ComponentType.INVENTORY_PAINTABLE);
+    }
+
+    @Override
+    public void paintComponent(SpriteBatch batch, int x, int y) {
+	ShapeRenderer renderer = new ShapeRenderer();
+	OrthographicCamera camera = new OrthographicCamera();
+	camera.setToOrtho(true);
+	camera.update();
+	batch = new SpriteBatch();
+	batch.setProjectionMatrix(camera.combined);
+
+	x = 800 - INVENTORY_WIDTH;
+	y = TILE_PADDING;
+	renderer.setProjectionMatrix(camera.combined);
+	Gdx.gl.glEnable(GL20.GL_BLEND);
+	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+	drawBackground(x, y, renderer);
+	drawTiles(x, y, renderer);
+	renderer.end();
+	Gdx.gl.glDisable(GL20.GL_BLEND);
+	drawItems(batch, x, y);
+    }
+
 }

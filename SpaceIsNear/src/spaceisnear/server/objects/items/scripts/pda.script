@@ -1,0 +1,20 @@
+if (emulatedType == contextMenu){
+}
+else
+if (emulatedType == processingMessage){
+    type = getMessageType {};
+    if (type == PROPERTY_SET){
+	name = getPropertyMessageName {};
+	if (name == "messages"){
+	    //Tell method that we are fine with handling the message by ourself
+	    dontProcessOnYourOwn {};
+	    messages = getProperty {"messages"};
+	    messages = concat {messages, LINE_SEPARATOR};
+	    value = getPropertyMessageValue {};
+	    messages = concat {messages, value};
+	    setProperty {"message", messages};
+	    //Now we should tell user there was done some work behind the scenes
+	    logInConsole {value, PRIVATE};
+    }
+}
+}
