@@ -5,6 +5,7 @@
  */
 package spaceisnear.server;
 
+import spaceisnear.server.objects.items.scripts.ItemScriptReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;

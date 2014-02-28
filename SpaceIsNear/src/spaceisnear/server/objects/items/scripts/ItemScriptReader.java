@@ -1,4 +1,4 @@
-package spaceisnear.server.objects.items;
+package spaceisnear.server.objects.items.scripts;
 
 import java.io.InputStream;
 import spaceisnear.Utils;

@@ -190,6 +190,8 @@
     +reading ItemScriptBundles from scripts.json
 	+scripts.json only contains boolean values for SIN to know if there is a need to search for a file with script
     +scripts are named after "name" field like "pda" has "pda.script"
+    +scripts are only loaded by request once per item
+    +added MessageProcessingScriptProccessor that will process scripts for PROPERTY_SET messages
 +Separate thread calculating animations
 *Inventory has moved into InventoryPaintableComponent
 
