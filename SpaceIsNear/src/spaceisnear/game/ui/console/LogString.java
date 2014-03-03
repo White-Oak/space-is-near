@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.ui.console;
 
+import lombok.Getter;
 import spaceisnear.game.objects.Position;
 
 /**
@@ -13,40 +14,43 @@ import spaceisnear.game.objects.Position;
  */
 public class LogString {
 
-    private final String message;
+    @Getter private final String message;
     private int timesMessaged = 1;
-    private final LogLevel level;
-    private final Position position;
-    private final String frequency;
+    @Getter private final LogLevel level;
+    @Getter private final Position position;
+    @Getter private final String frequency;
+    @Getter private final int receiverID;
 
     LogString() {
 	this.message = null;
 	this.level = null;
 	this.position = null;
 	this.frequency = null;
+	this.receiverID = 0;
     }
 
     public LogString(String message, LogLevel level) {
-	this(message, level, null, null);
+	this(message, level, null, null, 0);
     }
 
-    private LogString(String message, LogLevel level, Position position, String frequency) {
+    private LogString(String message, LogLevel level, Position position, String frequency, int receiverID) {
 	this.message = message;
 	this.level = level;
 	this.position = position;
 	this.frequency = frequency;
+	this.receiverID = receiverID;
     }
 
     public LogString(String message, LogLevel level, Position position) {
-	this(message, level, position, null);
+	this(message, level, position, null, 0);
     }
 
     public LogString(String message, LogLevel level, String frequency) {
-	this(message, level, null, frequency);
+	this(message, level, null, frequency, 0);
     }
 
-    public String getMessage() {
-	return message;
+    public LogString(String message, LogLevel level, int receiverID) {
+	this(message, level, null, null, receiverID);
     }
 
     @Override
@@ -64,17 +68,5 @@ public class LogString {
 
     public void increaseTimes() {
 	timesMessaged++;
-    }
-
-    public LogLevel getLevel() {
-	return level;
-    }
-
-    public Position getPosition() {
-	return position;
-    }
-
-    public String getFrequency() {
-	return frequency;
     }
 }

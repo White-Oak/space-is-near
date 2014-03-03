@@ -78,8 +78,7 @@ public class GameConsole extends Actor {
 	String nickname = player.getNickname();
 	message = nickname + " says: " + message;
 	LogString logString = new LogString(message, LogLevel.TALKING, player.getPosition());
-	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
-	context.sendDirectedMessage(messageToSend);
+	sendLogString(logString);
     }
 
     public void processInputedMessage() {
@@ -104,8 +103,7 @@ public class GameConsole extends Actor {
 	MessageClientInformation mci = context.getCore().getNetworking().getMci();
 	text = mci.getLogin() + ": " + text;
 	LogString logString = new LogString(text, LogLevel.OOC);
-	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
-	context.sendDirectedMessage(messageToSend);
+	sendLogString(logString);
     }
 
     private void sendWhisper(String message) {
@@ -113,8 +111,7 @@ public class GameConsole extends Actor {
 	String nickname = player.getNickname();
 	message = nickname + " whispers: " + message;
 	LogString logString = new LogString(message, LogLevel.WHISPERING, player.getPosition());
-	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
-	context.sendDirectedMessage(messageToSend);
+	sendLogString(logString);
     }
 
     private void processControlSequence(String text) {
@@ -145,7 +142,29 @@ public class GameConsole extends Actor {
 	    case "whisper":
 		sendWhisper(message);
 		break;
+	    case "pm":
+		if (split.length > 1) {
+		    sendPM(split[1], toStandAloneString(split, 2));
+		}
+		break;
 	}
+    }
+
+    private void sendPM(String receiver, String message) {
+	try {
+	    int receiverID = Integer.parseInt(receiver);
+	    StringBuilder stringBuilder = new StringBuilder(20);
+	    stringBuilder.append('[').append(context.getPlayerID()).append("] -> [").append(receiverID).append("] ")
+		    .append(context.getPlayer().getNickname()).append(" messages:").append(message);
+	    LogString logString = new LogString(message, LogLevel.PRIVATE, receiverID);
+	    sendLogString(logString);
+	} catch (NumberFormatException numberFormatException) {
+	}
+    }
+
+    private void sendLogString(LogString logString) {
+	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
+	context.sendDirectedMessage(messageToSend);
     }
 
     private void processBroadcastingMessageFromPlayer(String frequency, String[] message) {
@@ -159,18 +178,23 @@ public class GameConsole extends Actor {
 	    if (message.length == 3) {
 		standAloneMessage = message[2];
 	    } else {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 2; i < message.length; i++) {
-		    String string = message[i];
-		    sb.append(string);
-		    sb.append(' ');
-		}
-		standAloneMessage = sb.toString();
+		standAloneMessage = toStandAloneString(message, 2);
 	    }
 	    LogString logString = new LogString(nickname + ": " + standAloneMessage, LogLevel.BROADCASTING, frequency);
-	    MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
-	    context.sendDirectedMessage(messageToSend);
+	    sendLogString(logString);
 	}
+    }
+
+    private String toStandAloneString(String[] message, int start) {
+	String standAloneMessage;
+	StringBuilder sb = new StringBuilder();
+	for (int i = start; i < message.length; i++) {
+	    String string = message[i];
+	    sb.append(string);
+	    sb.append(' ');
+	}
+	standAloneMessage = sb.toString().trim();
+	return standAloneMessage;
     }
 
     private boolean isGoodFrequency(String frequency) {
