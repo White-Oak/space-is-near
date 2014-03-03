@@ -175,26 +175,32 @@
     -professions' choosing
 -Professions' basics
 -IDs' basics (ID of player, his profession)
--PDAs basics (working as radio)
++PDAs basics (working as radio)
 +Inventory basics
     *now based on HashMap
     +UI
 	+different placement of items for full and hidden inventory 
 	+animation
--In-game chat
++In-game chat
     +whisper
     +make PM using PDAs
 	"[XXX]->[YYY] %name% messages: %text%"
 	+added "-pm" directive for console. It sends PRIVATE logs to Server
 	+added server processing of private messages
+	+added script for pda
+	+added PDA to every Player's inventory
+	+processing of private messages on server and client
+	+logging PMs to server's log
 -Developed items' system
-    +ItemScriptBundle
-    +reading ItemScriptBundles from scripts.json
-	+scripts.json only contains boolean values for SIN to know if there is a need to search for a file with script
-    +scripts are named after "name" field like "pda" has "pda.script"
-    +scripts are only loaded by request once per item
-    +added MessageProcessingScriptProccessor that will process scripts for PROPERTY_SET messages
-    -map scipts' ids to items' ids
+    +Scripting message processing system for items
+	+ItemScriptBundle
+	+reading ItemScriptBundles from scripts.json
+	    +scripts.json only contains boolean values for SIN to know if there is a need to search for a file with script
+	+scripts are named after "name" field like "pda" has "pda.script"
+	+scripts are only loaded by request once per item
+	+added MessageProcessingScriptProccessor that will process scripts for PROPERTY_SET messages
+	+map scipts' ids to items' ids
+	+get Player's object holding an item
 +Separate thread calculating animations
 *Inventory has moved into InventoryPaintableComponent
 

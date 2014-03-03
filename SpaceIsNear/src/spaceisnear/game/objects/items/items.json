@@ -94,9 +94,9 @@
 	"type": "TOOL",
 	"blockingPath": false,
 	"blockingAir": false,
-	"imageIds": [7],
+	"imageIds": [2],
 	"stuckedByAddingFromScript": false,
-	"description": "Universal pda to wok with",
+	"description": "Universal pda to work with",
 	"defaultProperties": null
     }
 ]

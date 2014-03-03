@@ -28,9 +28,8 @@ public class VariablePropertiesComponent extends Component {
 		MessagePropertySet mps = (MessagePropertySet) message;
 		dontProcess = false;
 		try {
-		    System.out.println("Trying to script");
+		    System.out.println("Trying to script processing message");
 		    ServerContext context = (ServerContext) getContext();
-		    System.out.println("Still trying to script");
 		    if (mpsp == null) {
 			System.out.println("No mpsp -- will create it");
 			mpsp = new MessageProcessingScriptProccessor(context, this, mps);

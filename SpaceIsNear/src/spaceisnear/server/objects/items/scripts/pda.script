@@ -1,10 +1,15 @@
+println{"AMA BIRD"}
+println{emulatedType}
 if (emulatedType == contextMenu){
 }
 else {
 if (emulatedType == processingMessage){
+    println{"AMA BIRD"}
     if (type == PROPERTY_SET){
+	println {"AMA PROPERTY BIRD"}
 	name = getPropertyMessageName {}
-	if (name == "messages"){
+	if (name == messages){
+	    println {"AMA FUCKING LITTLE BIRD"}
 	    //Tell method that we are fine with handling the message by ourself
 	    dontProcessOnYourOwn {}
 	    //Add to property
@@ -12,6 +17,7 @@ if (emulatedType == processingMessage){
 	    addProperty {"messages", LINE_SEPARATOR}
 	    addProperty {"messages", value}
 	    //Send to player the message
+	    println {value}
 	    sendPlayerPrivateMessage{value}
     }
 }

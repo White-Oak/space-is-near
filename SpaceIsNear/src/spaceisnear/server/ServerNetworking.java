@@ -35,7 +35,6 @@ import spaceisnear.server.objects.items.*;
     private final Queue<Connection> connectionsForMessages = new LinkedList<>();
 
     private List<MessagePropertable> propertys;
-    private List<MessagePropertable> propertysForNewPlayer;
 
     private final AccountManager accountManager = new AccountManager();
 
@@ -200,9 +199,16 @@ import spaceisnear.server.objects.items.*;
 	player.setNickname(client.getPlayerInformation().getDesiredNickname());
 	final ServerContext context = core.getContext();
 	final ServerItemsArchive itemsArchive = ServerItemsArchive.ITEMS_ARCHIVE;
-	final int idByName = itemsArchive.getIdByName("ear_radio");
+
+	int idByName = itemsArchive.getIdByName("ear_radio");
 	StaticItem item = ItemAdder.addItem(new Position(-1, -1), idByName, context);
+	item.setPlayerId(player.getId());
 	player.getInventoryComponent().getSlots().get("ear").setItemId(item.getId());
+
+	idByName = itemsArchive.getIdByName("pda");
+	item = ItemAdder.addItem(new Position(-1, -1), idByName, context);
+	item.setPlayerId(player.getId());
+	player.getInventoryComponent().getSlots().get("right pocket").setItemId(item.getId());
     }
 
     public void host() throws IOException {

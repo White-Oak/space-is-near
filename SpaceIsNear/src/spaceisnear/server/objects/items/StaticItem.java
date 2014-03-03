@@ -1,6 +1,7 @@
 package spaceisnear.server.objects.items;
 
 import lombok.Getter;
+import lombok.Setter;
 import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
@@ -17,6 +18,7 @@ public class StaticItem extends ServerGameObject {
 
     @Getter private final ItemPropertiesComponent properties;
     @Getter private final VariablePropertiesComponent variableProperties;
+    @Getter @Setter private int playerId;
 
     public StaticItem(ServerContext context, Position p, int itemId) {
 	super(GameObjectType.ITEM, context);

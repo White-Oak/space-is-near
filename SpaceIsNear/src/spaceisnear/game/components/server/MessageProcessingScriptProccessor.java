@@ -1,10 +1,10 @@
-package spaceisnear.game.messages.properties;
+package spaceisnear.game.components.server;
 
 import org.whiteoak.parsing.interpretating.*;
 import org.whiteoak.parsing.interpretating.ast.*;
-import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessageToSend;
+import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.ServerContext;
@@ -27,7 +27,7 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 	new NativeFunction("getProperty", 1),
 	new NativeFunction("getPropertyMessageValue"),
 	new NativeFunction("setProperty", 2),
-	new NativeFunction("sendPlayerLog", 1),
+	new NativeFunction("sendPlayerPrivateMessage", 1),
 	new NativeFunction("addProperty", 2)};
     private final Constant[] c;
 
@@ -46,6 +46,7 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 
     public void run() {
 	if (interpretator != null) {
+	    System.out.println("Running this shitty script");
 	    interpretator.run(this, false);
 	}
     }
@@ -64,9 +65,11 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 	    case "getPropertyMessageName":
 		return currentMessage.getName();
 	    case "getPropertyMessageValue":
+		System.out.println("Current message value is " + currentMessage.getValue());
 		return (String) currentMessage.getValue();
 	    case "sendPlayerPrivateMessage":
-		int ownerId = currentRequester.getOwnerId();
+		int ownerId = ((StaticItem) currentRequester.getOwner()).getPlayerId();
+		System.out.println("Sending private message to " + ownerId);
 		LogString logString = new LogString(values[0].getValue(), LogLevel.PRIVATE, ownerId);
 		MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 		context.sendDirectedMessage(messageToSend);
@@ -96,5 +99,6 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 
     @Override
     public void acceptException(Exception ex) {
+	ex.printStackTrace();
     }
 }
