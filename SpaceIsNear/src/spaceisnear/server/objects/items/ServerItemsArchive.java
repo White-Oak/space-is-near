@@ -49,7 +49,7 @@ public class ServerItemsArchive extends ItemsArchivable {
 		System.out.println("Trying to parse script for " + name);
 		interpretators[id] = new Interpretator(constantses, functions, name, handler);
 		try {
-		    interpretators[id].parse(getClass().getResourceAsStream("/spaceisnear/server/objects/items/scripts/" + name + ".script"),
+		    interpretators[id].parse(getClass().getResourceAsStream("/res/scripts/" + name + ".script"),
 			    false);
 		} catch (IOException ex) {
 		    Logger.getLogger(ServerItemsArchive.class.getName()).log(Level.SEVERE, null, ex);

@@ -83,7 +83,7 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
 
     public void addItems() throws IOException {
 	Interpretator interpretator = new Interpretator(c, f, "additems", this);
-	interpretator.parse(getClass().getResourceAsStream("/spaceisnear/server/objects/items/additems"), false);
+	interpretator.parse(getClass().getResourceAsStream("/res/additems"), false);
 	interpretator.run(this, false);
     }
 
