@@ -143,8 +143,8 @@ public class GameConsole extends Actor {
 		sendWhisper(message);
 		break;
 	    case "pm":
-		if (split.length > 1) {
-		    sendPM(split[1], toStandAloneString(split, 2));
+		if (split.length > 2) {
+		    sendPM(split[2], toStandAloneString(split, 3));
 		}
 		break;
 	}
@@ -152,13 +152,14 @@ public class GameConsole extends Actor {
 
     private void sendPM(String receiver, String message) {
 	try {
-	    int receiverID = Integer.parseInt(receiver);
+	    int receiverID = receiver.equals("me") ? Integer.parseInt(receiver) : context.getPlayerID();
 	    StringBuilder stringBuilder = new StringBuilder(20);
 	    stringBuilder.append('[').append(context.getPlayerID()).append("] -> [").append(receiverID).append("] ")
 		    .append(context.getPlayer().getNickname()).append(" messages:").append(message);
 	    LogString logString = new LogString(message, LogLevel.PRIVATE, receiverID);
 	    sendLogString(logString);
 	} catch (NumberFormatException numberFormatException) {
+	    pushMessage(new LogString(receiver + " is not a correct ID", LogLevel.WARNING));
 	}
     }
 

@@ -10,7 +10,7 @@ import lombok.*;
 import spaceisnear.Main;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.client.PaintableComponent;
-import spaceisnear.game.components.inventory.InventoryPaintableComponent;
+import spaceisnear.game.components.inventory.Inventory;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
@@ -34,6 +34,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private ContextMenu menu;
     private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
     private InputCatcher inputCatcher;
+    private Inventory inventory;
 
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
 
@@ -65,6 +66,9 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	stage.addActor(inputCatcher);
 	stage.setKeyboardFocus(inputCatcher);
 
+	inventory = new Inventory(context);
+	stage.addActor(inventory);
+
 	callToConnect();
     }
 
@@ -93,6 +97,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     private void animate() {
 	context.sendThemAll(MESSAGE_ANIMATION_STEP);
+	inventory.processMessage(MESSAGE_ANIMATION_STEP);
     }
 
     public void update(int delta) {
@@ -141,7 +146,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    mc = new MessageControlledByInput(MessageControlledByInput.Type.RIGHT, context.getPlayerID());
 		    break;
 		case Input.Keys.M:
-		    final InventoryPaintableComponent inventory = context.getPlayer().getInventoryPaintableComponent();
 		    inventory.setMinimized(!inventory.isMinimized());
 		    lastTimeMoved = System.currentTimeMillis();
 		    break;

@@ -183,8 +183,10 @@
 	+animation
 -In-game chat
     +whisper
-    -make PM using PDAs
+    +make PM using PDAs
 	"[XXX]->[YYY] %name% messages: %text%"
+	+added "-pm" directive for console. It sends PRIVATE logs to Server
+	+added server processing of private messages
 -Developed items' system
     +ItemScriptBundle
     +reading ItemScriptBundles from scripts.json
@@ -192,7 +194,7 @@
     +scripts are named after "name" field like "pda" has "pda.script"
     +scripts are only loaded by request once per item
     +added MessageProcessingScriptProccessor that will process scripts for PROPERTY_SET messages
-    +added "-pm" directive for console. It sends PRIVATE logs to Server
+    -map scipts' ids to items' ids
 +Separate thread calculating animations
 *Inventory has moved into InventoryPaintableComponent
 

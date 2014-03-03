@@ -5,26 +5,27 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import lombok.Getter;
 import lombok.Setter;
-import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.components.client.PaintableComponent;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;
 
-public class InventoryPaintableComponent extends PaintableComponent {
+public class Inventory extends Actor {
 
     private final static int TILE_HEIGHT = 40, TILE_WIDTH = 40;
     private final static int TILE_PADDING = 5;
     public final static int INVENTORY_WIDTH = (TILE_WIDTH + TILE_PADDING) * 3;
     public final static int INVENTORY_HEIGHT = TILE_PADDING + (TILE_HEIGHT + TILE_PADDING) * 7;
     private int deltaX;
-    private final static int DELTA_DELTA_X = 12;
+    private final static int DELTA_DELTA_X = 8;
     private final static int MAX_DELTA_X = (TILE_WIDTH + TILE_PADDING) * 2;
     @Getter @Setter private boolean minimized;
     private InventoryComponent inventoryComponent;
+    private final GameContext context;
     private final static String[][] itemsPlacement = {{"mask", "head", "ear"},
 						      {"costume", "body", "gloves"},
 						      {"costume slot", "shoes", "belt"},
@@ -67,7 +68,7 @@ public class InventoryPaintableComponent extends PaintableComponent {
 
     private InventoryComponent getInventoryComponent() {
 	if (inventoryComponent == null) {
-	    Player owner = (Player) getOwner();
+	    Player owner = context.getPlayer();
 	    inventoryComponent = owner.getInventoryComponent();
 	}
 	return inventoryComponent;
@@ -125,7 +126,6 @@ public class InventoryPaintableComponent extends PaintableComponent {
 
     }
 
-    @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
 	    case ANIMATION_STEP:
@@ -144,12 +144,12 @@ public class InventoryPaintableComponent extends PaintableComponent {
 	}
     }
 
-    public InventoryPaintableComponent() {
-	super(ComponentType.INVENTORY_PAINTABLE);
+    @Override
+    public void draw(SpriteBatch batch, float parentAlpha) {
+	paintComponent(batch);
     }
 
-    @Override
-    public void paintComponent(SpriteBatch batch, int x, int y) {
+    public void paintComponent(SpriteBatch batch) {
 	ShapeRenderer renderer = new ShapeRenderer();
 	OrthographicCamera camera = new OrthographicCamera();
 	camera.setToOrtho(true);
@@ -157,8 +157,8 @@ public class InventoryPaintableComponent extends PaintableComponent {
 	batch = new SpriteBatch();
 	batch.setProjectionMatrix(camera.combined);
 
-	x = 800 - INVENTORY_WIDTH;
-	y = TILE_PADDING;
+	int x = 800 - INVENTORY_WIDTH;
+	int y = TILE_PADDING;
 	renderer.setProjectionMatrix(camera.combined);
 	Gdx.gl.glEnable(GL20.GL_BLEND);
 	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -168,6 +168,10 @@ public class InventoryPaintableComponent extends PaintableComponent {
 	renderer.end();
 	Gdx.gl.glDisable(GL20.GL_BLEND);
 	drawItems(batch, x, y);
+    }
+
+    public Inventory(GameContext context) {
+	this.context = context;
     }
 
 }

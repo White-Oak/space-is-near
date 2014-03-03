@@ -25,5 +25,6 @@ public final class InventoryComponent extends Component {
 
     @Override
     public void processMessage(Message message) {
+	getSlots().processMessage(message, getContext());
     }
 }

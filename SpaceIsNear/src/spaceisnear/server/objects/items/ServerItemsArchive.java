@@ -25,8 +25,10 @@ public class ServerItemsArchive extends ItemsArchivable {
 	this.scripts = scripts;
 	interpretators = new Interpretator[scripts.length];
     }
+//id is not correct rewrite
 
     public Interpretator getInterprator(int id, Constant[] constantses, Function[] functions, ExceptionHandler handler) {
+	System.out.println("Trying to find script for " + getName(id));
 	if (interpretators[id] == null && scripts[id].hasScript()) {
 	    interpretators[id] = new Interpretator(constantses, functions, getName(id), handler);
 	    interpretators[id].parse("spaceisnear\\server\\objects\\items\\scripts\\" + getName(id) + ".script", false);

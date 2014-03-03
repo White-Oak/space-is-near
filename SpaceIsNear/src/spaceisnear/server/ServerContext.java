@@ -10,6 +10,7 @@ import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
+import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.ui.console.LogString;
@@ -187,6 +188,10 @@ public final class ServerContext extends Context {
 		break;
 	    case WHISPERING:
 		processIncomingWhisperingLogMessage(log);
+		break;
+	    case PRIVATE:
+		Player get = (Player) getObjects().get(log.getReceiverID());
+		get.getInventoryComponent().processMessage(new MessagePropertySet(log.getReceiverID(), "messages", log.getMessage()));
 		break;
 	}
     }

@@ -7,6 +7,9 @@ package spaceisnear.game.components.inventory;
 import java.util.HashMap;
 import lombok.Getter;
 import lombok.Setter;
+import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.abstracts.Context;
+import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.items.Size;
 
 /**
@@ -56,6 +59,16 @@ public class TypicalInventorySlotsSet {
 
     public InventorySlot get(String key) {
 	return slots.get(key);
+    }
+
+    public void processMessage(Message message, Context context) {
+	for (InventorySlot inventorySlot : slots.values()) {
+	    int itemId = inventorySlot.getItemId();
+	    if (itemId != -1) {
+		AbstractGameObject get = context.getObjects().get(itemId);
+		get.message(message);
+	    }
+	}
     }
 
 }

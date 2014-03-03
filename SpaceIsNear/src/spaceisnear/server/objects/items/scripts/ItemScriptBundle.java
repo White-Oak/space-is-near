@@ -11,6 +11,6 @@ public class ItemScriptBundle {
     public boolean messageProcessing;
 
     public boolean hasScript() {
-	return contextMenuInit && messageProcessing;
+	return contextMenuInit || messageProcessing;
     }
 }

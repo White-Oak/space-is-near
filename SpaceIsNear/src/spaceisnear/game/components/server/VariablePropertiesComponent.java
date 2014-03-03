@@ -1,11 +1,9 @@
 package spaceisnear.game.components.server;
 
 import lombok.Setter;
-import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentType;
+import spaceisnear.game.components.*;
 import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.properties.MessageProcessingScriptProccessor;
-import spaceisnear.game.messages.properties.MessagePropertySet;
+import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;
@@ -17,6 +15,7 @@ import spaceisnear.server.objects.items.StaticItem;
 public class VariablePropertiesComponent extends Component {
 
     @Setter private boolean dontProcess = false;
+    private MessageProcessingScriptProccessor mpsp;
 
     public VariablePropertiesComponent() {
 	super(ComponentType.VARIABLES);
@@ -29,11 +28,16 @@ public class VariablePropertiesComponent extends Component {
 		MessagePropertySet mps = (MessagePropertySet) message;
 		dontProcess = false;
 		try {
+		    System.out.println("Trying to script");
 		    ServerContext context = (ServerContext) getContext();
-		    MessageProcessingScriptProccessor mpsp = MessageProcessingScriptProccessor.getInstance(context);
-		    mpsp.init(this, mps);
+		    System.out.println("Still trying to script");
+		    if (mpsp == null) {
+			System.out.println("No mpsp -- will create it");
+			mpsp = new MessageProcessingScriptProccessor(context, this, mps);
+		    }
 		    mpsp.run();
 		} catch (ClassCastException e) {
+		    e.printStackTrace();
 		}
 		if (!dontProcess) {
 		    switch (mps.getName()) {

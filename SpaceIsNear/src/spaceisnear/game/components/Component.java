@@ -35,7 +35,7 @@ import spaceisnear.game.objects.Position;
 	states.put(name, value);
     }
 
-    protected AbstractGameObject getOwner() {
+    public AbstractGameObject getOwner() {
 	if (getOwnerId() == -1) {
 	    throw new RuntimeException("Owner id is -1");
 	}

@@ -9,6 +9,7 @@ import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.ServerItemsArchive;
+import spaceisnear.server.objects.items.StaticItem;
 
 /**
  *
@@ -16,10 +17,10 @@ import spaceisnear.server.objects.items.ServerItemsArchive;
  */
 public class MessageProcessingScriptProccessor implements IAcceptable, ExceptionHandler {
 
-    private VariablePropertiesComponent currentRequester;
-    private MessagePropertySet currentMessage;
+    private final VariablePropertiesComponent currentRequester;
+    private final MessagePropertySet currentMessage;
     private final ServerContext context;
-    private Interpretator interpretator;
+    private final Interpretator interpretator;
     private final static Function[] f = {
 	new NativeFunction("getPropertyMessageName"),
 	new NativeFunction("dontProcessOnYourOwn"),
@@ -28,31 +29,25 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 	new NativeFunction("setProperty", 2),
 	new NativeFunction("sendPlayerLog", 1),
 	new NativeFunction("addProperty", 2)};
-    private Constant[] c;
-    private static MessageProcessingScriptProccessor singleton;
+    private final Constant[] c;
 
-    private MessageProcessingScriptProccessor(ServerContext context) {
+    public MessageProcessingScriptProccessor(ServerContext context, VariablePropertiesComponent currentRequester,
+					     MessagePropertySet currentMessage) {
 	this.context = context;
-    }
-
-    public static MessageProcessingScriptProccessor getInstance(ServerContext context) {
-	if (singleton == null) {
-	    singleton = new MessageProcessingScriptProccessor(context);
-	}
-	return singleton;
-    }
-
-    public void init(VariablePropertiesComponent currentRequester, MessagePropertySet currentMessage) {
 	this.currentRequester = currentRequester;
 	this.currentMessage = currentMessage;
-	int ownerId = currentRequester.getOwnerId();
+	StaticItem owner = (StaticItem) currentRequester.getOwner();
+	int id = owner.getProperties().getId();
 	c = new Constant[]{new Constant("type", currentMessage.getMessageType().name()),
 			   new Constant("emulatedType", "processingMessage")};
-	interpretator = ServerItemsArchive.ITEMS_ARCHIVE.getInterprator(ownerId, c, f, this);
+	System.out.println("getting interpretator");
+	interpretator = ServerItemsArchive.ITEMS_ARCHIVE.getInterprator(id, c, f, this);
     }
 
     public void run() {
-	interpretator.run(this, false);
+	if (interpretator != null) {
+	    interpretator.run(this, false);
+	}
     }
 
     @Override
