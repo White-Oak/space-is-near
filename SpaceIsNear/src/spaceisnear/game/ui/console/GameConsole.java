@@ -153,6 +153,7 @@ public class GameConsole extends Actor {
     private void sendPM(String receiver, String message) {
 	try {
 	    int receiverID = receiver.equals("me") ? context.getPlayerID() : Integer.parseInt(receiver);
+	    System.out.println("Receiver is " + receiverID);
 	    StringBuilder stringBuilder = new StringBuilder(20);
 	    stringBuilder.append('[').append(context.getPlayerID()).append("] -> [").append(receiverID).append("] ")
 		    .append(context.getPlayer().getNickname()).append(" messages:").append(message);

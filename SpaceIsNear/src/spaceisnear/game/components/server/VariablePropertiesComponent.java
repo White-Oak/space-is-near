@@ -30,10 +30,7 @@ public class VariablePropertiesComponent extends Component {
 		try {
 		    System.out.println("Trying to script processing message");
 		    ServerContext context = (ServerContext) getContext();
-		    if (mpsp == null) {
-			System.out.println("No mpsp -- will create it");
-			mpsp = new MessageProcessingScriptProccessor(context, this, mps);
-		    }
+		    mpsp = new MessageProcessingScriptProccessor(context, this, mps);
 		    mpsp.run();
 		} catch (ClassCastException e) {
 		    e.printStackTrace();

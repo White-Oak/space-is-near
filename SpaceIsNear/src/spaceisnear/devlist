@@ -168,18 +168,16 @@
 *Moved to GitHub
 *fixed bug when hero could move for wrong number of tiles
 
-0.0.8
+0.0.8 r124
 +total rework of starting UI and logic
     +login and password checking
     +login and password saving
-    -professions' choosing
 +Professions' basics
     +added to id
     +added to lobby screen
 +IDs' basics (ID of player, his profession)
     +added to items.json
     +added to player's inventory
-    -added icon for id
     +added to id's variables
 	+name
 	+profession
@@ -213,9 +211,10 @@
 *Inventory has moved into InventoryPaintableComponent
 
 0.0.9
--System of viewers for server
-    -atmosphere viewer
-    -log viewer
++total rework of starting UI and logic
+    -professions' choosing
++IDs' basics (ID of player, his profession)
+    -added icon for id
 +HealthComponent
     -knockbacking if critical
     -dying if dead
@@ -227,3 +226,9 @@
 -Introduce new map
 -place simmilar objects near in objects array on start
 -place properties of objects that are near connected player near in array for faster connection
+
+0.1.0
+
+-System of viewers for server
+    -atmosphere viewer
+    -log viewer
