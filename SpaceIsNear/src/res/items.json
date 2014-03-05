@@ -106,7 +106,7 @@
 	"type": "TOOL",
 	"blockingPath": false,
 	"blockingAir": false,
-	"imageIds": [2],
+	"imageIds": [6],
 	"stuckedByAddingFromScript": false,
 	"description": "Inlined Destructor",
 	"defaultProperties": null
