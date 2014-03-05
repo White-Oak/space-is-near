@@ -87,7 +87,7 @@ import spaceisnear.server.objects.items.*;
 		}
 		break;
 	    case PLAYER_INFO:
-		MessagePlayerInformation mpi = MessagePlayerInformation.getInstance(b);
+		MessagePlayerInformation mpi = Message.createInstance(b, MessagePlayerInformation.class);
 		getClientByConnection(connection).setPlayerInformation(mpi);
 		System.out.println("Player information received");
 		connectedWantsPlayer(getClientByConnection(connection));
@@ -197,18 +197,21 @@ import spaceisnear.server.objects.items.*;
 	Player player = core.addPlayer(client.getConnection().getID());
 	client.setPlayer(player);
 	player.setNickname(client.getPlayerInformation().getDesiredNickname());
+	addToPlayerItem("ear_radio", "ear", player);
+	addToPlayerItem("pda", "right pocket", player);
+	StaticItem id = addToPlayerItem("id", "id", player);
+	id.getVariableProperties().setProperty("name", client.getPlayerInformation().getDesiredNickname());
+	id.getVariableProperties().setProperty("profession", client.getPlayerInformation().getDesiredProfession());
+    }
+
+    private StaticItem addToPlayerItem(String itemName, String nameOfInventorySlot, Player player) {
 	final ServerContext context = core.getContext();
 	final ServerItemsArchive itemsArchive = ServerItemsArchive.ITEMS_ARCHIVE;
-
-	int idByName = itemsArchive.getIdByName("ear_radio");
+	int idByName = itemsArchive.getIdByName(itemName);
 	StaticItem item = ItemAdder.addItem(new Position(-1, -1), idByName, context);
 	item.setPlayerId(player.getId());
-	player.getInventoryComponent().getSlots().get("ear").setItemId(item.getId());
-
-	idByName = itemsArchive.getIdByName("pda");
-	item = ItemAdder.addItem(new Position(-1, -1), idByName, context);
-	item.setPlayerId(player.getId());
-	player.getInventoryComponent().getSlots().get("right pocket").setItemId(item.getId());
+	player.getInventoryComponent().getSlots().get(nameOfInventorySlot).setItemId(item.getId());
+	return item;
     }
 
     public void host() throws IOException {

@@ -1,7 +1,6 @@
 package spaceisnear.game.messages.service.onceused;
 
 import lombok.Getter;
-import spaceisnear.game.bundles.MessageBundle;
 import spaceisnear.game.messages.*;
 
 /**
@@ -11,21 +10,11 @@ import spaceisnear.game.messages.*;
  */
 public class MessagePlayerInformation extends Message implements NetworkableMessage {
 
-    @Getter private final String desiredNickname;
+    @Getter private final String desiredNickname, desiredProfession;
 
-    public MessagePlayerInformation(String desiredNickname) {
+    public MessagePlayerInformation(String desiredNickname, String desiredProfession) {
 	super(MessageType.PLAYER_INFO);
 	this.desiredNickname = desiredNickname;
-    }
-
-    @Override
-    public MessageBundle getBundle() {
-	MessageBundle messageBundle = new MessageBundle(getMessageType());
-	messageBundle.bytes = desiredNickname.getBytes();
-	return messageBundle;
-    }
-
-    public static MessagePlayerInformation getInstance(byte[] b) {
-	return new MessagePlayerInformation(new String(b));
+	this.desiredProfession = desiredProfession;
     }
 }

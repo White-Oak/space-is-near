@@ -173,8 +173,16 @@
     +login and password checking
     +login and password saving
     -professions' choosing
--Professions' basics
--IDs' basics (ID of player, his profession)
++Professions' basics
+    +added to id
+    +added to lobby screen
++IDs' basics (ID of player, his profession)
+    +added to items.json
+    +added to player's inventory
+    -added icon for id
+    +added to id's variables
+	+name
+	+profession
 +PDAs basics (working as radio)
 +Inventory basics
     *now based on HashMap

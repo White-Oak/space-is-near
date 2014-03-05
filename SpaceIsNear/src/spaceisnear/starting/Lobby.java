@@ -15,7 +15,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
  */
 public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 
-    private TextField nickname;
+    private TextField nickname, profession;
     private Button join;
 
     public Lobby(Corev3 corev3) {
@@ -26,15 +26,19 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
     private void init() {
 	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 	Label loginLabel = new Label("Nickname", labelStyle);
-	nickname = new TextField("kek");
+	Label proLabel = new Label("Profession", labelStyle);
+	nickname = new TextField("Antonio Vivaldi");
+	profession = new TextField("CCleaner");
 	join = new Button("Join!");
 
 	int x = (Gdx.graphics.getWidth() - 400) >> 1;
 	int y = (int) (Gdx.graphics.getHeight() - 20 - nickname.getHeight() * 2 - join.getHeight());
-	loginLabel.setPosition(x - loginLabel.getWidth() - 20, y);
+	loginLabel.setPosition(x - proLabel.getWidth() - 20, y);
+	proLabel.setPosition(x - proLabel.getWidth() - 20, y - profession.getHeight());
 
 	nickname.setPosition(x, y);
-	nickname.setActivationListener(this);
+
+	profession.setPosition(x, y - profession.getHeight());
 
 	join.setPosition(x, y + nickname.getHeight() + 10);
 	join.setActivationListener(this);
@@ -43,6 +47,8 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 	stage.addActor(loginLabel);
 	stage.addActor(join);
 	stage.addActor(nickname);
+	stage.addActor(proLabel);
+	stage.addActor(profession);
 
 	setBackgroundColor(Color.WHITE);
     }
@@ -50,7 +56,7 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
     @Override
     public void componentActivated(Actor actor) {
 	if (actor == join) {
-	    send(new MessagePlayerInformation(nickname.getText()));
+	    send(new MessagePlayerInformation(nickname.getText(), profession.getText()));
 	    setScreen(2);
 	}
     }
