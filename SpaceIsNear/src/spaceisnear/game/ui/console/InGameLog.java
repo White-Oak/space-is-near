@@ -9,8 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
 import lombok.Setter;
 
 /**
@@ -111,25 +110,87 @@ public class InGameLog {
     }
 
     private static String[] splitByLines(String line, int width, BitmapFont font) {
-	ArrayList<String> strings = new ArrayList<>();
-	int previousCut = 0, previousSpace = 0;
-	while (true) {
-	    int indexOf = line.indexOf(' ', previousSpace);
-	    if (indexOf == -1) {
-		strings.add(line.substring(previousCut));
-		break;
-	    }
-	    if (font.getBounds(line.substring(previousCut, indexOf)).width > width) {
-		if (previousCut != previousSpace) {
-		    strings.add(line.substring(previousCut, previousSpace));
-		    previousCut = previousSpace;
-		} else {
-		    strings.add(line.substring(previousCut, indexOf));
-		    previousCut = indexOf + 1;
+	List<String> strings = wrapLineInto(line, font, width);
+	return strings.toArray(new String[strings.size()]);
+    }
+
+    /**
+     * Given a line of text and font metrics information, wrap the line and add the new line(s) to <var>list</var>.
+     *
+     * @param line a line of text
+     * @param list an output list of strings
+     * @param fm font metrics
+     * @param maxWidth maximum width of the line(s)
+     */
+    private static List<String> wrapLineInto(String line, BitmapFont font, int maxWidth) {
+	int len = line.length();
+	List<String> list = new LinkedList<>();
+	int width;
+	while (len > 0 && (width = (int) font.getBounds(line).width) > maxWidth) {
+	    // Guess where to split the line. Look for the next space before
+	    // or after the guess.
+	    int guess = len * maxWidth / width;
+	    String before = line.substring(0, guess).trim();
+
+	    width = (int) font.getBounds(before).width;
+	    int pos;
+	    if (width > maxWidth) // Too long
+	    {
+		pos = findBreakBefore(line, guess);
+	    } else { // Too short or possibly just right
+		pos = findBreakAfter(line, guess);
+		if (pos != -1) { // Make sure this doesn't make us too long
+		    before = line.substring(0, pos).trim();
+		    if ((int) font.getBounds(before).width > maxWidth) {
+			pos = findBreakBefore(line, guess);
+		    }
 		}
 	    }
-	    previousSpace = indexOf + 1;
+	    if (pos == -1) {
+		pos = guess; // Split in the middle of the word
+	    }
+	    list.add(line.substring(0, pos).trim());
+	    line = line.substring(pos).trim();
+	    len = line.length();
 	}
-	return strings.toArray(new String[strings.size()]);
+	if (len > 0) {
+	    list.add(line);
+	}
+	return list;
+    }
+
+    /**
+     * Returns the index of the first whitespace character or '-' in <var>line</var>
+     * that is at or before <var>start</var>. Returns -1 if no such character is found.
+     *
+     * @param line a string
+     * @param start where to star looking
+     */
+    private static int findBreakBefore(String line, int start) {
+	for (int i = start; i >= 0; --i) {
+	    char c = line.charAt(i);
+	    if (Character.isWhitespace(c) || c == '-') {
+		return i;
+	    }
+	}
+	return -1;
+    }
+
+    /**
+     * Returns the index of the first whitespace character or '-' in <var>line</var>
+     * that is at or after <var>start</var>. Returns -1 if no such character is found.
+     *
+     * @param line a string
+     * @param start where to star looking
+     */
+    private static int findBreakAfter(String line, int start) {
+	int len = line.length();
+	for (int i = start; i < len; ++i) {
+	    char c = line.charAt(i);
+	    if (Character.isWhitespace(c) || c == '-') {
+		return i;
+	    }
+	}
+	return -1;
     }
 }
