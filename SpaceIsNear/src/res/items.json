@@ -98,5 +98,17 @@
 	"stuckedByAddingFromScript": false,
 	"description": "Universal pda to work with",
 	"defaultProperties": null
+    },
+    {
+
+	"name": "id",
+	"size": "SMALL",
+	"type": "TOOL",
+	"blockingPath": false,
+	"blockingAir": false,
+	"imageIds": [2],
+	"stuckedByAddingFromScript": false,
+	"description": "Inlined Destructor",
+	"defaultProperties": null
     }
 ]
