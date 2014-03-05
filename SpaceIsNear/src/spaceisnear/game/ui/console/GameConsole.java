@@ -181,7 +181,7 @@ public class GameConsole extends Actor {
 	    } else {
 		standAloneMessage = toStandAloneString(message, 2);
 	    }
-	    LogString logString = new LogString(nickname + ": " + standAloneMessage, LogLevel.BROADCASTING, frequency);
+	    LogString logString = new LogString(nickname + " broadcasts: " + standAloneMessage, LogLevel.BROADCASTING, frequency);
 	    sendLogString(logString);
 	}
     }
