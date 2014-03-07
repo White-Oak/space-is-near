@@ -168,7 +168,7 @@
 *Moved to GitHub
 *fixed bug when hero could move for wrong number of tiles
 
-0.0.8 r125
+0.0.8 r127
 +total rework of starting UI and logic
     +login and password checking
     +login and password saving
@@ -214,6 +214,7 @@
 *rewrote "accounts.txt" handling
 
 0.0.9
+-rewrote serialization of messages
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)

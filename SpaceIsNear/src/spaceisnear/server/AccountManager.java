@@ -17,7 +17,7 @@ public class AccountManager {
     private HashMap<String, String> accounts = new HashMap<>();
     private final static Type typeOfT = new TypeToken<HashMap<String, String>>() {
     }.getType();
-    private final static String RESTRICTED_SEQUENCE = "RESTRICTED";
+    private final HashMap<String, Boolean> accessibility = new HashMap<String, Boolean>();
 
     public AccountManager() {
 	File file = new File("accounts.txt");
@@ -71,15 +71,12 @@ public class AccountManager {
 
     public synchronized boolean isAccessible(String login, String password) {
 	synchronized (accounts) {
-	    if (password.equals(RESTRICTED_SEQUENCE)) {
-		return false;
-	    }
 	    String get = accounts.get(login);
 	    if (get == null) {
 		accounts.put(login, password);
 		return true;
-	    } else if (get.equals(password)) {
-		accounts.put(login, RESTRICTED_SEQUENCE);
+	    } else if (get.equals(password) && !accessibility.containsKey(login)) {
+		accessibility.put(login, Boolean.FALSE);
 		return true;
 	    } else {
 		return false;
