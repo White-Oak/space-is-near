@@ -211,6 +211,7 @@
 *Inventory has moved into InventoryPaintableComponent
 *Rewrote world's sending system
 *IP is reading from file in jar
+*rewrote "accounts.txt" handling
 
 0.0.9
 +total rework of starting UI and logic

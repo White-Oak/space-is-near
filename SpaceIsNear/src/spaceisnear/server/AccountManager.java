@@ -14,52 +14,76 @@ import spaceisnear.Utils;
  */
 public class AccountManager {
 
-    private HashMap<String, String> accounts;
-    private HashMap<String, Boolean> accountsAccessible = new HashMap<>();
+    private HashMap<String, String> accounts = new HashMap<>();
     private final static Type typeOfT = new TypeToken<HashMap<String, String>>() {
     }.getType();
+    private final static String RESTRICTED_SEQUENCE = "RESTRICTED";
 
     public AccountManager() {
 	File file = new File("accounts.txt");
 	try {
 	    if (file.exists()) {
-		byte[] contents = Utils.getContents(new FileInputStream(file));
-		accounts = Utils.GSON.fromJson(new String(contents), typeOfT);
-	    } else {
-		accounts = new HashMap<>();
-		file.createNewFile();
+		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+		    byte[] contents = Utils.getContents(fileInputStream);
+		    accounts = Utils.GSON.fromJson(new String(contents), typeOfT);
+		}
 	    }
 	} catch (FileNotFoundException ex) {
 	    Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
 	} catch (IOException ex) {
 	    Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
 	}
+	Thread thread = new Thread(new Runnable() {
+
+	    @Override
+	    public void run() {
+		while (true) {
+		    try {
+			Thread.sleep(1000 * 30);
+		    } catch (InterruptedException ex) {
+			Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+		    saveAccounts();
+		}
+	    }
+	}, "Accounts' thread");
+	thread.start();
     }
 
-    private void saveAccounts() {
+    public synchronized void saveAccounts() {
 	try {
-	    final String toJson = Utils.GSON.toJson(accounts, typeOfT);
-	    File file = new File("accounts.txt");
-	    try (FileOutputStream fos = new FileOutputStream(file, false)) {
-		fos.write(toJson.getBytes());
+	    synchronized (accounts) {
+		final String toJson = Utils.GSON.toJson(accounts, typeOfT);
+		File file = new File("accounts.txt");
+		if (file.exists()) {
+		    file.delete();
+		}
+		file.createNewFile();
+		try (FileOutputStream fos = new FileOutputStream(file, false)) {
+		    fos.write(toJson.getBytes());
+		}
+		System.out.println("Saved accounts' details");
 	    }
 	} catch (IOException ex) {
 	    Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
-    public boolean isAccessible(String login, String password) {
-	String get = accounts.get(login);
-	if (get == null) {
-	    accounts.put(login, password);
-	    saveAccounts();
-	    get = password;
-	}
-	if (get != null && get.equals(password) && accountsAccessible.get(login) == null) {
-	    accountsAccessible.put(login, Boolean.FALSE);
-	    return true;
-	} else {
-	    return false;
+    public synchronized boolean isAccessible(String login, String password) {
+	synchronized (accounts) {
+	    if (password.equals(RESTRICTED_SEQUENCE)) {
+		return false;
+	    }
+	    String get = accounts.get(login);
+	    if (get == null) {
+		accounts.put(login, password);
+		return true;
+	    } else if (get.equals(password)) {
+		accounts.put(login, RESTRICTED_SEQUENCE);
+		return true;
+	    } else {
+		return false;
+	    }
 	}
     }
 
