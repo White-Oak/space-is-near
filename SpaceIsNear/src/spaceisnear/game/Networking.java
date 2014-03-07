@@ -85,6 +85,7 @@ import spaceisnear.starting.LoadingScreen;
 	    switch (mt) {
 		case MOVED:
 		    MessageMoved mm = MessageMoved.getInstance(b);
+//		    System.out.println(mm);
 		    processMessageMoved(mm);
 		    break;
 		case PAUSED:
@@ -131,8 +132,7 @@ import spaceisnear.starting.LoadingScreen;
 		    break;
 		case INVENTORY_SET:
 		    MessageInventorySet mis = MessageInventorySet.getInstance(b);
-		    GamerPlayer player = core.getContext().getPlayer();
-		    player.getInventoryComponent().getSlots().setSlots(mis.getSlots());
+		    processMessageInventorySet(mis);
 		    break;
 		case CLONED:
 		    MessageCloned mc = Message.createInstance(b, MessageCloned.class);
@@ -151,6 +151,14 @@ import spaceisnear.starting.LoadingScreen;
 	}
     }
 
+    private void processMessageInventorySet(MessageInventorySet mis) {
+	AbstractGameObject get = core.getContext().getObjects().get(mis.getId());
+	if (get.getType() == GameObjectType.PLAYER || get.getType() == GameObjectType.GAMER_PLAYER) {
+	    Player player = (Player) get;
+	    player.getInventoryComponent().getSlots().setSlots(mis.getSlots());
+	}
+    }
+
     private void processMessageCloned(MessageCloned mc) {
 	AbstractGameObject get = core.getContext().getObjects().get(core.getContext().getObjects().size() - 1);
 	for (int i = 0; i < mc.amount; i++) {
@@ -161,8 +169,11 @@ import spaceisnear.starting.LoadingScreen;
     }
 
     private void processMessageNicknameSet(MessageNicknameSet mns) {
-	GamerPlayer player = core.getContext().getPlayer();
-	player.setNickname(mns.getNickname());
+	AbstractGameObject get = core.getContext().getObjects().get(mns.getId());
+	if (get.getType() == GameObjectType.PLAYER || get.getType() == GameObjectType.GAMER_PLAYER) {
+	    Player player = (Player) get;
+	    player.setNickname(mns.getNickname());
+	}
     }
 
     private void processMessageWorldInformation(MessageWorldInformation mwi) {
@@ -180,6 +191,7 @@ import spaceisnear.starting.LoadingScreen;
 
     private void processDiscoveredYourPlayerMessage(MessageYourPlayerDiscovered dypm) {
 	core.getContext().setNewGamerPlayer(dypm.getPlayerID());
+	System.out.println("Your player discovered at " + dypm.getPlayerID());
     }
 
     private void processMessageMoved(MessageMoved mm) {

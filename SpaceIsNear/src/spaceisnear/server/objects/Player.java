@@ -13,17 +13,15 @@ import spaceisnear.server.ServerContext;
  */
 public class Player extends ServerGameObject {
 
-    public int connectionID;
     @Getter private final HealthComponent healthComponent;
 
-    public Player(ServerContext context, int connectionID) {
+    public Player(ServerContext context) {
 	super(GameObjectType.PLAYER, context);
-	PositionComponent pc = new PositionComponent(2, 3);
+	PositionComponent pc = new PositionComponent(0, 0);
 	healthComponent = new HealthComponent();
 	addComponents(pc, healthComponent, new BreathingComponent(),
 		new InventoryComponent(), new PlayerControllableComponent(), new NameComponent(null),
 		new VariablePropertiesComponent());
-	this.connectionID = connectionID;
     }
 
     public String getNickname() {

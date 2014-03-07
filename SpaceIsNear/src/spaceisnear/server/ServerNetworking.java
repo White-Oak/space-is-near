@@ -34,8 +34,6 @@ import spaceisnear.server.objects.items.*;
     private final Queue<MessageBundle> messages = new LinkedList<>();
     private final Queue<Connection> connectionsForMessages = new LinkedList<>();
 
-    private List<MessagePropertable> propertys;
-
     private final AccountManager accountManager = new AccountManager();
 
     @Override
@@ -103,6 +101,7 @@ import spaceisnear.server.objects.items.*;
 		System.out.println("Client information received");
 	    case CONTROLLED:
 		MessageControlledByInput mc = MessageControlledByInput.getInstance(b);
+//		System.out.println(mc);
 		core.getContext().sendDirectedMessage(mc);
 		break;
 	    case MOVED:
@@ -153,10 +152,10 @@ import spaceisnear.server.objects.items.*;
 	sendToConnection(c, b);
     }
     private int messagesSent;
-    private final int MESSAGES_TO_SENT_BEFORE_REQUESTING_ROGERING = 255;
+    private final int MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING = 255;
 
     private void sendToConnection(Connection c, Bundle bundle) {
-	if (messagesSent == MESSAGES_TO_SENT_BEFORE_REQUESTING_ROGERING) {
+	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
 	    server.sendToTCP(c.getID(), ROGER_REQUSTED_BUNDLE);
 	    waitForToRoger(c.getID() - 1);
 	    rogered[c.getID() - 1] = false;
@@ -182,26 +181,39 @@ import spaceisnear.server.objects.items.*;
     }
 
     private synchronized void connectedWantsPlayer(final Client client) {
-	core.pause();
-	new Thread(new Runnable() {
+	if (!core.isAlreadyPaused()) {
+	    core.pause();
+	    new Thread(new Runnable() {
 
-	    @Override
-	    public void run() {
-		processNewPlayer(client);
-	    }
-	}).start();
+		@Override
+		public void run() {
+		    processNewPlayer(client);
+		}
+	    }).start();
+	}
     }
 
-    private void createPlayer(Client client) {
+    private List<ObjectMessaged> createPlayer(Client client) {
 	//1
-	Player player = core.addPlayer(client.getConnection().getID());
+	List<ObjectMessaged> list = new LinkedList<>();
+
+	Player player = core.addPlayer();
 	client.setPlayer(player);
 	player.setNickname(client.getPlayerInformation().getDesiredNickname());
-	addToPlayerItem("ear_radio", "ear", player);
-	addToPlayerItem("pda", "right pocket", player);
+	list.add(getObjectMessaged(player));
+
+	StaticItem ear = addToPlayerItem("ear_radio", "ear", player);
+	list.add(getObjectMessaged(ear));
+
+	StaticItem right_pocket = addToPlayerItem("pda", "right pocket", player);
+	list.add(getObjectMessaged(right_pocket));
+
 	StaticItem id = addToPlayerItem("id", "id", player);
+
 	id.getVariableProperties().setProperty("name", client.getPlayerInformation().getDesiredNickname());
 	id.getVariableProperties().setProperty("profession", client.getPlayerInformation().getDesiredProfession());
+	list.add(getObjectMessaged(id));
+	return list;
     }
 
     private StaticItem addToPlayerItem(String itemName, String nameOfInventorySlot, Player player) {
@@ -224,14 +236,17 @@ import spaceisnear.server.objects.items.*;
 
     private void processNewPlayer(Client client) {
 	waitForServerToStop();
-	//create list of properties
-	propertys = new ArrayList<>();
 	//
-	createPlayer(client);
+	List<ObjectMessaged> objectPlayer = createPlayer(client);
 	sendWorld(client);
 	sendPlayer(client);
 	for (Client client1 : clients) {
-	    sendProperties(client1);
+	    if (client1 != client) {
+		for (ObjectMessaged objectMessaged : objectPlayer) {
+		    sendToConnection(client1.getConnection(), objectMessaged.created);
+		    sendProperties(objectMessaged.propertables, client1.getConnection());
+		}
+	    }
 	}
 	//
 	core.unpause();
@@ -248,9 +263,6 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void waitForServerToStop() {
-	//wait for client to send information about clien
-	//and for server to finally pause
-	//@done use this info
 	while (!core.isAlreadyPaused()) {
 	    while (!messages.isEmpty()) {
 		waitSomeTime();
@@ -265,15 +277,21 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void sendWorld(Client client) {
-	MessageCreated[] world = getWorld();
-	MessageWorldInformation mwi = new MessageWorldInformation(world.length, propertys.size());
+	ObjectMessaged[] world = getWorld();
+	MessageWorldInformation mwi = new MessageWorldInformation(world.length, 0);
 	sendToConnection(client.getConnection(), mwi);
+	sendCreatedsOfWorld(world, client.getConnection());
+	sendPropertiesOfWorld(world, client.getConnection());
+    }
+
+    private void sendCreatedsOfWorld(ObjectMessaged[] world, Connection connection) {
 	MessageCloned cloned = null;
 	for (int i = 0; i < world.length; i++) {
-	    MessageCreated messageCreated = world[i];
-	    if (i > 0 && messageCreated instanceof MessageCreatedItem && world[i - 1] instanceof MessageCreatedItem) {
+	    ObjectMessaged objectMessaged = world[i];
+	    MessageCreated messageCreated = objectMessaged.created;
+	    if (i > 0 && messageCreated instanceof MessageCreatedItem && world[i - 1].created instanceof MessageCreatedItem) {
 		MessageCreatedItem mci = (MessageCreatedItem) messageCreated;
-		MessageCreatedItem mcilast = (MessageCreatedItem) world[i - 1];
+		MessageCreatedItem mcilast = (MessageCreatedItem) world[i - 1].created;
 		if (mci.getId() == mcilast.getId()) {
 		    int amount = cloned == null ? 1 : cloned.amount + 1;
 		    cloned = new MessageCloned();
@@ -281,20 +299,34 @@ import spaceisnear.server.objects.items.*;
 		    continue;
 		} else {
 		    if (cloned != null) {
-			sendToConnection(client.getConnection(), cloned);
+			sendToConnection(connection, cloned);
 			cloned = null;
 		    }
 		}
 	    } else {
 		if (cloned != null) {
-		    sendToConnection(client.getConnection(), cloned);
+		    sendToConnection(connection, cloned);
 		    cloned = null;
 		}
 	    }
-	    sendToConnection(client.getConnection(), messageCreated);
+	    sendToConnection(connection, messageCreated);
 	}
 	if (cloned != null) {
-	    sendToConnection(client.getConnection(), cloned);
+	    sendToConnection(connection, cloned);
+	}
+    }
+
+    private void sendPropertiesOfWorld(ObjectMessaged[] world, Connection connection) {
+	//properties
+	for (ObjectMessaged objectMessaged : world) {
+	    List<MessagePropertable> propertable = objectMessaged.propertables;
+	    sendProperties(propertable, connection);
+	}
+    }
+
+    private void sendProperties(List<MessagePropertable> propertable, Connection connection) {
+	for (MessagePropertable messagePropertable : propertable) {
+	    sendToConnection(connection, messagePropertable);
 	}
     }
 
@@ -304,72 +336,74 @@ import spaceisnear.server.objects.items.*;
 	System.out.println("Player has sent");
     }
 
-    private void sendProperties(Client client) {
-	for (MessagePropertable messagePropertable : propertys) {
-	    sendToConnection(client.getConnection(), messagePropertable);
-	}
-    }
-
-    private MessageCreated[] getWorld() {
+    private ObjectMessaged[] getWorld() {
 	ServerContext context = core.getContext();
 	List<AbstractGameObject> objects = context.getObjects();
-	List<MessageCreated> messagesToReturn = new ArrayList<>();
+	List<ObjectMessaged> messagesToReturn = new ArrayList<>();
 	for (AbstractGameObject object : objects) {
-	    if (object != null && object.getId() >= ServerContext.HIDDEN_SERVER_OBJECTS) {
-		switch (object.getType()) {
-		    case ITEM:
-			messagesToReturn.add(getMessageCreatedForItem(object));
-			break;
-		    case PLAYER:
-			Player player = (Player) object;
-			messagesToReturn.add(getMessageCreatedAndPropertiesForPlayer(player));
-			break;
-		}
-		//properties
-		MessageTeleported messageTeleported = new MessageTeleported(object.getPosition(), object.getId());
-		propertys.add(messageTeleported);
+	    ObjectMessaged objectMessaged = getObjectMessaged(object);
+	    if (objectMessaged != null) {
+		messagesToReturn.add(objectMessaged);
 	    }
 	}
-	return messagesToReturn.toArray(new MessageCreated[messagesToReturn.size()]);
+	return messagesToReturn.toArray(new ObjectMessaged[messagesToReturn.size()]);
     }
 
-    private MessageCreated getMessageCreatedAndPropertiesForPlayer(Player player) {
-	final MessageCreated messageCreated = new MessageCreated(player.getType());
-	//properties
-	propertys.add(new MessageNicknameSet(player.getId(), player.getNickname()));
-	MessageTeleported messageTeleported = new MessageTeleported(player.getPosition(), player.getId());
-	propertys.add(messageTeleported);
-	propertys.add(new MessageInventorySet(player.getId(), player.getInventoryComponent().getSlots()));
-	return messageCreated;
+    private ObjectMessaged getObjectMessaged(AbstractGameObject object) {
+	ObjectMessaged objectMessaged = null;
+	if (object != null && object.getId() >= ServerContext.HIDDEN_SERVER_OBJECTS) {
+	    MessageCreated nextMessageCreated = getMessageCreated(object);
+	    if (nextMessageCreated != null) {
+		List<MessagePropertable> messageProperties = getMessageProperties(object);
+		objectMessaged = new ObjectMessaged(nextMessageCreated, messageProperties);
+	    }
+	}
+	return objectMessaged;
     }
 
-    private MessageCreated getMessageCreatedForItem(AbstractGameObject object) {
-	StaticItem item = (StaticItem) object;
-	int id = item.getProperties().getId();
-
-	MessageCreatedItem mci = new MessageCreatedItem(id);
-	//properties
-	HashMap<String, Object> states = item.getVariableProperties().getStates();
-	Set<Map.Entry<String, Object>> entrySet = states.entrySet();
-	for (Map.Entry<String, Object> entry : entrySet) {
-	    switch (entry.getKey()) {
-		case "rotate": {
-		    int value = (int) entry.getValue();
-		    if (value != 0) {
-			propertys.add(new MessagePropertySet(item.getId(), "rotate", value));
+    private List<MessagePropertable> getMessageProperties(AbstractGameObject object) {
+	List<MessagePropertable> propertiesList = new LinkedList<>();
+	propertiesList.add(new MessageTeleported(object.getPosition(), object.getId()));
+	switch (object.getType()) {
+	    case ITEM:
+		StaticItem item = (StaticItem) object;
+		HashMap<String, Object> states = item.getVariableProperties().getStates();
+		Set<Map.Entry<String, Object>> entrySet = states.entrySet();
+		for (Map.Entry<String, Object> entry : entrySet) {
+		    switch (entry.getKey()) {
+			case "rotate": {
+			    int value = (int) entry.getValue();
+			    if (value != 0) {
+				propertiesList.add(new MessagePropertySet(item.getId(), "rotate", value));
+			    }
+			}
+			break;
 		    }
 		}
 		break;
-		case "stucked": {
-		    boolean stucked = (boolean) entry.getValue();
-		    if (stucked != item.getProperties().getBundle().stuckedByAddingFromScript) {
-			propertys.add(new MessagePropertySet(item.getId(), "stucked", stucked));
-		    }
-		}
+	    case PLAYER:
+		Player player = (Player) object;
+		propertiesList.add(new MessageNicknameSet(player.getId(), player.getNickname()));
+		propertiesList.add(new MessageInventorySet(player.getId(), player.getInventoryComponent().getSlots()));
 		break;
-	    }
 	}
-	return mci;
+	return propertiesList;
+    }
+
+    private MessageCreated getMessageCreated(AbstractGameObject object) {
+	MessageCreated nextMessageCreated = null;
+	switch (object.getType()) {
+	    case ITEM:
+		StaticItem item = (StaticItem) object;
+		int id = item.getProperties().getId();
+		nextMessageCreated = new MessageCreatedItem(id);
+		break;
+	    case PLAYER:
+		Player player = (Player) object;
+		nextMessageCreated = new MessageCreated(player.getType());
+		break;
+	}
+	return nextMessageCreated;
     }
 
     private boolean isRogeredByAll() {

@@ -7,6 +7,7 @@ package spaceisnear.game.components.inventory;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.properties.MessagePropertySet;
 
 public final class InventoryComponent extends Component {
 
@@ -25,6 +26,8 @@ public final class InventoryComponent extends Component {
 
     @Override
     public void processMessage(Message message) {
-	getSlots().processMessage(message, getContext());
+	if (message instanceof MessagePropertySet) {
+	    getSlots().processMessage(message, getContext());
+	}
     }
 }

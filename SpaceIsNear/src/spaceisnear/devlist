@@ -168,7 +168,7 @@
 *Moved to GitHub
 *fixed bug when hero could move for wrong number of tiles
 
-0.0.8 r124
+0.0.8 r125
 +total rework of starting UI and logic
     +login and password checking
     +login and password saving
@@ -209,6 +209,8 @@
 	+get Player's object holding an item
 +Separate thread calculating animations
 *Inventory has moved into InventoryPaintableComponent
+*Rewrote world's sending system
+*IP is reading from file in jar
 
 0.0.9
 +total rework of starting UI and logic
@@ -229,6 +231,6 @@
 
 0.1.0
 
--System of viewers for server
+-System of context editors for server
     -atmosphere viewer
     -log viewer

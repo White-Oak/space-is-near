@@ -43,4 +43,10 @@ public class MessageMoved extends DirectedMessage implements NetworkableMessage 
     public static MessageMoved getInstance(byte[] b) {
 	return Utils.GSON.fromJson(new String(b), MessageMoved.class);
     }
+
+    @Override
+    public String toString() {
+	return "moved in" + p.toString() + " to " + id;
+    }
+
 }

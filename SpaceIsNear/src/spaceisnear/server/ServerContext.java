@@ -55,8 +55,8 @@ public final class ServerContext extends Context {
 	}
     }
 
-    public synchronized Player addPlayer(int connectionID) {
-	Player player = new Player(this, connectionID);
+    public synchronized Player addPlayer() {
+	Player player = new Player(this);
 	players.add(player);
 	addObject(player);
 	return player;

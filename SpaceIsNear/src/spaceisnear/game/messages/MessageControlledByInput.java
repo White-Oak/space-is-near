@@ -2,7 +2,6 @@ package spaceisnear.game.messages;
 
 import lombok.Getter;
 import spaceisnear.Utils;
-import spaceisnear.game.bundles.MessageBundle;
 
 /**
  * @author LPzhelud
@@ -28,4 +27,10 @@ public class MessageControlledByInput extends DirectedMessage implements Network
     public static MessageControlledByInput getInstance(byte[] b) {
 	return Utils.GSON.fromJson(new String(b), MessageControlledByInput.class);
     }
+
+    @Override
+    public String toString() {
+	return "Controlled " + type;
+    }
+
 }

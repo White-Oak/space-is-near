@@ -5,9 +5,7 @@
  */
 package spaceisnear.game.objects;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * @author white_oak
@@ -18,6 +16,11 @@ import lombok.Setter;
 
     public boolean equals(int x, int y) {
 	return x == this.x && y == this.y;
+    }
+
+    @Override
+    public String toString() {
+	return new StringBuilder().append('(').append(x).append(", ").append(y).append(')').toString();
     }
 
 }

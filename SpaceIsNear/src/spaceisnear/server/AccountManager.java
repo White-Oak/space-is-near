@@ -15,9 +15,9 @@ import spaceisnear.Utils;
 public class AccountManager {
 
     private HashMap<String, String> accounts;
+    private HashMap<String, Boolean> accountsAccessible = new HashMap<>();
     private final static Type typeOfT = new TypeToken<HashMap<String, String>>() {
     }.getType();
-    private static final String RESTRICTED_SEQUENCE = "_RESTRICTED_SEQUENCE_";
 
     public AccountManager() {
 	File file = new File("accounts.txt");
@@ -55,8 +55,8 @@ public class AccountManager {
 	    saveAccounts();
 	    get = password;
 	}
-	if (get != null && get.equals(password)) {
-	    accounts.put(login, RESTRICTED_SEQUENCE);
+	if (get != null && get.equals(password) && accountsAccessible.get(login) == null) {
+	    accountsAccessible.put(login, Boolean.FALSE);
 	    return true;
 	} else {
 	    return false;

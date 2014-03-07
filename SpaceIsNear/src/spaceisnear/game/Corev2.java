@@ -4,10 +4,12 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.logging.*;
 import lombok.*;
 import spaceisnear.Main;
+import spaceisnear.Utils;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.components.inventory.Inventory;
@@ -36,6 +38,11 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private InputCatcher inputCatcher;
     private Inventory inventory;
 
+    static {
+	InputStream resourceAsStream = Corev2.class.getResourceAsStream("/res/hostip");
+	byte[] contents = Utils.getContents(resourceAsStream);
+	IP = new String(contents);
+    }
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
 
     public Corev2(Corev3 corev3) {
