@@ -58,7 +58,19 @@ public class Corev3 extends Game implements ActivationListener {
 	    public void run() {
 		update();
 	    }
-	}).start();
+	}, "Corev3").start();
+	new Thread(new Runnable() {
+
+	    @Override
+	    public void run() {
+		System.gc();
+		try {
+		    Thread.sleep(10000L);
+		} catch (InterruptedException ex) {
+		    Logger.getLogger(Corev3.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	    }
+	}, "GC Runner").start();
     }
 
     public void setScreen(int number) {
