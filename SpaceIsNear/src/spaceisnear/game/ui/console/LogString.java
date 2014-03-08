@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.ui.console;
 
+import java.io.Serializable;
 import lombok.Getter;
 import spaceisnear.game.objects.Position;
 
@@ -12,7 +13,7 @@ import spaceisnear.game.objects.Position;
  *
  * @author White Oak
  */
-public class LogString {
+public class LogString implements Serializable {
 
     @Getter private final String message;
     private int timesMessaged = 1;

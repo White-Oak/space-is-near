@@ -7,9 +7,6 @@ package spaceisnear.server;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
-import spaceisnear.game.bundles.Bundle;
-import spaceisnear.game.bundles.MessageBundle;
-import spaceisnear.game.messages.MessageType;
 
 /**
  *
@@ -18,9 +15,6 @@ import spaceisnear.game.messages.MessageType;
 public class Registerer {
 
     private static final Class[] classes = {
-	Bundle.class,
-	MessageBundle.class,
-	MessageType.class,
 	byte[].class,
 	String.class
     };

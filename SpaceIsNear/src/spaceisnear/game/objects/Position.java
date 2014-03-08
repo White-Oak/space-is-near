@@ -5,12 +5,13 @@
  */
 package spaceisnear.game.objects;
 
+import java.io.Serializable;
 import lombok.*;
 
 /**
  * @author white_oak
  */
-@AllArgsConstructor public class Position {
+@AllArgsConstructor public class Position implements Serializable {
 
     @Getter @Setter private int x, y;
 

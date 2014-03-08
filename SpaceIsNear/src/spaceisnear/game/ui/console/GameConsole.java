@@ -156,7 +156,7 @@ public class GameConsole extends Actor {
 	    System.out.println("Receiver is " + receiverID);
 	    StringBuilder stringBuilder = new StringBuilder(20);
 	    stringBuilder.append('[').append(context.getPlayerID()).append("] -> [").append(receiverID).append("] ")
-		    .append(context.getPlayer().getNickname()).append(" messages:").append(message);
+		    .append(context.getPlayer().getNickname()).append(" messages: ").append(message);
 	    LogString logString = new LogString(stringBuilder.toString(), LogLevel.PRIVATE, receiverID);
 	    sendLogString(logString);
 	} catch (NumberFormatException numberFormatException) {

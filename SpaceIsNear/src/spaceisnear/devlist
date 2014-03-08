@@ -214,7 +214,7 @@
 *rewrote "accounts.txt" handling
 
 0.0.9
--rewrote serialization of messages
++rewrote serialization of messages
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)

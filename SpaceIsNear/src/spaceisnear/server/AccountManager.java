@@ -17,7 +17,7 @@ public class AccountManager {
     private HashMap<String, String> accounts = new HashMap<>();
     private final static Type typeOfT = new TypeToken<HashMap<String, String>>() {
     }.getType();
-    private final HashMap<String, Boolean> accessibility = new HashMap<String, Boolean>();
+    private final HashMap<String, Boolean> accessibility = new HashMap<>();
 
     public AccountManager() {
 	File file = new File("accounts.txt");

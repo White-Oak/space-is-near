@@ -1,12 +1,13 @@
 package spaceisnear.server;
 
 import com.esotericsoftware.kryonet.*;
+import de.ruedigermoeller.serialization.FSTObjectInput;
+import de.ruedigermoeller.serialization.FSTObjectOutput;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
-import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
@@ -29,20 +30,33 @@ import spaceisnear.server.objects.items.*;
     private final List<Client> clients = new ArrayList<>();
 
     private boolean[] rogered;
-    private final static MessageBundle ROGER_REQUSTED_BUNDLE = new MessageRogerRequested().getBundle();
+    private static byte[] ROGER_REQUSTED_BYTES;
 
-    private final Queue<MessageBundle> messages = new LinkedList<>();
+    private final Queue<Message> messages = new LinkedList<>();
     private final Queue<Connection> connectionsForMessages = new LinkedList<>();
 
     private final AccountManager accountManager = new AccountManager();
 
+    static {
+	final MessageRogerRequested messageRogerRequested = new MessageRogerRequested();
+	try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
+	    fstObjectOutput.writeObject(messageRogerRequested);
+	    ROGER_REQUSTED_BYTES = fstObjectOutput.getCopyOfWrittenBuffer();
+	} catch (Exception ex) {
+	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }
+
     @Override
     public void received(Connection connection, Object object) {
-	if (object instanceof MessageBundle) {
-	    synchronized (messages) {
-		MessageBundle bundle = (MessageBundle) object;
+	if (object instanceof byte[]) {
+	    byte[] b = (byte[]) object;
+	    try (FSTObjectInput objectInput = new FSTObjectInput(new ByteArrayInputStream(b))) {
+		Message message = (Message) objectInput.readObject();
 		connectionsForMessages.add(connection);
-		messages.add(bundle);
+		messages.add(message);
+	    } catch (IOException | ClassNotFoundException ex) {
+		Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	} else if (object instanceof String) {
 	    System.out.println(object);
@@ -50,10 +64,8 @@ import spaceisnear.server.objects.items.*;
     }
 
     public void processReceivedQueue() {
-	synchronized (messages) {
-	    while (!messages.isEmpty()) {
-		processBundle(messages.poll(), connectionsForMessages.poll());
-	    }
+	while (!messages.isEmpty()) {
+	    processBundle(messages.poll(), connectionsForMessages.poll());
 	}
     }
 
@@ -72,50 +84,53 @@ import spaceisnear.server.objects.items.*;
 	return clientIDByConnection >= 0 ? clients.get(clientIDByConnection) : null;
     }
 
-    private void processBundle(MessageBundle bundle, Connection connection) {
-	MessageType mt = bundle.messageType;
-	byte[] b = bundle.bytes;
+    private void processBundle(Message message, Connection connection) {
+	MessageType mt = message.getMessageType();
 	switch (mt) {
 	    case ROGERED:
 		for (int i = 0; i < clients.size(); i++) {
 		    Connection connection1 = clients.get(i).getConnection();
 		    if (connection1.equals(connection)) {
 			rogered[i] = true;
+			System.out.println(i + " is truer than ever");
 		    }
 		}
 		break;
-	    case PLAYER_INFO:
-		MessagePlayerInformation mpi = Message.createInstance(b, MessagePlayerInformation.class);
+	    case PLAYER_INFO: {
+		MessagePlayerInformation mpi = (MessagePlayerInformation) message;
 		getClientByConnection(connection).setPlayerInformation(mpi);
 		System.out.println("Player information received");
 		connectedWantsPlayer(getClientByConnection(connection));
-		break;
-	    case CLIENT_INFO:
-		MessageClientInformation mci = Message.createInstance(b, MessageClientInformation.class);
+	    }
+	    break;
+	    case CLIENT_INFO: {
+		MessageClientInformation mci = (MessageClientInformation) message;
 		getClientByConnection(connection).setClientInformation(mci);
-		String message = mci.getLogin() + " requested access with password " + mci.getPassword();
+		String messageS = mci.getLogin() + " requested access with password " + mci.getPassword();
 		boolean accessible = accountManager.isAccessible(mci.getLogin(), mci.getPassword());
-		message += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
-		core.getContext().logToServerLog(new LogString(message, LogLevel.DEBUG));
+		messageS += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
+		core.getContext().logToServerLog(new LogString(messageS, LogLevel.DEBUG));
 		sendToConnection(connection, new MessageAccess(accessible));
 		System.out.println("Client information received");
+	    }
+	    break;
 	    case CONTROLLED:
-		MessageControlledByInput mc = MessageControlledByInput.getInstance(b);
+		MessageControlledByInput mc = (MessageControlledByInput) message;
 //		System.out.println(mc);
 		core.getContext().sendDirectedMessage(mc);
 		break;
 	    case MOVED:
-		MessageMoved mm = MessageMoved.getInstance(b);
+		MessageMoved mm = (MessageMoved) message;
 		core.getContext().sendToID(mm, mm.getId());
 		sendToAll(mm);
 		break;
 	    case LOG:
-		MessageLog ml = MessageLog.getInstance(b);
+		MessageLog ml = (MessageLog) message;
 		final LogString log = ml.getLog();
 		log(log);
 		break;
 	    case PROPERTY_SET:
-		MessagePropertySet mps = MessagePropertySet.getInstance(b);
+		MessagePropertySet mps = (MessagePropertySet) message;
 		System.out.println(mps.getName() + " " + mps.getValue().getClass().getName());
 		core.getContext().sendDirectedMessage(mps);
 		break;
@@ -130,41 +145,39 @@ import spaceisnear.server.objects.items.*;
     }
 
     public void sendToAll(NetworkableMessage message) {
-	Bundle b = message.getBundle();
-	server.sendToAllTCP(b);
-    }
-
-    public void sendToAll(Bundle b) {
-	server.sendToAllTCP(b);
+	try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
+	    fstObjectOutput.writeObject(message);
+	    server.sendToAllTCP(fstObjectOutput.getBuffer());
+	} catch (IOException ex) {
+	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     public void sendToID(int id, NetworkableMessage message) {
-	Bundle b = message.getBundle();
-	sendToID(id, b);
+//	baos.reset();
+	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
+	    server.sendToTCP(id, ROGER_REQUSTED_BYTES);
+	    System.out.println("As a good sir I'm sincerely waiting for you to roger that");
+	    waitForToRoger(id - 1);
+	    rogered[id - 1] = false;
+	    messagesSent = 0;
+	}
+	try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
+	    fstObjectOutput.writeObject(message);
+	    server.sendToTCP(id, fstObjectOutput.getBuffer());
+	    messagesSent++;
+	} catch (Exception ex) {
+	    System.out.println("Message caused trouble --" + message.getMessageType());
+	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
-
-    private void sendToID(int id, Bundle bundle) {
-	sendToConnection(clients.get(id).getConnection(), bundle);
-    }
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
     private void sendToConnection(Connection c, NetworkableMessage message) {
-	Bundle b = message.getBundle();
-	sendToConnection(c, b);
+	sendToID(c.getID(), message);
     }
     private int messagesSent;
     private final int MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING = 255;
-
-    private void sendToConnection(Connection c, Bundle bundle) {
-	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
-	    server.sendToTCP(c.getID(), ROGER_REQUSTED_BUNDLE);
-	    waitForToRoger(c.getID() - 1);
-	    rogered[c.getID() - 1] = false;
-	    messagesSent = 0;
-	}
-	server.sendToTCP(c.getID(), bundle);
-	messagesSent++;
-//	System.out.println("Message sent");
-    }
 
     @Override
     public synchronized void connected(Connection connection) {
@@ -271,7 +284,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void orderEveryoneToRogerAndWait() {
-	sendToAll(ROGER_REQUSTED_BUNDLE);
+	server.sendToAllTCP(ROGER_REQUSTED_BYTES);
 	waitForAllToRoger();
 	resetRogeredStatuses();
     }

@@ -2,22 +2,21 @@ package spaceisnear.game;
 
 import com.esotericsoftware.kryonet.*;
 import com.google.gson.JsonSyntaxException;
-import java.io.IOException;
+import de.ruedigermoeller.serialization.FSTObjectInput;
+import de.ruedigermoeller.serialization.FSTObjectOutput;
+import java.io.*;
+import java.util.logging.*;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
-import spaceisnear.game.bundles.*;
 import spaceisnear.game.messages.*;
-import spaceisnear.game.messages.properties.MessageNicknameSet;
-import spaceisnear.game.messages.properties.MessageYourPlayerDiscovered;
-import spaceisnear.game.messages.service.MessageNetworkState;
-import spaceisnear.game.messages.service.MessageRogered;
+import spaceisnear.game.messages.properties.*;
+import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.objects.*;
-import spaceisnear.game.objects.items.ItemsArchive;
-import spaceisnear.game.objects.items.StaticItem;
-import spaceisnear.game.ui.console.LogLevel;
-import spaceisnear.game.ui.console.LogString;
+import spaceisnear.game.objects.items.*;
+import spaceisnear.game.ui.console.*;
 import spaceisnear.server.Registerer;
+import spaceisnear.server.ServerNetworking;
 import spaceisnear.starting.LoadingScreen;
 
 /**
@@ -53,11 +52,14 @@ import spaceisnear.starting.LoadingScreen;
     }
 
     public void send(NetworkableMessage message) {
-	Bundle bundle = message.getBundle();
 	if (client != null && client.isConnected()) {
-	    client.sendTCP(bundle);
+	    try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
+		fstObjectOutput.writeObject(message);
+		client.sendTCP(fstObjectOutput.getBuffer());
+	    } catch (Exception ex) {
+		Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+	    }
 	}
-//	System.out.println("Message sent");
     }
 
     @Override
@@ -73,18 +75,22 @@ import spaceisnear.starting.LoadingScreen;
 
     @Override
     public void idle(Connection connection) {
-	core.getContext().sendThemAll(new MessageNetworkState(3));
+//	core.getContext().sendThemAll(new MessageNetworkState(3));
     }
 
     @Override
     public void received(Connection connection, Object object) {
-	if (object instanceof MessageBundle) {
-	    MessageBundle bundle = (MessageBundle) object;
-	    MessageType mt = bundle.messageType;
-	    byte[] b = bundle.bytes;
+	if (object instanceof byte[]) {
+	    Message message = null;
+	    try (FSTObjectInput fstObjectInput = new FSTObjectInput(new ByteArrayInputStream((byte[]) object))) {
+		message = (Message) fstObjectInput.readObject();
+	    } catch (IOException | ClassNotFoundException ex) {
+		Logger.getLogger(Networking.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	    MessageType mt = message.getMessageType();
 	    switch (mt) {
 		case MOVED:
-		    MessageMoved mm = MessageMoved.getInstance(b);
+		    MessageMoved mm = (MessageMoved) message;
 //		    System.out.println(mm);
 		    processMessageMoved(mm);
 		    break;
@@ -98,56 +104,61 @@ import spaceisnear.starting.LoadingScreen;
 		    processMessageDied();
 		    break;
 		case DISCOVERED_PLAYER:
-		    MessageYourPlayerDiscovered dypm = MessageYourPlayerDiscovered.getInstance(b);
+		    MessageYourPlayerDiscovered dypm = (MessageYourPlayerDiscovered) message;
 		    processDiscoveredYourPlayerMessage(dypm);
-		    joined = true;
 		    break;
 		case ROGER_REQUESTED:
+		    System.out.println("No time to explain — roger that!");
 		    send(ROGERED);
 		    break;
 		case CREATED_SIMPLIFIED: {
-		    MessageCreated mc = MessageCreated.getInstance(b);
+		    MessageCreated mc = (MessageCreated) message;
 		    processMessageCreated(mc);
 		}
 		break;
 		case CREATED_SIMPLIFIED_ITEM:
-		    MessageCreatedItem mci = MessageCreatedItem.getInstance(b);
-		    processMessageCreatedItem(mci);
+		    MessageCreatedItem createdItem = (MessageCreatedItem) message;
+		    processMessageCreatedItem(createdItem);
 		    break;
 		case WORLD_INFO:
-		    MessageWorldInformation mwi = MessageWorldInformation.getInstance(b);
+		    MessageWorldInformation mwi = (MessageWorldInformation) message;
 		    processMessageWorldInformation(mwi);
 		    break;
 		case LOG:
-		    MessageLog ml = MessageLog.getInstance(b);
+		    System.out.println("Somebody told me that grass is greener on the other side");
+		    MessageLog ml = (MessageLog) message;
 		    core.log(ml.getLog());
 		    break;
 		case TELEPORTED:
-		    MessageTeleported mte = MessageTeleported.getInstance(b);
+		    MessageTeleported mte = (MessageTeleported) message;
 		    core.getContext().sendToID(mte, mte.getId());
 		    break;
 		case NICKNAME_SET:
-		    MessageNicknameSet mns = MessageNicknameSet.getInstance(b);
+		    MessageNicknameSet mns = (MessageNicknameSet) message;
 		    processMessageNicknameSet(mns);
 		    break;
 		case INVENTORY_SET:
-		    MessageInventorySet mis = MessageInventorySet.getInstance(b);
+		    MessageInventorySet mis = (MessageInventorySet) message;
 		    processMessageInventorySet(mis);
 		    break;
 		case CLONED:
-		    MessageCloned mc = Message.createInstance(b, MessageCloned.class);
+		    MessageCloned mc = (MessageCloned) message;
 		    processMessageCloned(mc);
 		    break;
 		case ACCESS:
-		    MessageAccess ma = Message.createInstance(b, MessageAccess.class);
-		    logined = ma.isAccess();
-		    if (!logined) {
-			core.log(new LogString("Incorrect pair of login/password", LogLevel.WARNING));
-		    }
+		    MessageAccess ma = (MessageAccess) message;
+		    processMessageAccess(ma);
 		    break;
 	    }
 //	    System.out.println("Message received");
 //	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));
+	}
+    }
+
+    private void processMessageAccess(MessageAccess ma) {
+	logined = ma.isAccess();
+	if (!logined) {
+	    core.log(new LogString("Incorrect pair of login/password", LogLevel.WARNING));
 	}
     }
 
@@ -192,6 +203,7 @@ import spaceisnear.starting.LoadingScreen;
     private void processDiscoveredYourPlayerMessage(MessageYourPlayerDiscovered dypm) {
 	core.getContext().setNewGamerPlayer(dypm.getPlayerID());
 	System.out.println("Your player discovered at " + dypm.getPlayerID());
+	joined = true;
     }
 
     private void processMessageMoved(MessageMoved mm) {

@@ -4,6 +4,7 @@ import lombok.Setter;
 import spaceisnear.game.components.*;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.properties.*;
+import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;
@@ -27,13 +28,15 @@ public class VariablePropertiesComponent extends Component {
 	    case PROPERTY_SET:
 		MessagePropertySet mps = (MessagePropertySet) message;
 		dontProcess = false;
-		try {
-		    System.out.println("Trying to script processing message");
-		    ServerContext context = (ServerContext) getContext();
-		    mpsp = new MessageProcessingScriptProccessor(context, this, mps);
-		    mpsp.run();
-		} catch (ClassCastException e) {
-		    e.printStackTrace();
+		if (getOwner().getType() == GameObjectType.ITEM) {
+		    try {
+			System.out.println("Trying to script processing message");
+			ServerContext context = (ServerContext) getContext();
+			mpsp = new MessageProcessingScriptProccessor(context, this, mps);
+			mpsp.run();
+		    } catch (ClassCastException e) {
+			e.printStackTrace();
+		    }
 		}
 		if (!dontProcess) {
 		    switch (mps.getName()) {

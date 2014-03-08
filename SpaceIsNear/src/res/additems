@@ -1,2 +1,2 @@
-fillWithItem {plitka, 0, 0 , 20, 20}
+fillWithItem {plitka, 0, 0 , 31, 31}
 fillWithItem {wall, 0, 2, 0, 20}
