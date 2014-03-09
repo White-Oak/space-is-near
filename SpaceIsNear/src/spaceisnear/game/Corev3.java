@@ -63,11 +63,13 @@ public class Corev3 extends Game implements ActivationListener {
 
 	    @Override
 	    public void run() {
-		System.gc();
-		try {
-		    Thread.sleep(10000L);
-		} catch (InterruptedException ex) {
-		    Logger.getLogger(Corev3.class.getName()).log(Level.SEVERE, null, ex);
+		while (true) {
+		    System.gc();
+		    try {
+			Thread.sleep(10000L);
+		    } catch (InterruptedException ex) {
+			Logger.getLogger(Corev3.class.getName()).log(Level.SEVERE, null, ex);
+		    }
 		}
 	    }
 	}, "GC Runner").start();
@@ -132,7 +134,7 @@ public class Corev3 extends Game implements ActivationListener {
     }
 
     private void update() {
-	while (true) {
+	while (getScreen() != screens[3]) {
 	    if (!core.isNotpaused()) {
 		NetworkingObject get = (NetworkingObject) core.getContext().getObjects().get(Context.NETWORKING_ID);
 		get.process();

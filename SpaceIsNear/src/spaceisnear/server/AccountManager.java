@@ -33,7 +33,7 @@ public class AccountManager {
 	} catch (IOException ex) {
 	    Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
 	}
-	Thread thread = new Thread(new Runnable() {
+	Thread thread = new Thread("Accounts' thread") {
 
 	    @Override
 	    public void run() {
@@ -46,7 +46,7 @@ public class AccountManager {
 		    saveAccounts();
 		}
 	    }
-	}, "Accounts' thread");
+	};
 	thread.start();
     }
 

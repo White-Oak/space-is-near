@@ -22,7 +22,7 @@ import spaceisnear.game.messages.Message;
     private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter private boolean destroyed = false;
-    @Getter private List<Component> components = new LinkedList<>();
+    @Getter private List<Component> components = new ArrayList<>();
     @NonNull @Getter private final GameObjectType type;
     @Getter private GameContext context;
 
@@ -54,7 +54,8 @@ import spaceisnear.game.messages.Message;
 	}
 	while (messages.size() > 0) {
 	    Message message = messages.poll();
-	    for (Component component : components) {
+	    for (int i = 0; i < components.size(); i++) {
+		Component component = components.get(i);
 		component.processMessage(message);
 	    }
 	}

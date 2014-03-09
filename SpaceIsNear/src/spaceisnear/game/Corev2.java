@@ -78,7 +78,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     }
 
     private void callToConnect() {
-	new Thread() {
+	new Thread("Server starter") {
 	    @Override
 	    public void run() {
 		try {
@@ -280,8 +280,8 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	update(20);
 	context.setCameraToPlayer();
 	Gdx.input.setInputProcessor(stage);
-	new Thread(this).start();
-	new Thread(new Runnable() {
+	new Thread(this, "Corev2").start();
+	new Thread("Animation") {
 
 	    @Override
 	    public void run() {
@@ -294,7 +294,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    }
 		}
 	    }
-	}).start();
+	}.start();
     }
 
     @Override

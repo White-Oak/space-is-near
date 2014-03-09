@@ -196,13 +196,13 @@ import spaceisnear.server.objects.items.*;
     private synchronized void connectedWantsPlayer(final Client client) {
 	if (!core.isAlreadyPaused()) {
 	    core.pause();
-	    new Thread(new Runnable() {
+	    new Thread("Creating new player") {
 
 		@Override
 		public void run() {
 		    processNewPlayer(client);
 		}
-	    }).start();
+	    }.start();
 	}
     }
 

@@ -150,14 +150,12 @@ public class Inventory extends Actor {
 	paintComponent(batch);
     }
 
-    public void paintComponent(SpriteBatch batch) {
-	ShapeRenderer renderer = new ShapeRenderer();
-	OrthographicCamera camera = new OrthographicCamera();
-	camera.setToOrtho(true);
-	camera.update();
-	batch = new SpriteBatch();
-	batch.setProjectionMatrix(camera.combined);
+    final ShapeRenderer renderer = new ShapeRenderer();
+    final OrthographicCamera camera;
 
+    public void paintComponent(SpriteBatch batch) {
+	batch.end();
+	batch.setProjectionMatrix(camera.combined);
 	int x = 800 - INVENTORY_WIDTH;
 	int y = TILE_PADDING;
 	renderer.setProjectionMatrix(camera.combined);
@@ -169,10 +167,14 @@ public class Inventory extends Actor {
 	renderer.end();
 	Gdx.gl.glDisable(GL20.GL_BLEND);
 	drawItems(batch, x, y);
+	batch.begin();
     }
 
     public Inventory(GameContext context) {
 	this.context = context;
+	camera = new OrthographicCamera();
+	camera.setToOrtho(true);
+	camera.update();
     }
 
 }

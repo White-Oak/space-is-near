@@ -5,14 +5,10 @@
  */
 package spaceisnear.server.objects;
 
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectType;
@@ -23,10 +19,10 @@ import spaceisnear.server.ServerContext;
  */
 @RequiredArgsConstructor public abstract class ServerGameObject extends AbstractGameObject {
 
-    private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
+    private final Queue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter private boolean destroyed = false;
-    @Getter private final LinkedList<Component> components = new LinkedList<>();
+    @Getter private final List<Component> components = new ArrayList<>();
     @Getter private final GameObjectType type;
     @Getter private final ServerContext context;
 
@@ -58,7 +54,8 @@ import spaceisnear.server.ServerContext;
 	}
 	while (!messages.isEmpty()) {
 	    Message message = messages.poll();
-	    for (Component component : components) {
+	    for (int i = 0; i < components.size(); i++) {
+		Component component = components.get(i);
 		component.processMessage(message);
 	    }
 	}

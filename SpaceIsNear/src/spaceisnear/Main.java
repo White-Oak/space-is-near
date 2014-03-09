@@ -44,7 +44,7 @@ public class Main {
 		try {
 		    ServerCore serverCore = new ServerCore();
 		    serverCore.host();
-		    new Thread(serverCore).start();
+		    new Thread(serverCore, "SIN Server").start();
 		    System.out.println("Hosted");
 		} catch (IOException ex) {
 		    Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
