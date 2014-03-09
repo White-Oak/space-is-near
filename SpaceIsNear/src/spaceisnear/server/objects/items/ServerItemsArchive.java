@@ -2,13 +2,12 @@ package spaceisnear.server.objects.items;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
 import org.whiteoak.parsing.interpretating.ExceptionHandler;
 import org.whiteoak.parsing.interpretating.Interpretator;
 import org.whiteoak.parsing.interpretating.ast.Constant;
 import org.whiteoak.parsing.interpretating.ast.Function;
+import spaceisnear.abstracts.Context;
 import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.server.ServerContext;
@@ -40,19 +39,19 @@ public class ServerItemsArchive extends ItemsArchivable {
 
     public Interpretator getInterprator(int id, Constant[] constantses, Function[] functions, ExceptionHandler handler) {
 	final String name = getName(id);
-	System.out.println("Trying to find script for " + name);
+	Context.LOG.log("Trying to find script for " + name);
 	//translate item id to script id
 	Integer scriptIdByName = getScriptIdByName(name);
 	if (scriptIdByName != null) {
 	    id = scriptIdByName;
 	    if (scripts[id].hasScript()) {
-		System.out.println("Trying to parse script for " + name);
+		Context.LOG.log("Trying to parse script for " + name);
 		interpretators[id] = new Interpretator(constantses, functions, name, handler);
 		try {
 		    interpretators[id].parse(getClass().getResourceAsStream("/res/scripts/" + name + ".script"),
 			    false);
 		} catch (IOException ex) {
-		    Logger.getLogger(ServerItemsArchive.class.getName()).log(Level.SEVERE, null, ex);
+		    Context.LOG.log(ex);
 		}
 		return interpretators[id];
 	    }

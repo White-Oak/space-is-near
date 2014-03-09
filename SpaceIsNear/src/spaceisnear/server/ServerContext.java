@@ -30,7 +30,7 @@ public final class ServerContext extends Context {
     @Getter private final List<Player> players = new LinkedList<>();
     @Getter private final ObstaclesLayer obstacles;
     @Getter private final AtmosphericLayer atmosphere;
-    private final ServerLog log = new ServerLog();
+    private final ServerLogMessages log = new ServerLogMessages();
     private static final int MAXIMUM_TILES_TO_BE_HEARD = 20, MAXIMUM_TILES_TO_BE_WHISPERED = 2;
     public static final int HIDDEN_SERVER_OBJECTS = 1;
 
@@ -74,6 +74,7 @@ public final class ServerContext extends Context {
 	this.obstacles = obstacles;
 	this.atmosphere = atmosphere;
 	addObject(new ServerNetworkingObject(this));
+	LOG = new ServerLog();
 	checkSize();
     }
 
@@ -85,7 +86,7 @@ public final class ServerContext extends Context {
 
     public void logToServerLog(LogString string) {
 	log.log(string);
-	System.out.println(string);
+	Context.LOG.log(string);
     }
 
     public boolean isHearingLogMessage(Position said, Position toHear) {

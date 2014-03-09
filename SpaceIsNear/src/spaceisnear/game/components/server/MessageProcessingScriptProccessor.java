@@ -2,6 +2,7 @@ package spaceisnear.game.components.server;
 
 import org.whiteoak.parsing.interpretating.*;
 import org.whiteoak.parsing.interpretating.ast.*;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.properties.MessagePropertySet;
@@ -40,13 +41,13 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 	int id = owner.getProperties().getId();
 	c = new Constant[]{new Constant("type", currentMessage.getMessageType().name()),
 			   new Constant("emulatedType", "processingMessage")};
-	System.out.println("getting interpretator");
+	Context.LOG.log("getting interpretator");
 	interpretator = ServerItemsArchive.ITEMS_ARCHIVE.getInterprator(id, c, f, this);
     }
 
     public void run() {
 	if (interpretator != null) {
-	    System.out.println("Running this shitty script");
+	    Context.LOG.log("Running this shitty script");
 	    interpretator.run(this, false);
 	}
     }
@@ -65,11 +66,11 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 	    case "getPropertyMessageName":
 		return currentMessage.getName();
 	    case "getPropertyMessageValue":
-		System.out.println("Current message value is " + currentMessage.getValue());
+		Context.LOG.log("Current message value is " + currentMessage.getValue());
 		return (String) currentMessage.getValue();
 	    case "sendPlayerPrivateMessage":
 		int ownerId = ((StaticItem) currentRequester.getOwner()).getPlayerId();
-		System.out.println("Sending private message to " + ownerId);
+		Context.LOG.log("Sending private message to " + ownerId);
 		LogString logString = new LogString(values[0].getValue(), LogLevel.PRIVATE, ownerId);
 		MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 		context.sendDirectedMessage(messageToSend);

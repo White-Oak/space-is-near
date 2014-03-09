@@ -5,9 +5,9 @@ import de.ruedigermoeller.serialization.FSTObjectInput;
 import de.ruedigermoeller.serialization.FSTObjectOutput;
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
@@ -43,7 +43,7 @@ import spaceisnear.server.objects.items.*;
 	    fstObjectOutput.writeObject(messageRogerRequested);
 	    ROGER_REQUSTED_BYTES = fstObjectOutput.getCopyOfWrittenBuffer();
 	} catch (Exception ex) {
-	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log(ex);
 	}
     }
 
@@ -56,10 +56,10 @@ import spaceisnear.server.objects.items.*;
 		connectionsForMessages.add(connection);
 		messages.add(message);
 	    } catch (IOException | ClassNotFoundException ex) {
-		Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+		Context.LOG.log(ex);
 	    }
 	} else if (object instanceof String) {
-	    System.out.println(object);
+	    Context.LOG.log(object);
 	}
     }
 
@@ -92,14 +92,14 @@ import spaceisnear.server.objects.items.*;
 		    Connection connection1 = clients.get(i).getConnection();
 		    if (connection1.equals(connection)) {
 			rogered[i] = true;
-//			System.out.println(i + " is truer than ever");
+//			Context.LOG.log(i + " is truer than ever");
 		    }
 		}
 		break;
 	    case PLAYER_INFO: {
 		MessagePlayerInformation mpi = (MessagePlayerInformation) message;
 		getClientByConnection(connection).setPlayerInformation(mpi);
-		System.out.println("Player information received");
+		Context.LOG.log("Player information received");
 		connectedWantsPlayer(getClientByConnection(connection));
 	    }
 	    break;
@@ -111,12 +111,12 @@ import spaceisnear.server.objects.items.*;
 		messageS += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
 		core.getContext().logToServerLog(new LogString(messageS, LogLevel.DEBUG));
 		sendToConnection(connection, new MessageAccess(accessible));
-		System.out.println("Client information received");
+		Context.LOG.log("Client information received");
 	    }
 	    break;
 	    case CONTROLLED:
 		MessageControlledByInput mc = (MessageControlledByInput) message;
-//		System.out.println(mc);
+//		Context.LOG.log(mc);
 		core.getContext().sendDirectedMessage(mc);
 		break;
 	    case MOVED:
@@ -131,16 +131,16 @@ import spaceisnear.server.objects.items.*;
 		break;
 	    case PROPERTY_SET:
 		MessagePropertySet mps = (MessagePropertySet) message;
-		System.out.println(mps.getName() + " " + mps.getValue().getClass().getName());
+		Context.LOG.log(mps.getName() + " " + mps.getValue().getClass().getName());
 		core.getContext().sendDirectedMessage(mps);
 		break;
 
 	}
-//	    System.out.println("Message received");
+//	    Context.LOG.log("Message received");
     }
 
     public void log(final LogString log) {
-//	System.out.println("Checking out!");
+//	Context.LOG.log("Checking out!");
 	core.getContext().log(log);
     }
 
@@ -149,7 +149,7 @@ import spaceisnear.server.objects.items.*;
 	    fstObjectOutput.writeObject(message);
 	    server.sendToAllTCP(fstObjectOutput.getBuffer());
 	} catch (IOException ex) {
-	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log(ex);
 	}
     }
 
@@ -157,7 +157,7 @@ import spaceisnear.server.objects.items.*;
 //	baos.reset();
 	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
 	    server.sendToTCP(id, ROGER_REQUSTED_BYTES);
-//	    System.out.println("As a good sir I'm sincerely waiting for you to roger that");
+//	    Context.LOG.log("As a good sir I'm sincerely waiting for you to roger that");
 	    waitForToRoger(id - 1);
 	    rogered[id - 1] = false;
 	    messagesSent = 0;
@@ -167,8 +167,8 @@ import spaceisnear.server.objects.items.*;
 	    server.sendToTCP(id, fstObjectOutput.getBuffer());
 	    messagesSent++;
 	} catch (Exception ex) {
-	    System.out.println("Message caused trouble --" + message.getMessageType());
-	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log("Message caused trouble --" + message.getMessageType());
+	    Context.LOG.log(ex);
 	}
     }
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -263,7 +263,7 @@ import spaceisnear.server.objects.items.*;
 	}
 	//
 	core.unpause();
-	System.out.println("Server has continued his work");
+	Context.LOG.log("Server has continued his work");
 	//wait for client to unpause
 	orderEveryoneToRogerAndWait();
 	//@working fix that
@@ -346,7 +346,7 @@ import spaceisnear.server.objects.items.*;
     private void sendPlayer(Client client) {
 	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(client.getPlayer().getId());
 	sendToConnection(client.getConnection(), mypd);
-	System.out.println("Player has sent");
+	Context.LOG.log("Player has sent");
     }
 
     private ObjectMessaged[] getWorld() {
@@ -447,7 +447,7 @@ import spaceisnear.server.objects.items.*;
 	try {
 	    Thread.sleep(100L);
 	} catch (InterruptedException ex) {
-	    Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log(ex);
 	}
     }
 }

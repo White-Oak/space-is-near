@@ -2,10 +2,9 @@ package spaceisnear.server;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
 import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.HealthComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
@@ -39,7 +38,7 @@ public class ServerCore implements Runnable {
 	try {
 	    ServerItemsArchive.ITEMS_ARCHIVE = new ServerItemsArchive(ItemsReader.read(), ItemScriptReader.read());
 	} catch (Exception ex) {
-	    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log(ex);
 	}
 	ObstaclesLayer obstacles = new ObstaclesLayer(width, height);
 	AtmosphericLayer atmosphere = new AtmosphericLayer(width, height);
@@ -47,7 +46,7 @@ public class ServerCore implements Runnable {
 	//items adding
 	ItemAdder itemAdder = new ItemAdder(context);
 	itemAdder.addItems();
-	System.out.println("done");
+	Context.LOG.log("done");
     }
 
     @Override
@@ -73,7 +72,7 @@ public class ServerCore implements Runnable {
 	    try {
 		Thread.sleep(QUANT_TIME);
 	    } catch (InterruptedException ex) {
-		Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+		Context.LOG.log(ex);
 	    }
 	    sendPressure();
 	}
@@ -110,7 +109,7 @@ public class ServerCore implements Runnable {
     public void pause() {
 	paused = true;
 	context.getNetworking().sendToAll(new MessagePaused());
-	System.out.println("Server\'s been paused");
+	Context.LOG.log("Server\'s been paused");
     }
 
     public void unpause() {
@@ -139,7 +138,7 @@ public class ServerCore implements Runnable {
 		try {
 		    Thread.sleep(ATMOSPHERE_DELAY);
 		} catch (InterruptedException ex) {
-		    Logger.getLogger(ServerCore.class.getName()).log(Level.SEVERE, null, ex);
+		    Context.LOG.log(ex);
 		}
 	    }
 	}

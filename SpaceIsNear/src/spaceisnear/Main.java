@@ -7,15 +7,12 @@
  */
 package spaceisnear;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.*;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.cli.*;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.Corev3;
-import spaceisnear.server.ServerCore;
-import spaceisnear.starting.LoginScreen;
+import spaceisnear.server.*;
 
 /**
  *
@@ -65,15 +62,15 @@ public class Main {
     private static void runSINInWeirdMode(String mode) {
 	switch (mode) {
 	    case "host":
-		System.out.println("SIN is running in no-GUI mode");
+		Context.LOG.log("SIN is running in no-GUI mode");
 		try {
 		    IP = "127.0.0.1";
 		    ServerCore serverCore = new ServerCore();
 		    serverCore.host();
 		    new Thread(serverCore, "SIN Server").start();
-		    System.out.println("Hosted");
+		    Context.LOG.log("Hosted");
 		} catch (IOException ex) {
-		    Logger.getLogger(LoginScreen.class.getName()).log(Level.SEVERE, null, ex);
+		    Context.LOG.log(ex);
 		}
 		break;
 	    case "editor":

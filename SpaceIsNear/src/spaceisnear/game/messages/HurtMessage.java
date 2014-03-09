@@ -6,8 +6,7 @@
  */
 package spaceisnear.game.messages;
 
-import spaceisnear.Utils;
-import spaceisnear.game.bundles.MessageBundle;
+import lombok.Getter;
 
 /**
  * Sent both to client and server if player was hurt. Otherwise \u0432\u0402\u201d sent only to server.
@@ -16,8 +15,8 @@ import spaceisnear.game.bundles.MessageBundle;
  */
 public class HurtMessage extends DirectedMessage implements NetworkableMessage {
 
-    private final int damage;
-    private final Type type;
+    @Getter private final int damage;
+    @Getter private final Type type;
 
     public HurtMessage(int damage, Type type, int id) {
 	super(MessageType.HURT, id);
@@ -33,24 +32,5 @@ public class HurtMessage extends DirectedMessage implements NetworkableMessage {
 	RADIOACTIVE,
 	TOXIN;
 
-    }
-
-    @Override
-    public MessageBundle getBundle() {
-	MessageBundle messageBundle = new MessageBundle(getMessageType());
-	messageBundle.bytes = Utils.GSON.toJson(this).getBytes();
-	return messageBundle;
-    }
-
-    public static HurtMessage getInstance(byte[] b) {
-	return Utils.GSON.fromJson(new String(b), HurtMessage.class);
-    }
-
-    public int getDamage() {
-	return this.damage;
-    }
-
-    public Type getType() {
-	return this.type;
     }
 }

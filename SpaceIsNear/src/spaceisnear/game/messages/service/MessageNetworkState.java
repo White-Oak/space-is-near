@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.messages.service;
 
+import lombok.Getter;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageType;
 
@@ -12,19 +13,16 @@ import spaceisnear.game.messages.MessageType;
  * @author LPzhelud
  */
 public class MessageNetworkState extends Message {
-	private int state;
-	
+
+    @Getter private final int state;
+
 //0 - n a
 //1 - connected
 //2 - disconnected
 //3 - idle
-	public MessageNetworkState(int state) {
-		super(MessageType.NETWORK_STATE);
-		this.state = state;
-	}
-	
-	
-	public int getState() {
-		return this.state;
-	}
+    public MessageNetworkState(int state) {
+	super(MessageType.NETWORK_STATE);
+	this.state = state;
+    }
+
 }

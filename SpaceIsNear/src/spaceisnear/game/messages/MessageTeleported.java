@@ -4,7 +4,6 @@
  */
 package spaceisnear.game.messages;
 
-import spaceisnear.Utils;
 import spaceisnear.game.messages.properties.MessagePropertable;
 import spaceisnear.game.objects.Position;
 
@@ -14,7 +13,4 @@ public class MessageTeleported extends MessageMoved implements MessagePropertabl
 	super(p, id, 0);
     }
 
-    public static MessageTeleported getInstance(byte[] b) {
-	return Utils.GSON.fromJson(new String(b), MessageTeleported.class);
-    }
 }

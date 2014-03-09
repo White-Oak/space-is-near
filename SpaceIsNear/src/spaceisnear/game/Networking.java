@@ -1,13 +1,13 @@
 package spaceisnear.game;
 
 import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.kryonet.Client;
 import com.google.gson.JsonSyntaxException;
-import de.ruedigermoeller.serialization.FSTObjectInput;
-import de.ruedigermoeller.serialization.FSTObjectOutput;
+import de.ruedigermoeller.serialization.*;
 import java.io.*;
 import java.util.logging.*;
 import lombok.*;
-import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.abstracts.*;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
@@ -15,8 +15,7 @@ import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.objects.*;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.game.ui.console.*;
-import spaceisnear.server.Registerer;
-import spaceisnear.server.ServerNetworking;
+import spaceisnear.server.*;
 import spaceisnear.starting.LoadingScreen;
 
 /**
@@ -91,7 +90,7 @@ import spaceisnear.starting.LoadingScreen;
 	    switch (mt) {
 		case MOVED:
 		    MessageMoved mm = (MessageMoved) message;
-//		    System.out.println(mm);
+//		    Context.LOG.log(mm);
 		    processMessageMoved(mm);
 		    break;
 		case PAUSED:
@@ -108,7 +107,7 @@ import spaceisnear.starting.LoadingScreen;
 		    processDiscoveredYourPlayerMessage(dypm);
 		    break;
 		case ROGER_REQUESTED:
-//		    System.out.println("No time to explain — roger that!");
+//		    Context.LOG.log("No time to explain — roger that!");
 		    send(ROGERED);
 		    break;
 		case CREATED_SIMPLIFIED: {
@@ -125,7 +124,7 @@ import spaceisnear.starting.LoadingScreen;
 		    processMessageWorldInformation(mwi);
 		    break;
 		case LOG:
-//		    System.out.println("Somebody told me that grass is greener on the other side");
+//		    Context.LOG.log("Somebody told me that grass is greener on the other side");
 		    MessageLog ml = (MessageLog) message;
 		    core.log(ml.getLog());
 		    break;
@@ -150,7 +149,7 @@ import spaceisnear.starting.LoadingScreen;
 		    processMessageAccess(ma);
 		    break;
 	    }
-//	    System.out.println("Message received");
+//	    Context.LOG.log("Message received");
 //	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));
 	}
     }
@@ -202,7 +201,7 @@ import spaceisnear.starting.LoadingScreen;
 
     private void processDiscoveredYourPlayerMessage(MessageYourPlayerDiscovered dypm) {
 	core.getContext().setNewGamerPlayer(dypm.getPlayerID());
-	System.out.println("Your player discovered at " + dypm.getPlayerID());
+	Context.LOG.log("Your player discovered at " + dypm.getPlayerID());
 	joined = true;
     }
 

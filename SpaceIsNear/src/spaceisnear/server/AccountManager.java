@@ -4,9 +4,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import spaceisnear.Utils;
+import spaceisnear.abstracts.Context;
 
 /**
  *
@@ -28,10 +27,8 @@ public class AccountManager {
 		    accounts = Utils.GSON.fromJson(new String(contents), typeOfT);
 		}
 	    }
-	} catch (FileNotFoundException ex) {
-	    Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
 	} catch (IOException ex) {
-	    Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log(ex);
 	}
 	Thread thread = new Thread("Accounts' thread") {
 
@@ -41,7 +38,7 @@ public class AccountManager {
 		    try {
 			Thread.sleep(1000 * 30);
 		    } catch (InterruptedException ex) {
-			Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+			Context.LOG.log(ex);
 		    }
 		    saveAccounts();
 		}
@@ -62,10 +59,10 @@ public class AccountManager {
 		try (FileOutputStream fos = new FileOutputStream(file, false)) {
 		    fos.write(toJson.getBytes());
 		}
-		System.out.println("Saved accounts' details");
+		Context.LOG.log("Saved accounts' details");
 	    }
 	} catch (IOException ex) {
-	    Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log(ex);
 	}
     }
 

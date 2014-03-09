@@ -9,6 +9,7 @@
  */
 package spaceisnear.game.components.server;
 
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.*;
@@ -90,7 +91,7 @@ public class HealthComponent extends Component {
 
     public void changeHealth(int delta) {
 	setStateValueNamed("health", getHealth() + delta);
-	System.out.println(getHealth());
+	Context.LOG.log(getHealth());
     }
 
     public int getHealth() {

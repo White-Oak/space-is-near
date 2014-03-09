@@ -6,7 +6,6 @@
 package spaceisnear.game.messages;
 
 import lombok.Getter;
-import spaceisnear.Utils;
 import spaceisnear.game.objects.Position;
 
 /**
@@ -38,10 +37,6 @@ public class MessageMoved extends DirectedMessage implements NetworkableMessage 
     protected MessageMoved(Position p, int id, int unused) {
 	super(MessageType.TELEPORTED, id);
 	this.p = p;
-    }
-
-    public static MessageMoved getInstance(byte[] b) {
-	return Utils.GSON.fromJson(new String(b), MessageMoved.class);
     }
 
     @Override

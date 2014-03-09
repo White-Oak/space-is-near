@@ -1,4 +1,4 @@
-package spaceisnear.server;
+package spaceisnear.game;
 
 import spaceisnear.abstracts.Log;
 
@@ -6,9 +6,9 @@ import spaceisnear.abstracts.Log;
  *
  * @author White Oak
  */
-public class ServerLog extends Log {
+public class ClientLog extends Log {
 
-    public ServerLog() {
+    public ClientLog() {
 	super("logClient.txt");
     }
 

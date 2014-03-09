@@ -1,6 +1,7 @@
 package spaceisnear.game.components.server;
 
 import lombok.Setter;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.properties.*;
@@ -30,7 +31,7 @@ public class VariablePropertiesComponent extends Component {
 		dontProcess = false;
 		if (getOwner().getType() == GameObjectType.ITEM) {
 		    try {
-			System.out.println("Trying to script processing message");
+			Context.LOG.log("Trying to script processing message");
 			ServerContext context = (ServerContext) getContext();
 			mpsp = new MessageProcessingScriptProccessor(context, this, mps);
 			mpsp.run();

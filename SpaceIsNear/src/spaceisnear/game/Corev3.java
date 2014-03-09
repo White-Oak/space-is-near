@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.MessageType;
@@ -16,6 +14,7 @@ import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.console.GameConsole;
+import spaceisnear.server.ServerContext;
 import spaceisnear.starting.*;
 import spaceisnear.starting.ui.ScreenImproved;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
@@ -44,7 +43,7 @@ public class Corev3 extends Game implements ActivationListener {
 	camera.setToOrtho(true);
 	camera.update();
 	font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
-	System.out.println("Font has created -- don't worry");
+	Context.LOG.log("Font has created -- don't worry");
 	loginScreen = new LoginScreen(this);
 	lobby = new Lobby(this);
 	core = new Corev2(this);
@@ -69,7 +68,7 @@ public class Corev3 extends Game implements ActivationListener {
 		    try {
 			Thread.sleep(10000L);
 		    } catch (InterruptedException ex) {
-			Logger.getLogger(Corev3.class.getName()).log(Level.SEVERE, null, ex);
+			Context.LOG.log(ex);
 		    }
 		}
 	    }
@@ -148,7 +147,7 @@ public class Corev3 extends Game implements ActivationListener {
 	    try {
 		Thread.sleep(50);
 	    } catch (InterruptedException ex) {
-		Logger.getLogger(Corev3.class.getName()).log(Level.SEVERE, null, ex);
+		Context.LOG.log(ex);
 	    }
 	}
     }

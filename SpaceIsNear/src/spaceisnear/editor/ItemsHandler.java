@@ -4,17 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import lombok.Getter;
-import lombok.Setter;
+import java.io.*;
+import java.util.*;
+import lombok.*;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.objects.items.ItemBundle;
-import spaceisnear.game.objects.items.ItemsReader;
+import spaceisnear.game.objects.items.*;
 
 /**
  *
@@ -50,7 +45,7 @@ public class ItemsHandler {
 	try {
 	    bundles = ItemsReader.read();
 	} catch (Exception ex) {
-	    Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log(ex);
 	}
 	for (int i = 0; i < bundles.length; i++) {
 	    ItemBundle itemBundle = bundles[i];
@@ -87,7 +82,7 @@ public class ItemsHandler {
 	    try {
 		loader.addItems(read);
 	    } catch (IOException ex) {
-		Logger.getLogger(ItemsHandler.class.getName()).log(Level.SEVERE, null, ex);
+		Context.LOG.log(ex);
 	    }
 	    items.clear();
 	    actions.clear();

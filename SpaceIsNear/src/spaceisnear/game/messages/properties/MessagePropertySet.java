@@ -5,12 +5,7 @@
  */
 package spaceisnear.game.messages.properties;
 
-import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
-import spaceisnear.Utils;
-import spaceisnear.game.bundles.MessageBundle;
 import spaceisnear.game.messages.*;
 
 public class MessagePropertySet extends DirectedMessage implements NetworkableMessage, MessagePropertable {
@@ -33,38 +28,4 @@ public class MessagePropertySet extends DirectedMessage implements NetworkableMe
 	valueClass = value.getClass().getName();
     }
 
-    @Override
-    public MessageBundle getBundle() {
-	MessageBundle messageBundle = new MessageBundle(getMessageType());
-
-	try {
-	    try (ByteArrayOutputStream baos = new ByteArrayOutputStream(); DataOutputStream dos = new DataOutputStream(baos)) {
-		dos.writeUTF(name);
-		dos.writeUTF(Utils.GSON.toJson(value));
-		dos.writeUTF(valueClass);
-		dos.writeInt(id);
-		messageBundle.bytes = baos.toByteArray();
-	    }
-	} catch (IOException iOException) {
-	}
-
-	return messageBundle;
-    }
-
-    public static MessagePropertySet getInstance(byte[] b) {
-	try {
-	    try (ByteArrayInputStream bais = new ByteArrayInputStream(b); DataInputStream dis = new DataInputStream(bais)) {
-		String name = dis.readUTF();
-		String value = dis.readUTF();
-		String valueClass = dis.readUTF();
-		Object value1 = Utils.GSON.fromJson(value, Class.forName(valueClass));
-		return new MessagePropertySet(dis.readInt(), name, value1);
-	    } catch (ClassNotFoundException ex) {
-		Logger.getLogger(MessagePropertySet.class.getName()).log(Level.SEVERE, null, ex);
-	    }
-	} catch (IOException ex) {
-	    Logger.getLogger(MessagePropertySet.class.getName()).log(Level.SEVERE, null, ex);
-	}
-	return null;
-    }
 }

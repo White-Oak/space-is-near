@@ -6,8 +6,6 @@
 package spaceisnear.game.messages;
 
 import lombok.Getter;
-import spaceisnear.Utils;
-import spaceisnear.game.bundles.MessageBundle;
 import spaceisnear.game.objects.GameObjectType;
 
 /**
@@ -27,14 +25,5 @@ public class MessageCreated extends Message implements NetworkableMessage {
     protected MessageCreated(GameObjectType type, MessageType type1) {
 	super(type1);
 	this.type = type;
-    }
-
-    @Override
-    public MessageBundle getBundle() {
-	return new MessageBundle(Utils.GSON.toJson(type).getBytes(), getMessageType());
-    }
-
-    public static MessageCreated getInstance(byte[] b) {
-	return new MessageCreated(Utils.GSON.fromJson(new String(b), GameObjectType.class));
     }
 }

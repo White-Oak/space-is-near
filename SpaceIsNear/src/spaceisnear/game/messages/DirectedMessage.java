@@ -4,21 +4,19 @@
  */
 package spaceisnear.game.messages;
 
+import lombok.Getter;
+
 /**
  *
  * @author White Oak
  */
 public abstract class DirectedMessage extends Message {
 
-    protected final int id;
+    @Getter protected final int id;
 
     public DirectedMessage(MessageType messageType, int id) {
 	super(messageType);
 	this.id = id;
-    }
-
-    public int getId() {
-	return id;
     }
 
 }

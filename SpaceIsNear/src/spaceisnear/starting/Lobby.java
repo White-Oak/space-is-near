@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import java.util.Random;
 import spaceisnear.game.Corev3;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.ui.*;
@@ -27,7 +28,7 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 	Label loginLabel = new Label("Nickname", labelStyle);
 	Label proLabel = new Label("Profession", labelStyle);
-	nickname = new TextField("Antonio Vivaldi");
+	nickname = new TextField(getRandomName());
 	profession = new TextField("CCleaner");
 	join = new Button("Join!");
 
@@ -61,4 +62,16 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 	}
     }
 
+    /**
+     *
+     * @author riseremi
+     */
+    private String getRandomName() {
+	String[] names = {"Aaron", "Abbey", "Acacia", "Adam", "Aden", "Adolph",
+			  "Alexia", "Alf", "Alexandria", "Amber", "Azura", "Antonio", "Amadeus"};
+	String[] surnames = {"Setters", "Shann", "Shaw", "Shield", "Settle",
+			     "Shady", "Share", "Shark", "Shill", "Sherwin", "Vivaldi", "Mozart"};
+	Random rnd = new Random();
+	return names[rnd.nextInt(names.length)] + " " + surnames[rnd.nextInt(surnames.length)];
+    }
 }

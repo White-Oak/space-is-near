@@ -7,6 +7,7 @@ package spaceisnear.abstracts;
 
 import java.util.LinkedList;
 import java.util.List;
+import spaceisnear.game.ClientLog;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectType;
@@ -18,6 +19,7 @@ import spaceisnear.game.objects.GameObjectType;
 public abstract class Context {
 
     public final static int NETWORKING_ID = 0;
+    public static Log LOG = new ClientLog();
 
     public abstract void sendThemAll(Message m);
 

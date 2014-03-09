@@ -50,7 +50,7 @@ public class PlayerControllableComponent extends Component {
 		}
 		if (mm != null) {
 		    getOwner().message(mm);
-//		    System.out.println("So we say them to move");
+//		    Context.LOG.log("So we say them to move");
 		    getContext().sendDirectedMessage(new MessageToSend(mm));
 		}
 	}
@@ -98,7 +98,7 @@ public class PlayerControllableComponent extends Component {
 	    MessageMoved mm1 = new MessageMoved(oldx - positionToPull.getX(), oldy - positionToPull.getY(), get.getId());
 	    getContext().sendDirectedMessage(mm1);
 	    getContext().sendDirectedMessage(new MessageToSend(mm1));
-//		System.out.println("pulled " + mm1.getX() + " " + mm1.getY());}
+//		Context.LOG.log("pulled " + mm1.getX() + " " + mm1.getY());}
 	}
     }
 }

@@ -5,11 +5,10 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 import lombok.*;
 import org.apache.commons.cli.ParseException;
 import spaceisnear.*;
-import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.abstracts.*;
 import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.components.inventory.Inventory;
 import spaceisnear.game.messages.*;
@@ -50,7 +49,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	try {
 	    ItemsArchive.itemsArchive = new ItemsArchive(ItemsReader.read());
 	} catch (Exception ex) {
-	    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
+	    Context.LOG.log(ex);
 	}
 
 	context = new GameContext(new CameraMan(), objects, this);
@@ -84,7 +83,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    try {
 			Main.main(new String[]{"-mode", "host", "-hostip", "null"});
 		    } catch (ParseException ex1) {
-			Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex1);
+			Context.LOG.log(ex1);
 		    }
 		    synchronized (Corev2.this) {
 			try {
@@ -92,7 +91,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 			    log(new LogString("Starting server on " + Main.IP, LogLevel.WARNING));
 			    networking.connect(Main.IP, 54555);
 			} catch (IOException ex1) {
-			    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex1);
+			    Context.LOG.log(ex1);
 			}
 		    }
 		}
@@ -117,6 +116,9 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		context.sendDirectedMessage(new MessageToSend(mc));
 	    }
 	    for (AbstractGameObject gameObject : objects) {
+		if (!notpaused) {
+		    break;
+		}
 		gameObject.process();
 	    }
 	}
@@ -200,7 +202,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     public void unpause() {
 	notpaused = true;
-	System.out.println("Client has continued his work");
+	Context.LOG.log("Client has continued his work");
     }
 
     public void mouseClicked(int button, int x, int y, int clickCount) {
@@ -287,7 +289,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    try {
 			Thread.sleep(MessageAnimationStep.STEP);
 		    } catch (InterruptedException ex) {
-			Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
+			Context.LOG.log(ex);
 		    }
 		}
 	    }
@@ -313,7 +315,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	    try {
 		Thread.sleep(50);
 	    } catch (InterruptedException ex) {
-		Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex);
+		Context.LOG.log(ex);
 	    }
 	}
     }

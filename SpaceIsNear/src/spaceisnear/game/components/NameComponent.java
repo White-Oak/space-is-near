@@ -4,11 +4,9 @@
  */
 package spaceisnear.game.components;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.messages.Message;
 
-public class NameComponent extends PaintableComponent {
+public class NameComponent extends Component {
 
     public NameComponent(String name) {
 	super(ComponentType.NAME);
@@ -29,9 +27,5 @@ public class NameComponent extends PaintableComponent {
 
     public void setNickname(String name) {
 	setStateValueNamed("name", name);
-    }
-
-    @Override
-    public void paintComponent(SpriteBatch batch, int x, int y) {
     }
 }

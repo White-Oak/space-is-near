@@ -4,6 +4,7 @@
  */
 package spaceisnear.game.components.client;
 
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
@@ -20,7 +21,7 @@ public class UIComponent extends Component {
 	switch (message.getMessageType()) {
 	    case NETWORK_STATE:
 		MessageNetworkState mns = (MessageNetworkState) message;
-		System.out.println(mns.getState());
+		Context.LOG.log(mns.getState());
 		break;
 	}
     }

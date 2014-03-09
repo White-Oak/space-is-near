@@ -212,6 +212,9 @@
 *Rewrote world's sending system
 *IP is reading from file in jar
 *rewrote "accounts.txt" handling
++added name generator borrowed from @riseremi
+*Reworked log system
+*NameComponent is no longer Paintable — maybe remove it later
 
 0.0.9
 *Removed massive creations of Iterators and SpriteBatches

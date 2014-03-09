@@ -1,14 +1,13 @@
 package spaceisnear.editor;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.*;
 import lombok.Getter;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 
 /**
@@ -38,7 +37,7 @@ public class RightTab extends Actor {
 		x /= TILE_WIDTH + TILE_PADDING * 1.5f;
 		y -= UI_PADDING_Y;
 		y /= TILE_HEIGHT + TILE_PADDING;
-		System.out.println(x + " " + y);
+		Context.LOG.log("Touched: " + x + " " + y);
 		if (x > 0 && y > 0) {
 		    chosenOne = ((int) y) * 2 + (int) x;
 		}
