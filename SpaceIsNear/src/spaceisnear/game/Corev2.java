@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 import lombok.*;
+import org.apache.commons.cli.ParseException;
 import spaceisnear.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.client.PaintableComponent;
@@ -27,7 +28,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     @Getter private GameContext context;
     private final ArrayList<AbstractGameObject> objects = new ArrayList<>();
     @Setter private int key;
-    public static String IP = "127.0.0.1";
     @Getter private boolean notpaused;
 
     @Getter private final Networking networking;
@@ -35,13 +35,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
     private InputCatcher inputCatcher;
     private Inventory inventory;
-
-    static {
-	InputStream resourceAsStream = Corev2.class.getResourceAsStream("/res/hostip");
-	byte[] contents = Utils.getContents(resourceAsStream);
-	IP = new String(contents);
-    }
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
+    private final SpriteBatch batch = new SpriteBatch();
+    private long lastTimeMoved;
+    private final static long MINIMUM_TIME_TO_MOVE = 60L;
 
     public Corev2(Corev3 corev3) {
 	super(corev3);
@@ -82,15 +79,18 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	    @Override
 	    public void run() {
 		try {
-		    networking.connect(IP, 54555);
+		    networking.connect(Main.IP, 54555);
 		} catch (IOException ex) {
-		    Main.main(new String[]{"host"});
+		    try {
+			Main.main(new String[]{"-mode", "host", "-hostip", "null"});
+		    } catch (ParseException ex1) {
+			Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex1);
+		    }
 		    synchronized (Corev2.this) {
 			try {
-			    log(new LogString("Couldn't find a host on " + IP, LogLevel.WARNING));
-			    IP = "127.0.0.1";
-			    log(new LogString("Starting server on " + IP, LogLevel.WARNING));
-			    networking.connect(IP, 54555);
+			    log(new LogString("Couldn't find a host on " + Main.IP, LogLevel.WARNING));
+			    log(new LogString("Starting server on " + Main.IP, LogLevel.WARNING));
+			    networking.connect(Main.IP, 54555);
 			} catch (IOException ex1) {
 			    Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex1);
 			}
@@ -129,8 +129,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     public void keyReleased(int key, char c) {
 	this.key = 0;
     }
-    private long lastTimeMoved;
-    private final static long MINIMUM_TIME_TO_MOVE = 60L;
 
     private MessageControlledByInput checkMovementDesired() {
 	MessageControlledByInput mc = null;
@@ -178,7 +176,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		break;
 	}
     }
-    private final SpriteBatch batch = new SpriteBatch();
 
     @Override
     public void draw() {

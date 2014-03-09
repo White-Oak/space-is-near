@@ -216,6 +216,7 @@
 0.0.9
 *Removed massive creations of Iterators and SpriteBatches
 *Removed some debug messages, added others
+*IP and mode of running are now reading from commandline arguments
 *Added check for id of private messages, so they eon't be read by everyone
 +rewrote serialization of messages
 +total rework of starting UI and logic

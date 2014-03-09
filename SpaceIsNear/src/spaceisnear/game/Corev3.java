@@ -44,6 +44,7 @@ public class Corev3 extends Game implements ActivationListener {
 	camera.setToOrtho(true);
 	camera.update();
 	font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
+	System.out.println("Font has created -- don't worry");
 	loginScreen = new LoginScreen(this);
 	lobby = new Lobby(this);
 	core = new Corev2(this);
