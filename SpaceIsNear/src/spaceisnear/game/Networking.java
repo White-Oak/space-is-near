@@ -108,7 +108,7 @@ import spaceisnear.starting.LoadingScreen;
 		    processDiscoveredYourPlayerMessage(dypm);
 		    break;
 		case ROGER_REQUESTED:
-		    System.out.println("No time to explain — roger that!");
+//		    System.out.println("No time to explain — roger that!");
 		    send(ROGERED);
 		    break;
 		case CREATED_SIMPLIFIED: {
@@ -125,7 +125,7 @@ import spaceisnear.starting.LoadingScreen;
 		    processMessageWorldInformation(mwi);
 		    break;
 		case LOG:
-		    System.out.println("Somebody told me that grass is greener on the other side");
+//		    System.out.println("Somebody told me that grass is greener on the other side");
 		    MessageLog ml = (MessageLog) message;
 		    core.log(ml.getLog());
 		    break;

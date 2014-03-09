@@ -92,7 +92,7 @@ import spaceisnear.server.objects.items.*;
 		    Connection connection1 = clients.get(i).getConnection();
 		    if (connection1.equals(connection)) {
 			rogered[i] = true;
-			System.out.println(i + " is truer than ever");
+//			System.out.println(i + " is truer than ever");
 		    }
 		}
 		break;
@@ -140,7 +140,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     public void log(final LogString log) {
-	System.out.println("Checking out!");
+//	System.out.println("Checking out!");
 	core.getContext().log(log);
     }
 
@@ -157,7 +157,7 @@ import spaceisnear.server.objects.items.*;
 //	baos.reset();
 	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
 	    server.sendToTCP(id, ROGER_REQUSTED_BYTES);
-	    System.out.println("As a good sir I'm sincerely waiting for you to roger that");
+//	    System.out.println("As a good sir I'm sincerely waiting for you to roger that");
 	    waitForToRoger(id - 1);
 	    rogered[id - 1] = false;
 	    messagesSent = 0;

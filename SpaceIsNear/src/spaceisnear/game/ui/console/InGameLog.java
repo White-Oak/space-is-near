@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.*;
 import lombok.Setter;
+import spaceisnear.game.GameContext;
 
 /**
  *
@@ -52,9 +53,9 @@ public class InGameLog {
 	return height / (int) f.getLineHeight();
     }
 
-    public void pushMessage(LogString str) {
-	if (str.getLevel() == LogLevel.BROADCASTING) {
-	    System.out.println("oh lol");
+    public void pushMessage(LogString str, GameContext context) {
+	if (str.getReceiverID() != 0 && str.getReceiverID() != context.getPlayerID()) {
+	    return;
 	}
 	if (!acceptDebugMessages && str.getLevel() == LogLevel.DEBUG) {
 	    return;

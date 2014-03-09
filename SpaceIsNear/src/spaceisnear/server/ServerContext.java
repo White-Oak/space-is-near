@@ -85,6 +85,7 @@ public final class ServerContext extends Context {
 
     public void logToServerLog(LogString string) {
 	log.log(string);
+	System.out.println(string);
     }
 
     public boolean isHearingLogMessage(Position said, Position toHear) {
