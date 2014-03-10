@@ -21,6 +21,7 @@ import spaceisnear.server.*;
 public class Main {
 
     public static String IP;
+    public static LwjglApplication lwjglApplication;
 
     public static void main(String[] args) throws ParseException {
 	Option mode = new Option("mode", true, "one of default, host, editor");
@@ -49,9 +50,11 @@ public class Main {
 		cfg.height = 600;
 		cfg.vSyncEnabled = true;
 		cfg.useGL20 = true;
+		cfg.useCPUSynch = true;
+		cfg.resizable = false;
 		IP = parse.getOptionValue("hostip");
 		final Corev3 corev3 = new Corev3();
-		new LwjglApplication(corev3, cfg);
+		lwjglApplication = new LwjglApplication(corev3, cfg);
 	    }
 	} else {
 	    HelpFormatter formatter = new HelpFormatter();

@@ -107,7 +107,8 @@ public class Inventory extends Actor {
 		    if (itemId > 0) {
 			StaticItem get = (StaticItem) inventoryComponent.getContext().getObjects().get(itemId);
 			int id = get.getProperties().getId();
-			TextureRegion textureRegion = ItemsArchive.itemsArchive.getTextureRegion(id);
+			int imageId = get.getProperties().getBundle().imageIds[0];
+			TextureRegion textureRegion = ItemsArchive.itemsArchive.getTextureRegion(imageId);
 			batch.draw(textureRegion, startingX + 2 * (TILE_WIDTH + TILE_PADDING),
 				startingY + i * (TILE_HEIGHT + TILE_PADDING));
 		    }

@@ -34,7 +34,8 @@ import spaceisnear.server.ServerContext;
     @Override
     public void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
-	    for (AbstractGameObject gameObject : objects) {
+	    for (int i = 0; i < objects.size(); i++) {
+		AbstractGameObject gameObject = objects.get(i);
 		gameObject.message(m);
 	    }
 	}

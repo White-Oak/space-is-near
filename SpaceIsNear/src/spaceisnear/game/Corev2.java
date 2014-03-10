@@ -58,7 +58,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.getCameraMan().setWindowWidth(800);
 	context.getCameraMan().setWindowHeight(600);
 
-	camera.setToOrtho(true, 1200, 600);
+	camera.setToOrtho(true);
 	camera.update();
 	stage.setCamera(camera);
 
@@ -71,6 +71,24 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	stage.addActor(inventory);
 
 	callToConnect();
+	Thread thread = new Thread(this, "Corev2");
+	thread.setPriority(Thread.MAX_PRIORITY);
+	thread.start();
+	thread = new Thread("Animation") {
+
+	    @Override
+	    public void run() {
+		while (true) {
+		    animate();
+		    try {
+			Thread.sleep(MessageAnimationStep.STEP);
+		    } catch (InterruptedException ex) {
+			Context.LOG.log(ex);
+		    }
+		}
+	    }
+	};
+	thread.start();
     }
 
     private void callToConnect() {
@@ -103,23 +121,32 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.sendThemAll(MESSAGE_ANIMATION_STEP);
 	inventory.processMessage(MESSAGE_ANIMATION_STEP);
     }
+    private int counterUpdate = -1;
 
     public void update(int delta) {
 	if (notpaused) {
-//	    MessageTimePassed messageTimePassed = new MessageTimePassed(delta);
-//	    context.sendThemAll(messageTimePassed);
-	    //
-	    checkKeys();
-	    MessageControlledByInput mc = checkMovementDesired();
-	    int playerID = context.getPlayerID();
-	    if (mc != null && playerID != -1) {
-		context.sendDirectedMessage(new MessageToSend(mc));
-	    }
-	    for (AbstractGameObject gameObject : objects) {
-		if (!notpaused) {
+	    counterUpdate = 0;
+	    switch (counterUpdate) {
+		case 0:
+		    checkKeys();
+		    MessageControlledByInput mc = checkMovementDesired();
+		    int playerID = context.getPlayerID();
+		    if (mc != null && playerID != -1) {
+			context.sendDirectedMessage(new MessageToSend(mc));
+		    }
+		    for (AbstractGameObject gameObject : objects) {
+			if (!notpaused) {
+			    break;
+			}
+			gameObject.process();
+		    }
 		    break;
-		}
-		gameObject.process();
+		case 1:
+		    animate();
+		    break;
+	    }
+	    if (counterUpdate == 1) {
+		counterUpdate = -1;
 	    }
 	}
     }
@@ -276,24 +303,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     @Override
     public void show() {
-	update(20);
 	context.setCameraToPlayer();
-	Gdx.input.setInputProcessor(stage);
-	new Thread(this, "Corev2").start();
-	new Thread("Animation") {
-
-	    @Override
-	    public void run() {
-		while (true) {
-		    animate();
-		    try {
-			Thread.sleep(MessageAnimationStep.STEP);
-		    } catch (InterruptedException ex) {
-			Context.LOG.log(ex);
-		    }
-		}
-	    }
-	}.start();
     }
 
     @Override

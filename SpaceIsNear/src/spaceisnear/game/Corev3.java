@@ -14,7 +14,6 @@ import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.console.GameConsole;
-import spaceisnear.server.ServerContext;
 import spaceisnear.starting.*;
 import spaceisnear.starting.ui.ScreenImproved;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
@@ -59,7 +58,7 @@ public class Corev3 extends Game implements ActivationListener {
 		update();
 	    }
 	}, "Corev3").start();
-	new Thread(new Runnable() {
+	Thread thread = new Thread(new Runnable() {
 
 	    @Override
 	    public void run() {
@@ -72,7 +71,9 @@ public class Corev3 extends Game implements ActivationListener {
 		    }
 		}
 	    }
-	}, "GC Runner").start();
+	}, "GC Runner");
+	thread.setPriority(Thread.MIN_PRIORITY);
+	thread.start();
     }
 
     public void setScreen(int number) {
@@ -145,7 +146,7 @@ public class Corev3 extends Game implements ActivationListener {
 		}
 	    }
 	    try {
-		Thread.sleep(50);
+		Thread.sleep(100);
 	    } catch (InterruptedException ex) {
 		Context.LOG.log(ex);
 	    }
