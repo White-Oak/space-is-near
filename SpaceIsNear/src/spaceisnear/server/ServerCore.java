@@ -10,8 +10,6 @@ import spaceisnear.game.components.server.HealthComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
-import spaceisnear.game.messages.service.MessagePaused;
-import spaceisnear.game.messages.service.MessageUnpaused;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsReader;
 import spaceisnear.server.objects.Player;
@@ -25,9 +23,8 @@ public class ServerCore implements Runnable {
 
     @Getter private final ServerContext context;
     private final boolean unbreakable = true;
-    private boolean paused = false;
+    @Getter private boolean paused = false;
     private static final int QUANT_TIME = 20;
-    @Getter private boolean alreadyPaused;
     private long timePassed;
     private AtmosphereThread at = new AtmosphereThread();
 
@@ -63,10 +60,6 @@ public class ServerCore implements Runnable {
 		    if (gameObject != null) {
 			gameObject.process();
 		    }
-		}
-	    } else {
-		if (!alreadyPaused) {
-		    alreadyPaused = true;
 		}
 	    }
 	    try {
@@ -108,14 +101,10 @@ public class ServerCore implements Runnable {
 
     public void pause() {
 	paused = true;
-	context.getNetworking().sendToAll(new MessagePaused());
-	Context.LOG.log("Server\'s been paused");
     }
 
     public void unpause() {
-	context.getNetworking().sendToAll(new MessageUnpaused());
 	paused = false;
-	alreadyPaused = false;
     }
 
     public void host() throws IOException {

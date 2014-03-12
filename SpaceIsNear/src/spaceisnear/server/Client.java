@@ -2,6 +2,7 @@ package spaceisnear.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import lombok.Data;
+import lombok.NonNull;
 import spaceisnear.game.messages.service.onceused.MessageClientInformation;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.server.objects.Player;
@@ -12,8 +13,14 @@ import spaceisnear.server.objects.Player;
  */
 @Data public class Client {
 
-    private final Connection connection;
+    @NonNull private Connection connection;
     private MessageClientInformation clientInformation;
     private MessagePlayerInformation playerInformation;
     private Player player;
+
+    public void dispose() {
+	connection = null;
+	clientInformation = null;
+	playerInformation = null;
+    }
 }

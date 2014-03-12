@@ -222,6 +222,9 @@
 *IP and mode of running are now reading from commandline arguments
 *Added check for id of private messages, so they eon't be read by everyone
 *Players do hear themselves again
+*Added handling of repeating keys for TextField
+*Placing cursor in textfield where mouse has clicked
+*Rewrote server pausing logic
 +rewrote serialization of messages
 +total rework of starting UI and logic
     -professions' choosing

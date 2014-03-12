@@ -181,7 +181,7 @@ public final class ServerContext extends Context {
 		    Player player = players.get(i);
 		    boolean radioPlayer = doesPlayerHasEnabledRadioOnFrequency(player, log.getFrequency());
 		    if (radioPlayer || bufferMap[player.getPosition().getX()][player.getPosition().getY()] > 0) {
-			getNetworking().sendToID(i + 1, new MessageLog(log));
+			getNetworking().sendToClientID(i, new MessageLog(log));
 		    }
 		}
 		break;
@@ -204,7 +204,7 @@ public final class ServerContext extends Context {
 	    Position positionToHear = player.getPosition();
 	    Position positionToSay = log.getPosition();
 	    if (isHearingLogMessage(positionToSay, positionToHear)) {
-		getNetworking().sendToID(i, new MessageLog(log));
+		getNetworking().sendToClientID(i, new MessageLog(log));
 	    }
 	}
     }
@@ -215,7 +215,7 @@ public final class ServerContext extends Context {
 	    Position positionToHear = player.getPosition();
 	    Position positionToSay = log.getPosition();
 	    if (isHearingLogMessage(positionToSay, positionToHear)) {
-		getNetworking().sendToID(i, new MessageLog(log));
+		getNetworking().sendToClientID(i, new MessageLog(log));
 	    }
 	}
     }

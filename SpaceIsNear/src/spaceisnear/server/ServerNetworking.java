@@ -53,8 +53,22 @@ import spaceisnear.server.objects.items.*;
 	    byte[] b = (byte[]) object;
 	    try (FSTObjectInput objectInput = new FSTObjectInput(new ByteArrayInputStream(b))) {
 		Message message = (Message) objectInput.readObject();
-		connectionsForMessages.add(connection);
-		messages.add(message);
+		switch (message.getMessageType()) {
+		    case ROGERED:
+			for (int i = 0; i < clients.size(); i++) {
+			    Connection connection1 = clients.get(i).getConnection();
+			    if (connection1.equals(connection)) {
+				rogered[i] = true;
+//			Context.LOG.log(i + " is truer than ever");
+			    }
+			}
+			break;
+		    default:
+			if (!core.isPaused()) {
+			    connectionsForMessages.add(connection);
+			    messages.add(message);
+			}
+		}
 	    } catch (IOException | ClassNotFoundException ex) {
 		Context.LOG.log(ex);
 	    }
@@ -87,15 +101,6 @@ import spaceisnear.server.objects.items.*;
     private void processBundle(Message message, Connection connection) {
 	MessageType mt = message.getMessageType();
 	switch (mt) {
-	    case ROGERED:
-		for (int i = 0; i < clients.size(); i++) {
-		    Connection connection1 = clients.get(i).getConnection();
-		    if (connection1.equals(connection)) {
-			rogered[i] = true;
-//			Context.LOG.log(i + " is truer than ever");
-		    }
-		}
-		break;
 	    case PLAYER_INFO: {
 		MessagePlayerInformation mpi = (MessagePlayerInformation) message;
 		getClientByConnection(connection).setPlayerInformation(mpi);
@@ -105,12 +110,26 @@ import spaceisnear.server.objects.items.*;
 	    break;
 	    case CLIENT_INFO: {
 		MessageClientInformation mci = (MessageClientInformation) message;
-		getClientByConnection(connection).setClientInformation(mci);
+		final Client clientByConnection = getClientByConnection(connection);
+		clientByConnection.setClientInformation(mci);
 		String messageS = mci.getLogin() + " requested access with password " + mci.getPassword();
 		boolean accessible = accountManager.isAccessible(mci.getLogin(), mci.getPassword());
 		messageS += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
 		core.getContext().logToServerLog(new LogString(messageS, LogLevel.DEBUG));
 		sendToConnection(connection, new MessageAccess(accessible));
+		if (false) {
+		    for (int i = 0; i < clients.size(); i++) {
+			Client client = clients.get(i);
+			if (clientByConnection != client) {
+			    MessageClientInformation clientInformation = client.getClientInformation();
+			    if (clientInformation.getLogin().equals(mci.getLogin())) {
+				client.setConnection(connection);
+				clientByConnection.dispose();
+
+			    }
+			}
+		    }
+		}
 		Context.LOG.log("Client information received");
 	    }
 	    break;
@@ -153,8 +172,12 @@ import spaceisnear.server.objects.items.*;
 	}
     }
 
-    public void sendToID(int id, NetworkableMessage message) {
-//	baos.reset();
+    public void sendToConnection(Connection connection, NetworkableMessage message) {
+	sendToConnectionID(connection.getID(), message);
+
+    }
+
+    public void sendToConnectionID(int id, NetworkableMessage message) {
 	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
 	    server.sendToTCP(id, ROGER_REQUSTED_BYTES);
 //	    Context.LOG.log("As a good sir I'm sincerely waiting for you to roger that");
@@ -170,23 +193,28 @@ import spaceisnear.server.objects.items.*;
 	    Context.LOG.log("Message caused trouble --" + message.getMessageType());
 	    Context.LOG.log(ex);
 	}
+
+    }
+
+    public void sendToClientID(int id, NetworkableMessage message) {
+//	baos.reset();
+	id = clients.get(id).getConnection().getID();
+	sendToConnectionID(id, message);
     }
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-    private void sendToConnection(Connection c, NetworkableMessage message) {
-	sendToID(c.getID(), message);
-    }
     private int messagesSent;
     private final int MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING = 255;
 
     @Override
     public synchronized void connected(Connection connection) {
+	//Possibly should rewrite this shit
 	synchronized (clients) {
 	    Client client = new Client(connection);
 	    clients.add(client);
 	    rogered = new boolean[clients.size()];
 	    //make some kind of queue or something like that to prevent blocking
-	    if (core.isAlreadyPaused()) {
+	    if (core.isPaused()) {
 		sendToConnection(connection, new MessageConnectionBroken());
 		connection.close();
 	    }
@@ -194,16 +222,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     private synchronized void connectedWantsPlayer(final Client client) {
-	if (!core.isAlreadyPaused()) {
-	    core.pause();
-	    new Thread("Creating new player") {
-
-		@Override
-		public void run() {
-		    processNewPlayer(client);
-		}
-	    }.start();
-	}
+	processNewPlayer(client);
     }
 
     private List<ObjectMessaged> createPlayer(Client client) {
@@ -247,9 +266,15 @@ import spaceisnear.server.objects.items.*;
 	server.bind(54555);
     }
 
-    private void processNewPlayer(Client client) {
-	waitForServerToStop();
+    private void processOldPlayer(Client client) {
+
+    }
+
+    private void processNewPlayer(final Client client) {
+//	waitForServerToStop();
 	//
+	sendToAll(new MessagePaused());
+	Context.LOG.log("Server\'s been paused");
 	List<ObjectMessaged> objectPlayer = createPlayer(client);
 	sendWorld(client);
 	sendPlayer(client);
@@ -261,26 +286,24 @@ import spaceisnear.server.objects.items.*;
 		}
 	    }
 	}
-	//
-	core.unpause();
+	//	
+	sendToAll(new MessageUnpaused());
 	Context.LOG.log("Server has continued his work");
 	//wait for client to unpause
 	orderEveryoneToRogerAndWait();
 	//@working fix that
-	for (int i = 0; i < 20; i++) {
-	    waitSomeTime();
-	}
-	Player get = client.getPlayer();
-	String message = get.getNickname() + " has connected to SIN!";
-	log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
-    }
-
-    private void waitForServerToStop() {
-	while (!core.isAlreadyPaused()) {
-	    while (!messages.isEmpty()) {
-		waitSomeTime();
+	Runnable runnable = new Runnable() {
+	    @Override
+	    public void run() {
+		for (int i = 0; i < 20; i++) {
+		    waitSomeTime();
+		}
+		Player get = client.getPlayer();
+		String message = get.getNickname() + " has connected to SIN!";
+		log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
 	    }
-	}
+	};
+	new Thread(runnable, "Messaging about connected").start();
     }
 
     private void orderEveryoneToRogerAndWait() {
