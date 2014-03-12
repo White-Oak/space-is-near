@@ -23,6 +23,7 @@ public final class TextField extends UIElement {
     private Color textColor;
     @Getter private boolean focused;
     private static final int HEIGHT_PADDING = 2;
+    private static final int WIDTH_PADDING = 10;
     private int keycode;
     private long lastTimeActed;
     private final static long DELTA_ACTED = 100L;
@@ -43,6 +44,12 @@ public final class TextField extends UIElement {
 		Stage stage = getStage();
 		if (stage != null) {
 		    stage.setKeyboardFocus(TextField.this);
+		}
+		int currentX = WIDTH_PADDING;
+		currentPosition = 0;
+		while (currentX < x && currentPosition < text.length()) {
+		    currentPosition++;
+		    currentX += font.getBounds(text, 0, currentPosition).width;
 		}
 		return true;
 	    }
@@ -174,7 +181,6 @@ public final class TextField extends UIElement {
 	font.draw(batch, text.subSequence(start, end), WIDTH_PADDING + getX(), 3 + getY());
 	batch.end();
     }
-    private static final int WIDTH_PADDING = 10;
 
     public void setTextColor(Color textColor) {
 	this.textColor = textColor;
