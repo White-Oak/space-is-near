@@ -124,7 +124,6 @@ import spaceisnear.starting.LoadingScreen;
 		    processMessageWorldInformation(mwi);
 		    break;
 		case LOG:
-//		    Context.LOG.log("Somebody told me that grass is greener on the other side");
 		    MessageLog ml = (MessageLog) message;
 		    core.log(ml.getLog());
 		    break;

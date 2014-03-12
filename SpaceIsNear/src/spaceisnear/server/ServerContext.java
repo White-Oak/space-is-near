@@ -181,7 +181,7 @@ public final class ServerContext extends Context {
 		    Player player = players.get(i);
 		    boolean radioPlayer = doesPlayerHasEnabledRadioOnFrequency(player, log.getFrequency());
 		    if (radioPlayer || bufferMap[player.getPosition().getX()][player.getPosition().getY()] > 0) {
-			getNetworking().sendToID(i, new MessageLog(log));
+			getNetworking().sendToID(i + 1, new MessageLog(log));
 		    }
 		}
 		break;
