@@ -23,6 +23,9 @@ public final class TextField extends UIElement {
     private Color textColor;
     @Getter private boolean focused;
     private static final int HEIGHT_PADDING = 2;
+    private int keycode;
+    private long lastTimeActed;
+    private final static long DELTA_ACTED = 100L;
 
     public TextField() {
 	init();
@@ -55,6 +58,32 @@ public final class TextField extends UIElement {
 
 	    @Override
 	    public boolean keyDown(InputEvent event, int keycode) {
+		TextField.this.keycode = keycode;
+		lastTimeActed = 0;
+		return true;
+	    }
+
+	    @Override
+	    public boolean keyTyped(InputEvent event, char character) {
+		if (font.containsCharacter(character)) {
+		    addCharacter(character);
+		}
+		return true;
+	    }
+
+	    @Override
+	    public boolean keyUp(InputEvent event, int keycode) {
+		TextField.this.keycode = 0;
+		return true;
+	    }
+	});
+	setHeight(getPrefHeight());
+	setWidth(getPrefWidth());
+    }
+
+    public void checkKeys() {
+	if (keycode != 0) {
+	    if (System.currentTimeMillis() - lastTimeActed > DELTA_ACTED) {
 		switch (keycode) {
 		    case Input.Keys.ENTER:
 			activated();
@@ -75,24 +104,9 @@ public final class TextField extends UIElement {
 			}
 			break;
 		}
-		return true;
+		lastTimeActed = System.currentTimeMillis();
 	    }
-
-	    @Override
-	    public boolean keyTyped(InputEvent event, char character) {
-		if (font.containsCharacter(character)) {
-		    addCharacter(character);
-		}
-		return true;
-	    }
-
-	    @Override
-	    public boolean keyUp(InputEvent event, int keycode) {
-		return true;
-	    }
-	});
-	setHeight(getPrefHeight());
-	setWidth(getPrefWidth());
+	}
     }
 
     @Override
@@ -123,6 +137,7 @@ public final class TextField extends UIElement {
 
     @Override
     public void paint(SpriteBatch batch) {
+	checkKeys();
 	ShapeRenderer renderer = getRenderer();
 	focused = getStage().getKeyboardFocus() == this;
 	int start = 0;
