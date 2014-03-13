@@ -72,13 +72,18 @@ public class AccountManager {
 	    if (get == null) {
 		accounts.put(login, password);
 		return true;
-	    } else if (get.equals(password) && !accessibility.containsKey(login)) {
+	    } else if (get.equals(password)
+		    && (!accessibility.containsKey(login) || accessibility.get(login).equals(Boolean.TRUE))) {
 		accessibility.put(login, Boolean.FALSE);
 		return true;
 	    } else {
 		return false;
 	    }
 	}
+    }
+
+    public synchronized void disconnect(String login) {
+	accessibility.put(login, Boolean.TRUE);
     }
 
 }

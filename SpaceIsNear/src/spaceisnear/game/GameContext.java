@@ -83,6 +83,10 @@ import spaceisnear.server.ServerContext;
 	return core.getNetworking().isLogined();
     }
 
+    public boolean isPlayable() {
+	return core.getNetworking().isPlayable();
+    }
+
     public boolean isJoined() {
 	return core.getNetworking().isJoined();
     }

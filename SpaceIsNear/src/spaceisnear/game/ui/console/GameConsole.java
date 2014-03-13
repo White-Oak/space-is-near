@@ -85,7 +85,7 @@ public class GameConsole extends Actor {
     public void processInputedMessage() {
 	String text = textField.getText();
 	if (context.isLogined()) {
-	    if (context.isJoined()) {
+	    if (context.isPlayable()) {
 		if (text.startsWith("-")) {
 		    processControlSequence(text);
 		} else {

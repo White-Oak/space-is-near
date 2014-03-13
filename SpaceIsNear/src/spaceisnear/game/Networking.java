@@ -28,7 +28,7 @@ import spaceisnear.starting.LoadingScreen;
     private final static MessageRogered ROGERED = new MessageRogered();
     @Getter @Setter private MessagePlayerInformation mpi;
     @Getter @Setter private MessageClientInformation mci;
-    @Getter private boolean logined, joined;
+    @Getter private boolean logined, joined, playable;
 
     public void connect(String host, int tcpPort) throws IOException {
 	client = new Client(256 * 1024, 1024);
@@ -147,6 +147,9 @@ import spaceisnear.starting.LoadingScreen;
 		    MessageAccess ma = (MessageAccess) message;
 		    processMessageAccess(ma);
 		    break;
+		case JOINED:
+		    joined = true;
+		    break;
 	    }
 //	    Context.LOG.log("Message received");
 //	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));
@@ -201,7 +204,7 @@ import spaceisnear.starting.LoadingScreen;
     private void processDiscoveredYourPlayerMessage(MessageYourPlayerDiscovered dypm) {
 	core.getContext().setNewGamerPlayer(dypm.getPlayerID());
 	Context.LOG.log("Your player discovered at " + dypm.getPlayerID());
-	joined = true;
+	playable = true;
     }
 
     private void processMessageMoved(MessageMoved mm) {

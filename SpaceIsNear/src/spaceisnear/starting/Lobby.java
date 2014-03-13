@@ -58,7 +58,6 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
     public void componentActivated(Actor actor) {
 	if (actor == join) {
 	    send(new MessagePlayerInformation(nickname.getText(), profession.getText()));
-	    setScreen(2);
 	}
     }
 

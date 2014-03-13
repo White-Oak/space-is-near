@@ -57,7 +57,7 @@ import spaceisnear.server.objects.items.*;
 		    case ROGERED:
 			for (int i = 0; i < clients.size(); i++) {
 			    Connection connection1 = clients.get(i).getConnection();
-			    if (connection1.equals(connection)) {
+			    if (connection1 != null && connection1.equals(connection)) {
 				rogered[i] = true;
 //			Context.LOG.log(i + " is truer than ever");
 			    }
@@ -105,6 +105,7 @@ import spaceisnear.server.objects.items.*;
 		MessagePlayerInformation mpi = (MessagePlayerInformation) message;
 		getClientByConnection(connection).setPlayerInformation(mpi);
 		Context.LOG.log("Player information received");
+		sendToConnection(connection, new MessageJoined());
 		connectedWantsPlayer(getClientByConnection(connection));
 	    }
 	    break;
@@ -117,16 +118,16 @@ import spaceisnear.server.objects.items.*;
 		messageS += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
 		core.getContext().logToServerLog(new LogString(messageS, LogLevel.DEBUG));
 		sendToConnection(connection, new MessageAccess(accessible));
-		if (false) {
-		    for (int i = 0; i < clients.size(); i++) {
-			Client client = clients.get(i);
-			if (clientByConnection != client) {
-			    MessageClientInformation clientInformation = client.getClientInformation();
-			    if (clientInformation.getLogin().equals(mci.getLogin())) {
-				client.setConnection(connection);
-				clientByConnection.dispose();
-
-			    }
+		for (int i = 0; i < clients.size(); i++) {
+		    Client client = clients.get(i);
+		    if (clientByConnection != client) {
+			MessageClientInformation clientInformation = client.getClientInformation();
+			if (clientInformation.getLogin().equals(mci.getLogin())) {
+			    client.setConnection(connection);
+			    clientByConnection.dispose();
+			    sendToConnection(connection, new MessageJoined());
+			    processOldPlayer(client);
+			    break;
 			}
 		    }
 		}
@@ -207,6 +208,17 @@ import spaceisnear.server.objects.items.*;
     private final int MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING = 255;
 
     @Override
+    public void disconnected(Connection connection) {//Possibly should rewrite this shit
+	synchronized (clients) {
+	    Client clientByConnection = getClientByConnection(connection);
+	    MessageClientInformation clientInformation = clientByConnection.getClientInformation();
+	    if (clientInformation != null) {
+		accountManager.disconnect(clientInformation.getLogin());
+	    }
+	}
+    }
+
+    @Override
     public synchronized void connected(Connection connection) {
 	//Possibly should rewrite this shit
 	synchronized (clients) {
@@ -267,7 +279,13 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void processOldPlayer(Client client) {
-
+	sendToAll(new MessagePaused());
+	Context.LOG.log("Server\'s been paused");
+	sendWorld(client);//	
+	sendToAll(new MessageUnpaused());
+	Context.LOG.log("Server has continued his work");
+	//wait for client to unpause
+	orderEveryoneToRogerAndWait();
     }
 
     private void processNewPlayer(final Client client) {

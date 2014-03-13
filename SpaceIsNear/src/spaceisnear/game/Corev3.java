@@ -145,6 +145,9 @@ public class Corev3 extends Game implements ActivationListener {
 		    setScreen(1);
 		}
 	    }
+	    if (isJoined()) {
+		setScreen(2);
+	    }
 	    try {
 		Thread.sleep(100);
 	    } catch (InterruptedException ex) {
@@ -163,5 +166,9 @@ public class Corev3 extends Game implements ActivationListener {
 
     public boolean isConnected() {
 	return core.getNetworking().isConnected();
+    }
+
+    public boolean isJoined() {
+	return core.getNetworking().isJoined();
     }
 }
