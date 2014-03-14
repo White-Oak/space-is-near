@@ -25,15 +25,11 @@ public class GamePlayerPositionComponent extends PositionComponent {
 	final GameContext context = (GameContext) getContext();
 	switch (message.getMessageType()) {
 	    case MOVED:
+	    case TELEPORTED:
 		MessageMoved messagem = (MessageMoved) message;
 		if (oldX != getX() || oldY != getY()) {
 		    context.getCameraMan().setNewCameraPositionForMove(messagem.getP().getX(), messagem.getP().getY());
 		}
-		break;
-	    case TELEPORTED:
-		//Note that MessageTeleported is the subclass of MessageMoved
-		MessageMoved messagetMessageMoved = (MessageMoved) message;
-		context.getCameraMan().moveCameraToPlayer(messagetMessageMoved.getP().getX(), messagetMessageMoved.getP().getY());
 		break;
 	    case TIME_PASSED:
 		break;

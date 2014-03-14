@@ -19,7 +19,6 @@ import spaceisnear.server.objects.items.StaticItem;
 
 public class PositionComponent extends Component {
 
-    private Position p;
     boolean animation;
     @Getter private int delayX, delayY;
     private int timeAccumulated;
@@ -41,10 +40,7 @@ public class PositionComponent extends Component {
 
     @Override
     public Position getPosition() {
-	if (p == null) {
-	    p = (Position) getStateValueNamed("position");
-	}
-	return p;
+	return (Position) getStateValueNamed("position");
     }
 
     public void setPosition(Position p) {
@@ -92,6 +88,9 @@ public class PositionComponent extends Component {
 		//here no check for obstacles
 		setX(messagetMessageMoved.getP().getX());
 		setY(messagetMessageMoved.getP().getY());
+		if (getOwner().getType() == GameObjectType.PLAYER) {
+		    System.out.println("Position of player is " + getPosition());
+		}
 		break;
 	    case ANIMATION_STEP:
 		checkAnimation(message);

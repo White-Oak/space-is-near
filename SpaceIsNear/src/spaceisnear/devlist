@@ -243,6 +243,7 @@
 	all they get is world-snapshot
     +new type of message for joining the game — MessageJoined
     +processing of Messagejoined
+*Rogered logic has been changed
 -Introduce new map
 -place simmilar objects near in objects array on start
 -place properties of objects that are near connected player near in array for faster connection

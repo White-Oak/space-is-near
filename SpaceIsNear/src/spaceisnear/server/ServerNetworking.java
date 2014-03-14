@@ -29,11 +29,12 @@ import spaceisnear.server.objects.items.*;
 
     private final List<Client> clients = new ArrayList<>();
 
-    private boolean[] rogered;
     private static byte[] ROGER_REQUSTED_BYTES;
 
     private final Queue<Message> messages = new LinkedList<>();
     private final Queue<Connection> connectionsForMessages = new LinkedList<>();
+    private final ArrayList<MessageRogered> rogereds = new ArrayList<>();
+    private final ArrayList<Connection> connectionsForRogereds = new ArrayList<>();
 
     private final AccountManager accountManager = new AccountManager();
 
@@ -55,13 +56,8 @@ import spaceisnear.server.objects.items.*;
 		Message message = (Message) objectInput.readObject();
 		switch (message.getMessageType()) {
 		    case ROGERED:
-			for (int i = 0; i < clients.size(); i++) {
-			    Connection connection1 = clients.get(i).getConnection();
-			    if (connection1 != null && connection1.equals(connection)) {
-				rogered[i] = true;
-//			Context.LOG.log(i + " is truer than ever");
-			    }
-			}
+			rogereds.add((MessageRogered) message);
+			connectionsForRogereds.add(connection);
 			break;
 		    default:
 			if (!core.isPaused()) {
@@ -119,14 +115,19 @@ import spaceisnear.server.objects.items.*;
 		core.getContext().logToServerLog(new LogString(messageS, LogLevel.DEBUG));
 		sendToConnection(connection, new MessageAccess(accessible));
 		for (int i = 0; i < clients.size(); i++) {
-		    Client client = clients.get(i);
+		    final Client client = clients.get(i);
 		    if (clientByConnection != client) {
 			MessageClientInformation clientInformation = client.getClientInformation();
 			if (clientInformation.getLogin().equals(mci.getLogin())) {
 			    client.setConnection(connection);
-			    clientByConnection.dispose();
+			    clients.remove(clientByConnection);
 			    sendToConnection(connection, new MessageJoined());
-			    processOldPlayer(client);
+			    Runnable runnable = new Runnable() {
+				public void run() {
+				    processOldPlayer(client);
+				}
+			    };
+			    new Thread(runnable, "sending world to old player").start();
 			    break;
 			}
 		    }
@@ -174,16 +175,36 @@ import spaceisnear.server.objects.items.*;
     }
 
     public void sendToConnection(Connection connection, NetworkableMessage message) {
-	sendToConnectionID(connection.getID(), message);
+	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
+	    server.sendToTCP(connection.getID(), ROGER_REQUSTED_BYTES);
+	    waitForToRoger(connection);
+	    messagesSent = 0;
+	}
+	try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
+	    fstObjectOutput.writeObject(message);
+	    server.sendToTCP(connection.getID(), fstObjectOutput.getBuffer());
+	    messagesSent++;
+	} catch (Exception ex) {
+	    Context.LOG.log("Message caused trouble --" + message.getMessageType());
+	    Context.LOG.log(ex);
+	}
 
     }
 
     public void sendToConnectionID(int id, NetworkableMessage message) {
 	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
+	    Connection connection = null;
+	    for (int i = 0; i < clients.size(); i++) {
+		Client client = clients.get(i);
+		if (client.getConnection().getID() == id) {
+		    connection = client.getConnection();
+		}
+	    }
+	    if (connection == null) {
+		return;
+	    }
 	    server.sendToTCP(id, ROGER_REQUSTED_BYTES);
-//	    Context.LOG.log("As a good sir I'm sincerely waiting for you to roger that");
-	    waitForToRoger(id - 1);
-	    rogered[id - 1] = false;
+	    waitForToRoger(connection);
 	    messagesSent = 0;
 	}
 	try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
@@ -224,7 +245,6 @@ import spaceisnear.server.objects.items.*;
 	synchronized (clients) {
 	    Client client = new Client(connection);
 	    clients.add(client);
-	    rogered = new boolean[clients.size()];
 	    //make some kind of queue or something like that to prevent blocking
 	    if (core.isPaused()) {
 		sendToConnection(connection, new MessageConnectionBroken());
@@ -234,7 +254,12 @@ import spaceisnear.server.objects.items.*;
     }
 
     private synchronized void connectedWantsPlayer(final Client client) {
-	processNewPlayer(client);
+	Runnable runnable = new Runnable() {
+	    public void run() {
+		processNewPlayer(client);
+	    }
+	};
+	new Thread(runnable, "New player creating").start();
     }
 
     private List<ObjectMessaged> createPlayer(Client client) {
@@ -282,6 +307,7 @@ import spaceisnear.server.objects.items.*;
 	sendToAll(new MessagePaused());
 	Context.LOG.log("Server\'s been paused");
 	sendWorld(client);//	
+	sendPlayer(client);
 	sendToAll(new MessageUnpaused());
 	Context.LOG.log("Server has continued his work");
 	//wait for client to unpause
@@ -327,7 +353,6 @@ import spaceisnear.server.objects.items.*;
     private void orderEveryoneToRogerAndWait() {
 	server.sendToAllTCP(ROGER_REQUSTED_BYTES);
 	waitForAllToRoger();
-	resetRogeredStatuses();
     }
 
     private void sendWorld(Client client) {
@@ -460,28 +485,30 @@ import spaceisnear.server.objects.items.*;
 	return nextMessageCreated;
     }
 
-    private boolean isRogeredByAll() {
-	boolean result = true;
-	for (int i = 0; i < rogered.length; i++) {
-	    result &= rogered[i];
-	}
-	return result;
-    }
-
     private void waitForAllToRoger() {
-	while (!isRogeredByAll()) {
+	boolean[] rogered = new boolean[clients.size()];
+	boolean result = false;
+	while (!result) {
 	    waitSomeTime();
+	    result = true;
+	    for (int i = 0; i < rogered.length; i++) {
+		result &= rogered[i];
+	    }
 	}
     }
 
-    private void resetRogeredStatuses() {
-	Arrays.fill(rogered, false);
-    }
-
-    private void waitForToRoger(int connectionId) {
-	while (!rogered[connectionId]) {
+    private void waitForToRoger(Connection connection) {
+	while (true) {
+	    for (int i = 0; i < connectionsForRogereds.size(); i++) {
+		Connection connection1 = connectionsForRogereds.get(i);
+		if (connection1 == connection) {
+		    connectionsForRogereds.remove(i);
+		    return;
+		}
+	    }
 	    waitSomeTime();
 	}
+
     }
 
     private void waitSomeTime() {

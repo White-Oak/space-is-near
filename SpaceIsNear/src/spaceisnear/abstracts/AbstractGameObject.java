@@ -6,9 +6,7 @@
 package spaceisnear.abstracts;
 
 import java.util.List;
-import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.components.PositionComponent;
+import spaceisnear.game.components.*;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectType;
