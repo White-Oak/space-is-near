@@ -6,6 +6,8 @@
 package spaceisnear.game.messages.properties;
 
 import lombok.Getter;
+import spaceisnear.abstracts.Context;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.*;
 
 public class MessageYourPlayerDiscovered extends Message implements NetworkableMessage, MessagePropertable {
@@ -15,6 +17,13 @@ public class MessageYourPlayerDiscovered extends Message implements NetworkableM
     public MessageYourPlayerDiscovered(int playerID) {
 	super(MessageType.DISCOVERED_PLAYER);
 	this.playerID = playerID;
+    }
+
+    @Override
+    public void processForClient(GameContext context) {
+	context.setNewGamerPlayer(getPlayerID());
+	Context.LOG.log("Your player discovered at " + getPlayerID());
+	context.getCore().getNetworking().setPlayable(true);
     }
 
 }

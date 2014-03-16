@@ -229,6 +229,7 @@
 *removed tons of ANIMATION_STEP messages sending
 *fixed bug where old messages had not procecessed for new objects based on old ones
 *only connected and active clients are now to roger when requested by server
++switch-case code is replaced by good one
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)

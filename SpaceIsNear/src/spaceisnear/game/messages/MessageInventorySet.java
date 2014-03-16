@@ -9,9 +9,13 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import lombok.Getter;
+import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.components.inventory.InventorySlot;
 import spaceisnear.game.components.inventory.TypicalInventorySlotsSet;
 import spaceisnear.game.messages.properties.MessagePropertable;
+import spaceisnear.game.objects.GameObjectType;
+import spaceisnear.game.objects.Player;
 
 public class MessageInventorySet extends DirectedMessage implements MessagePropertable {
 
@@ -28,6 +32,15 @@ public class MessageInventorySet extends DirectedMessage implements MessagePrope
     private MessageInventorySet(HashMap<String, InventorySlot> map, int id) {
 	super(MessageType.INVENTORY_SET, id);
 	slots = map;
+    }
+
+    @Override
+    public void processForClient(GameContext context) {
+	AbstractGameObject get = context.getObjects().get(getId());
+	if (get.getType() == GameObjectType.PLAYER || get.getType() == GameObjectType.GAMER_PLAYER) {
+	    Player player = (Player) get;
+	    player.getInventoryComponent().getSlots().setSlots(getSlots());
+	}
     }
 
 }

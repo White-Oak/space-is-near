@@ -5,7 +5,9 @@
  */
 package spaceisnear.game.messages.service.onceused;
 
+import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.*;
+import spaceisnear.starting.LoadingScreen;
 
 public class MessageWorldInformation extends Message implements NetworkableMessage {
 
@@ -17,4 +19,11 @@ public class MessageWorldInformation extends Message implements NetworkableMessa
 	this.amountOfItems = amountOfItems;
 	this.propertyAmount = propertyAmount;
     }
+
+    @Override
+    public void processForClient(GameContext context) {
+	LoadingScreen.LOADING_AMOUNT = amountOfItems;
+	LoadingScreen.CURRENT_AMOUNT = 0;
+    }
+
 }

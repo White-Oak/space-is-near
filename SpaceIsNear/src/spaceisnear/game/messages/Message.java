@@ -3,6 +3,8 @@ package spaceisnear.game.messages;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import spaceisnear.game.GameContext;
+import spaceisnear.server.ServerContext;
 
 /**
  * @author LPzhelud
@@ -16,4 +18,11 @@ import lombok.RequiredArgsConstructor;
 	return "My type is " + messageType;
     }
 
+    public void processForClient(GameContext context) {
+
+    }
+
+    public void processForServer(ServerContext context) {
+
+    }
 }

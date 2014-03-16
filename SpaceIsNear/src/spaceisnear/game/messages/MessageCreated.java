@@ -6,7 +6,9 @@
 package spaceisnear.game.messages;
 
 import lombok.Getter;
-import spaceisnear.game.objects.GameObjectType;
+import spaceisnear.game.GameContext;
+import spaceisnear.game.objects.*;
+import spaceisnear.starting.LoadingScreen;
 
 /**
  * Sent only by server as a result of Items' interactions.
@@ -26,4 +28,19 @@ public class MessageCreated extends Message implements NetworkableMessage {
 	super(type1);
 	this.type = type;
     }
+
+    @Override
+    public void processForClient(GameContext context) {
+	ClientGameObject gameObject = null;
+	switch (getType()) {
+	    case PLAYER:
+		gameObject = new Player();
+		break;
+	}
+	if (gameObject != null) {
+	    context.addObject(gameObject);
+	    LoadingScreen.CURRENT_AMOUNT++;
+	}
+    }
+
 }

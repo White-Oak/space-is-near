@@ -6,7 +6,9 @@
 package spaceisnear.game.messages;
 
 import lombok.Getter;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.ui.console.LogString;
+import spaceisnear.server.ServerContext;
 
 public class MessageLog extends Message implements NetworkableMessage {
 
@@ -15,6 +17,16 @@ public class MessageLog extends Message implements NetworkableMessage {
     public MessageLog(LogString log) {
 	super(MessageType.LOG);
 	this.log = log;
+    }
+
+    @Override
+    public void processForServer(ServerContext context) {
+	context.log(log);
+    }
+
+    @Override
+    public void processForClient(GameContext context) {
+	context.getCore().log(getLog());
     }
 
 }

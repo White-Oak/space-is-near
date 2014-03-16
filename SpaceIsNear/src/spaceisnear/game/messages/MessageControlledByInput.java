@@ -2,6 +2,7 @@ package spaceisnear.game.messages;
 
 import lombok.Getter;
 import spaceisnear.Utils;
+import spaceisnear.server.ServerContext;
 
 /**
  * @author LPzhelud
@@ -31,6 +32,11 @@ public class MessageControlledByInput extends DirectedMessage implements Network
     @Override
     public String toString() {
 	return "Controlled " + type;
+    }
+
+    @Override
+    public void processForServer(ServerContext context) {
+	context.sendDirectedMessage(this);
     }
 
 }

@@ -135,34 +135,12 @@ import spaceisnear.server.objects.items.*;
 		Context.LOG.log("Client information received");
 	    }
 	    break;
-	    case CONTROLLED:
-		MessageControlledByInput mc = (MessageControlledByInput) message;
-//		Context.LOG.log(mc);
-		core.getContext().sendDirectedMessage(mc);
-		break;
-	    case MOVED:
-		MessageMoved mm = (MessageMoved) message;
-		core.getContext().sendToID(mm, mm.getId());
-		sendToAll(mm);
-		break;
-	    case LOG:
-		MessageLog ml = (MessageLog) message;
-		final LogString log = ml.getLog();
-		log(log);
-		break;
-	    case PROPERTY_SET:
-		MessagePropertySet mps = (MessagePropertySet) message;
-		Context.LOG.log(mps.getName() + " " + mps.getValue().getClass().getName());
-		core.getContext().sendDirectedMessage(mps);
+	    default:
+		message.processForServer(core.getContext());
 		break;
 
 	}
 //	    Context.LOG.log("Message received");
-    }
-
-    public void log(final LogString log) {
-//	Context.LOG.log("Checking out!");
-	core.getContext().log(log);
     }
 
     public void sendToAll(NetworkableMessage message) {
@@ -342,7 +320,7 @@ import spaceisnear.server.objects.items.*;
 		}
 		Player get = client.getPlayer();
 		String message = get.getNickname() + " has connected to SIN!";
-		log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
+		core.getContext().log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
 	    }
 	};
 	new Thread(runnable, "Messaging about connected").start();
