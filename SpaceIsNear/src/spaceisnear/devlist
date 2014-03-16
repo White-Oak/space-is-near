@@ -227,6 +227,7 @@
 *Rewrote server pausing logic
 *rewrote serialization of messages
 *removed tons of ANIMATION_STEP messages sending
+*fixed bug where old messages had not procecessed for new objects based on old ones
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)

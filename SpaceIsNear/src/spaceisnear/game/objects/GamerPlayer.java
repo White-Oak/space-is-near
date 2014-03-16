@@ -26,5 +26,6 @@ public class GamerPlayer extends Player {
 	}
 	setContext(p.getContext());
 	setId(p.getId());
+	setMessages(p.getMessages());
     }
 }

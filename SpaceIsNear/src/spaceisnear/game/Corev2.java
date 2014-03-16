@@ -125,28 +125,17 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     public void update(int delta) {
 	if (notpaused) {
-	    counterUpdate = 0;
-	    switch (counterUpdate) {
-		case 0:
-		    checkKeys();
-		    MessageControlledByInput mc = checkMovementDesired();
-		    int playerID = context.getPlayerID();
-		    if (mc != null && playerID != -1) {
-			context.sendDirectedMessage(new MessageToSend(mc));
-		    }
-		    for (AbstractGameObject gameObject : objects) {
-			if (!notpaused) {
-			    break;
-			}
-			gameObject.process();
-		    }
-		    break;
-		case 1:
-		    animate();
-		    break;
+	    checkKeys();
+	    MessageControlledByInput mc = checkMovementDesired();
+	    int playerID = context.getPlayerID();
+	    if (mc != null && playerID != -1) {
+		context.sendDirectedMessage(new MessageToSend(mc));
 	    }
-	    if (counterUpdate == 1) {
-		counterUpdate = -1;
+	    for (AbstractGameObject gameObject : objects) {
+		if (!notpaused) {
+		    break;
+		}
+		gameObject.process();
 	    }
 	}
     }

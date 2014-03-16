@@ -70,10 +70,8 @@ public class PositionComponent extends Component {
     @Override
     public void processMessage(Message message) {
 	int oldX = getX(), oldY = getY();
-	if (false && message.getMessageType() != MessageType.ANIMATION_STEP) {
-	    if (getOwner().getType() == GameObjectType.PLAYER || getOwner().getType() == GameObjectType.GAMER_PLAYER) {
-		System.out.println(message);
-	    }
+	if (message.getMessageType() != MessageType.TIME_PASSED && getOwner().getType() == GameObjectType.PLAYER || getOwner().getType() == GameObjectType.GAMER_PLAYER) {
+	    System.out.println(message + " for id " + getOwnerId());
 	}
 	switch (message.getMessageType()) {
 	    case MOVED:

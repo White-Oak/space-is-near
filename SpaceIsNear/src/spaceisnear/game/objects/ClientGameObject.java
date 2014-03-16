@@ -19,7 +19,7 @@ import spaceisnear.game.messages.Message;
  */
 @RequiredArgsConstructor public abstract class ClientGameObject extends AbstractGameObject {
 
-    private final ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
+    @Setter @Getter private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter private boolean destroyed = false;
     @Getter private List<Component> components = new ArrayList<>();
@@ -57,6 +57,9 @@ import spaceisnear.game.messages.Message;
 	    for (int i = 0; i < components.size(); i++) {
 		Component component = components.get(i);
 		component.processMessage(message);
+	    }
+	    if (getType() == GameObjectType.PLAYER && !messages.isEmpty()) {
+		System.out.println("That is no good");
 	    }
 	}
     }

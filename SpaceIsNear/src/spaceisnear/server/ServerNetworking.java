@@ -33,10 +33,11 @@ import spaceisnear.server.objects.items.*;
 
     private final Queue<Message> messages = new LinkedList<>();
     private final Queue<Connection> connectionsForMessages = new LinkedList<>();
-    private final ArrayList<MessageRogered> rogereds = new ArrayList<>();
-    private final ArrayList<Connection> connectionsForRogereds = new ArrayList<>();
 
     private final AccountManager accountManager = new AccountManager();
+
+    //
+    private boolean[] rogereds;
 
     static {
 	final MessageRogerRequested messageRogerRequested = new MessageRogerRequested();
@@ -56,8 +57,7 @@ import spaceisnear.server.objects.items.*;
 		Message message = (Message) objectInput.readObject();
 		switch (message.getMessageType()) {
 		    case ROGERED:
-			rogereds.add((MessageRogered) message);
-			connectionsForRogereds.add(connection);
+			getClientByConnection(connection).setRogered(true);
 			break;
 		    default:
 			if (!core.isPaused()) {
@@ -305,13 +305,12 @@ import spaceisnear.server.objects.items.*;
 
     private void processOldPlayer(Client client) {
 	sendToAll(new MessagePaused());
-	Context.LOG.log("Server\'s been paused");
+	Context.LOG.log("Server's been paused");
 	sendWorld(client);//	
+	orderEveryoneToRogerAndWait();
 	sendPlayer(client);
 	sendToAll(new MessageUnpaused());
 	Context.LOG.log("Server has continued his work");
-	//wait for client to unpause
-	orderEveryoneToRogerAndWait();
     }
 
     private void processNewPlayer(final Client client) {
@@ -333,8 +332,6 @@ import spaceisnear.server.objects.items.*;
 	//	
 	sendToAll(new MessageUnpaused());
 	Context.LOG.log("Server has continued his work");
-	//wait for client to unpause
-	orderEveryoneToRogerAndWait();
 	//@working fix that
 	Runnable runnable = new Runnable() {
 	    @Override
@@ -486,29 +483,26 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void waitForAllToRoger() {
-	boolean[] rogered = new boolean[clients.size()];
 	boolean result = false;
+	int rogeredSize = clients.size();
 	while (!result) {
 	    waitSomeTime();
 	    result = true;
-	    for (int i = 0; i < rogered.length; i++) {
-		result &= rogered[i];
+	    for (int i = 0; i < rogeredSize; i++) {
+		result &= clients.get(i).isRogered();
 	    }
+	}
+	for (int i = 0; i < rogeredSize; i++) {
+	    clients.get(i).setRogered(false);
 	}
     }
 
     private void waitForToRoger(Connection connection) {
-	while (true) {
-	    for (int i = 0; i < connectionsForRogereds.size(); i++) {
-		Connection connection1 = connectionsForRogereds.get(i);
-		if (connection1 == connection) {
-		    connectionsForRogereds.remove(i);
-		    return;
-		}
-	    }
+	Client clientByConnection = getClientByConnection(connection);
+	while (!clientByConnection.isRogered()) {
 	    waitSomeTime();
 	}
-
+	clientByConnection.setRogered(false);
     }
 
     private void waitSomeTime() {

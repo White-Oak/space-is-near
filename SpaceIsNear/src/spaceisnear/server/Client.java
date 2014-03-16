@@ -17,6 +17,7 @@ import spaceisnear.server.objects.Player;
     private MessageClientInformation clientInformation;
     private MessagePlayerInformation playerInformation;
     private Player player;
+    private boolean rogered;
 
     public void dispose() {
 	connection = null;
