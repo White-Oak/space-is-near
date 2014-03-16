@@ -70,15 +70,24 @@ public class PositionComponent extends Component {
     @Override
     public void processMessage(Message message) {
 	int oldX = getX(), oldY = getY();
+	if (false && message.getMessageType() != MessageType.ANIMATION_STEP) {
+	    if (getOwner().getType() == GameObjectType.PLAYER || getOwner().getType() == GameObjectType.GAMER_PLAYER) {
+		System.out.println(message);
+	    }
+	}
 	switch (message.getMessageType()) {
 	    case MOVED:
 		MessageMoved messagem = (MessageMoved) message;
 		int newX = getX() + messagem.getX();
 		int newY = getY() + messagem.getY();
-		delayX = messagem.getX() * GameContext.TILE_WIDTH;
-		delayY = messagem.getY() * GameContext.TILE_HEIGHT;
-		animation = true;
-		timeAccumulated = 0;
+		try {
+		    registerForAnimation();
+		    delayX = messagem.getX() * GameContext.TILE_WIDTH;
+		    delayY = messagem.getY() * GameContext.TILE_HEIGHT;
+		    animation = true;
+		    timeAccumulated = 0;
+		} catch (ClassCastException e) {
+		}
 		setX(newX);
 		setY(newY);
 		break;
@@ -88,12 +97,9 @@ public class PositionComponent extends Component {
 		//here no check for obstacles
 		setX(messagetMessageMoved.getP().getX());
 		setY(messagetMessageMoved.getP().getY());
-		if (getOwner().getType() == GameObjectType.PLAYER) {
-		    System.out.println("Position of player is " + getPosition());
-		}
 		break;
 	    case ANIMATION_STEP:
-		checkAnimation(message);
+		checkAnimation();
 	}
 	checkConsequnces(oldX, oldY);
     }
@@ -127,7 +133,7 @@ public class PositionComponent extends Component {
 	}
     }
 
-    private void checkAnimation(Message message) {
+    private void checkAnimation() {
 	if (animation) {
 	    int timePassed = MessageAnimationStep.STEP;
 	    timeAccumulated += timePassed;
@@ -149,6 +155,7 @@ public class PositionComponent extends Component {
 	    }
 	    if (timeAccumulated > TIME_NEEDED_TO_ANIMATE) {
 		animation = false;
+		unregisterForAnimation();
 		timeAccumulated = 0;
 		delayX = 0;
 		delayY = 0;

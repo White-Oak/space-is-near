@@ -118,7 +118,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     }
 
     private void animate() {
-	context.sendThemAll(MESSAGE_ANIMATION_STEP);
+	context.sendAnimationStep();
 	inventory.processMessage(MESSAGE_ANIMATION_STEP);
     }
     private int counterUpdate = -1;

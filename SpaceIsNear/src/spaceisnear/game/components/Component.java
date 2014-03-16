@@ -6,7 +6,9 @@ import java.util.List;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.abstracts.Context;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.game.objects.Position;
 
 /**
@@ -18,6 +20,7 @@ import spaceisnear.game.objects.Position;
     @Getter private Context context = null;
     private final ComponentType type;
     @Getter @Setter private int ownerId = -1;
+    private boolean animation;
 
     public abstract void processMessage(Message message);
 
@@ -62,4 +65,21 @@ import spaceisnear.game.objects.Position;
 	return type;
     }
 
+    protected void registerForAnimation() {
+	if (!((ClientGameObject) getOwner()).isAnimated()) {
+	    ((GameContext) context).addAnimated(getOwner());
+	}
+	animation = true;
+    }
+
+    protected void unregisterForAnimation() {
+	animation = false;
+	if (!((ClientGameObject) getOwner()).isAnimated()) {
+	    ((GameContext) context).removeAnimated(getOwner());
+	}
+    }
+
+    public boolean hasAnimation() {
+	return animation;
+    }
 }

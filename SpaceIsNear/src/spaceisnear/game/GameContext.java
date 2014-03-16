@@ -27,9 +27,11 @@ import spaceisnear.server.ServerContext;
     public static final int MAP_HEIGHT = 64;
     public static float SCALING_X = 1f, SCALING_Y = 1f;
     @Getter private final List<AbstractGameObject> objects;
+    private final List<AbstractGameObject> animateds = new ArrayList<>();
     @Getter @Setter private int playerID = -1;
     @Getter private final Corev2 core;
     public static final int HIDDEN_CLIENT_OBJECTS = 1;
+    private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
 
     @Override
     public void sendThemAll(Message m) {
@@ -38,6 +40,13 @@ import spaceisnear.server.ServerContext;
 		AbstractGameObject gameObject = objects.get(i);
 		gameObject.message(m);
 	    }
+	}
+    }
+
+    public void sendAnimationStep() {
+	for (int i = 0; i < animateds.size(); i++) {
+	    AbstractGameObject abstractGameObject = animateds.get(i);
+	    abstractGameObject.message(MESSAGE_ANIMATION_STEP);
 	}
     }
 
@@ -91,4 +100,11 @@ import spaceisnear.server.ServerContext;
 	return core.getNetworking().isJoined();
     }
 
+    public void addAnimated(AbstractGameObject animated) {
+	animateds.add(animated);
+    }
+
+    public void removeAnimated(AbstractGameObject animated) {
+	animateds.remove(animated);
+    }
 }

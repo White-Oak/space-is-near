@@ -10,4 +10,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor public abstract class Message implements Serializable {
 
     @Getter private final MessageType messageType;
+
+    @Override
+    public String toString() {
+	return "My type is " + messageType;
+    }
+
 }

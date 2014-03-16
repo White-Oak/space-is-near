@@ -129,7 +129,7 @@ import spaceisnear.starting.LoadingScreen;
 		    break;
 		case TELEPORTED:
 		    MessageTeleported mte = (MessageTeleported) message;
-		    core.getContext().sendToID(mte, mte.getId());
+		    core.getContext().sendDirectedMessage(mte);
 		    if (core.getContext().getObjects().get(mte.getId()).getType() == GameObjectType.PLAYER
 			    || core.getContext().getObjects().get(mte.getId()).getType() == GameObjectType.GAMER_PLAYER) {
 			System.out.println(mte);

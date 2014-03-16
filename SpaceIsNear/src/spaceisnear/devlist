@@ -225,7 +225,8 @@
 *Added handling of repeating keys for TextField
 *Placing cursor in textfield where mouse has clicked
 *Rewrote server pausing logic
-+rewrote serialization of messages
+*rewrote serialization of messages
+*removed tons of ANIMATION_STEP messages sending
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)
