@@ -37,7 +37,7 @@ import spaceisnear.server.objects.items.*;
     private final AccountManager accountManager = new AccountManager();
 
     //
-    private boolean[] rogereds;
+    private List<Client> pendingRogers = new ArrayList<Client>();
 
     static {
 	final MessageRogerRequested messageRogerRequested = new MessageRogerRequested();
@@ -236,6 +236,7 @@ import spaceisnear.server.objects.items.*;
 	    if (clientInformation != null) {
 		accountManager.disconnect(clientInformation.getLogin());
 	    }
+	    clientByConnection.setConnection(null);
 	}
     }
 
@@ -348,6 +349,18 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void orderEveryoneToRogerAndWait() {
+	if (!pendingRogers.isEmpty()) {
+	    server.close();
+	    throw new ConcurrentModificationException("Someone already waited for rogers when another one attempted to wait once again");
+	}
+	synchronized (clients) {
+	    for (int i = 0; i < clients.size(); i++) {
+		Client client = clients.get(i);
+		if (client.getConnection() != null && client.getClientInformation() != null) {
+		    pendingRogers.add(client);
+		}
+	    }
+	}
 	server.sendToAllTCP(ROGER_REQUSTED_BYTES);
 	waitForAllToRoger();
     }
@@ -483,26 +496,28 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void waitForAllToRoger() {
-	boolean result = false;
-	int rogeredSize = clients.size();
-	while (!result) {
+	while (!pendingRogers.isEmpty()) {
 	    waitSomeTime();
-	    result = true;
-	    for (int i = 0; i < rogeredSize; i++) {
-		result &= clients.get(i).isRogered();
+	    for (int i = 0; i < pendingRogers.size(); i++) {
+		Client client = pendingRogers.get(i);
+		if (client.isRogered()) {
+		    pendingRogers.remove(i);
+		    client.setRogered(false);
+		}
 	    }
-	}
-	for (int i = 0; i < rogeredSize; i++) {
-	    clients.get(i).setRogered(false);
 	}
     }
 
     private void waitForToRoger(Connection connection) {
 	Client clientByConnection = getClientByConnection(connection);
-	while (!clientByConnection.isRogered()) {
+	waitForToRoger(clientByConnection);
+    }
+
+    private void waitForToRoger(Client client) {
+	while (!client.isRogered()) {
 	    waitSomeTime();
 	}
-	clientByConnection.setRogered(false);
+	client.setRogered(false);
     }
 
     private void waitSomeTime() {

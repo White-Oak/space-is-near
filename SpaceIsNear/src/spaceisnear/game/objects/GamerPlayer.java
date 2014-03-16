@@ -20,7 +20,6 @@ public class GamerPlayer extends Player {
 	    if (component.getType() == ComponentType.POSITION) {
 		final Position position = ((PositionComponent) component).getPosition();
 		final GamePlayerPositionComponent newPositionComponent = new GamePlayerPositionComponent(position);
-		System.out.println("Position of gamer player is " + position);
 		getComponents().set(i, newPositionComponent);
 	    }
 	}

@@ -130,10 +130,6 @@ import spaceisnear.starting.LoadingScreen;
 		case TELEPORTED:
 		    MessageTeleported mte = (MessageTeleported) message;
 		    core.getContext().sendDirectedMessage(mte);
-		    if (core.getContext().getObjects().get(mte.getId()).getType() == GameObjectType.PLAYER
-			    || core.getContext().getObjects().get(mte.getId()).getType() == GameObjectType.GAMER_PLAYER) {
-			System.out.println(mte);
-		    }
 		    break;
 		case NICKNAME_SET:
 		    MessageNicknameSet mns = (MessageNicknameSet) message;
