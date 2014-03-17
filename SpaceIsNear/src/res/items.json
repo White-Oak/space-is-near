@@ -110,5 +110,17 @@
 	"stuckedByAddingFromScript": false,
 	"description": "Inlined Destructor",
 	"defaultProperties": null
+    },
+    {
+
+	"name": "door",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": true,
+	"blockingAir": true,
+	"imageIds": [8, 9, 10, 11],
+	"stuckedByAddingFromScript": true,
+	"description": "Door. It opens and then closes.",
+	"defaultProperties": null
     }
 ]

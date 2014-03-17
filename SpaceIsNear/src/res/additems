@@ -1,2 +1,3 @@
 fillWithItem {plitka, 0, 0 , 31, 31}
 fillWithItem {wall, 0, 2, 0, 20}
+addItem {door, 4, 4}

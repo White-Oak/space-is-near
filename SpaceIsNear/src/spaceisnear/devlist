@@ -237,6 +237,8 @@
     -After door began opening it should remain impassable for a period of time (?).
     +A door is closed after some time had passed.
     +Animation of closing/opening is sent
+-Developed items' system
+    +Animation
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)
