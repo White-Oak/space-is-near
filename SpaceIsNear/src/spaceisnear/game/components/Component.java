@@ -23,6 +23,7 @@ import spaceisnear.server.objects.ServerGameObject;
     private final ComponentType type;
     @Getter @Setter private int ownerId = -1;
     private boolean animation, needsTime;
+    @Setter @Getter private boolean dontProcess = false;
 
     public abstract void processMessage(Message message);
 
@@ -81,14 +82,14 @@ import spaceisnear.server.objects.ServerGameObject;
 	}
     }
 
-    protected void registerForTimeMessages() {
+    public void registerForTimeMessages() {
 	if (!((ServerGameObject) getOwner()).needsTime()) {
 	    ((ServerContext) context).addTimeNeeding(getOwner());
 	}
 	needsTime = true;
     }
 
-    protected void unregisterForTimeMessages() {
+    public void unregisterForTimeMessages() {
 	needsTime = false;
 	if (!((ServerGameObject) getOwner()).needsTime()) {
 	    ((ServerContext) context).removeTimeNeeding(getOwner());

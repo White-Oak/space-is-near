@@ -2,6 +2,13 @@
 {
     "name" = "pda",
     "contextMenuInit" = false,
-    "messageProcessing" = true
+    "messageProcessing" = true,
+    "interaction" = false
+},
+{
+    "name" = "door",
+    "contextMenuInit" = false,
+    "messageProcessing" = false,
+    "interaction" = true
 }
 ]

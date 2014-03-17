@@ -1,6 +1,5 @@
 package spaceisnear.game.components.server;
 
-import lombok.Setter;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
 import spaceisnear.game.messages.Message;
@@ -16,8 +15,7 @@ import spaceisnear.server.objects.items.StaticItem;
  */
 public class VariablePropertiesComponent extends Component {
 
-    @Setter private boolean dontProcess = false;
-    private MessageProcessingScriptProccessor mpsp;
+    private MessagePropertySetProcessingScriptProccessor mpsp;
 
     public VariablePropertiesComponent() {
 	super(ComponentType.VARIABLES);
@@ -28,18 +26,18 @@ public class VariablePropertiesComponent extends Component {
 	switch (message.getMessageType()) {
 	    case PROPERTY_SET:
 		MessagePropertySet mps = (MessagePropertySet) message;
-		dontProcess = false;
+		setDontProcess(false);
 		if (getOwner().getType() == GameObjectType.ITEM) {
 		    try {
 			Context.LOG.log("Trying to script processing message");
 			ServerContext context = (ServerContext) getContext();
-			mpsp = new MessageProcessingScriptProccessor(context, this, mps);
+			mpsp = new MessagePropertySetProcessingScriptProccessor(context, this, mps);
 			mpsp.run();
 		    } catch (ClassCastException e) {
 			e.printStackTrace();
 		    }
 		}
-		if (!dontProcess) {
+		if (!isDontProcess()) {
 		    switch (mps.getName()) {
 			case "pull":
 			    if (((Integer) mps.getValue()) != -1) {

@@ -1,7 +1,4 @@
 Константы:
--item_name:
-    - все имена вещей так, как они определены в файле определений
-    - player — если вещь использует человек
 -FOOD:
     -FOOD_SMALL_SATURATION
     -FOOD_NORMAL_SATURATION

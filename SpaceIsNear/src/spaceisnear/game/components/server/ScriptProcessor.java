@@ -1,11 +1,11 @@
 package spaceisnear.game.components.server;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.whiteoak.parsing.interpretating.*;
 import org.whiteoak.parsing.interpretating.ast.*;
 import spaceisnear.abstracts.Context;
-import spaceisnear.game.messages.MessageLog;
-import spaceisnear.game.messages.MessageToSend;
-import spaceisnear.game.messages.properties.MessagePropertySet;
+import spaceisnear.game.components.Component;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.ServerContext;
@@ -16,12 +16,8 @@ import spaceisnear.server.objects.items.StaticItem;
  *
  * @author White Oak
  */
-public class MessageProcessingScriptProccessor implements IAcceptable, ExceptionHandler {
+public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 
-    private final VariablePropertiesComponent currentRequester;
-    private final MessagePropertySet currentMessage;
-    private final ServerContext context;
-    private final Interpretator interpretator;
     private final static Function[] f = {
 	new NativeFunction("getPropertyMessageName"),
 	new NativeFunction("dontProcessOnYourOwn"),
@@ -29,23 +25,23 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 	new NativeFunction("getPropertyMessageValue"),
 	new NativeFunction("setProperty", 2),
 	new NativeFunction("sendPlayerPrivateMessage", 1),
-	new NativeFunction("addProperty", 2)};
-    private final Constant[] c;
+	new NativeFunction("concatenateProperty", 2),
+	new NativeFunction("sendAnimationQueueToRequestor", 2),
+	new NativeFunction("registerForTimeMessages"),
+	new NativeFunction("unregisterForTimeMessages")};
+    private final Interpretator interpretator;
+    private final ServerContext context;
+    private final Component currentRequester;
 
-    public MessageProcessingScriptProccessor(ServerContext context, VariablePropertiesComponent currentRequester,
-					     MessagePropertySet currentMessage) {
+    public ScriptProcessor(ServerContext context, Component currentRequester, Function[] f, Constant[] c) {
+	Function[] allFunctions = ArrayUtils.addAll(ScriptProcessor.f, f);
 	this.context = context;
-	this.currentRequester = currentRequester;
-	this.currentMessage = currentMessage;
-	StaticItem owner = (StaticItem) currentRequester.getOwner();
-	int id = owner.getProperties().getId();
-	c = new Constant[]{new Constant("type", currentMessage.getMessageType().name()),
-			   new Constant("emulatedType", "processingMessage")};
 	Context.LOG.log("getting interpretator");
-	interpretator = ServerItemsArchive.ITEMS_ARCHIVE.getInterprator(id, c, f, this);
+	this.currentRequester = currentRequester;
+	interpretator = ServerItemsArchive.ITEMS_ARCHIVE.getInterprator(currentRequester.getOwnerId(), c, allFunctions, this);
     }
 
-    public void run() {
+    public final void run() {
 	if (interpretator != null) {
 	    Context.LOG.log("Running this shitty script");
 	    interpretator.run(this, false);
@@ -63,35 +59,50 @@ public class MessageProcessingScriptProccessor implements IAcceptable, Exception
 	    case "setProperty":
 		setProperty(values[0].getValue(), values[1].getValue());
 		break;
-	    case "getPropertyMessageName":
-		return currentMessage.getName();
-	    case "getPropertyMessageValue":
-		Context.LOG.log("Current message value is " + currentMessage.getValue());
-		return (String) currentMessage.getValue();
-	    case "sendPlayerPrivateMessage":
+	    case "sendPlayerPrivateMessage": {
 		int ownerId = ((StaticItem) currentRequester.getOwner()).getPlayerId();
 		Context.LOG.log("Sending private message to " + ownerId);
 		LogString logString = new LogString(values[0].getValue(), LogLevel.PRIVATE, ownerId);
 		MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 		context.sendDirectedMessage(messageToSend);
-		break;
-	    case "addProperty":
+	    }
+	    break;
+	    case "concatenateProperty":
 		Object property = getProperty(values[0].getValue());
 		if (property == null) {
 		    property = "";
 		}
 		setProperty(values[0].getValue(), property.toString() + values[1].getValue());
 		break;
+	    case "sendAnimationQueueToRequestor":
+		String imageIdsS[] = values[0].getValue().split(", ");
+		int imageIds[] = new int[imageIdsS.length];
+		for (int i = 0; i < imageIdsS.length; i++) {
+		    String object = imageIdsS[i];
+		    imageIds[i] = Integer.parseInt(object);
+		}
+		int animationDelta = Integer.parseInt(values[1].getValue());
+		MessageAnimationChanged messageAnimationChanged;
+		messageAnimationChanged = new MessageAnimationChanged(currentRequester.getOwnerId(), imageIds, animationDelta);
+		MessageToSend messageToSend = new MessageToSend(messageAnimationChanged);
+		context.sendDirectedMessage(messageToSend);
+		break;
+	    case "registerForTimeMessages":
+		currentRequester.registerForTimeMessages();
+		break;
+	    case "unregisterForTimeMessages":
+		currentRequester.unregisterForTimeMessages();
+		break;
 	}
 	return null;
     }
 
     public void setProperty(String name, Object value) {
-	currentRequester.setProperty(name, value);
+	currentRequester.getOwner().getVariablePropertiesComponent().setProperty(name, value);
     }
 
     public Object getProperty(String name) {
-	return currentRequester.getProperty(name);
+	return currentRequester.getOwner().getVariablePropertiesComponent().getProperty(name);
     }
 
     @Override

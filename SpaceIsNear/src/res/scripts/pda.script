@@ -9,10 +9,11 @@ if (emulatedType == processingMessage){
 	    dontProcessOnYourOwn {}
 	    //Add to property
 	    value = getPropertyMessageValue {}
-	    addProperty {"messages", LINE_SEPARATOR}
-	    addProperty {"messages", value}
+	    concatenateProperty {"messages", LINE_SEPARATOR}
+	    concatenateProperty {"messages", value}
 	    //Send to player the message
 	    sendPlayerPrivateMessage{value}
     }
+}
 }
 }

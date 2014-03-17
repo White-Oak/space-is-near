@@ -58,9 +58,6 @@ import spaceisnear.game.messages.Message;
 		Component component = components.get(i);
 		component.processMessage(message);
 	    }
-	    if (getType() == GameObjectType.PLAYER && !messages.isEmpty()) {
-		System.out.println("That is no good");
-	    }
 	}
     }
 

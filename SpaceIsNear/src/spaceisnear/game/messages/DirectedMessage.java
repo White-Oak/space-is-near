@@ -5,6 +5,7 @@
 package spaceisnear.game.messages;
 
 import lombok.Getter;
+import spaceisnear.game.GameContext;
 
 /**
  *
@@ -17,6 +18,11 @@ public abstract class DirectedMessage extends Message {
     public DirectedMessage(MessageType messageType, int id) {
 	super(messageType);
 	this.id = id;
+    }
+
+    @Override
+    public void processForClient(GameContext context) {
+	context.sendDirectedMessage(this);
     }
 
 }
