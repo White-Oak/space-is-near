@@ -60,4 +60,13 @@ import spaceisnear.server.ServerContext;
 	    }
 	}
     }
+
+    public boolean needsTime() {
+	boolean result = false;
+	for (int i = 0; i < components.size(); i++) {
+	    Component component = components.get(i);
+	    result |= component.needsTime();
+	}
+	return result;
+    }
 }

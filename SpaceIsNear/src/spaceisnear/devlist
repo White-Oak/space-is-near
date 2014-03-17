@@ -231,6 +231,7 @@
 *only connected and active clients are now to roger when requested by server
 +switch-case code is replaced by good one
 +total rework of starting UI and logic
+*removed tons of TIME_PASSED messages sending
     -professions' choosing
 +IDs' basics (ID of player, his profession)
     -added icon for id

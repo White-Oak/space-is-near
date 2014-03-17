@@ -33,6 +33,7 @@ public final class ServerContext extends Context {
     private final ServerLogMessages log = new ServerLogMessages();
     private static final int MAXIMUM_TILES_TO_BE_HEARD = 20, MAXIMUM_TILES_TO_BE_WHISPERED = 2;
     public static final int HIDDEN_SERVER_OBJECTS = 1;
+    private final List<AbstractGameObject> timeNeeding = new ArrayList<>();
 
     @Override
     public synchronized void sendThemAll(Message m) {
@@ -40,6 +41,13 @@ public final class ServerContext extends Context {
 	    for (AbstractGameObject gameObject : objects) {
 		gameObject.message(m);
 	    }
+	}
+    }
+
+    public void sendTimePassed(MessageTimePassed mtp) {
+	for (int i = 0; i < timeNeeding.size(); i++) {
+	    AbstractGameObject abstractGameObject = timeNeeding.get(i);
+	    abstractGameObject.message(mtp);
 	}
     }
 
@@ -235,6 +243,14 @@ public final class ServerContext extends Context {
 	    }
 	}
 	return radioPlayer;
+    }
+
+    public boolean addTimeNeeding(AbstractGameObject e) {
+	return timeNeeding.add(e);
+    }
+
+    public boolean removeTimeNeeding(AbstractGameObject e) {
+	return timeNeeding.remove(e);
     }
 
 }

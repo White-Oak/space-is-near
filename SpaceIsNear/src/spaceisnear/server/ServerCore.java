@@ -55,7 +55,7 @@ public class ServerCore implements Runnable {
 	    //game
 	    if (!paused) {
 		MessageTimePassed messageTimePassed = new MessageTimePassed(QUANT_TIME);
-		context.sendThemAll(messageTimePassed);
+		context.sendTimePassed(messageTimePassed);
 		for (AbstractGameObject gameObject : getContext().getObjects()) {
 		    if (gameObject != null) {
 			gameObject.process();

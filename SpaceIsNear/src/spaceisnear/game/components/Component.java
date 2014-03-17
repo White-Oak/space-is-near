@@ -10,6 +10,8 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.game.objects.Position;
+import spaceisnear.server.ServerContext;
+import spaceisnear.server.objects.ServerGameObject;
 
 /**
  * @author LPzhelud
@@ -20,7 +22,7 @@ import spaceisnear.game.objects.Position;
     @Getter private Context context = null;
     private final ComponentType type;
     @Getter @Setter private int ownerId = -1;
-    private boolean animation;
+    private boolean animation, needsTime;
 
     public abstract void processMessage(Message message);
 
@@ -79,7 +81,25 @@ import spaceisnear.game.objects.Position;
 	}
     }
 
+    protected void registerForTimeMessages() {
+	if (!((ServerGameObject) getOwner()).needsTime()) {
+	    ((ServerContext) context).addTimeNeeding(getOwner());
+	}
+	needsTime = true;
+    }
+
+    protected void unregisterForTimeMessages() {
+	needsTime = false;
+	if (!((ServerGameObject) getOwner()).needsTime()) {
+	    ((ServerContext) context).removeTimeNeeding(getOwner());
+	}
+    }
+
     public boolean hasAnimation() {
 	return animation;
+    }
+
+    public boolean needsTime() {
+	return needsTime;
     }
 }
