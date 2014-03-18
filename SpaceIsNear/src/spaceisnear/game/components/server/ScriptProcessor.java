@@ -18,11 +18,9 @@ import spaceisnear.server.objects.items.StaticItem;
  */
 public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 
-    private final static Function[] f = {
-	new NativeFunction("getPropertyMessageName"),
+    private final static Function[] fs = {
 	new NativeFunction("dontProcessOnYourOwn"),
 	new NativeFunction("getProperty", 1),
-	new NativeFunction("getPropertyMessageValue"),
 	new NativeFunction("setProperty", 2),
 	new NativeFunction("sendPlayerPrivateMessage", 1),
 	new NativeFunction("concatenateProperty", 2),
@@ -33,18 +31,25 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
     private final ServerContext context;
     private final Component currentRequester;
 
-    public ScriptProcessor(ServerContext context, Component currentRequester, Function[] f, Constant[] c) {
-	Function[] allFunctions = ArrayUtils.addAll(ScriptProcessor.f, f);
+    public ScriptProcessor(ServerContext context, Component currentRequester, Function[] f, Constant[] c, int mode) {
+	if (f != null) {
+	    f = ArrayUtils.addAll(fs, f);
+	} else {
+	    f = fs;
+	}
 	this.context = context;
-	Context.LOG.log("getting interpretator");
+	//Context.LOG.log("getting interpretator");
 	this.currentRequester = currentRequester;
-	interpretator = ServerItemsArchive.ITEMS_ARCHIVE.getInterprator(currentRequester.getOwnerId(), c, allFunctions, this);
+	StaticItem item = (StaticItem) currentRequester.getOwner();
+	interpretator = ServerItemsArchive.ITEMS_ARCHIVE.getInterprator(item.getProperties().getId(), c, f, this, mode);
     }
 
     public final void run() {
 	if (interpretator != null) {
-	    Context.LOG.log("Running this shitty script");
+	    //Context.LOG.log("Running this shitty script");
 	    interpretator.run(this, false);
+	} else {
+	    Context.LOG.log("Theres nothing to run!");
 	}
     }
 
@@ -102,7 +107,11 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
     }
 
     public Object getProperty(String name) {
-	return currentRequester.getOwner().getVariablePropertiesComponent().getProperty(name);
+	final Object property = currentRequester.getOwner().getVariablePropertiesComponent().getProperty(name);
+	if (property == null) {
+	    return "null";
+	}
+	return property;
     }
 
     @Override

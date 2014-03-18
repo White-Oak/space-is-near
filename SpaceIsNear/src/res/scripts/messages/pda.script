@@ -1,8 +1,4 @@
-if (emulatedType == contextMenu){
-}
-else {
-if (emulatedType == processingMessage){
-    if (type == PROPERTY_SET){
+if (type == PROPERTY_SET){
 	name = getPropertyMessageName {}
 	if (name == messages){
 	    //Tell method that we are fine with handling the message by ourself
@@ -13,7 +9,5 @@ if (emulatedType == processingMessage){
 	    concatenateProperty {"messages", value}
 	    //Send to player the message
 	    sendPlayerPrivateMessage{value}
-    }
-}
-}
+	}
 }

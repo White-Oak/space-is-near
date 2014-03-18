@@ -118,7 +118,7 @@
 	"type": "ENVIRONMENT",
 	"blockingPath": true,
 	"blockingAir": true,
-	"imageIds": [8, 9, 10, 11],
+	"imageIds": [11, 10, 9, 8],
 	"stuckedByAddingFromScript": true,
 	"description": "Door. It opens and then closes.",
 	"defaultProperties": null

@@ -16,7 +16,6 @@ public class InteractionScriptProccessor extends ScriptProcessor {
     public InteractionScriptProccessor(ServerContext context, Component currentRequester,
 				       ServerGameObject currentInteractor) {
 	super(context, currentRequester, f, new Constant[]{
-	    new Constant("item", currentInteractor == null ? "null" : currentInteractor.getId() + ""),
-	    new Constant("emulatedType", "interaction")});
+	    new Constant("item", currentInteractor == null ? "null" : currentInteractor.getId() + "")}, 0);
     }
 }

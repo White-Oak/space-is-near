@@ -71,14 +71,25 @@ public class PlayerControllableComponent extends Component {
 		StaticItem staticItem = (StaticItem) abstractGameObject;
 		int id = staticItem.getProperties().getId();
 		boolean blockingPath = ServerItemsArchive.ITEMS_ARCHIVE.isBlockingPath(id);
-		if (blockingPath) {
-		    Boolean property = (Boolean) staticItem.getVariableProperties().getProperty("stucked");
-		    if (property != null && !property && context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
-			mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
-			staticItem.message(mm);
-			getContext().sendDirectedMessage(new MessageToSend(mm));
-			mm = new MessageMoved(deltaX, deltaY, getOwnerId());
-			break;
+		int doorid = ServerItemsArchive.ITEMS_ARCHIVE.getIdByName("door");
+		boolean result = staticItem.getProperties().getId() == doorid;
+		if (result) {
+		    MessageInteraction interaction = new MessageInteraction(staticItem.getId());
+		    context.sendDirectedMessage(interaction);
+		} else {
+		    String blockingPathString = (String) staticItem.getVariableProperties().getProperty("blockingPath");
+		    if (blockingPathString != null) {
+			blockingPath = Boolean.parseBoolean(blockingPathString);
+		    }
+		    if (blockingPath) {
+			Boolean property = (Boolean) staticItem.getVariableProperties().getProperty("stucked");
+			if (property != null && !property && context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
+			    mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
+			    staticItem.message(mm);
+			    getContext().sendDirectedMessage(new MessageToSend(mm));
+			    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
+			    break;
+			}
 		    }
 		}
 	    }

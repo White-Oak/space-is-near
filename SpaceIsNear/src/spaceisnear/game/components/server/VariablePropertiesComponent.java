@@ -1,6 +1,5 @@
 package spaceisnear.game.components.server;
 
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.properties.*;
@@ -29,7 +28,7 @@ public class VariablePropertiesComponent extends Component {
 		setDontProcess(false);
 		if (getOwner().getType() == GameObjectType.ITEM) {
 		    try {
-			Context.LOG.log("Trying to script processing message");
+			//Context.LOG.log("Trying to script processing message");
 			ServerContext context = (ServerContext) getContext();
 			mpsp = new MessagePropertySetProcessingScriptProccessor(context, this, mps);
 			mpsp.run();
@@ -38,27 +37,54 @@ public class VariablePropertiesComponent extends Component {
 		    }
 		}
 		if (!isDontProcess()) {
-		    switch (mps.getName()) {
-			case "pull":
-			    if (((Integer) mps.getValue()) != -1) {
-				Integer value = (Integer) mps.getValue();
-				StaticItem get = (StaticItem) getContext().getObjects().get(value);
-				//checked if unstucked
-				Object property = get.getVariableProperties().getProperty("stucked");
-				if (property != null && !(Boolean) property) {
-				    //1-tile-range of pulling
-				    Position positionToPull = get.getPosition();
-				    Position position = getPosition();
-				    if (Math.abs(positionToPull.getX() - position.getX()) <= 1 && Math.abs(
-					    positionToPull.getY() - position.getY()) <= 1) {
-					setProperty(mps.getName(), mps.getValue());
-				    }
-				}
-			    } else {
-				setProperty(mps.getName(), mps.getValue());
-			    }
-			    break;
+		    processPropertySetMessage(mps);
+		}
+		break;
+	    case TIME_PASSED:
+		if (getOwner().getType() == GameObjectType.ITEM) {
+		    try {
+			//Context.LOG.log("Trying to script time passed message");
+			ServerContext context = (ServerContext) getContext();
+			TimePassedScriptProcessor timePassedScriptProcessor = new TimePassedScriptProcessor(context, this);
+			timePassedScriptProcessor.run();
+		    } catch (ClassCastException e) {
+			e.printStackTrace();
 		    }
+		}
+		break;
+	    case INTERACTED:
+		if (getOwner().getType() == GameObjectType.ITEM) {
+		    try {
+			//Context.LOG.log("Trying to script interaction");
+			ServerContext context = (ServerContext) getContext();
+			InteractionScriptProccessor interactionScriptProccessor = new InteractionScriptProccessor(context, this, null);
+			interactionScriptProccessor.run();
+		    } catch (ClassCastException e) {
+			e.printStackTrace();
+		    }
+		}
+	}
+    }
+
+    private void processPropertySetMessage(MessagePropertySet mps) {
+	switch (mps.getName()) {
+	    case "pull":
+		if (((Integer) mps.getValue()) != -1) {
+		    Integer value = (Integer) mps.getValue();
+		    StaticItem get = (StaticItem) getContext().getObjects().get(value);
+		    //checked if unstucked
+		    Object property = get.getVariableProperties().getProperty("stucked");
+		    if (property != null && !(Boolean) property) {
+			//1-tile-range of pulling
+			Position positionToPull = get.getPosition();
+			Position position = getPosition();
+			if (Math.abs(positionToPull.getX() - position.getX()) <= 1 && Math.abs(
+				positionToPull.getY() - position.getY()) <= 1) {
+			    setProperty(mps.getName(), mps.getValue());
+			}
+		    }
+		} else {
+		    setProperty(mps.getName(), mps.getValue());
 		}
 		break;
 	}

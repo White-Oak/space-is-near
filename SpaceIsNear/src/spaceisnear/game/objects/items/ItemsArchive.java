@@ -25,23 +25,15 @@ public class ItemsArchive extends ItemsArchivable {
     public ItemsArchive(ItemBundle[] bundles) {
 	super(bundles);
 	sprites = new Texture(Gdx.files.classpath("res").child("sprites.png"));
-	int tilesX = sprites.getWidth() / GameContext.TILE_WIDTH;
-	int tilesY = sprites.getHeight() / GameContext.TILE_HEIGHT;
 	TextureRegion[][] split = TextureRegion.split(sprites, GameContext.TILE_WIDTH, GameContext.TILE_HEIGHT);
 	regions = new TextureRegion[split.length * split[0].length];
 	int index = 0;
 	for (TextureRegion[] textureRegions : split) {
 	    for (TextureRegion textureRegion : textureRegions) {
+		textureRegion.flip(false, true);
 		regions[index++] = textureRegion;
 	    }
 	}
-//	for (int i = 0; i < tilesY; i++) {
-//	    for (int j = 0; j < tilesX; j++) {
-//		regions[i * tilesX + j] = new TextureRegion(sprites,
-//			j * GameContext.TILE_WIDTH, i * GameContext.TILE_HEIGHT,
-//			GameContext.TILE_WIDTH, GameContext.TILE_HEIGHT);
-//	    }
-//	}
     }
 
     public TextureRegion getTextureRegion(int id) {

@@ -1,0 +1,15 @@
+    if (type == TIME_PASSED){
+	ticksSinceOpened = getProperty {"ticksSinceOpened"}
+	if(ticksSinceOpened == null){
+	    ticksSinceOpened = 0;
+	}
+	ticksSinceOpened = ticksSinceOpened + 1
+	setProperty {"ticksSinceOpened", ticksSinceOpened}
+	if (ticksSinceOpened > 100){
+	    setProperty {blockingPath, true}
+	    setProperty {blockingAir, true}
+	    setProperty {opened, false}
+	    sendAnimationQueueToRequestor {"3, 2, 1, 0", 200}
+	    unregisterForTimeMessages {}
+	}
+    }

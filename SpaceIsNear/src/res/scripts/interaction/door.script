@@ -1,0 +1,20 @@
+    if (item == null){
+	isOpened = getProperty {opened}
+	if(isOpened == null){
+	    isOpened = false
+	}
+	//TODO introduce boolean operations in Interpretator
+	setProperty {blockingPath, isOpened}
+	setProperty {blockingAir, isOpened}
+	isOpened = invertBoolean {isOpened}
+	setProperty {opened, isOpened}
+	if (isOpened == true){
+	    sendAnimationQueueToRequestor {"0, 1, 2, 3", 200}
+	    setProperty {ticksSinceOpened, 0}
+	    registerForTimeMessages {}
+	}
+	else {
+	    sendAnimationQueueToRequestor {"3, 2, 1, 0", 200}
+	    unregisterForTimeMessages {}
+	}
+  }

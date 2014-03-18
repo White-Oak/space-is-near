@@ -17,9 +17,8 @@ public class MessagePropertySetProcessingScriptProccessor extends ScriptProcesso
 	new NativeFunction("getPropertyMessageValue")};
 
     public MessagePropertySetProcessingScriptProccessor(ServerContext context, VariablePropertiesComponent currentRequester,
-					     MessagePropertySet currentMessage) {
-	super(context, currentRequester, f, new Constant[]{new Constant("type", currentMessage.getMessageType().name()),
-							   new Constant("emulatedType", "processingMessage")});
+							MessagePropertySet currentMessage) {
+	super(context, currentRequester, f, new Constant[]{new Constant("type", currentMessage.getMessageType().name())}, 1);
 	this.currentMessage = currentMessage;
     }
 
