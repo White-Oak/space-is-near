@@ -1,5 +1,8 @@
 package spaceisnear.game.components.server;
 
+import spaceisnear.game.components.server.scriptprocessors.TimePassedScriptProcessor;
+import spaceisnear.game.components.server.scriptprocessors.MessagePropertySetProcessingScriptProccessor;
+import spaceisnear.game.components.server.scriptprocessors.InteractionScriptProccessor;
 import spaceisnear.game.components.*;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.properties.*;

@@ -233,12 +233,13 @@
 *removed tons of TIME_PASSED messages sending
 -Doors opening/closing
     -Interaction with no item in active hand or with id should lead to opening a door.
-    -Movement towards a closed door should be treated as interaction with no item.
+    +Movement towards a closed door should be treated as interaction with no item.
     -After door began opening it should remain impassable for a period of time (?).
     +A door is closed after some time had passed.
     +Animation of closing/opening is sent
 -Developed items' system
     +Animation
+    *recoded scipts' architecture
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)

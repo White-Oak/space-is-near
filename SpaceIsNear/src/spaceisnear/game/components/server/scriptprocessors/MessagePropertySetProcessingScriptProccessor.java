@@ -1,7 +1,8 @@
-package spaceisnear.game.components.server;
+package spaceisnear.game.components.server.scriptprocessors;
 
-import org.whiteoak.parsing.interpretating.ast.*;
+import org.whiteoak.parsing.interpretating.ast.Value;
 import spaceisnear.abstracts.Context;
+import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.server.ServerContext;
 
@@ -9,22 +10,18 @@ import spaceisnear.server.ServerContext;
  *
  * @author White Oak
  */
-public class MessagePropertySetProcessingScriptProccessor extends ScriptProcessor {
+public class MessagePropertySetProcessingScriptProccessor extends MessagesScriptProcessor {
 
     private final MessagePropertySet currentMessage;
-    private final static Function[] f = {
-	new NativeFunction("getPropertyMessageName"),
-	new NativeFunction("getPropertyMessageValue")};
 
     public MessagePropertySetProcessingScriptProccessor(ServerContext context, VariablePropertiesComponent currentRequester,
 							MessagePropertySet currentMessage) {
-	super(context, currentRequester, f, new Constant[]{new Constant("type", currentMessage.getMessageType().name())}, 1);
+	super(context, currentRequester, currentMessage);
 	this.currentMessage = currentMessage;
     }
 
     @Override
     public String callNativeFunction(String name, Value[] values) {
-	super.callNativeFunction(name, values);
 	switch (name) {
 	    case "getPropertyMessageName":
 		return currentMessage.getName();
@@ -32,6 +29,7 @@ public class MessagePropertySetProcessingScriptProccessor extends ScriptProcesso
 		Context.LOG.log("Current message value is " + currentMessage.getValue());
 		return (String) currentMessage.getValue();
 	}
-	return null;
+	return super.callNativeFunction(name, values);
     }
+
 }

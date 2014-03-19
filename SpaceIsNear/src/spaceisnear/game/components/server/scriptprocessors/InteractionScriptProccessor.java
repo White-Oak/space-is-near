@@ -1,4 +1,4 @@
-package spaceisnear.game.components.server;
+package spaceisnear.game.components.server.scriptprocessors;
 
 import org.whiteoak.parsing.interpretating.ast.*;
 import spaceisnear.game.components.Component;

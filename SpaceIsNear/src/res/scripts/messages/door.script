@@ -1,3 +1,4 @@
+type = getMessageType {}
     if (type == TIME_PASSED){
 	ticksSinceOpened = getProperty {"ticksSinceOpened"}
 	if(ticksSinceOpened == null){

@@ -1,3 +1,4 @@
+type = getMessageType {}
 if (type == PROPERTY_SET){
 	name = getPropertyMessageName {}
 	if (name == messages){
