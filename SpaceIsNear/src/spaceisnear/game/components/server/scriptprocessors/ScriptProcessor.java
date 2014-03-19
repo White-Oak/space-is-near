@@ -26,7 +26,8 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 	new NativeFunction("concatenateProperty", 2),
 	new NativeFunction("sendAnimationQueueToRequestor", 2),
 	new NativeFunction("registerForTimeMessages"),
-	new NativeFunction("unregisterForTimeMessages")};
+	new NativeFunction("unregisterForTimeMessages"),
+	new NativeFunction("setFullyPathable", 1)};
     private final Interpretator interpretator;
     private final ServerContext context;
     private final Component currentRequester;
@@ -97,6 +98,14 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 		break;
 	    case "unregisterForTimeMessages":
 		currentRequester.unregisterForTimeMessages();
+		break;
+	    case "setFullyPathable":
+		boolean set = Boolean.parseBoolean(values[0].getValue());
+		setProperty("blockingPath", set);
+		setProperty("blockingAir", set);
+		ServerContext context1 = context;
+		context1.getObstacles().setReacheable(currentRequester.getPosition().getX(), currentRequester.getPosition().getY(), set);
+		context1.getAtmosphere().setAirReacheable(currentRequester.getPosition().getX(), currentRequester.getPosition().getY(), set);
 		break;
 	}
 	return null;
