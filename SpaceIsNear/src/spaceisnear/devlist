@@ -231,7 +231,7 @@
 *only connected and active clients are now to roger when requested by server
 +switch-case code is replaced by good one
 *removed tons of TIME_PASSED messages sending
--Doors opening/closing
++Doors opening/closing
     -Interaction with no item in active hand or with id should lead to opening a door.
     +Movement towards a closed door should be treated as interaction with no item.
     -After door began opening it should remain impassable for a period of time (?).

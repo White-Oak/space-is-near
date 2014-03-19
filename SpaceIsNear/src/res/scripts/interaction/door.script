@@ -1,3 +1,4 @@
+item = getItem {}
     if (item == null){
 	isOpened = getProperty {opened}
 	if(isOpened == null){
