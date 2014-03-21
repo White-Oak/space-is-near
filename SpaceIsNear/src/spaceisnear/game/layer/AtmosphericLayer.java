@@ -7,6 +7,7 @@ package spaceisnear.game.layer;
 
 import java.util.Arrays;
 import java.util.List;
+import lombok.Getter;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
@@ -20,7 +21,7 @@ import spaceisnear.server.objects.items.StaticItem;
  */
 public class AtmosphericLayer extends Layer {
 
-    private final int[][] map;
+    @Getter private final int[][] map;
     private final boolean[][] plitkas;
     /**
      * Two-bit variable where large bit is for top corners and little bit is for left corners.

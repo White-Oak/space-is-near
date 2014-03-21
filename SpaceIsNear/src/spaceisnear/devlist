@@ -251,7 +251,7 @@
     -knockbacking if big difference between two tiles in pressure
 +MessageKnockbacked
     -processing on server
--gotta do something with disconnected players
++gotta do something with disconnected players
     +disconnected clients are able to authorize again through AccountsManager
     +reconnected player should not be the cause of "creating new player" process
 	all they get is world-snapshot
@@ -261,9 +261,14 @@
 -Introduce new map
 -place simmilar objects near in objects array on start
 -place properties of objects that are near connected player near in array for faster connection
+-System of context editors for server
+    +architecture introduced
+    -atmosphere viewer
+	+AtmosphereEditor
+	+JFramewith JPanel on it
+	+Pressure map is copied to internal map for editor
+	-moving on JFrame
+	-editing pressures
+    -log viewer
 
 0.1.0
-
--System of context editors for server
-    -atmosphere viewer
-    -log viewer

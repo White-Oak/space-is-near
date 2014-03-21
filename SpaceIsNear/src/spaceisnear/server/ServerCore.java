@@ -12,6 +12,7 @@ import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsReader;
+import spaceisnear.server.contexteditors.AtmosphereEditor;
 import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.items.*;
 import spaceisnear.server.objects.items.scripts.ItemScriptReader;
@@ -44,6 +45,9 @@ public class ServerCore implements Runnable {
 	ItemAdder itemAdder = new ItemAdder(context);
 	itemAdder.addItems();
 	Context.LOG.log("done");
+	AtmosphereEditor atmosphereEditor = new AtmosphereEditor();
+	atmosphereEditor.update(context);
+	atmosphereEditor.show();
     }
 
     @Override
