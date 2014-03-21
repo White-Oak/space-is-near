@@ -38,17 +38,12 @@ public final class ServerContext extends Context {
     @Override
     public synchronized void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
-	    for (AbstractGameObject gameObject : objects) {
-		gameObject.message(m);
-	    }
+	    objects.forEach(gameObject -> gameObject.message(m));
 	}
     }
 
     public void sendTimePassed(MessageTimePassed mtp) {
-	for (int i = 0; i < timeNeeding.size(); i++) {
-	    AbstractGameObject abstractGameObject = timeNeeding.get(i);
-	    abstractGameObject.message(mtp);
-	}
+	timeNeeding.forEach(abstractGameObject -> abstractGameObject.message(mtp));
     }
 
     @Override
@@ -152,24 +147,19 @@ public final class ServerContext extends Context {
 
     public int[][] getAvailabilityMatrixOfHearingFrequency(String frequency) {
 	int[][] bufferMap = new int[obstacles.getWidth()][obstacles.getHeight()];
-	for (AbstractGameObject abstractGameObject : objects) {
-	    if (abstractGameObject.getType() == GameObjectType.ITEM) {
-		StaticItem item = (StaticItem) abstractGameObject;
-		if (item.getProperties().getId() == ServerItemsArchive.RADIO_ID) {
-		    String property = (String) item.getVariableProperties().getProperty("frequency");
-		    if (property.equals(frequency)) {
-			boolean enabled = (boolean) item.getVariableProperties().getProperty("enabled");
-			if (enabled) {
-			    Position position = item.getPosition();
-			    START_RECURSION(bufferMap, position.getX() - 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
-			    START_RECURSION(bufferMap, position.getX() + 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
-			    START_RECURSION(bufferMap, position.getX(), position.getY() - 1, MAXIMUM_TILES_TO_BE_HEARD - 1);
-			    START_RECURSION(bufferMap, position.getX(), position.getY() + 1, MAXIMUM_TILES_TO_BE_HEARD - 1);
-			}
-		    }
-		}
-	    }
-	}
+	objects.stream()
+		.filter(abstractGameObject -> abstractGameObject.getType() == GameObjectType.ITEM)
+		.map(abstractGameObject -> (StaticItem) abstractGameObject)
+		.filter(item -> item.getProperties().getId() == ServerItemsArchive.ITEMS_ARCHIVE.getIdByName("radio"))
+		.filter(item -> item.getVariableProperties().getProperty("frequency").equals(frequency))
+		.filter(item -> (boolean) item.getVariableProperties().getProperty("enabled"))
+		.map(item -> item.getPosition())
+		.forEach(position -> {
+		    START_RECURSION(bufferMap, position.getX() - 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
+		    START_RECURSION(bufferMap, position.getX() + 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
+		    START_RECURSION(bufferMap, position.getX(), position.getY() - 1, MAXIMUM_TILES_TO_BE_HEARD - 1);
+		    START_RECURSION(bufferMap, position.getX(), position.getY() + 1, MAXIMUM_TILES_TO_BE_HEARD - 1);
+		});
 	return bufferMap;
     }
 

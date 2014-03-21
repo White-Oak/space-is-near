@@ -14,6 +14,7 @@ import spaceisnear.server.ServerContext;
 public class AtmosphereEditor extends ContextEditor implements InterfaceShowable {
 
     private int[][] pressures;
+    private JFrame jFrame;
 
     @Override
     public void update(ServerContext context) {
@@ -40,15 +41,21 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 
     @Override
     public void show() {
-	JFrame jFrame = new JFrame();
+	jFrame = new JFrame();
 	final Shower shower = new Shower();
 	shower.setBackground(Color.black);
 	jFrame.setBackground(Color.black);
+	jFrame.setTitle("Atmosphere Editor");
 	jFrame.setSize(600, 600);
 	jFrame.getContentPane().setPreferredSize(new Dimension(600, 600));
 	jFrame.setResizable(false);
 	jFrame.add(shower);
 	jFrame.setVisible(true);
+    }
+
+    @Override
+    public void repaint() {
+	jFrame.repaint();
     }
 
     private class Shower extends JPanel {
@@ -57,16 +64,19 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 
 	@Override
 	protected void paintComponent(Graphics g) {
-//	    g.translate(x, y);
+	    g.translate(x, y);
+	    int xAccumulated = 0;
 	    for (int[] is : pressures) {
+		int yAccumulated = 0;
 		for (int j : is) {
 		    g.setColor(getColorFor(j));
 		    g.fillRect(0, 0, GameContext.TILE_WIDTH, GameContext.TILE_HEIGHT);
 		    g.translate(0, GameContext.TILE_HEIGHT);
+		    yAccumulated += GameContext.TILE_HEIGHT;
 		}
-		g.translate(GameContext.TILE_WIDTH, 0);
+		g.translate(GameContext.TILE_WIDTH, -yAccumulated);
 	    }
-//	    g.translate(-x, -y);
+	    g.translate(-x - xAccumulated, -y);
 	}
 
     }

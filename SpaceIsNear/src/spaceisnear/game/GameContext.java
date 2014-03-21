@@ -36,18 +36,12 @@ import spaceisnear.server.ServerContext;
     @Override
     public void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
-	    for (int i = 0; i < objects.size(); i++) {
-		AbstractGameObject gameObject = objects.get(i);
-		gameObject.message(m);
-	    }
+	    objects.forEach(gameObject -> gameObject.message(m));
 	}
     }
 
     public void sendAnimationStep() {
-	for (int i = 0; i < animateds.size(); i++) {
-	    AbstractGameObject abstractGameObject = animateds.get(i);
-	    abstractGameObject.message(MESSAGE_ANIMATION_STEP);
-	}
+	animateds.forEach(abstractGameObject -> abstractGameObject.message(MESSAGE_ANIMATION_STEP));
     }
 
     @Override

@@ -263,7 +263,7 @@
 -place properties of objects that are near connected player near in array for faster connection
 -System of context editors for server
     +architecture introduced
-    -atmosphere viewer
+    -atmosphere editor
 	+AtmosphereEditor
 	+JFramewith JPanel on it
 	+Pressure map is copied to internal map for editor

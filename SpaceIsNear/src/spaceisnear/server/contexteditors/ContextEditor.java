@@ -14,13 +14,13 @@ public abstract class ContextEditor {
 
     public abstract void update(ServerContext context);
 
-    public void makeChangesTo(ServerContext context) {
+    public final void makeChangesTo(ServerContext context) {
 	while (!actions.isEmpty()) {
 	    actions.poll().act(context);
 	}
     }
 
-    protected void addAction(Action action) {
+    protected final void addAction(Action action) {
 	actions.add(action);
     }
 }

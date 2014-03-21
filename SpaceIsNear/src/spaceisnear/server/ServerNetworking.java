@@ -37,7 +37,7 @@ import spaceisnear.server.objects.items.*;
     private final AccountManager accountManager = new AccountManager();
 
     //
-    private List<Client> pendingRogers = new ArrayList<Client>();
+    private final List<Client> pendingRogers = new ArrayList<>();
 
     static {
 	final MessageRogerRequested messageRogerRequested = new MessageRogerRequested();
@@ -122,11 +122,7 @@ import spaceisnear.server.objects.items.*;
 			    client.setConnection(connection);
 			    clients.remove(clientByConnection);
 			    sendToConnection(connection, new MessageJoined());
-			    Runnable runnable = new Runnable() {
-				public void run() {
-				    processOldPlayer(client);
-				}
-			    };
+			    Runnable runnable = () -> processOldPlayer(client);
 			    new Thread(runnable, "sending world to old player").start();
 			    break;
 			}
@@ -233,11 +229,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     private synchronized void connectedWantsPlayer(final Client client) {
-	Runnable runnable = new Runnable() {
-	    public void run() {
-		processNewPlayer(client);
-	    }
-	};
+	Runnable runnable = () -> processNewPlayer(client);
 	new Thread(runnable, "New player creating").start();
     }
 
@@ -300,28 +292,25 @@ import spaceisnear.server.objects.items.*;
 	List<ObjectMessaged> objectPlayer = createPlayer(client);
 	sendWorld(client);
 	sendPlayer(client);
-	for (Client client1 : clients) {
-	    if (client1 != client) {
-		for (ObjectMessaged objectMessaged : objectPlayer) {
-		    sendToConnection(client1.getConnection(), objectMessaged.created);
-		    sendProperties(objectMessaged.propertables, client1.getConnection());
-		}
-	    }
-	}
+	clients.stream()
+		.filter(client1 -> client1 != client)
+		.forEach(client1 -> {
+		    objectPlayer.forEach(objectMessaged -> {
+			sendToConnection(client1.getConnection(), objectMessaged.created);
+			sendProperties(objectMessaged.propertables, client1.getConnection());
+		    });
+		});
 	//	
 	sendToAll(new MessageUnpaused());
 	Context.LOG.log("Server has continued his work");
 	//@working fix that
-	Runnable runnable = new Runnable() {
-	    @Override
-	    public void run() {
-		for (int i = 0; i < 20; i++) {
-		    waitSomeTime();
-		}
-		Player get = client.getPlayer();
-		String message = get.getNickname() + " has connected to SIN!";
-		core.getContext().log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
+	Runnable runnable = () -> {
+	    for (int i = 0; i < 20; i++) {
+		waitSomeTime();
 	    }
+	    Player get = client.getPlayer();
+	    String message = get.getNickname() + " has connected to SIN!";
+	    core.getContext().log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
 	};
 	new Thread(runnable, "Messaging about connected").start();
     }
@@ -332,12 +321,9 @@ import spaceisnear.server.objects.items.*;
 	    throw new ConcurrentModificationException("Someone already waited for rogers when another one attempted to wait once again");
 	}
 	synchronized (clients) {
-	    for (int i = 0; i < clients.size(); i++) {
-		Client client = clients.get(i);
-		if (client.getConnection() != null && client.getClientInformation() != null) {
-		    pendingRogers.add(client);
-		}
-	    }
+	    clients.stream()
+		    .filter(client -> client.getConnection() != null && client.getClientInformation() != null)
+		    .forEach(client -> pendingRogers.add(client));
 	}
 	server.sendToAllTCP(ROGER_REQUSTED_BYTES);
 	waitForAllToRoger();
@@ -392,9 +378,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void sendProperties(List<MessagePropertable> propertable, Connection connection) {
-	for (MessagePropertable messagePropertable : propertable) {
-	    sendToConnection(connection, messagePropertable);
-	}
+	propertable.forEach(messagePropertable -> sendToConnection(connection, messagePropertable));
     }
 
     private void sendPlayer(Client client) {
@@ -407,12 +391,10 @@ import spaceisnear.server.objects.items.*;
 	ServerContext context = core.getContext();
 	List<AbstractGameObject> objects = context.getObjects();
 	List<ObjectMessaged> messagesToReturn = new ArrayList<>();
-	for (AbstractGameObject object : objects) {
-	    ObjectMessaged objectMessaged = getObjectMessaged(object);
-	    if (objectMessaged != null) {
-		messagesToReturn.add(objectMessaged);
-	    }
-	}
+	objects.stream()
+		.map(object -> getObjectMessaged(object))
+		.filter(objectMessaged -> objectMessaged != null)
+		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
 	return messagesToReturn.toArray(new ObjectMessaged[messagesToReturn.size()]);
     }
 
