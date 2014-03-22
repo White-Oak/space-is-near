@@ -267,7 +267,7 @@
 	+AtmosphereEditor
 	+JFramewith JPanel on it
 	+Pressure map is copied to internal map for editor
-	-moving on JFrame
+	+moving on JFrame
 	-editing pressures
     -log viewer
 

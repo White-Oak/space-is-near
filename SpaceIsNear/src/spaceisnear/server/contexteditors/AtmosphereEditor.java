@@ -1,7 +1,8 @@
 package spaceisnear.server.contexteditors;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import spaceisnear.game.GameContext;
@@ -18,14 +19,17 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 
     @Override
     public void update(ServerContext context) {
-	int[][] temp = context.getAtmosphere().getMap();
 	if (pressures == null) {
-	    pressures = new int[temp.length][];
+	    pressures = context.getAtmosphere().getMap();
 	}
-	for (int i = 0; i < temp.length; i++) {
-	    int[] is = temp[i];
-	    pressures[i] = Arrays.copyOf(is, is.length);
-	}
+//	int[][] temp = context.getAtmosphere().getMap();
+//	if (pressures == null) {
+//	    pressures = new int[temp.length][];
+//	}
+//	for (int i = 0; i < temp.length; i++) {
+//	    int[] is = temp[i];
+//	    pressures[i] = Arrays.copyOf(is, is.length);
+//	}
     }
 
     private static Color getColorFor(int pressure) {
@@ -44,6 +48,7 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 	jFrame = new JFrame();
 	final Shower shower = new Shower();
 	shower.setBackground(Color.black);
+	jFrame.addKeyListener(shower);
 	jFrame.setBackground(Color.black);
 	jFrame.setTitle("Atmosphere Editor");
 	jFrame.setSize(600, 600);
@@ -58,13 +63,22 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 	jFrame.repaint();
     }
 
-    private class Shower extends JPanel {
+    @Override
+    public boolean isShown() {
+	return jFrame != null && jFrame.isVisible();
+    }
+
+    private class Shower extends JPanel implements KeyListener {
 
 	int x, y;
 
 	@Override
 	protected void paintComponent(Graphics g) {
-	    g.translate(x, y);
+	    g.setColor(Color.black);
+	    g.fillRect(0, 0, getWidth(), getHeight());
+	    int xTile = x * GameContext.TILE_WIDTH;
+	    int yTile = y * GameContext.TILE_HEIGHT;
+	    g.translate(-xTile, -yTile);
 	    int xAccumulated = 0;
 	    for (int[] is : pressures) {
 		int yAccumulated = 0;
@@ -76,7 +90,34 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 		}
 		g.translate(GameContext.TILE_WIDTH, -yAccumulated);
 	    }
-	    g.translate(-x - xAccumulated, -y);
+	    g.translate(xTile - xAccumulated, yTile);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	    switch (e.getKeyCode()) {
+		case KeyEvent.VK_DOWN:
+		    y++;
+		    break;
+		case KeyEvent.VK_UP:
+		    y--;
+		    break;
+		case KeyEvent.VK_LEFT:
+		    x--;
+		    break;
+		case KeyEvent.VK_RIGHT:
+		    x++;
+		    break;
+	    }
+	    repaint();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 
     }

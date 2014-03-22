@@ -11,24 +11,52 @@ public class ContextEditorsManager {
 
     private final ArrayList<ContextEditor> editors = new ArrayList<>();
     private final ArrayList<InterfaceShowable> paintables = new ArrayList<>();
+    private final ArrayList<ConsoleShowable> printables = new ArrayList<>();
+
+    public void addDefaultCase() {
+	addEditor(new AtmosphereEditor());
+    }
 
     public boolean addEditor(ContextEditor e) {
+	if (e instanceof InterfaceShowable) {
+	    addPaintable((InterfaceShowable) e);
+	}
 	return editors.add(e);
     }
 
-    public boolean addPaintable(InterfaceShowable e) {
+    private boolean addPaintable(InterfaceShowable e) {
 	return paintables.add(e);
     }
 
-    private void repaint() {
+    public void repaint() {
+	paintables.stream()
+		.filter(paintable -> !paintable.isShown())
+		.forEach(paintable -> paintable.show());
 	paintables.forEach(paintable -> paintable.repaint());
+	printables.forEach(printable -> printable.print());
     }
 
-    private void update(ServerContext context) {
+    public void update(ServerContext context) {
 	editors.forEach(editor -> editor.update(context));
     }
 
-    private void makeChanges(ServerContext context) {
+    public void makeChanges(ServerContext context) {
 	editors.forEach(editor -> editor.makeChangesTo(context));
+    }
+
+    public void startUpdateCycle(ServerContext context) {
+	Runnable r = () -> {
+	    while (true) {
+		update(context);
+		makeChanges(context);
+		repaint();
+		try {
+		    Thread.sleep(1000L);
+		} catch (InterruptedException ex) {
+		    ServerContext.LOG.log(ex);
+		}
+	    }
+	};
+	new Thread(r, "Context Editors Manager's update cycle").start();
     }
 }

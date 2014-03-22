@@ -240,6 +240,8 @@ import spaceisnear.server.objects.items.*;
 	Player player = core.addPlayer();
 	client.setPlayer(player);
 	player.setNickname(client.getPlayerInformation().getDesiredNickname());
+	player.getPosition().setX(1);
+	player.getPosition().setY(1);
 	list.add(getObjectMessaged(player));
 
 	StaticItem ear = addToPlayerItem("ear_radio", "ear", player);

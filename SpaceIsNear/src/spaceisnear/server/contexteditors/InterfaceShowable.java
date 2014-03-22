@@ -6,6 +6,8 @@ package spaceisnear.server.contexteditors;
  */
 public interface InterfaceShowable {
 
+    public boolean isShown();
+
     public void show();
 
     public void repaint();

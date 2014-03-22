@@ -12,7 +12,7 @@ import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.ItemsReader;
-import spaceisnear.server.contexteditors.AtmosphereEditor;
+import spaceisnear.server.contexteditors.ContextEditorsManager;
 import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.items.*;
 import spaceisnear.server.objects.items.scripts.ItemScriptReader;
@@ -28,6 +28,7 @@ public class ServerCore implements Runnable {
     private static final int QUANT_TIME = 20;
     private long timePassed;
     private AtmosphereThread at = new AtmosphereThread();
+    private ContextEditorsManager editorsManager = new ContextEditorsManager();
 
     public ServerCore() throws IOException {
 	int width = GameContext.MAP_WIDTH;
@@ -45,14 +46,13 @@ public class ServerCore implements Runnable {
 	ItemAdder itemAdder = new ItemAdder(context);
 	itemAdder.addItems();
 	Context.LOG.log("done");
-	AtmosphereEditor atmosphereEditor = new AtmosphereEditor();
-	atmosphereEditor.update(context);
-	atmosphereEditor.show();
+	editorsManager.addDefaultCase();
+	editorsManager.startUpdateCycle(context);
     }
 
     @Override
     public void run() {
-//	at.start();
+	at.start();
 	while (unbreakable) {
 	    //networking
 	    context.getNetworking().processReceivedQueue();
@@ -133,7 +133,7 @@ public class ServerCore implements Runnable {
 		}
 	    }
 	}
-	public static final long ATMOSPHERE_DELAY = 2000L;
+	public static final long ATMOSPHERE_DELAY = 1000L;
 
     }
 }
