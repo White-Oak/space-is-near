@@ -121,13 +121,13 @@ public class ItemRenderer extends Actor {
 	Rectangle clipBounds = new Rectangle(-1, -1, getWidth(), getHeight());
 	ScissorStack.calculateScissors(camera, batch.getTransformMatrix(), clipBounds, scissors);
 	ScissorStack.pushScissors(scissors);
-	for (Item item : handler.getItems()) {
+	handler.getItems().forEach((item) -> {
 	    final int x = item.getX() * GameContext.TILE_WIDTH + posX;
 	    final int y = item.getY() * GameContext.TILE_HEIGHT + posY;
 	    if (x > -GameContext.TILE_WIDTH && x < getWidth() && y > -GameContext.TILE_HEIGHT && y < getHeight()) {
 		batch.draw(handler.getTextureRegion(item.getId()), x, y);
 	    }
-	}
+	});
 	if (handler.getCurrentAction() != null) {
 	    handler.getCurrentAction().draw(batch, posX, posY);
 	}

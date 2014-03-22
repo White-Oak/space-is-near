@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.*;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
@@ -64,29 +66,48 @@ public class ItemsHandler {
     }
 
     public void save() {
-	FileHandle fh = Gdx.files.local("additems.txt");
-	if (fh.exists()) {
-	    fh.delete();
-	}
-	for (Item item : items) {
-	    fh.writeString("addItem {" + bundles[item.getId()].name + ", " + item.getX() + ", " + item.getY() + "}" + System.lineSeparator(),
-		    true);
+	try {
+	    FileHandle fh = Gdx.files.local("additems.txt");
+	    File f = fh.file();
+	    if (f.exists()) {
+		f.delete();
+	    }
+	    f.createNewFile();
+	    items.stream()
+		    .sorted((item1, item2) -> item1.getId() - item2.getId())
+		    .forEach((item) -> fh.writeString(
+				    "addItem {" + bundles[item.getId()].name + ", " + item.getX()
+				    + ", " + item.getY() + "}" + System.lineSeparator(), true));
+	} catch (IOException ex) {
+	    Logger.getLogger(ItemsHandler.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
     public void load() {
 	FileHandle fh = Gdx.files.local("additems.txt");
-	if (fh.exists()) {
-	    InputStream read = fh.read();
-	    Loader loader = new Loader();
+	File f = fh.file();
+	if (f.exists()) {
+	    InputStream read = null;
 	    try {
-		loader.addItems(read);
-	    } catch (IOException ex) {
-		Context.LOG.log(ex);
+		read = new FileInputStream(f);
+		Loader loader = new Loader();
+		try {
+		    loader.addItems(read);
+		} catch (IOException ex) {
+		    Context.LOG.log(ex);
+		}
+		items.clear();
+		actions.clear();
+		items.addAll(loader.getItems());
+	    } catch (FileNotFoundException ex) {
+		Logger.getLogger(ItemsHandler.class.getName()).log(Level.SEVERE, null, ex);
+	    } finally {
+		try {
+		    read.close();
+		} catch (IOException ex) {
+		    Logger.getLogger(ItemsHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	    }
-	    items.clear();
-	    actions.clear();
-	    items.addAll(loader.getItems());
 	}
     }
 }
