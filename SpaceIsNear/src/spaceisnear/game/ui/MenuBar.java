@@ -64,7 +64,6 @@ public class MenuBar extends UIElement {
 	batch.begin();
 	{
 	    font.setColor(textColor);
-	    batch.setColor(textColor);
 	    currentx = 0;
 	    for (MenuItem menuItem : items) {
 		if (currentx < getWidth()) {

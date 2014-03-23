@@ -56,7 +56,6 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 
 	    @Override
 	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		System.out.println("ohoh");
 		ContextMenu.this.mouseClicked(button, (int) x, (int) y);
 		return true;
 	    }

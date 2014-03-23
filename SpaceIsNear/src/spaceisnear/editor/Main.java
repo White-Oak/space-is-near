@@ -21,11 +21,11 @@ public class Main {
 	// TODO code application logic here
 	LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 	cfg.title = "Space Editor";
-//	cfg.width = 1000 + RightTab.TAB_WIDTH;
-//	cfg.height = 800;
-	cfg.width = 1920;
-	cfg.height = 1080;
-	cfg.fullscreen = true;
+	cfg.width = 1000 + RightTab.TAB_WIDTH;
+	cfg.height = 800;
+//	cfg.width = 1920;
+//	cfg.height = 1080;
+//	cfg.fullscreen = true;
 	cfg.vSyncEnabled = true;
 	LwjglApplication lwjglApplication = new LwjglApplication(new spaceisnear.editor.Core(), cfg);
     }

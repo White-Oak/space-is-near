@@ -15,9 +15,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import lombok.Getter;
 import spaceisnear.game.GameContext;
 
@@ -117,10 +115,10 @@ public class ItemRenderer extends Actor {
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
 //	batch.setProjectionMatrix(camera.combined);
-	Rectangle scissors = new Rectangle();
-	Rectangle clipBounds = new Rectangle(-1, -1, getWidth(), getHeight());
-	ScissorStack.calculateScissors(camera, batch.getTransformMatrix(), clipBounds, scissors);
-	ScissorStack.pushScissors(scissors);
+//	Rectangle scissors = new Rectangle();
+//	Rectangle clipBounds = new Rectangle(-1, -1, getWidth(), getHeight());
+//	ScissorStack.calculateScissors(camera, batch.getTransformMatrix(), clipBounds, scissors);
+//	ScissorStack.pushScissors(scissors);
 	handler.getItems().forEach((item) -> {
 	    final int x = item.getX() * GameContext.TILE_WIDTH + posX;
 	    final int y = item.getY() * GameContext.TILE_HEIGHT + posY;
@@ -137,7 +135,7 @@ public class ItemRenderer extends Actor {
 	renderer.setColor(Color.RED);
 	renderer.rect(posX, posY, 64 * GameContext.TILE_WIDTH, 64 * GameContext.TILE_HEIGHT);
 	renderer.end();
-	ScissorStack.popScissors();
+//	ScissorStack.popScissors();
     }
     private final ShapeRenderer renderer = new ShapeRenderer();
 

@@ -25,7 +25,7 @@ public class Editor implements Screen {
     private final FPSLogger fps = new FPSLogger();
     private final Stage stage = new Stage();
     private final ItemsHandler handler = ItemsHandler.HANDLER;
-    private final MenuBar menuBar = new MenuBar();
+    private final MenuBar menuBar;
 
     @Getter private final Texture sprites;
 
@@ -39,6 +39,7 @@ public class Editor implements Screen {
 	rightTab.setSize(Gdx.graphics.getWidth() - rightTab.getX(), Gdx.graphics.getHeight());
 	rightTab.setColor(new Color(0.7f, 0.7f, 0.7f, 1f));
 
+	menuBar = new MenuBar();
 	MenuItem menuItem = new MenuItem("File", stage);
 	menuItem.add(new ContextMenuItem("(L)oad"));
 	menuItem.add(new ContextMenuItem("(S)ave"));
@@ -55,8 +56,8 @@ public class Editor implements Screen {
 	itemAdder.setBounds(0, menuBar.getHeight(), Gdx.graphics.getWidth() - RightTab.TAB_WIDTH,
 		Gdx.graphics.getHeight() - menuBar.getHeight());
 
-	stage.addActor(menuBar);
 	stage.addActor(itemAdder);
+	stage.addActor(menuBar);
 	stage.addActor(rightTab);
 	stage.setCamera(camera);
 	stage.setKeyboardFocus(itemAdder);

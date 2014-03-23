@@ -58,10 +58,6 @@ public abstract class UIElement extends Actor {
 
     @Override
     public final void draw(SpriteBatch batch, float parentAlpha) {
-	if (getWidth() == 0 || getHeight() == 0) {
-	    setWidth(getPrefWidth());
-	    setHeight(getPrefHeight());
-	}
 	batch.end();
 	renderer.translate(getX(), getY(), 0);
 	paint(batch);
