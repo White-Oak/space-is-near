@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Getter;
+import spaceisnear.game.ui.MenuBar;
+import spaceisnear.game.ui.MenuItem;
+import spaceisnear.game.ui.context.ContextMenuItem;
 
 /**
  *
@@ -22,6 +25,7 @@ public class Editor implements Screen {
     private final FPSLogger fps = new FPSLogger();
     private final Stage stage = new Stage();
     private final ItemsHandler handler = ItemsHandler.HANDLER;
+    private final MenuBar menuBar = new MenuBar();
 
     @Getter private final Texture sprites;
 
@@ -31,11 +35,27 @@ public class Editor implements Screen {
 	camera.setToOrtho(true);
 	batch = new SpriteBatch();
 	rightTab = new RightTab();
-	itemAdder = new ItemRenderer(rightTab);
-	itemAdder.setSize(Gdx.graphics.getWidth() - RightTab.TAB_WIDTH, Gdx.graphics.getHeight());
 	rightTab.setPosition(Gdx.graphics.getWidth() - RightTab.TAB_WIDTH, 0);
 	rightTab.setSize(Gdx.graphics.getWidth() - rightTab.getX(), Gdx.graphics.getHeight());
 	rightTab.setColor(new Color(0.7f, 0.7f, 0.7f, 1f));
+
+	MenuItem menuItem = new MenuItem("File", stage);
+	menuItem.add(new ContextMenuItem("(L)oad"));
+	menuItem.add(new ContextMenuItem("(S)ave"));
+	menuItem.add(new ContextMenuItem("(E)xit"));
+	menuBar.add(menuItem);
+	menuItem = new MenuItem("Edit", stage);
+	menuItem.add(new ContextMenuItem("(A)dd mode"));
+	menuItem.add(new ContextMenuItem("(F)ill mode"));
+	menuItem.add(new ContextMenuItem("(D)elete mode"));
+	menuBar.add(menuItem);
+	menuBar.setWidth(Gdx.graphics.getWidth() - RightTab.TAB_WIDTH);
+
+	itemAdder = new ItemRenderer(rightTab);
+	itemAdder.setBounds(0, menuBar.getHeight(), Gdx.graphics.getWidth() - RightTab.TAB_WIDTH,
+		Gdx.graphics.getHeight() - menuBar.getHeight());
+
+	stage.addActor(menuBar);
 	stage.addActor(itemAdder);
 	stage.addActor(rightTab);
 	stage.setCamera(camera);

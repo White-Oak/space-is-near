@@ -26,12 +26,13 @@ import spaceisnear.game.ui.UIElement;
  */
 public final class ContextMenu extends UIElement implements ContextMenuItemable {
 
-    @Getter private final String label;
+    @Getter private String label;
     private final List<ContextMenuItemable> items = new ArrayList<>();
     private int maxWidth;
     private int height;
     @Getter private int selected;
     private final Stage stage;
+    public final static int HEIGHT_PADDING = 5;
 
     public ContextMenu(String label, Stage stage) {
 	this.label = label;
@@ -69,6 +70,10 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 	render(batch);
     }
 
+    private int getLineHeight() {
+	return (int) (font.getLineHeight() + HEIGHT_PADDING);
+    }
+
     public void render(SpriteBatch batch) {
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.translate(getX(), getY(), 0);
@@ -77,7 +82,7 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 	    renderer.setColor(Color.WHITE);
 	    renderer.filledRect(0, 0, maxWidth, height);
 	    renderer.setColor(Color.BLACK);
-	    renderer.filledRect(0, selected * font.getLineHeight(), maxWidth, font.getLineHeight());
+	    renderer.filledRect(0, selected * getLineHeight(), maxWidth, getLineHeight());
 	}
 	renderer.end();
 	renderer.begin(ShapeRenderer.ShapeType.Rectangle);
@@ -87,20 +92,20 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 	renderer.end();
 	for (int i = 0; i < items.size(); i++) {
 	    ContextMenuItemable contextMenuItem = items.get(i);
-	    final int currentPosition = (int) (i * font.getLineHeight());
+	    final int currentPosition = (i * getLineHeight());
 	    renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
 	    {
 		Color color = i == selected ? Color.WHITE : Color.BLACK;
 		renderer.setColor(color);
 		font.setColor(color);
 		if (contextMenuItem instanceof ContextMenu) {
-		    renderer.filledRect(maxWidth - 10, currentPosition + ((int) font.getLineHeight() >> 1) - 1, 3, 3);
+		    renderer.filledRect(maxWidth - 10, currentPosition + (getLineHeight() >> 1) - 1, 3, 3);
 		}
 	    }
 	    renderer.end();
 	    batch.begin();
 	    {
-		font.draw(batch, contextMenuItem.getLabel(), getX(), getY() + currentPosition);
+		font.draw(batch, contextMenuItem.getLabel(), getX(), getY() + currentPosition + HEIGHT_PADDING / 2);
 	    }
 	    batch.end();
 	}
@@ -111,23 +116,24 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 	return add(new ContextMenuItem(str));
     }
 
+    private void recalculateWidth(int width) {
+	if (width > maxWidth) {
+	    maxWidth = width + 20;
+	    setX(getX());
+	}
+    }
+
     public boolean add(ContextMenuItemable e) {
 	int width = (int) font.getBounds((e.getLabel())).width;
 	//Increasing width of this menu if label of new item is too big
-	if (width > maxWidth) {
-	    maxWidth = width + 20;
-	    items.stream()
-		    .filter((contextMenuItem) -> (contextMenuItem instanceof ContextMenu))
-		    .map((contextMenuItem) -> (ContextMenu) contextMenuItem)
-		    .forEach((subMenu) -> subMenu.setX(getX() + maxWidth + 1));
-	}
+	recalculateWidth(width);
 	//Increasing height by line
-	height += font.getLineHeight();
+	height += font.getLineHeight() + HEIGHT_PADDING;
 	//Setting position for new menu
 	if (e instanceof ContextMenu) {
 	    ContextMenu subMenu = (ContextMenu) e;
 	    subMenu.setX(getX() + maxWidth + 1);
-	    subMenu.setY((int) (getY() + items.size() * font.getLineHeight()));
+	    subMenu.setY((int) (getY() + items.size() * getLineHeight()));
 	    subMenu.setActivationListener(getActivationListener());
 	}
 	setWidth(getWidth(font));
@@ -187,6 +193,42 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 	    menu.hide();
 	}
 	stage.getActors().removeValue(this, true);
+    }
+
+    public void show() {
+	stage.addActor(this);
+	selected = 0;
+	selectedItem = items.get(selected);
+	if (selectedItem instanceof ContextMenu) {
+	    ((ContextMenu) selectedItem).show();
+	}
+    }
+
+    public void setLabel(String label) {
+	this.label = label;
+	int width = (int) font.getBounds((label)).width;
+	recalculateWidth(width);
+    }
+
+    @Override
+    public void setX(float x) {
+	super.setX(x); //To change body of generated methods, choose Tools | Templates.
+	items.stream()
+		.filter((contextMenuItem) -> (contextMenuItem instanceof ContextMenu))
+		.map((contextMenuItem) -> (ContextMenu) contextMenuItem)
+		.forEach((subMenu) -> subMenu.setX(getX() + maxWidth + 1));
+    }
+
+    @Override
+    public void setY(float y) {
+	super.setY(y); //To change body of generated methods, choose Tools | Templates.
+	for (int i = 0; i < items.size(); i++) {
+	    ContextMenuItemable contextMenuItemable = items.get(i);
+	    if (contextMenuItemable instanceof ContextMenu) {
+		ContextMenu menu = (ContextMenu) contextMenuItemable;
+		menu.setY(getY() + i * getLineHeight());
+	    }
+	}
     }
 
 }
