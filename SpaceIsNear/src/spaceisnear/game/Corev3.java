@@ -3,7 +3,6 @@ package spaceisnear.game;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Getter;
 import spaceisnear.abstracts.Context;
@@ -13,6 +12,7 @@ import spaceisnear.game.messages.service.onceused.MessageClientInformation;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.ui.ActivationListener;
+import spaceisnear.game.ui.UIElement;
 import spaceisnear.game.ui.console.GameConsole;
 import spaceisnear.starting.*;
 import spaceisnear.starting.ui.ScreenImproved;
@@ -51,24 +51,14 @@ public class Corev3 extends Game implements ActivationListener {
 	initializeConsole();
 	screens = new ScreenImprovedGreatly[]{loginScreen, lobby, loading, core};
 	setScreen(0);
-	new Thread(new Runnable() {
-
-	    @Override
-	    public void run() {
-		update();
-	    }
-	}, "Corev3").start();
-	Thread thread = new Thread(new Runnable() {
-
-	    @Override
-	    public void run() {
-		while (true) {
-		    System.gc();
-		    try {
-			Thread.sleep(10000L);
-		    } catch (InterruptedException ex) {
-			Context.LOG.log(ex);
-		    }
+	new Thread(this::update, "Corev3").start();
+	Thread thread = new Thread(() -> {
+	    while (true) {
+		System.gc();
+		try {
+		    Thread.sleep(10000L);
+		} catch (InterruptedException ex) {
+		    Context.LOG.log(ex);
 		}
 	    }
 	}, "GC Runner");
@@ -119,7 +109,7 @@ public class Corev3 extends Game implements ActivationListener {
     }
 
     @Override
-    public void componentActivated(Actor actor) {
+    public void componentActivated(UIElement actor) {
 	console.processInputedMessage();
 	((ScreenImproved) getScreen()).getStage().setKeyboardFocus(null);
     }

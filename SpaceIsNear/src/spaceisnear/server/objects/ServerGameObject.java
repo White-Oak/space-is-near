@@ -54,19 +54,15 @@ import spaceisnear.server.ServerContext;
 	}
 	while (!messages.isEmpty()) {
 	    Message message = messages.poll();
-	    for (int i = 0; i < components.size(); i++) {
-		Component component = components.get(i);
-		component.processMessage(message);
-	    }
+	    components.forEach(component -> component.processMessage(message));
 	}
     }
 
     public boolean needsTime() {
 	boolean result = false;
-	for (int i = 0; i < components.size(); i++) {
-	    Component component = components.get(i);
-	    result |= component.needsTime();
-	}
+	result = components.stream()
+		.map((component) -> component.needsTime())
+		.reduce(result, (accumulator, _item) -> accumulator | _item);
 	return result;
     }
 }

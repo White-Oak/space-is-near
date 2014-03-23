@@ -168,8 +168,7 @@ import spaceisnear.server.objects.items.*;
     public void sendToConnectionID(int id, NetworkableMessage message) {
 	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
 	    Connection connection = null;
-	    for (int i = 0; i < clients.size(); i++) {
-		Client client = clients.get(i);
+	    for (Client client : clients) {
 		if (client.getConnection().getID() == id) {
 		    connection = client.getConnection();
 		}

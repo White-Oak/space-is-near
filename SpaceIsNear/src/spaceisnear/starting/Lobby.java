@@ -2,7 +2,6 @@ package spaceisnear.starting;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import java.util.Random;
 import spaceisnear.game.Corev3;
@@ -55,7 +54,7 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
     }
 
     @Override
-    public void componentActivated(Actor actor) {
+    public void componentActivated(UIElement actor) {
 	if (actor == join) {
 	    send(new MessagePlayerInformation(nickname.getText(), profession.getText()));
 	}

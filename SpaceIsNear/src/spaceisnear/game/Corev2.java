@@ -15,6 +15,7 @@ import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.objects.items.*;
+import spaceisnear.game.ui.UIElement;
 import spaceisnear.game.ui.console.*;
 import spaceisnear.game.ui.context.*;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
@@ -253,26 +254,23 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	    contextSubMenu.add("Learn");
 	    contextSubMenu.add("Pull");
 	    contextSubMenu.add("Take");
-	    contextSubMenu.setActionListener(new ActionListener() {
-
-		@Override
-		public void itemActivated(ContextMenuItemable e) {
-		    switch (e.getLabel()) {
-			case "Learn":
-			    String description = item.getProperties().getDescription();
-			    log(new LogString(description, LogLevel.TALKING));
-			    break;
-			case "Pull":
-			    int id = item.getId();
-			    int playerID = context.getPlayerID();
-			    MessagePropertySet messagePropertySet = new MessagePropertySet(playerID, "pull", id);
-			    MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-			    context.sendDirectedMessage(messageToSend);
-			    break;
-		    }
-		    menu.hide();
-		    menu = null;
+	    contextMenu.setActivationListener((UIElement e) -> {
+		ContextMenu currentMenu = (ContextMenu) e;
+		switch (currentMenu.getSelected()) {
+		    case 0:
+			String description = item.getProperties().getDescription();
+			log(new LogString(description, LogLevel.TALKING));
+			break;
+		    case 1:
+			int id = item.getId();
+			int playerID = context.getPlayerID();
+			MessagePropertySet messagePropertySet = new MessagePropertySet(playerID, "pull", id);
+			MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+			context.sendDirectedMessage(messageToSend);
+			break;
 		}
+		menu.hide();
+		menu = null;
 	    });
 	}
 	menu = contextMenu;

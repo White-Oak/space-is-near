@@ -51,7 +51,7 @@ public abstract class UIElement extends Actor {
     }
 
     @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
+    public final void draw(SpriteBatch batch, float parentAlpha) {
 	if (getWidth() == 0 || getHeight() == 0) {
 	    setWidth(getPrefWidth());
 	    setHeight(getPrefHeight());

@@ -9,7 +9,6 @@
  */
 package spaceisnear.game.ui.context;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,25 +17,24 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
+import spaceisnear.game.ui.ActivationListener;
+import spaceisnear.game.ui.UIElement;
 
 /**
  *
  * @author White Oak
  */
-public final class ContextMenu extends Actor implements ContextMenuItemable {
+public final class ContextMenu extends UIElement implements ContextMenuItemable {
 
     @Getter private final String label;
     private final List<ContextMenuItemable> items = new ArrayList<>();
     private int maxWidth;
     private int height;
-    @Getter @Setter(AccessLevel.PACKAGE) private BitmapFont font;
-    private int selected;
-    @Setter private ActionListener actionListener;
+    @Getter private int selected;
     private final Stage stage;
 
     public ContextMenu(String label, Stage stage) {
 	this.label = label;
-	this.font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
 	this.stage = stage;
 	init();
     }
@@ -57,6 +55,7 @@ public final class ContextMenu extends Actor implements ContextMenuItemable {
 
 	    @Override
 	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		System.out.println("ohoh");
 		ContextMenu.this.mouseClicked(button, (int) x, (int) y);
 		return true;
 	    }
@@ -66,10 +65,8 @@ public final class ContextMenu extends Actor implements ContextMenuItemable {
     private final ShapeRenderer renderer = new ShapeRenderer();
 
     @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-	batch.end();
+    public void paint(SpriteBatch batch) {
 	render(batch);
-	batch.begin();
     }
 
     public void render(SpriteBatch batch) {
@@ -119,21 +116,19 @@ public final class ContextMenu extends Actor implements ContextMenuItemable {
 	//Increasing width of this menu if label of new item is too big
 	if (width > maxWidth) {
 	    maxWidth = width + 20;
-	    for (ContextMenuItemable contextMenuItem : items) {
-		if (contextMenuItem instanceof ContextMenu) {
-		    ContextMenu subMenu = (ContextMenu) contextMenuItem;
-		    subMenu.setX(getX() + maxWidth + 1);
-		}
-	    }
+	    items.stream()
+		    .filter((contextMenuItem) -> (contextMenuItem instanceof ContextMenu))
+		    .map((contextMenuItem) -> (ContextMenu) contextMenuItem)
+		    .forEach((subMenu) -> subMenu.setX(getX() + maxWidth + 1));
 	}
 	//Increasing height by line
 	height += font.getLineHeight();
 	//Setting position for new menu
 	if (e instanceof ContextMenu) {
 	    ContextMenu subMenu = (ContextMenu) e;
-	    subMenu.setFont(font);
 	    subMenu.setX(getX() + maxWidth + 1);
 	    subMenu.setY((int) (getY() + items.size() * font.getLineHeight()));
+	    subMenu.setActivationListener(getActivationListener());
 	}
 	setWidth(getWidth(font));
 	setHeight(getHeight(font));
@@ -158,10 +153,20 @@ public final class ContextMenu extends Actor implements ContextMenuItemable {
     private ContextMenuItemable selectedItem;
 
     public void mouseClicked(int button, int x, int y) {
-	if (actionListener != null) {
-	    int selected = y / (int) font.getLineHeight();
-	    actionListener.itemActivated(items.get(selected));
+	if (getActivationListener() != null) {
+	    if (selectedItem instanceof ContextMenuItem) {
+		getActivationListener().componentActivated(this);
+	    }
 	}
+    }
+
+    @Override
+    public void setActivationListener(ActivationListener activationListener) {
+	super.setActivationListener(activationListener);
+	items.stream()
+		.filter(e -> e instanceof ContextMenu)
+		.map(e -> (ContextMenu) e)
+		.forEach(e -> e.setActivationListener(activationListener));
     }
 
     public int getWidth(BitmapFont font) {

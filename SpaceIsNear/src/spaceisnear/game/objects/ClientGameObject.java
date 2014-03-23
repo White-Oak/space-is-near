@@ -54,10 +54,7 @@ import spaceisnear.game.messages.Message;
 	}
 	while (messages.size() > 0) {
 	    Message message = messages.poll();
-	    for (int i = 0; i < components.size(); i++) {
-		Component component = components.get(i);
-		component.processMessage(message);
-	    }
+	    components.forEach(component -> component.processMessage(message));
 	}
     }
 
@@ -77,10 +74,9 @@ import spaceisnear.game.messages.Message;
 
     public boolean isAnimated() {
 	boolean result = false;
-	for (int i = 0; i < components.size(); i++) {
-	    Component component = components.get(i);
-	    result |= component.hasAnimation();
-	}
+	result = components.stream()
+		.map(component -> component.hasAnimation())
+		.reduce(result, (accumulator, _item) -> accumulator | _item);
 	return result;
     }
 }
