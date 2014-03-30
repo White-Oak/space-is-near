@@ -191,7 +191,7 @@ public final class ServerContext extends Context {
 		break;
 	    case PRIVATE:
 		Player get = (Player) getObjects().get(log.getReceiverID());
-		get.getInventoryComponent().processMessage(new MessagePropertySet(log.getReceiverID(), "messages", log.getMessage()));
+		get.message(new MessagePropertySet(log.getReceiverID(), "messages", log.getMessage()));
 		break;
 	}
     }

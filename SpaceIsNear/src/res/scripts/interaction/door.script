@@ -11,10 +11,9 @@ item = getItem {}
 	if (isOpened == true){
 	    sendAnimationQueueToRequestor {"0, 1, 2, 3", 200}
 	    setProperty {ticksSinceOpened, 0}
-	    registerForTimeMessages {}
+	    registerForTimeMessages {150}
 	}
 	else {
 	    sendAnimationQueueToRequestor {"3, 2, 1, 0", 200}
-	    unregisterForTimeMessages {}
 	}
   }

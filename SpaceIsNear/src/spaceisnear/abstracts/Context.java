@@ -25,7 +25,7 @@ public abstract class Context {
 
     public abstract void sendToID(Message m, int id);
 
-    public synchronized void sendDirectedMessage(DirectedMessage directedMessage) {
+    public final synchronized void sendDirectedMessage(DirectedMessage directedMessage) {
 	sendToID(directedMessage, directedMessage.getId());
     }
 

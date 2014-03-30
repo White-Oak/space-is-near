@@ -5,10 +5,13 @@
  */
 package spaceisnear.abstracts;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import lombok.*;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
-import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 
@@ -18,14 +21,31 @@ import spaceisnear.game.objects.Position;
  */
 public abstract class AbstractGameObject {
 
+    @Setter @Getter private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     private PositionComponent positionComponent;
     private VariablePropertiesComponent properties;
+    @Getter @Setter private boolean destroyed = false;
+    @Getter @Setter(AccessLevel.PROTECTED) private List<Component> components = new ArrayList<>();
 
-    public abstract void message(Message m);
+    public final void message(Message message) {
+	messages.add(message);
+    }
 
-    public abstract List<Component> getComponents();
-
-    public abstract void process();
+    public synchronized void process() {
+	if (destroyed) {
+	    return;
+	}
+	int savedSize = messages.size();
+	for (int i = 0; i < savedSize; i++) {
+	    Message message = messages.poll();
+	    components.forEach(component -> {
+		component.processMessage(message);
+		if (false & message.getMessageType() == MessageType.TIME_PASSED) {
+		    component.checkTimes();
+		}
+	    });
+	}
+    }
 
     public abstract Context getContext();
 

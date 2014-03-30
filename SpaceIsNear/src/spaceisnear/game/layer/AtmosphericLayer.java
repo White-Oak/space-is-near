@@ -223,4 +223,22 @@ public class AtmosphericLayer extends Layer {
 	processHulls(context);
 	tick();
     }
+
+    public boolean notEnoughToBreath(int x, int y) {
+	int pressure = getPressure(x, y);
+	return pressure < AtmosphericLayer.PRESSURE_ENOUGH_TO_BREATH;
+    }
+
+    public boolean hardToBreath(int x, int y) {
+	int pressure = getPressure(x, y);
+	return pressure < AtmosphericLayer.PRESSURE_HARD_TO_BREATH;
+    }
+
+    public boolean hardToBreath(Position p) {
+	return hardToBreath(p.getX(), p.getY());
+    }
+
+    public boolean notEnoughToBreath(Position p) {
+	return notEnoughToBreath(p.getX(), p.getY());
+    }
 }

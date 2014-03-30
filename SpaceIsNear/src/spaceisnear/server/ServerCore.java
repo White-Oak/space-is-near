@@ -84,12 +84,12 @@ public class ServerCore implements Runnable {
     }
 
     private void checkHealthStatuses() {
-	for (Player player : getContext().getPlayers()) {
+	getContext().getPlayers().forEach((player) -> {
 	    Position position = player.getPosition();
-	    int pressure = context.getAtmosphere().getPressure(position.getX(), position.getY());
-	    if (pressure < AtmosphericLayer.PRESSURE_HARD_TO_BREATH) {
+	    final AtmosphericLayer atmosphere = context.getAtmosphere();
+	    if (atmosphere.hardToBreath(position)) {
 		HurtMessage hurtMessage;
-		if (pressure < AtmosphericLayer.PRESSURE_ENOUGH_TO_BREATH) {
+		if (atmosphere.notEnoughToBreath(position)) {
 		    hurtMessage = new HurtMessage(HealthComponent.SUFFOCATING_DAMAGE, HurtMessage.Type.SUFFOCATING,
 			    player.getId());
 		} else {
@@ -98,7 +98,7 @@ public class ServerCore implements Runnable {
 		}
 		getContext().sendDirectedMessage(hurtMessage);
 	    }
-	}
+	});
     }
 
     public void pause() {

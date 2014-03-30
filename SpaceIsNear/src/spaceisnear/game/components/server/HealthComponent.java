@@ -28,6 +28,7 @@ public class HealthComponent extends Component {
     public static final int SICK_HEALTH = 80;
     public static final int SUFFOCATING_DAMAGE = -10;
     public static final int LIGHT_SUFFOCATING_DAMAGE = -1;
+    private static final int KNOCKBACKED_PASSES = 200;
 
     /**
      *
@@ -52,23 +53,28 @@ public class HealthComponent extends Component {
 //			context.log(new LogString(nickname + " задыхается.", LogLevel.TALKING, getPosition()));
 			break;
 		}
+		final VariablePropertiesComponent variablePropertiesComponent = getOwner().getVariablePropertiesComponent();
 		//
 		switch (getState()) {
 		    case CRITICICAL:
 			MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
 //			getContext().sendToID(messageKnockbacked, player.getId());
-			getOwner().getVariablePropertiesComponent().setProperty("knockbacked", true);
+			variablePropertiesComponent.setProperty("knockbacked", true);
+			registerForOneShotTask(() -> variablePropertiesComponent.setProperty("knockbacked", false),
+				KNOCKBACKED_PASSES);
 			getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
 			break;
 
 		    case DEAD:
 			MessageDied messageDied = new MessageDied(player.getId());
-			getOwner().getVariablePropertiesComponent().setProperty("dead", true);
+			variablePropertiesComponent.setProperty("dead", true);
 			getContext().sendToID(new MessageToSend(messageDied), player.getId());
 			break;
 
 		}
 		break;
+	    case TIME_PASSED:
+
 	}
     }
 

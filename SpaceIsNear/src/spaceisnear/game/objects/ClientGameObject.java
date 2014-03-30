@@ -22,16 +22,15 @@ import spaceisnear.game.messages.Message;
     @Setter @Getter private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter private boolean destroyed = false;
-    @Getter private List<Component> components = new ArrayList<>();
     @NonNull @Getter private final GameObjectType type;
     @Getter private GameContext context;
 
     public void setId(int id) {
 	if (this.id == -1) {
 	    this.id = id;
-	    for (Component component : components) {
+	    getComponents().forEach((component) -> {
 		component.setOwnerId(id);
-	    }
+	    });
 	}
     }
 
@@ -39,42 +38,20 @@ import spaceisnear.game.messages.Message;
 	for (Component component : a) {
 	    component.setContext(context);
 	}
-	this.components.addAll(Arrays.asList(a));
-    }
-
-    @Override
-    public final void message(Message message) {
-	messages.add(message);
-    }
-
-    @Override
-    public synchronized void process() {
-	if (destroyed) {
-	    return;
-	}
-	while (messages.size() > 0) {
-	    Message message = messages.poll();
-	    components.forEach(component -> component.processMessage(message));
-	}
+	this.getComponents().addAll(Arrays.asList(a));
     }
 
     public void setContext(GameContext context) {
 	this.context = context;
-	for (Component component : components) {
-	    component.setContext(context);
-	    if (component instanceof PaintableComponent) {
-		context.addPaintable((PaintableComponent) component);
-	    }
-	}
-    }
-
-    protected void setComponents(List<Component> components) {
-	this.components = components;
+	getComponents().forEach(component -> component.setContext(context));
+	getComponents().stream()
+		.filter(component -> (component instanceof PaintableComponent))
+		.forEach(component -> context.addPaintable((PaintableComponent) component));
     }
 
     public boolean isAnimated() {
 	boolean result = false;
-	result = components.stream()
+	result = getComponents().stream()
 		.map(component -> component.hasAnimation())
 		.reduce(result, (accumulator, _item) -> accumulator | _item);
 	return result;

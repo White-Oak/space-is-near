@@ -22,14 +22,13 @@ import spaceisnear.server.ServerContext;
     private final Queue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter private boolean destroyed = false;
-    @Getter private final List<Component> components = new ArrayList<>();
     @Getter private final GameObjectType type;
     @Getter private final ServerContext context;
 
     public void setId(int id) {
 	if (this.id == -1) {
 	    this.id = id;
-	    for (Component component : components) {
+	    for (Component component : getComponents()) {
 		component.setOwnerId(id);
 	    }
 	}
@@ -39,28 +38,12 @@ import spaceisnear.server.ServerContext;
 	for (Component component : a) {
 	    component.setContext(context);
 	}
-	this.components.addAll(Arrays.asList(a));
-    }
-
-    @Override
-    public final void message(Message message) {
-	messages.add(message);
-    }
-
-    @Override
-    public synchronized void process() {
-	if (destroyed) {
-	    return;
-	}
-	while (!messages.isEmpty()) {
-	    Message message = messages.poll();
-	    components.forEach(component -> component.processMessage(message));
-	}
+	getComponents().addAll(Arrays.asList(a));
     }
 
     public boolean needsTime() {
 	boolean result = false;
-	result = components.stream()
+	result = getComponents().stream()
 		.map((component) -> component.needsTime())
 		.reduce(result, (accumulator, _item) -> accumulator | _item);
 	return result;

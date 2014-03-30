@@ -26,7 +26,6 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 	new NativeFunction("concatenateProperty", 2),
 	new NativeFunction("sendAnimationQueueToRequestor", 2),
 	new NativeFunction("registerForTimeMessages"),
-	new NativeFunction("unregisterForTimeMessages"),
 	new NativeFunction("setFullyPathable", 1)};
     private final Interpretator interpretator;
     private final ServerContext context;
@@ -93,11 +92,9 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 		MessageToSend messageToSend = new MessageToSend(messageAnimationChanged);
 		context.sendDirectedMessage(messageToSend);
 		break;
-	    case "registerForTimeMessages":
-		currentRequester.registerForTimeMessages();
-		break;
-	    case "unregisterForTimeMessages":
-		currentRequester.unregisterForTimeMessages();
+	    case "registerForTimeMessage":
+		currentRequester.registerForOneShotTask(() -> currentRequester.processMessage(new MessageTimePassed(20)),
+			Integer.parseInt(values[0].getValue()));
 		break;
 	    case "setFullyPathable":
 		boolean set = Boolean.parseBoolean(values[0].getValue());
