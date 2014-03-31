@@ -53,7 +53,7 @@ public class Inventory extends Actor {
 		    localDeltaX >>= 1;
 		}
 		for (int j = 0; j < 4; j++) {
-		    renderer.filledRect(localDeltaX + startingX + i * (TILE_WIDTH + TILE_PADDING),
+		    renderer.rect(localDeltaX + startingX + i * (TILE_WIDTH + TILE_PADDING),
 			    startingY + j * (TILE_HEIGHT + TILE_PADDING),
 			    TILE_WIDTH, TILE_HEIGHT);
 		}
@@ -61,7 +61,7 @@ public class Inventory extends Actor {
 	}
 	//last line of tiles
 	for (int i = 0; i < 7; i++) {
-	    renderer.filledRect(startingX + (TILE_WIDTH + TILE_PADDING) * 2, startingY + i * (TILE_HEIGHT + TILE_PADDING),
+	    renderer.rect(startingX + (TILE_WIDTH + TILE_PADDING) * 2, startingY + i * (TILE_HEIGHT + TILE_PADDING),
 		    TILE_WIDTH, TILE_HEIGHT);
 	}
     }
@@ -121,9 +121,9 @@ public class Inventory extends Actor {
     private void drawBackground(int startingX, int startingY, ShapeRenderer renderer) {
 	Color backgroundColor = new Color(1, 1, 1, 0.5f);
 	renderer.setColor(backgroundColor);
-	renderer.filledRect(startingX - TILE_PADDING + deltaX, startingY - TILE_PADDING,
+	renderer.rect(startingX - TILE_PADDING + deltaX, startingY - TILE_PADDING,
 		MAX_DELTA_X - deltaX, TILE_PADDING + (TILE_HEIGHT + TILE_PADDING) * 4);
-	renderer.filledRect(startingX + (TILE_WIDTH + TILE_PADDING) * 2 - TILE_PADDING, startingY - TILE_PADDING,
+	renderer.rect(startingX + (TILE_WIDTH + TILE_PADDING) * 2 - TILE_PADDING, startingY - TILE_PADDING,
 		TILE_WIDTH + TILE_PADDING * 2, INVENTORY_HEIGHT);
 
     }
@@ -162,7 +162,7 @@ public class Inventory extends Actor {
 	renderer.setProjectionMatrix(camera.combined);
 	Gdx.gl.glEnable(GL20.GL_BLEND);
 	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+	renderer.begin(ShapeRenderer.ShapeType.Filled);
 	drawBackground(x, y, renderer);
 	drawTiles(x, y, renderer);
 	renderer.end();

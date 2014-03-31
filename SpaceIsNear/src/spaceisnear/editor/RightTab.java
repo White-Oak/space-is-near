@@ -54,16 +54,16 @@ public class RightTab extends Actor {
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.setTransformMatrix(batch.getTransformMatrix());
 	renderer.translate(getX(), getY(), 0);
-	renderer.begin(ShapeType.FilledRectangle);
+	renderer.begin(ShapeType.Filled);
 	renderer.setColor(getColor());
-	renderer.filledRect(0, 0, getWidth(), getHeight());
+	renderer.rect(0, 0, getWidth(), getHeight());
 	//scrollbar
 	renderer.setColor(Color.DARK_GRAY);
-	renderer.filledRect(SCROLLBAR_PADDING_X, SCROLLBAR_PADDING_Y + scrollBarY,
+	renderer.rect(SCROLLBAR_PADDING_X, SCROLLBAR_PADDING_Y + scrollBarY,
 		SCROLLBAR_WIDTH, getHeight() - SCROLLBAR_PADDING_Y * 2);
 	renderer.end();
 	//border
-	renderer.begin(ShapeType.Rectangle);
+	renderer.begin(ShapeType.Line);
 	renderer.setColor(Color.RED);
 	int borderX = UI_PADDING_X + TILE_PADDING;
 	if (chosenOne % 2 != 0) {

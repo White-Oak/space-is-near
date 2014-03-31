@@ -132,7 +132,7 @@ public class ItemRenderer extends Actor {
 	}
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.setTransformMatrix(batch.getTransformMatrix());
-	renderer.begin(ShapeRenderer.ShapeType.Rectangle);
+	renderer.begin(ShapeRenderer.ShapeType.Line);
 	renderer.setColor(Color.RED);
 	renderer.rect(posX, posY, 64 * GameContext.TILE_WIDTH, 64 * GameContext.TILE_HEIGHT);
 	renderer.end();

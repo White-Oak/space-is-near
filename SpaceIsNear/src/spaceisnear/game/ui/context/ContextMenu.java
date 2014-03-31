@@ -76,15 +76,15 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
     public void render(SpriteBatch batch) {
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.translate(getX(), getY(), 0);
-	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+	renderer.begin(ShapeRenderer.ShapeType.Filled);
 	{
 	    renderer.setColor(Color.WHITE);
-	    renderer.filledRect(0, 0, maxWidth, height);
+	    renderer.rect(0, 0, maxWidth, height);
 	    renderer.setColor(Color.BLACK);
-	    renderer.filledRect(0, selected * getLineHeight(), maxWidth, getLineHeight());
+	    renderer.rect(0, selected * getLineHeight(), maxWidth, getLineHeight());
 	}
 	renderer.end();
-	renderer.begin(ShapeRenderer.ShapeType.Rectangle);
+	renderer.begin(ShapeRenderer.ShapeType.Line);
 	{
 	    renderer.rect(-1, -1, maxWidth + 1, height + 1);
 	}
@@ -92,13 +92,13 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 	for (int i = 0; i < items.size(); i++) {
 	    ContextMenuItemable contextMenuItem = items.get(i);
 	    final int currentPosition = (i * getLineHeight());
-	    renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+	    renderer.begin(ShapeRenderer.ShapeType.Filled);
 	    {
 		Color color = i == selected ? Color.WHITE : Color.BLACK;
 		renderer.setColor(color);
 		font.setColor(color);
 		if (contextMenuItem instanceof ContextMenu) {
-		    renderer.filledRect(maxWidth - 10, currentPosition + (getLineHeight() >> 1) - 1, 3, 3);
+		    renderer.rect(maxWidth - 10, currentPosition + (getLineHeight() >> 1) - 1, 3, 3);
 		}
 	    }
 	    renderer.end();

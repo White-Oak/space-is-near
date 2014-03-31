@@ -2,7 +2,7 @@ package spaceisnear.game;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Getter;
 import spaceisnear.abstracts.Context;
@@ -22,7 +22,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
  *
  * @author White Oak
  */
-public class Corev3 extends Game implements ActivationListener {
+public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener {
 
     private final InputMultiplexer multiplexer = new InputMultiplexer();
     private OrthographicCamera camera;

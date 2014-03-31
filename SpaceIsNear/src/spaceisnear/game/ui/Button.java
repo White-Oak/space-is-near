@@ -34,7 +34,7 @@ public final class Button extends UIElement {
     @Override
     public void paint(SpriteBatch batch) {
 	ShapeRenderer renderer = getRenderer();
-	renderer.begin(ShapeRenderer.ShapeType.Rectangle);
+	renderer.begin(ShapeRenderer.ShapeType.Line);
 	renderer.setColor(Color.BLACK);
 	renderer.rect(0, 0, getWidth(), getHeight());
 	renderer.end();

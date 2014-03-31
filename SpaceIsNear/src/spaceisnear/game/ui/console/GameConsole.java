@@ -55,12 +55,12 @@ public class GameConsole extends Actor {
     public void draw(SpriteBatch batch, float parentAlpha) {
 	renderer.translate(x, 0, 0);
 	batch.end();
-	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+	renderer.begin(ShapeRenderer.ShapeType.Filled);
 	renderer.setColor(Color.WHITE);
-	renderer.filledRect(0, 0, getWidth(), getHeight());
+	renderer.rect(0, 0, getWidth(), getHeight());
 	//left scrollbar 
 	renderer.setColor(Color.GRAY);
-	renderer.filledRect(2, 2 + scrollBarY, 18, scrollBarSize);
+	renderer.rect(2, 2 + scrollBarY, 18, scrollBarSize);
 	renderer.end();
 	//
 	renderer.begin(ShapeRenderer.ShapeType.Line);
