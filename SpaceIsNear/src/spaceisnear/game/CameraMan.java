@@ -20,6 +20,7 @@ public final class CameraMan {
     @Setter private int windowWidth;
     @Setter private int windowHeight;
     @Getter private final OrthographicCamera camera = new OrthographicCamera();
+    @Getter private final OrthographicCamera lightsCamera = new OrthographicCamera();
     @Getter private final int horizontalTilesNumber;
     @Getter private final int verticalTilesNumber;
 
@@ -27,6 +28,7 @@ public final class CameraMan {
 	verticalTilesNumber = GameContext.MAP_WIDTH;
 	horizontalTilesNumber = verticalTilesNumber;
 	camera.setToOrtho(true);
+	lightsCamera.setToOrtho(true, 1200f / GameContext.TILE_WIDTH, 600f / GameContext.TILE_HEIGHT);
     }
 
     public void moveCamera(int deltax, int deltay) {
@@ -73,14 +75,17 @@ public final class CameraMan {
     private int savedX, savedY;
 
     public void moveCamera() {
-	savedX = x * GameContext.TILE_WIDTH;
-	savedY = y * GameContext.TILE_HEIGHT;
-	camera.translate(savedX, savedY);
+	savedX = x;
+	savedY = y;
+	camera.translate(savedX * GameContext.TILE_WIDTH, savedY * GameContext.TILE_HEIGHT);
 	camera.update();
+	lightsCamera.translate(savedX, savedY);
+	lightsCamera.update();
     }
 
     public void unmoveCamera() {
-	camera.translate(-savedX, -savedY);
+	camera.translate(-savedX * GameContext.TILE_WIDTH, -savedY * GameContext.TILE_HEIGHT);
+	lightsCamera.translate(-savedX, -savedY);
 	camera.update();
     }
 

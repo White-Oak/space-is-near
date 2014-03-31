@@ -52,8 +52,8 @@ public final class MenuItem {
     public int paint(int x, int y, ShapeRenderer renderer) {
 	if (selected) {
 	    renderer.setColor(selectedColor);
-	    renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
-	    renderer.filledRect(x, y - 2, width, font.getLineHeight() + 4);
+	    renderer.begin(ShapeRenderer.ShapeType.Filled);
+	    renderer.rect(x, y - 2, width, font.getLineHeight() + 4);
 	    renderer.end();
 	}
 	return width;

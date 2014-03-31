@@ -1,8 +1,12 @@
 package spaceisnear.game;
 
+import box2dLight.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import java.io.*;
 import java.util.*;
 import lombok.*;
@@ -31,13 +35,14 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     @Getter private final Networking networking;
     private ContextMenu menu;
-    private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
+    private final OrthographicCamera camera = new OrthographicCamera(1200, 800);
     private InputCatcher inputCatcher;
     private Inventory inventory;
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
     private final SpriteBatch batch = new SpriteBatch();
     private long lastTimeMoved;
     private final static long MINIMUM_TIME_TO_MOVE = 80L;
+    RayHandler rayHandler;
 
     public Corev2(Corev3 corev3) {
 	super(corev3);
@@ -89,6 +94,9 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	    }
 	};
 	thread.start();
+
+//	rayHandler = new RayHandler(createPhysicsWorld());
+//	new PointLight(rayHandler, 10, new Color(1, 1, 1, 1), 5, 0, 0);
     }
 
     private void callToConnect() {
@@ -195,13 +203,58 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	}
     }
 
+    private World createPhysicsWorld() {
+
+	World world = new World(new Vector2(0, -10), true);
+
+	ChainShape chainShape = new ChainShape();
+	chainShape.createLoop(new Vector2[]{new Vector2(-22, 1),
+					    new Vector2(22, 1), new Vector2(22, 31), new Vector2(0, 20),
+					    new Vector2(-22, 31)});
+	BodyDef chainBodyDef = new BodyDef();
+	chainBodyDef.type = BodyType.StaticBody;
+	world.createBody(chainBodyDef).createFixture(chainShape, 0);
+	chainShape.dispose();
+	return world;
+    }
+
     @Override
     public void draw() {
 	context.getCameraMan().moveCamera();
 	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
+
+	final World world = new World(new Vector2(), true);
+	// Create our body definition
+	BodyDef groundBodyDef = new BodyDef();
+	// Set its world position
+	groundBodyDef.position.set(new Vector2(context.getPlayer().getPosition().getX(), context.getPlayer().getPosition().getY()));
+
+	// Create a body from the defintion and add it to the world
+	Body groundBody = world.createBody(groundBodyDef);
+
+	// Create a polygon shape
+	PolygonShape groundBox = new PolygonShape();
+	// Set the polygon shape as a box which is twice the size of our view port and 20 high
+	// (setAsBox takes half-width and half-height as arguments)
+	groundBox.setAsBox(0.5f, 0.5f);
+	// Create a fixture from our polygon shape and add it to our ground body  
+	groundBody.createFixture(groundBox, 0.0f);
+
+	RayHandler.useDiffuseLight(true);
+	RayHandler rayHandler = new RayHandler(world);
+	rayHandler.setCulling(true);
+	rayHandler.setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
+	PointLight pointLight = new PointLight(rayHandler, 100);
+	pointLight.setColor(new Color(1, 1, 1, 0.5f));
+	pointLight.setDistance(10);
+	pointLight.setStaticLight(true);
+	pointLight.attachToBody(groundBody, 0.5f, 0.5f);
 	batch.begin();
 	context.getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();
+	rayHandler.updateAndRender();
+	rayHandler.dispose();
+
 	context.getCameraMan().unmoveCamera();
     }
 

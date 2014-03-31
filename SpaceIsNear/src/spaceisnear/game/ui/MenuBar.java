@@ -48,9 +48,9 @@ public class MenuBar extends UIElement {
     public void paint(SpriteBatch batch) {
 	ShapeRenderer renderer = getRenderer();
 	renderer.setColor(color);
-	renderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+	renderer.begin(ShapeRenderer.ShapeType.Filled);
 	{
-	    renderer.filledRect(0, 0, getWidth(), getHeight());
+	    renderer.rect(0, 0, getWidth(), getHeight());
 	}
 	renderer.end();
 
