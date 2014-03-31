@@ -8,8 +8,6 @@ import java.util.List;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.ItemPaintableComponent;
-import spaceisnear.game.components.client.LightComponent;
-import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.*;
 
 /**
@@ -24,8 +22,7 @@ public class StaticItem extends ClientGameObject {
 	super(GameObjectType.ITEM);
 	PositionComponent pc = new PositionComponent(p);
 	properties = new ItemPropertiesComponent(itemId);
-	addComponents(pc, properties, new ItemPaintableComponent(), new LightComponent());
-	message(new MessagePropertySet(getId(), "blockingLight", ItemsArchive.itemsArchive.getBundle(itemId).blockingLight));
+	addComponents(pc, properties, new ItemPaintableComponent());
     }
 
     public StaticItem(int itemId) {
