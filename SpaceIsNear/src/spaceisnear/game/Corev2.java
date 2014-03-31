@@ -223,32 +223,26 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.getCameraMan().moveCamera();
 	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
 
-	final World world = new World(new Vector2(), true);
 	// Create our body definition
 	BodyDef groundBodyDef = new BodyDef();
 	// Set its world position
 	groundBodyDef.position.set(new Vector2(context.getPlayer().getPosition().getX(), context.getPlayer().getPosition().getY()));
 
 	// Create a body from the defintion and add it to the world
-	Body groundBody = world.createBody(groundBodyDef);
-
-	// Create a polygon shape
-	PolygonShape groundBox = new PolygonShape();
-	// Set the polygon shape as a box which is twice the size of our view port and 20 high
-	// (setAsBox takes half-width and half-height as arguments)
-	groundBox.setAsBox(0.5f, 0.5f);
-	// Create a fixture from our polygon shape and add it to our ground body  
-	groundBody.createFixture(groundBox, 0.0f);
+	Body groundBody = context.getWorld().createBody(groundBodyDef);
 
 	RayHandler.useDiffuseLight(true);
-	RayHandler rayHandler = new RayHandler(world);
+	RayHandler rayHandler = new RayHandler(context.getWorld());
 	rayHandler.setCulling(true);
 	rayHandler.setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
-	PointLight pointLight = new PointLight(rayHandler, 100);
+	PointLight pointLight = new PointLight(rayHandler, 128);
 	pointLight.setColor(new Color(1, 1, 1, 0.5f));
-	pointLight.setDistance(10);
+	pointLight.setSoft(true);
+	pointLight.setSoftnessLenght(2f);
+	pointLight.setDistance(50);
 	pointLight.setStaticLight(true);
 	pointLight.attachToBody(groundBody, 0.5f, 0.5f);
+//	pointLight.setPosition(key, key);
 	batch.begin();
 	context.getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();

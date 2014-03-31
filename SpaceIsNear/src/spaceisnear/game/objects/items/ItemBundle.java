@@ -22,6 +22,7 @@ public class ItemBundle {
     public Type type;
     public boolean blockingPath;
     public boolean blockingAir;
+    public boolean blockingLight;
     public int[] imageIds;
     public boolean stuckedByAddingFromScript;
     public String description;
