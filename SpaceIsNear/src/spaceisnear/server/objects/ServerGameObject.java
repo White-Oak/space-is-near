@@ -6,11 +6,9 @@
 package spaceisnear.server.objects;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.Component;
-import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.server.ServerContext;
 
@@ -19,7 +17,6 @@ import spaceisnear.server.ServerContext;
  */
 @RequiredArgsConstructor public abstract class ServerGameObject extends AbstractGameObject {
 
-    private final Queue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter private boolean destroyed = false;
     @Getter private final GameObjectType type;
@@ -39,6 +36,18 @@ import spaceisnear.server.ServerContext;
 	    component.setContext(context);
 	}
 	getComponents().addAll(Arrays.asList(a));
+    }
+
+    public void registerForTimeMessages() {
+	if (!needsTime()) {
+	    context.addTimeNeeding(this);
+	}
+    }
+
+    public void unregisterForTimeMessages() {
+	if (!needsTime()) {
+	    context.removeTimeNeeding(this);
+	}
     }
 
     public boolean needsTime() {

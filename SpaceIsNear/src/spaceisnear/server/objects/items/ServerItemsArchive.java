@@ -68,29 +68,15 @@ public class ServerItemsArchive extends ItemsArchivable {
 	if (interpretatorBundles[id] == null) {
 	    interpretatorBundles[id] = new InterpretatorBundle();
 	}
-	switch (mode) {
-	    case 0:
-		interpretatorBundles[id].interaction = interpretator;
-		break;
-	    case 1:
-		interpretatorBundles[id].messages = interpretator;
-		break;
-	}
+	interpretatorBundles[id].interpretators[mode] = interpretator;
     }
 
     private Interpretator getInterpretatorByMode(int mode, int id) {
-	Interpretator interpretator = null;
+	Interpretator interpretator;
 	if (interpretatorBundles[id] == null) {
 	    return null;
 	}
-	switch (mode) {
-	    case 0:
-		interpretator = interpretatorBundles[id].interaction;
-		break;
-	    case 1:
-		interpretator = interpretatorBundles[id].messages;
-		break;
-	}
+	interpretator = interpretatorBundles[id].interpretators[mode];
 	return interpretator;
     }
 
@@ -103,14 +89,18 @@ public class ServerItemsArchive extends ItemsArchivable {
 	    case 1:
 		dir = "messages/";
 		break;
+	    case 2:
+		dir = "time/";
+		break;
 	}
 	return dir;
     }
 
     private class InterpretatorBundle {
 
-	Interpretator interaction;
-	Interpretator messages;
+	//interaction, messages, time
+	Interpretator[] interpretators = new Interpretator[3];
+
     }
 
     public spaceisnear.server.objects.items.StaticItem getNewItemForServer(int id, ServerContext serverContext) {

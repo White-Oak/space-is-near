@@ -25,7 +25,7 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 	new NativeFunction("sendPlayerPrivateMessage", 1),
 	new NativeFunction("concatenateProperty", 2),
 	new NativeFunction("sendAnimationQueueToRequestor", 2),
-	new NativeFunction("registerForTimeMessages"),
+	new NativeFunction("registerForTimeMessage", 1),
 	new NativeFunction("setFullyPathable", 1)};
     private final Interpretator interpretator;
     private final ServerContext context;
@@ -93,7 +93,8 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 		context.sendDirectedMessage(messageToSend);
 		break;
 	    case "registerForTimeMessage":
-		currentRequester.registerForOneShotTask(() -> currentRequester.processMessage(new MessageTimePassed(20)),
+		TimePassedScriptProcessor timePassedScriptProcessor = new TimePassedScriptProcessor(context, currentRequester);
+		currentRequester.registerForOneShotTask(() -> timePassedScriptProcessor.run(),
 			Integer.parseInt(values[0].getValue()));
 		break;
 	    case "setFullyPathable":

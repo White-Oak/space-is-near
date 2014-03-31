@@ -1,9 +1,8 @@
 package spaceisnear.game.components.server;
 
-import spaceisnear.game.components.server.scriptprocessors.TimePassedScriptProcessor;
-import spaceisnear.game.components.server.scriptprocessors.MessagePropertySetProcessingScriptProccessor;
-import spaceisnear.game.components.server.scriptprocessors.InteractionScriptProccessor;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
+import spaceisnear.game.components.server.scriptprocessors.*;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.objects.GameObjectType;
@@ -36,23 +35,11 @@ public class VariablePropertiesComponent extends Component {
 			mpsp = new MessagePropertySetProcessingScriptProccessor(context, this, mps);
 			mpsp.run();
 		    } catch (ClassCastException e) {
-			e.printStackTrace();
+			Context.LOG.log(e);
 		    }
 		}
 		if (!isDontProcess()) {
 		    processPropertySetMessage(mps);
-		}
-		break;
-	    case TIME_PASSED:
-		if (getOwner().getType() == GameObjectType.ITEM) {
-		    try {
-			//Context.LOG.log("Trying to script time passed message");
-			ServerContext context = (ServerContext) getContext();
-			TimePassedScriptProcessor timePassedScriptProcessor = new TimePassedScriptProcessor(context, this);
-			timePassedScriptProcessor.run();
-		    } catch (ClassCastException e) {
-			e.printStackTrace();
-		    }
 		}
 		break;
 	    case INTERACTED:

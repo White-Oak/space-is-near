@@ -6,6 +6,7 @@ import de.ruedigermoeller.serialization.*;
 import java.io.*;
 import java.util.logging.*;
 import lombok.*;
+import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
@@ -77,20 +78,22 @@ import spaceisnear.server.*;
 	    try (FSTObjectInput fstObjectInput = new FSTObjectInput(new ByteArrayInputStream((byte[]) object))) {
 		message = (Message) fstObjectInput.readObject();
 	    } catch (IOException | ClassNotFoundException ex) {
-		Logger.getLogger(Networking.class.getName()).log(Level.SEVERE, null, ex);
+		Context.LOG.log(ex);
 	    }
-	    MessageType mt = message.getMessageType();
-	    switch (mt) {
-		case ROGER_REQUESTED:
+	    if (message != null) {
+		MessageType mt = message.getMessageType();
+		switch (mt) {
+		    case ROGER_REQUESTED:
 //		    Context.LOG.log("No time to explain — roger that!");
-		    send(ROGERED);
-		    break;
-		case JOINED:
-		    joined = true;
-		    break;
-		default:
-		    message.processForClient(core.getContext());
-		    break;
+			send(ROGERED);
+			break;
+		    case JOINED:
+			joined = true;
+			break;
+		    default:
+			message.processForClient(core.getContext());
+			break;
+		}
 	    }
 //	    Context.LOG.log("Message received");
 //	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));

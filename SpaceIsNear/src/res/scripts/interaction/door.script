@@ -4,14 +4,13 @@ item = getItem {}
 	if(isOpened == null){
 	    isOpened = false
 	}
-	//TODO introduce boolean operations in Interpretator
 	isOpened = invertBoolean {isOpened}
 	setProperty {opened, isOpened}
 	setFullyPathable {isOpened}
 	if (isOpened == true){
 	    sendAnimationQueueToRequestor {"0, 1, 2, 3", 200}
 	    setProperty {ticksSinceOpened, 0}
-	    registerForTimeMessages {150}
+	    registerForTimeMessage {150}
 	}
 	else {
 	    sendAnimationQueueToRequestor {"3, 2, 1, 0", 200}

@@ -293,6 +293,7 @@ import spaceisnear.server.objects.items.*;
 	List<ObjectMessaged> objectPlayer = createPlayer(client);
 	sendWorld(client);
 	sendPlayer(client);
+	//rework
 	clients.stream()
 		.filter(client1 -> client1 != client)
 		.forEach(client1 -> {
@@ -332,7 +333,11 @@ import spaceisnear.server.objects.items.*;
 
     private void sendWorld(Client client) {
 	ObjectMessaged[] world = getWorld();
-	MessageWorldInformation mwi = new MessageWorldInformation(world.length, 0);
+	int accumulator = 0;
+	for (ObjectMessaged objectMessaged : world) {
+	    accumulator += objectMessaged.propertables.size();
+	}
+	MessageWorldInformation mwi = new MessageWorldInformation(world.length, accumulator);
 	sendToConnection(client.getConnection(), mwi);
 	sendCreatedsOfWorld(world, client.getConnection());
 	sendPropertiesOfWorld(world, client.getConnection());

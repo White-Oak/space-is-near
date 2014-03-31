@@ -1,9 +1,0 @@
-type = getMessageType {}
-    if (type == TIME_PASSED){
-	isOpened = getProperty {opened}
-	if (isOpened == true){
-	    setFullyPathable {false}
-	    setProperty {opened, false}
-	    sendAnimationQueueToRequestor {"3, 2, 1, 0", 200}
-	}
-    }

@@ -29,6 +29,7 @@ public class ServerCore implements Runnable {
     private long timePassed;
     private AtmosphereThread at = new AtmosphereThread();
     private ContextEditorsManager editorsManager = new ContextEditorsManager();
+    private static final MessageTimePassed MESSAGE_TIME_PASSED = new MessageTimePassed(QUANT_TIME);
 
     public ServerCore() throws IOException {
 	int width = GameContext.MAP_WIDTH;
@@ -58,7 +59,7 @@ public class ServerCore implements Runnable {
 	    context.getNetworking().processReceivedQueue();
 	    //game
 	    if (!paused) {
-		MessageTimePassed messageTimePassed = new MessageTimePassed(QUANT_TIME);
+		MessageTimePassed messageTimePassed = MESSAGE_TIME_PASSED;
 		context.sendTimePassed(messageTimePassed);
 		getContext().getObjects().stream().
 			filter(gameObject -> gameObject != null).

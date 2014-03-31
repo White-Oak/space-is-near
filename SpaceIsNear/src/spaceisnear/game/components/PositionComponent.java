@@ -12,8 +12,7 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
-import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.objects.*;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;
 

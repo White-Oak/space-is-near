@@ -9,7 +9,6 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.game.objects.Position;
-import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.ServerGameObject;
 
 /**
@@ -23,7 +22,7 @@ import spaceisnear.server.objects.ServerGameObject;
     @Getter @Setter private int ownerId = -1;
     private boolean animation, needsTime;
     @Setter @Getter private boolean dontProcess = false;
-    private final ArrayList<OneShotTask> tasks = new ArrayList<>();
+    private final List<OneShotTask> tasks = new ArrayList<>();
 
     public void registerForOneShotTask(Taskable consumer, int ticksToPass) {
 	tasks.add(new OneShotTask(consumer, ticksToPass));
@@ -39,7 +38,7 @@ import spaceisnear.server.objects.ServerGameObject;
 	    }
 	}
 	if (tasks.isEmpty()) {
-	    unregisterForAnimation();
+	    unregisterForTimeMessages();
 	}
     }
 
@@ -101,17 +100,13 @@ import spaceisnear.server.objects.ServerGameObject;
     }
 
     private void registerForTimeMessages() {
-	if (!((ServerGameObject) getOwner()).needsTime()) {
-	    ((ServerContext) context).addTimeNeeding(getOwner());
-	}
+	((ServerGameObject) getOwner()).registerForTimeMessages();
 	needsTime = true;
     }
 
     private void unregisterForTimeMessages() {
 	needsTime = false;
-	if (!((ServerGameObject) getOwner()).needsTime()) {
-	    ((ServerContext) context).removeTimeNeeding(getOwner());
-	}
+	((ServerGameObject) getOwner()).unregisterForTimeMessages();
     }
 
     public boolean hasAnimation() {

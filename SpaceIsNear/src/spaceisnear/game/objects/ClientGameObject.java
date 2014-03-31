@@ -6,20 +6,17 @@
 package spaceisnear.game.objects;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.client.PaintableComponent;
-import spaceisnear.game.messages.Message;
 
 /**
  * @author LPzhelud
  */
 @RequiredArgsConstructor public abstract class ClientGameObject extends AbstractGameObject {
 
-    @Setter @Getter private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
     @Getter private int id = -1;
     @Getter @Setter private boolean destroyed = false;
     @NonNull @Getter private final GameObjectType type;

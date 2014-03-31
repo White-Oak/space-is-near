@@ -3,12 +3,14 @@
     "name" = "pda",
     "contextMenuInit" = false,
     "messageProcessing" = true,
-    "interaction" = false
+    "interaction" = false,
+    "time" = false
 },
 {
     "name" = "door",
     "contextMenuInit" = false,
     "messageProcessing" = false,
-    "interaction" = true
+    "interaction" = true,
+    "time" = true
 }
 ]

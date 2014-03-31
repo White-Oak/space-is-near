@@ -12,6 +12,7 @@ class OneShotTask {
     private final Taskable task;
     private final int ticksToPass;
     private int ticksPassed;
+    private boolean done;
 
     /**
      *
@@ -19,11 +20,10 @@ class OneShotTask {
      */
     public boolean tick() {
 	ticksPassed++;
-	if (isReadyToStart()) {
+	if (!done && isReadyToStart()) {
 	    process();
-	    return true;
 	}
-	return false;
+	return done;
     }
 
     private boolean isReadyToStart() {
@@ -32,5 +32,6 @@ class OneShotTask {
 
     private void process() {
 	task.doIt();
+	done = true;
     }
 }

@@ -12,8 +12,7 @@ import lombok.*;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.messages.*;
-import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.objects.*;
 
 /**
  *
@@ -39,9 +38,10 @@ public abstract class AbstractGameObject {
 	for (int i = 0; i < savedSize; i++) {
 	    Message message = messages.poll();
 	    components.forEach(component -> {
-		component.processMessage(message);
-		if (false & message.getMessageType() == MessageType.TIME_PASSED) {
+		if (message.getMessageType() == MessageType.TIME_PASSED) {
 		    component.checkTimes();
+		} else {
+		    component.processMessage(message);
 		}
 	    });
 	}
