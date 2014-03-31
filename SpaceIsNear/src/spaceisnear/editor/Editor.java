@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Getter;
 import spaceisnear.game.ui.MenuBar;
 import spaceisnear.game.ui.MenuItem;
+import spaceisnear.game.ui.context.ContextMenu;
 import spaceisnear.game.ui.context.ContextMenuItem;
 
 /**
@@ -40,17 +41,7 @@ public class Editor implements Screen {
 	rightTab.setColor(new Color(0.7f, 0.7f, 0.7f, 1f));
 
 	menuBar = new MenuBar();
-	MenuItem menuItem = new MenuItem("File", stage);
-	menuItem.add(new ContextMenuItem("(L)oad"));
-	menuItem.add(new ContextMenuItem("(S)ave"));
-	menuItem.add(new ContextMenuItem("(E)xit"));
-	menuBar.add(menuItem);
-	menuItem = new MenuItem("Edit", stage);
-	menuItem.add(new ContextMenuItem("(A)dd mode"));
-	menuItem.add(new ContextMenuItem("(F)ill mode"));
-	menuItem.add(new ContextMenuItem("(D)elete mode"));
-	menuBar.add(menuItem);
-	menuBar.setWidth(Gdx.graphics.getWidth() - RightTab.TAB_WIDTH);
+	initializeMenuBar();
 
 	itemAdder = new ItemRenderer(rightTab);
 	itemAdder.setBounds(0, menuBar.getHeight(), Gdx.graphics.getWidth() - RightTab.TAB_WIDTH,
@@ -66,6 +57,48 @@ public class Editor implements Screen {
     private final RightTab rightTab;
     private final ItemRenderer itemAdder;
     private int posX, posY;
+
+    private void initializeMenuBar() {
+	MenuItem menuItem = new MenuItem("File", stage);
+	menuItem.setActivationListener((e) -> {
+	    ContextMenu item = (ContextMenu) e;
+	    switch (item.getSelected()) {
+		case 0:
+		    handler.load();
+		    break;
+		case 1:
+		    handler.save();
+		    break;
+		case 2:
+		    Gdx.app.exit();
+		    break;
+	    }
+	});
+	menuItem.add(new ContextMenuItem("(L)oad"));
+	menuItem.add(new ContextMenuItem("(S)ave"));
+	menuItem.add(new ContextMenuItem("(E)xit"));
+	menuBar.add(menuItem);
+	menuItem = new MenuItem("Edit", stage);
+	menuItem.setActivationListener((e) -> {
+	    ContextMenu item = (ContextMenu) e;
+	    switch (item.getSelected()) {
+		case 0:
+		    itemAdder.setMode(MapAction.Type.ADD);
+		    break;
+		case 1:
+		    itemAdder.setMode(MapAction.Type.FILL);
+		    break;
+		case 2:
+		    itemAdder.setMode(MapAction.Type.DELETE);
+		    break;
+	    }
+	});
+	menuItem.add(new ContextMenuItem("(A)dd mode"));
+	menuItem.add(new ContextMenuItem("(F)ill mode"));
+	menuItem.add(new ContextMenuItem("(D)elete mode"));
+	menuBar.add(menuItem);
+	menuBar.setWidth(Gdx.graphics.getWidth() - RightTab.TAB_WIDTH);
+    }
 
     @Override
     public void render(float delta) {

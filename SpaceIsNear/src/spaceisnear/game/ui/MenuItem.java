@@ -37,6 +37,10 @@ public final class MenuItem {
 	width = (int) font.getBounds(label).width + HEIGHT_PADDING * 2;
     }
 
+    public void setActivationListener(ActivationListener activationListener) {
+	menu.setActivationListener(activationListener);
+    }
+
     public boolean add(String str) {
 	return menu.add(str);
     }

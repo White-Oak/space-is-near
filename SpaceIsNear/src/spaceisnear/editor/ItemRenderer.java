@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
 import lombok.Getter;
+import lombok.Setter;
 import spaceisnear.game.GameContext;
 
 /**
@@ -26,7 +27,7 @@ import spaceisnear.game.GameContext;
 public class ItemRenderer extends Actor {
 
     final ItemsHandler handler = ItemsHandler.HANDLER;
-    @Getter private MapAction.Type mode = MapAction.Type.ADD;
+    @Getter @Setter private MapAction.Type mode = MapAction.Type.ADD;
     private final OrthographicCamera camera;
 
     public ItemRenderer(final RightTab tab) {

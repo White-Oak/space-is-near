@@ -259,7 +259,7 @@
     +processing of Messagejoined
 *Rogered logic has been changed
 -Introduce new map
--place simmilar objects near in objects array on start
++place simmilar objects near in objects array on start
 -place properties of objects that are near connected player near in array for faster connection
 -System of context editors for server
     +architecture introduced
