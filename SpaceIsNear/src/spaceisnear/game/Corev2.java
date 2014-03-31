@@ -9,7 +9,6 @@ import lombok.*;
 import org.apache.commons.cli.ParseException;
 import spaceisnear.*;
 import spaceisnear.abstracts.*;
-import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.components.inventory.Inventory;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
@@ -201,9 +200,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.getCameraMan().moveCamera();
 	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
 	batch.begin();
-	for (PaintableComponent paintableComponent : context.getPaintables()) {
-	    paintableComponent.paint(batch);
-	}
+	context.getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();
 	context.getCameraMan().unmoveCamera();
     }
