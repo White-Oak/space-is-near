@@ -38,7 +38,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
     private final SpriteBatch batch = new SpriteBatch();
     private long lastTimeMoved;
-    private final static long MINIMUM_TIME_TO_MOVE = 60L;
+    private final static long MINIMUM_TIME_TO_MOVE = 80L;
 
     public Corev2(Corev3 corev3) {
 	super(corev3);
@@ -151,8 +151,8 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     private MessageControlledByInput checkMovementDesired() {
 	MessageControlledByInput mc = null;
-	boolean ableToMove = !context.getPlayer().getPositionComponent().isAnimated() && !getConsole().hasFocus()
-		&& System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE;
+	boolean ableToMove = System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE
+		&& !context.getPlayer().getPositionComponent().isAnimated() && !getConsole().hasFocus();
 	if (ableToMove) {
 	    switch (key) {
 		case Input.Keys.UP:
@@ -222,7 +222,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	Context.LOG.log("Client has continued his work");
     }
 
-    public void mouseClicked(int button, int x, int y, int clickCount) {
+    public void mouseClicked(int button, int x, int y) {
 	int toAddX = context.getCameraMan().getX();
 	int toAddY = context.getCameraMan().getY();
 	int calculatedX = x / GameContext.TILE_WIDTH;

@@ -38,8 +38,6 @@ public class GamePlayerPositionComponent extends PositionComponent {
 		}
 		break;
 	    }
-	    case TIME_PASSED:
-		break;
 	}
     }
 

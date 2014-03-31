@@ -32,7 +32,7 @@ public class InputCatcher extends Actor {
 
 	    @Override
 	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		core.mouseClicked(button, (int) x, (int) y, 1);
+		core.mouseClicked(button, (int) x, (int) y);
 		getStage().setKeyboardFocus(InputCatcher.this);
 		return true;
 	    }

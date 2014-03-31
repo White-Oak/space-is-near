@@ -70,14 +70,17 @@ public final class CameraMan {
     private void cameraRight() {
 	x++;
     }
+    private int savedX, savedY;
 
     public void moveCamera() {
-	camera.translate(x * GameContext.TILE_WIDTH, y * GameContext.TILE_HEIGHT);
+	savedX = x * GameContext.TILE_WIDTH;
+	savedY = y * GameContext.TILE_HEIGHT;
+	camera.translate(savedX, savedY);
 	camera.update();
     }
 
     public void unmoveCamera() {
-	camera.translate(-x * GameContext.TILE_WIDTH, -y * GameContext.TILE_HEIGHT);
+	camera.translate(-savedX, -savedY);
 	camera.update();
     }
 
