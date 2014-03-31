@@ -216,7 +216,7 @@
 *Reworked log system
 *NameComponent is no longer Paintable — maybe remove it later
 
-0.0.9
+0.0.9 
 *Removed massive creations of Iterators and SpriteBatches
 *Removed some debug messages, added others
 *IP and mode of running are now reading from commandline arguments
@@ -232,14 +232,32 @@
 +switch-case code is replaced by good one
 *removed tons of TIME_PASSED messages sending
 +Doors opening/closing
-    -Interaction with no item in active hand or with id should lead to opening a door.
     +Movement towards a closed door should be treated as interaction with no item.
-    -After door began opening it should remain impassable for a period of time (?).
     +A door is closed after some time had passed.
     +Animation of closing/opening is sent
 -Developed items' system
     +Animation
     *recoded scipts' architecture
++gotta do something with disconnected players
+    +disconnected clients are able to authorize again through AccountsManager
+    +reconnected player should not be the cause of "creating new player" process
+	all they get is world-snapshot
+    +new type of message for joining the game — MessageJoined
+    +processing of Messagejoined
+*Rogered logic has been changed
++place simmilar objects near in objects array on start
+-System of context editors for server
+    +architecture introduced
+    -atmosphere editor
+	+AtmosphereEditor
+	+JFramewith JPanel on it
+	+Pressure map is copied to internal map for editor
+	+moving on JFrame
+
+0.1.0
++Doors opening/closing
+    -Interaction with no item in active hand or with id should lead to opening a door.
+    -After door began opening it should remain impassable for a period of time (?).
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)
@@ -251,24 +269,10 @@
     -knockbacking if big difference between two tiles in pressure
 +MessageKnockbacked
     -processing on server
-+gotta do something with disconnected players
-    +disconnected clients are able to authorize again through AccountsManager
-    +reconnected player should not be the cause of "creating new player" process
-	all they get is world-snapshot
-    +new type of message for joining the game — MessageJoined
-    +processing of Messagejoined
-*Rogered logic has been changed
--Introduce new map
-+place simmilar objects near in objects array on start
 -place properties of objects that are near connected player near in array for faster connection
 -System of context editors for server
-    +architecture introduced
     -atmosphere editor
-	+AtmosphereEditor
-	+JFramewith JPanel on it
-	+Pressure map is copied to internal map for editor
-	+moving on JFrame
 	-editing pressures
     -log viewer
+-lighting system
 
-0.1.0
