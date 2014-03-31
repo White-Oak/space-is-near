@@ -29,7 +29,7 @@ public final class CameraMan {
 	camera.setToOrtho(true);
     }
 
-    public void setNewCameraPositionForMove(int deltax, int deltay) {
+    public void moveCamera(int deltax, int deltay) {
 	if (deltax != 0) {
 	    if (deltax > 0) {
 		cameraRight();

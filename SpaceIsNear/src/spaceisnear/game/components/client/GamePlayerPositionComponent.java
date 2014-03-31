@@ -24,13 +24,20 @@ public class GamePlayerPositionComponent extends PositionComponent {
 	super.processMessage(message);
 	final GameContext context = (GameContext) getContext();
 	switch (message.getMessageType()) {
-	    case MOVED:
-	    case TELEPORTED:
+	    case MOVED: {
 		MessageMoved messagem = (MessageMoved) message;
 		if (oldX != getX() || oldY != getY()) {
-		    context.getCameraMan().setNewCameraPositionForMove(messagem.getP().getX(), messagem.getP().getY());
+		    context.getCameraMan().moveCamera(messagem.getP().getX(), messagem.getP().getY());
 		}
 		break;
+	    }
+	    case TELEPORTED: {
+		MessageMoved messagem = (MessageMoved) message;
+		if (oldX != getX() || oldY != getY()) {
+		    context.getCameraMan().moveCameraToPlayer(messagem.getP().getX(), messagem.getP().getY());
+		}
+		break;
+	    }
 	    case TIME_PASSED:
 		break;
 	}

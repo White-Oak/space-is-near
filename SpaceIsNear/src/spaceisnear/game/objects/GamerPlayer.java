@@ -21,6 +21,7 @@ public class GamerPlayer extends Player {
 		final Position position = ((PositionComponent) component).getPosition();
 		final GamePlayerPositionComponent newPositionComponent = new GamePlayerPositionComponent(position);
 		getComponents().set(i, newPositionComponent);
+		p.getContext().getCameraMan().moveCameraToPlayer(position.getX(), position.getY());
 	    }
 	}
 	setContext(p.getContext());
