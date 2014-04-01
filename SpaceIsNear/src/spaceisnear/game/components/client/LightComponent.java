@@ -53,6 +53,10 @@ public class LightComponent extends Component {
 		}
 		break;
 	    case MOVED:
+		if (body != null) {
+		    body.setTransform(getPosition().getX() + 0.5f, getPosition().getY() + 0.5f, 0);
+		}
+		break;
 	    case TELEPORTED:
 		if (body != null) {
 		    MessageMoved mm = (MessageMoved) message;

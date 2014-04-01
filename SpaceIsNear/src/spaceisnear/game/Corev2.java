@@ -43,6 +43,8 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private long lastTimeMoved;
     private final static long MINIMUM_TIME_TO_MOVE = 80L;
     RayHandler rayHandler;
+    private PointLight pointLight;
+    private Body playerBody;
 
     public Corev2(Corev3 corev3) {
 	super(corev3);
@@ -95,8 +97,16 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	};
 	thread.start();
 
-//	rayHandler = new RayHandler(createPhysicsWorld());
-//	new PointLight(rayHandler, 10, new Color(1, 1, 1, 1), 5, 0, 0);
+	playerBody = context.getWorld().createBody(new BodyDef());
+	RayHandler.useDiffuseLight(true);
+	rayHandler = new RayHandler(context.getWorld());
+	rayHandler.setCulling(true);
+	pointLight = new PointLight(rayHandler, 64);
+	pointLight.setColor(new Color(1, 1, 1, 0.5f));
+	pointLight.setSoft(true);
+	pointLight.setSoftnessLenght(2f);
+	pointLight.setDistance(50);
+	pointLight.setStaticLight(true);
     }
 
     private void callToConnect() {
@@ -223,31 +233,14 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.getCameraMan().moveCamera();
 	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
 
-	// Create our body definition
-	BodyDef groundBodyDef = new BodyDef();
-	// Set its world position
-	groundBodyDef.position.set(new Vector2(context.getPlayer().getPosition().getX(), context.getPlayer().getPosition().getY()));
-
-	// Create a body from the defintion and add it to the world
-	Body groundBody = context.getWorld().createBody(groundBodyDef);
-
-	RayHandler.useDiffuseLight(true);
-	RayHandler rayHandler = new RayHandler(context.getWorld());
-	rayHandler.setCulling(true);
 	rayHandler.setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
-	PointLight pointLight = new PointLight(rayHandler, 128);
-	pointLight.setColor(new Color(1, 1, 1, 0.5f));
-	pointLight.setSoft(true);
-	pointLight.setSoftnessLenght(2f);
-	pointLight.setDistance(50);
-	pointLight.setStaticLight(true);
-	pointLight.attachToBody(groundBody, 0.5f, 0.5f);
-//	pointLight.setPosition(key, key);
+	playerBody.setTransform(getContext().getPlayer().getPosition().getX(), getContext().getPlayer().getPosition().getY(), 0);
+	pointLight.attachToBody(playerBody, 0.5f, 0.5f);
+
 	batch.begin();
 	context.getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();
 	rayHandler.updateAndRender();
-	rayHandler.dispose();
 
 	context.getCameraMan().unmoveCamera();
     }
