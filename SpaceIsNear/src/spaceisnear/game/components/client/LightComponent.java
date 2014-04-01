@@ -1,8 +1,10 @@
-package spaceisnear.game.components;
+package spaceisnear.game.components.client;
 
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
+import spaceisnear.game.components.Component;
+import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.properties.MessagePropertySet;

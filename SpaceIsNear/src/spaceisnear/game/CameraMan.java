@@ -103,11 +103,9 @@ public final class CameraMan {
 	float yy = py + 0.5f;
 	boolean lighted = context.getCore().getPointLight().contains(px, py);
 	Position position = context.getPlayer().getPosition();
-	xx += Math.signum(position.getX() - px);
-	lighted |= context.getCore().getPointLight().contains(xx, yy);
-	xx -= Math.signum(position.getX() - px);
-	yy += Math.signum(position.getY() - py);
-	lighted |= context.getCore().getPointLight().contains(xx, yy);
+	lighted |= context.getCore().getPointLight().contains(xx + Math.signum(position.getX() - px), yy);
+	lighted |= context.getCore().getPointLight().contains(xx, yy + Math.signum(position.getY() - py));
+	lighted |= context.getCore().getPointLight().contains(xx + Math.signum(position.getX() - px), yy + Math.signum(position.getY() - py));
 	return xBelongs && yBelongs && lighted;
     }
 

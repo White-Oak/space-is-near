@@ -143,6 +143,6 @@
 	"imageIds": [16],
 	"stuckedByAddingFromScript": true,
 	"description": "Lamp. It lights.",
-	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:1, a: 0.5f}, distance: 50}"}]
+	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:1, a: 0.2f}, distance: 20}"}]
     }
 ]

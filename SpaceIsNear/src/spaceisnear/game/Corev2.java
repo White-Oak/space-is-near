@@ -231,14 +231,15 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.getCameraMan().moveCamera();
 	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
 
-	context.getRayHandler().setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
+	GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
+	GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
 	playerBody.setTransform(getContext().getPlayer().getPosition().getX(), getContext().getPlayer().getPosition().getY(), 0);
 	pointLight.attachToBody(playerBody, 0.5f, 0.5f);
 
 	batch.begin();
 	context.getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();
-	context.getRayHandler().updateAndRender();
+	GameContext.getRayHandler().updateAndRender();
 
 	context.getCameraMan().unmoveCamera();
     }

@@ -4,6 +4,7 @@
  */
 package spaceisnear.game.objects.items;
 
+import spaceisnear.game.components.client.LightComponent;
 import java.util.List;
 import spaceisnear.Utils;
 import spaceisnear.game.GameContext;
