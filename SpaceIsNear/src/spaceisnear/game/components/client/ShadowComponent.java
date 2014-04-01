@@ -9,7 +9,7 @@ import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageMoved;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 
-public class LightComponent extends Component {
+public class ShadowComponent extends Component {
 
     private Body body;
     private static final PolygonShape BOX;
@@ -19,8 +19,8 @@ public class LightComponent extends Component {
 	BOX.setAsBox(0.5f, 0.5f);
     }
 
-    public LightComponent() {
-	super(ComponentType.LIGHT);
+    public ShadowComponent() {
+	super(ComponentType.SHADOW);
     }
 
     @Override
@@ -40,14 +40,14 @@ public class LightComponent extends Component {
 			    groundBodyDef.position.set(new Vector2(getPosition().getX(), getPosition().getY()));
 
 			    // Create a body from the defintion and add it to the world
-			    body = gc.getWorld().createBody(groundBodyDef);
+			    body = GameContext.getWorld().createBody(groundBodyDef);
 
 			    // Create a fixture from our polygon shape and add it to our ground body  
 			    body.createFixture(BOX, 0.0f);
 			}
 		    } else {
 			if (body != null) {
-			    gc.getWorld().destroyBody(body);
+			    GameContext.getWorld().destroyBody(body);
 			}
 		    }
 		}

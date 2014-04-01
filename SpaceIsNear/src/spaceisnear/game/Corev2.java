@@ -42,8 +42,8 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private final SpriteBatch batch = new SpriteBatch();
     private long lastTimeMoved;
     private final static long MINIMUM_TIME_TO_MOVE = 80L;
-    RayHandler rayHandler;
-    private PointLight pointLight;
+
+    @Getter private PointLight pointLight;
     private Body playerBody;
 
     public Corev2(Corev3 corev3) {
@@ -97,12 +97,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	};
 	thread.start();
 
-	playerBody = context.getWorld().createBody(new BodyDef());
-	RayHandler.useDiffuseLight(true);
-	rayHandler = new RayHandler(context.getWorld());
-	rayHandler.setCulling(true);
+	playerBody = GameContext.getWorld().createBody(new BodyDef());
+	RayHandler rayHandler = GameContext.getRayHandler();
 	pointLight = new PointLight(rayHandler, 64);
-	pointLight.setColor(new Color(1, 1, 1, 0.5f));
+	pointLight.setColor(new Color(1, 1, 1, 0.2f));
 	pointLight.setSoft(true);
 	pointLight.setSoftnessLenght(2f);
 	pointLight.setDistance(50);
@@ -233,14 +231,14 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.getCameraMan().moveCamera();
 	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
 
-	rayHandler.setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
+	context.getRayHandler().setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
 	playerBody.setTransform(getContext().getPlayer().getPosition().getX(), getContext().getPlayer().getPosition().getY(), 0);
 	pointLight.attachToBody(playerBody, 0.5f, 0.5f);
 
 	batch.begin();
 	context.getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();
-	rayHandler.updateAndRender();
+	context.getRayHandler().updateAndRender();
 
 	context.getCameraMan().unmoveCamera();
     }

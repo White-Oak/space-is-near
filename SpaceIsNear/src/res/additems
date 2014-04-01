@@ -204,7 +204,6 @@ addItem {plitka, 14, 17}
 addItem {plitka, 15, 16}
 addItem {plitka, 15, 17}
 addItem {plitka, 16, 16}
-addItem {plitka, 16, 17}
 addItem {plitka, 14, 15}
 addItem {plitka, 14, 14}
 addItem {plitka, 14, 13}
@@ -263,7 +262,6 @@ addItem {plitka, 19, 10}
 addItem {plitka, 19, 11}
 addItem {plitka, 19, 12}
 addItem {plitka, 20, 5}
-addItem {plitka, 20, 6}
 addItem {plitka, 20, 7}
 addItem {plitka, 20, 8}
 addItem {plitka, 20, 9}
@@ -290,6 +288,8 @@ addItem {plitka, 14, 18}
 addItem {plitka, 13, 18}
 addItem {plitka, 13, 15}
 addItem {plitka, 3, 17}
+addItem {plitka, 16, 17}
+addItem {plitka, 20, 6}
 addItem {plitka_danger, 3, 12}
 addItem {plitka_danger, 3, 13}
 addItem {plitka_danger, 3, 14}
@@ -439,3 +439,5 @@ addItem {door, 11, 11}
 addItem {door, 11, 15}
 addItem {door, 15, 12}
 addItem {door, 16, 12}
+addItem {lamp, 1, 1}
+addItem {lamp, 20, 6}

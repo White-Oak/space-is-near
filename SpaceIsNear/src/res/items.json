@@ -122,7 +122,6 @@
 	"defaultProperties": null
     },
     {
-
 	"name": "door",
 	"size": "TOO_BIG",
 	"type": "ENVIRONMENT",
@@ -133,5 +132,17 @@
 	"stuckedByAddingFromScript": true,
 	"description": "Door. It opens and then closes.",
 	"defaultProperties": null
+    },
+    {
+	"name": "lamp",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": false,
+	"blockingAir": false,
+	"blockingLight": false,
+	"imageIds": [16],
+	"stuckedByAddingFromScript": true,
+	"description": "Lamp. It lights.",
+	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:1, a: 0.5f}, distance: 50}"}]
     }
 ]
