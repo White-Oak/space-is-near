@@ -100,7 +100,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	playerBody = GameContext.getWorld().createBody(new BodyDef());
 	RayHandler rayHandler = GameContext.getRayHandler();
 	pointLight = new PointLight(rayHandler, 64);
-	pointLight.setColor(new Color(1, 1, 1, 0.2f));
+	pointLight.setColor(new Color(1, 1, 1, 0.05f));
 	pointLight.setSoft(true);
 	pointLight.setSoftnessLenght(2f);
 	pointLight.setDistance(50);

@@ -143,6 +143,30 @@
 	"imageIds": [16],
 	"stuckedByAddingFromScript": true,
 	"description": "Lamp. It lights.",
-	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:1, a: 0.2f}, distance: 20}"}]
+	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:1, a: 0.4f}, distance: 20}"}]
+    },
+    {
+	"name": "lamp_danger",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": false,
+	"blockingAir": false,
+	"blockingLight": false,
+	"imageIds": [16],
+	"stuckedByAddingFromScript": true,
+	"description": "Lamp. It lights.",
+	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 0, b:0, a: 0.2f}, distance: 20}"}]
+    },
+    {
+	"name": "lamp_cheap",
+	"size": "TOO_BIG",
+	"type": "ENVIRONMENT",
+	"blockingPath": false,
+	"blockingAir": false,
+	"blockingLight": false,
+	"imageIds": [16],
+	"stuckedByAddingFromScript": true,
+	"description": "Lamp. It lights.",
+	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:0.5f, a: 0.4f}, distance: 20}"}]
     }
 ]

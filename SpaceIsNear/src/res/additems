@@ -440,7 +440,10 @@ addItem {door, 11, 15}
 addItem {door, 15, 12}
 addItem {door, 16, 12}
 addItem {lamp, 1, 1}
-addItem {lamp, 1, 10, 360}
+addItem {lamp, 1, 10}
 addItem {lamp, 10, 1}
-addItem {lamp, 10, 10, 270}
-addItem {lamp, 20, 6}
+addItem {lamp, 10, 10}
+addItem {lamp_cheap, 15, 6}
+addItem {lamp_cheap, 20, 11}
+addItem {lamp_danger, 3, 12}
+addItem {lamp_danger, 9, 14}
