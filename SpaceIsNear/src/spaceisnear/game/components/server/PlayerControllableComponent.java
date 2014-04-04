@@ -74,7 +74,7 @@ public class PlayerControllableComponent extends Component {
 		int doorid = ServerItemsArchive.ITEMS_ARCHIVE.getIdByName("door");
 		boolean result = staticItem.getProperties().getId() == doorid;
 		if (result) {
-		    MessageInteraction interaction = new MessageInteraction(staticItem.getId());
+		    MessageInteraction interaction = new MessageInteraction(staticItem.getId(), -1);
 		    context.sendDirectedMessage(interaction);
 		} else {
 		    String blockingPathString = (String) staticItem.getVariableProperties().getProperty("blockingPath");

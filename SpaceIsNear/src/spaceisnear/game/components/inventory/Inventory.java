@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.*;
 import lombok.Getter;
 import lombok.Setter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.MessageInteraction;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;
@@ -40,6 +41,7 @@ public class Inventory extends Actor {
 							  "right hand",
 							  "left hand",
 							  "bag"};
+    private int activeHand;
 
     private void drawTiles(int startingX, int startingY, ShapeRenderer renderer) {
 	Color tileColor = new Color(0, 0, 0, 0.7f);
@@ -64,6 +66,12 @@ public class Inventory extends Actor {
 	    renderer.rect(startingX + (TILE_WIDTH + TILE_PADDING) * 2, startingY + i * (TILE_HEIGHT + TILE_PADDING),
 		    TILE_WIDTH, TILE_HEIGHT);
 	}
+	renderer.end();
+	//active hand representing
+	renderer.begin(ShapeRenderer.ShapeType.Line);
+	renderer.setColor(new Color(0, 1, 1, 1));
+	renderer.rect(startingX + (TILE_WIDTH + TILE_PADDING) * 2 - 1, startingY + (4 + activeHand) * (TILE_HEIGHT + TILE_PADDING) - 1,
+		TILE_WIDTH + 2, TILE_HEIGHT + 2);
     }
 
     private InventoryComponent getInventoryComponent() {
@@ -157,8 +165,8 @@ public class Inventory extends Actor {
     public void paintComponent(SpriteBatch batch) {
 	batch.end();
 	batch.setProjectionMatrix(camera.combined);
-	int x = 800 - INVENTORY_WIDTH;
-	int y = TILE_PADDING;
+	int x = (int) getX();
+	int y = (int) getY();
 	renderer.setProjectionMatrix(camera.combined);
 	Gdx.gl.glEnable(GL20.GL_BLEND);
 	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -176,6 +184,88 @@ public class Inventory extends Actor {
 	camera = new OrthographicCamera();
 	camera.setToOrtho(true);
 	camera.update();
+	addCaptureListener(new InputListener() {
+
+	    @Override
+	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		Inventory.this.mouseClicked((int) x, (int) y, button);
+		return true;
+	    }
+	});
     }
 
+    private InventorySlot getItemInActiveHand() {
+	return inventoryComponent.getSlots().get(itemsPlacementHidden[4 + activeHand]);
+    }
+
+    private InventorySlot pullItemInActiveHand() {
+	return inventoryComponent.getSlots().pull(itemsPlacementHidden[4 + activeHand]);
+    }
+
+    private InventorySlot get(int x, int y) {
+	return inventoryComponent.getSlots().get(getDefinition(x, y));
+    }
+
+    private String getDefinition(int x, int y) {
+	return minimized
+		? (itemsPlacementHidden[y])
+		: (itemsPlacement[y][x]);
+    }
+
+    private InventorySlot pull(int x, int y) {
+	return inventoryComponent.getSlots().pull(getDefinition(x, y));
+    }
+
+    private void moveActiveHandItemTo(int x, int y) {
+	InventorySlot get = pullItemInActiveHand();
+	if (get.getItemId() > 0) {
+	    InventorySlot newOne = new InventorySlot(get, getDefinition(x, y));
+	    inventoryComponent.getSlots().add(newOne);
+	}
+    }
+
+    private void moveToActiveHandFrom(int x, int y) {
+	InventorySlot get = pull(x, y);
+	if (get.getItemId() > 0) {
+	    InventorySlot newOne = new InventorySlot(get, getDefinition(3, 4 + activeHand));
+	    inventoryComponent.getSlots().add(newOne);
+	}
+    }
+
+    private void interactWithItemInActiveHand(int x, int y) {
+	InventorySlot get = get(x, y);
+	if (get.getItemId() > 0) {
+	    MessageInteraction messageInteraction = new MessageInteraction(get.getItemId(), getItemInActiveHand().getItemId());
+	    context.sendDirectedMessage(messageInteraction);
+	}
+    }
+
+    public void mouseClicked(int x, int y, int button) {
+	int tileX = x / (TILE_WIDTH + TILE_PADDING);
+	int tileY = y / (TILE_HEIGHT + TILE_PADDING);
+	System.out.println(String.format("You reached that at %s %s", tileX, tileY));
+	if (tileY < 4) {
+	    switch (button) {
+		case 0:
+		    if (getItemInActiveHand().getItemId() > 0) {
+			if (get(tileX, tileY).getItemId() < 0) {
+			    moveActiveHandItemTo(tileX, tileY);
+			} else {
+			    interactWithItemInActiveHand(tileX, tileY);
+			}
+		    } else {
+			if (get(tileX, tileY).getItemId() > 0) {
+			    moveToActiveHandFrom(tileX, tileX);
+			}
+		    }
+		    break;
+		case 1:
+		    break;
+	    }
+	}
+    }
+
+    public void setBounds() {
+	super.setBounds(800 - INVENTORY_WIDTH, TILE_PADDING, INVENTORY_WIDTH, INVENTORY_HEIGHT);
+    }
 }

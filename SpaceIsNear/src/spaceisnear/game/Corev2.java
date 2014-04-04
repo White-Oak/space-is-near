@@ -75,6 +75,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	stage.setKeyboardFocus(inputCatcher);
 
 	inventory = new Inventory(context);
+	inventory.setBounds();
 	stage.addActor(inventory);
 
 	callToConnect();
@@ -137,7 +138,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	context.sendAnimationStep();
 	inventory.processMessage(MESSAGE_ANIMATION_STEP);
     }
-    private int counterUpdate = -1;
 
     public void update(int delta) {
 	if (notpaused) {
