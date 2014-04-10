@@ -92,7 +92,7 @@ public class Inventory extends Actor {
 		    for (int j = 0; j < strings.length; j++) {
 			int localDeltaX = deltaX;
 			if (j == 1) {
-			    localDeltaX = localDeltaX >> 1;
+			    localDeltaX >>= 1;
 			} else if (j == 0) {
 			    localDeltaX = 0;
 			}
@@ -103,8 +103,13 @@ public class Inventory extends Actor {
 			    int id = get.getProperties().getId();
 			    int[] imageIds = ItemsArchive.itemsArchive.getImageIds(id);
 			    TextureRegion textureRegion = ItemsArchive.itemsArchive.getTextureRegion(imageIds[0]);
-			    batch.draw(textureRegion, startingX + localDeltaX + (strings.length - 1 - j) * (TILE_WIDTH + TILE_PADDING),
-				    startingY + i * (TILE_HEIGHT + TILE_PADDING));
+			    if (strings.length != 1) {
+				batch.draw(textureRegion, startingX + localDeltaX + (strings.length - 1 - j) * (TILE_WIDTH + TILE_PADDING),
+					startingY + i * (TILE_HEIGHT + TILE_PADDING));
+			    } else {
+				batch.draw(textureRegion, startingX + 2 * (TILE_WIDTH + TILE_PADDING),
+					startingY + i * (TILE_HEIGHT + TILE_PADDING));
+			    }
 			}
 		    }
 		}
@@ -227,7 +232,7 @@ public class Inventory extends Actor {
     private void moveToActiveHandFrom(int x, int y) {
 	InventorySlot get = pull(x, y);
 	if (get.getItemId() > 0) {
-	    InventorySlot newOne = new InventorySlot(get, getDefinition(3, 4 + activeHand));
+	    InventorySlot newOne = new InventorySlot(get, getDefinition(0, 4 + activeHand));
 	    inventoryComponent.getSlots().add(newOne);
 	}
     }
@@ -243,7 +248,7 @@ public class Inventory extends Actor {
     public void mouseClicked(int x, int y, int button) {
 	int tileX = x / (TILE_WIDTH + TILE_PADDING);
 	int tileY = y / (TILE_HEIGHT + TILE_PADDING);
-	System.out.println(String.format("You reached that at %s %s", tileX, tileY));
+	//System.out.println(String.format("You reached that at %s %s", tileX, tileY));
 	if (tileY < 4) {
 	    switch (button) {
 		case 0:
@@ -255,7 +260,7 @@ public class Inventory extends Actor {
 			}
 		    } else {
 			if (get(tileX, tileY).getItemId() > 0) {
-			    moveToActiveHandFrom(tileX, tileX);
+			    moveToActiveHandFrom(tileX, tileY);
 			}
 		    }
 		    break;

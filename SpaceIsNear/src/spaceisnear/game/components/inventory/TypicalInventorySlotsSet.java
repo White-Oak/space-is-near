@@ -15,7 +15,7 @@ import spaceisnear.game.objects.items.Size;
  *
  * @author White Oak
  */
-public class TypicalInventorySlotsSet {
+public final class TypicalInventorySlotsSet {
 
     private final InventorySlot head = new InventorySlot(Size.MEDIUM, "head"),
 	    body = new InventorySlot(Size.MEDIUM, "body"),
@@ -61,7 +61,11 @@ public class TypicalInventorySlotsSet {
     }
 
     public InventorySlot pull(String key) {
-	return slots.remove(key);
+	InventorySlot remove = slots.remove(key);
+	if (remove != null) {
+	    add(new InventorySlot(remove.getSize(), key));
+	}
+	return remove;
     }
 
     public void processMessage(Message message, Context context) {
