@@ -41,7 +41,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
     private final SpriteBatch batch = new SpriteBatch();
     private long lastTimeMoved;
-    private final static long MINIMUM_TIME_TO_MOVE = 80L;
+    private final static long MINIMUM_TIME_TO_MOVE = 100L;
 
     @Getter private PointLight pointLight;
     private Body playerBody;
@@ -184,6 +184,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    break;
 		case Input.Keys.M:
 		    inventory.setMinimized(!inventory.isMinimized());
+		    lastTimeMoved = System.currentTimeMillis();
+		    break;
+		case Input.Keys.R:
+		    inventory.changeActiveHand();
 		    lastTimeMoved = System.currentTimeMillis();
 		    break;
 	    }

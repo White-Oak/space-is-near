@@ -273,4 +273,9 @@ public class Inventory extends Actor {
     public void setBounds() {
 	super.setBounds(800 - INVENTORY_WIDTH, TILE_PADDING, INVENTORY_WIDTH, INVENTORY_HEIGHT);
     }
+
+    public void changeActiveHand() {
+	activeHand++;
+	activeHand %= 2;
+    }
 }
