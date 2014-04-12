@@ -33,11 +33,10 @@ public abstract class Context {
 
     public List<AbstractGameObject> itemsOn(int x, int y) {
 	LinkedList<AbstractGameObject> items = new LinkedList<>();
-	for (AbstractGameObject abstractGameObject : getObjects()) {
-	    if (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)) {
-		items.add(abstractGameObject);
-	    }
-	}
+	getObjects().stream()
+		.filter(abstractGameObject
+			-> (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)))
+		.forEach(abstractGameObject -> items.add(abstractGameObject));
 	return items;
     }
 }

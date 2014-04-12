@@ -4,9 +4,7 @@ import box2dLight.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import java.io.*;
 import java.util.*;
 import lombok.*;
@@ -213,21 +211,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		}
 		break;
 	}
-    }
-
-    private World createPhysicsWorld() {
-
-	World world = new World(new Vector2(0, -10), true);
-
-	ChainShape chainShape = new ChainShape();
-	chainShape.createLoop(new Vector2[]{new Vector2(-22, 1),
-					    new Vector2(22, 1), new Vector2(22, 31), new Vector2(0, 20),
-					    new Vector2(-22, 31)});
-	BodyDef chainBodyDef = new BodyDef();
-	chainBodyDef.type = BodyType.StaticBody;
-	world.createBody(chainBodyDef).createFixture(chainShape, 0);
-	chainShape.dispose();
-	return world;
     }
 
     @Override

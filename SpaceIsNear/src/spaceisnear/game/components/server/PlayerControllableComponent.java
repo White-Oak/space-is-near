@@ -16,7 +16,6 @@ import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
-import spaceisnear.server.objects.items.ServerItemsArchive;
 import spaceisnear.server.objects.items.StaticItem;
 
 public class PlayerControllableComponent extends Component {
@@ -61,37 +60,14 @@ public class PlayerControllableComponent extends Component {
 	int y = oldy + deltaY;
 	ServerContext context = (ServerContext) getContext();
 	MessageMoved mm = null;
-	if (context.getObstacles().isReacheable(x, y)) {
-	    //If cell is empty then simply move
-	    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
-	} else if (context.isOnMap(x, y)) {
-	    //else try to push item on that cell
-	    List<AbstractGameObject> itemsOn = context.itemsOn(x, y);
-	    for (AbstractGameObject abstractGameObject : itemsOn) {
-		StaticItem staticItem = (StaticItem) abstractGameObject;
-		int id = staticItem.getProperties().getId();
-		boolean blockingPath = ServerItemsArchive.ITEMS_ARCHIVE.isBlockingPath(id);
-		int doorid = ServerItemsArchive.ITEMS_ARCHIVE.getIdByName("door");
-		boolean result = staticItem.getProperties().getId() == doorid;
-		if (result) {
-		    MessageInteraction interaction = new MessageInteraction(staticItem.getId(), -1);
-		    context.sendDirectedMessage(interaction);
-		} else {
-		    String blockingPathString = (String) staticItem.getVariableProperties().getProperty("blockingPath");
-		    if (blockingPathString != null) {
-			blockingPath = Boolean.parseBoolean(blockingPathString);
-		    }
-		    if (blockingPath) {
-			Boolean property = (Boolean) staticItem.getVariableProperties().getProperty("stucked");
-			if (property != null && !property && context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
-			    mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
-			    staticItem.message(mm);
-			    getContext().sendDirectedMessage(new MessageToSend(mm));
-			    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
-			    break;
-			}
-		    }
-		}
+	Object knockbacked = getStateValueNamed("knockbacked");
+	if (knockbacked == null || (Boolean) knockbacked == false) {
+	    if (context.getObstacles().isReacheable(x, y)) {
+		//If cell is empty then simply move
+		mm = new MessageMoved(deltaX, deltaY, getOwnerId());
+	    } else if (context.isOnMap(x, y)) {
+		//else try to push item on that cell
+		mm = pushOn(x, y, deltaX, deltaY);
 	    }
 	}
 	if (mm != null) {
@@ -100,15 +76,57 @@ public class PlayerControllableComponent extends Component {
 	return mm;
     }
 
+    private MessageMoved pushOn(int x, int y, int deltaX, int deltaY) {
+	final ServerContext context = (ServerContext) getContext();
+	final List<AbstractGameObject> itemsOn = context.itemsOn(x, y);
+	for (AbstractGameObject abstractGameObject : itemsOn) {
+	    StaticItem staticItem = (StaticItem) abstractGameObject;
+	    boolean blockingPath = checkIfBlocking(staticItem);
+	    if (blockingPath) {
+		Boolean property = (Boolean) staticItem.getVariableProperties().getProperty("stucked");
+		if (property != null && !property) {
+		    if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
+			MessageMoved mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
+			staticItem.message(mm);
+			getContext().sendDirectedMessage(new MessageToSend(mm));
+			mm = new MessageMoved(deltaX, deltaY, getOwnerId());
+			return mm;
+		    }
+		} else {
+		    MessageInteraction interaction = new MessageInteraction(staticItem.getId(), -1);
+		    context.sendDirectedMessage(interaction);
+		}
+	    }
+	}
+	return null;
+    }
+
+    private boolean checkIfBlocking(StaticItem staticItem) {
+	boolean blockingPath = staticItem.getProperties().getBundle().blockingPath;
+	String blockingPathString = (String) staticItem.getVariableProperties().getProperty("blockingPath");
+	if (blockingPathString != null) {
+	    blockingPath = Boolean.parseBoolean(blockingPathString);
+	}
+	return blockingPath;
+    }
+
     private void checkPull(final int oldx, final int oldy) {
 	VariablePropertiesComponent variablePropertiesComponent = getOwner().getVariablePropertiesComponent();
-	if (variablePropertiesComponent.getProperty("pull") != null && ((Integer) variablePropertiesComponent.getProperty("pull")) > -1) {
-	    int toPull = (Integer) variablePropertiesComponent.getProperty("pull");
+	final Object pulled = variablePropertiesComponent.getProperty("pull");
+	if (pulled != null && ((Integer) pulled) > -1) {
+	    int toPull = (Integer) pulled;
 	    AbstractGameObject get = getContext().getObjects().get(toPull);
 	    Position positionToPull = get.getPosition();
-	    MessageMoved mm1 = new MessageMoved(oldx - positionToPull.getX(), oldy - positionToPull.getY(), get.getId());
-	    getContext().sendDirectedMessage(mm1);
-	    getContext().sendDirectedMessage(new MessageToSend(mm1));
+	    Position position = getPosition();
+	    if (Math.abs(positionToPull.getX() - position.getX()) <= 1 && Math.abs(
+		    positionToPull.getY() - position.getY()) <= 1) {
+
+		MessageMoved mm1 = new MessageMoved(oldx - positionToPull.getX(), oldy - positionToPull.getY(), get.getId());
+		getContext().sendDirectedMessage(mm1);
+		getContext().sendDirectedMessage(new MessageToSend(mm1));
+	    } else {
+		setStateValueNamed("pull", -1);
+	    }
 //		Context.LOG.log("pulled " + mm1.getX() + " " + mm1.getY());}
 	}
     }
