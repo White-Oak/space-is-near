@@ -6,6 +6,7 @@ package spaceisnear.game.messages;
 
 import lombok.Getter;
 import spaceisnear.game.GameContext;
+import spaceisnear.server.ServerContext;
 
 /**
  *
@@ -22,6 +23,11 @@ public abstract class DirectedMessage extends Message {
 
     @Override
     public void processForClient(GameContext context) {
+	context.sendDirectedMessage(this);
+    }
+
+    @Override
+    public void processForServer(ServerContext context) {
 	context.sendDirectedMessage(this);
     }
 

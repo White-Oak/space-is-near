@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import spaceisnear.game.components.inventory.*;
 import spaceisnear.game.messages.*;
+import spaceisnear.game.messages.properties.MessageInventoryUpdated;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;
@@ -207,10 +208,6 @@ public class Inventory extends Actor {
 	return get(2, getActiveHandY());
     }
 
-    private InventorySlot pullItemInActiveHand() {
-	return inventoryComponent.getSlots().pull(itemsPlacementHidden[ACTIVE_HAND_START_Y + activeHand]);
-    }
-
     private InventorySlot get(int x, int y) {
 	return inventoryComponent.getSlots().get(getDefinition(x, y));
     }
@@ -235,23 +232,26 @@ public class Inventory extends Actor {
 		: (itemsPlacement[y][x]);
     }
 
-    private InventorySlot pull(int x, int y) {
-	return inventoryComponent.getSlots().pull(getDefinition(x, y));
-    }
-
     private void moveActiveHandItemTo(int x, int y) {
-	InventorySlot get = pullItemInActiveHand();
+	InventorySlot get = getItemInActiveHand();
 	if (get.getItemId() > 0) {
-	    InventorySlot newOne = new InventorySlot(get, getDefinition(x, y));
-	    inventoryComponent.getSlots().add(newOne);
+	    InventorySlot newOne = get.getWithNewName(getDefinition(x, y));
+	    sendInventoryUpdate(newOne, get);
 	}
     }
 
+    private void sendInventoryUpdate(InventorySlot newOne, InventorySlot get) {
+	InventoryComponent.Update update = new InventoryComponent.MovedUpdate(newOne, get);
+	MessageInventoryUpdated messageInventoryUpdated;
+	messageInventoryUpdated = new MessageInventoryUpdated(inventoryComponent.getOwnerId(), update);
+	context.sendDirectedMessage(new MessageToSend(messageInventoryUpdated));
+    }
+
     private void moveToActiveHandFrom(int x, int y) {
-	InventorySlot get = pull(x, y);
+	InventorySlot get = get(x, y);
 	if (get.getItemId() > 0) {
-	    InventorySlot newOne = new InventorySlot(get, getDefinition(0, getActiveHandY()));
-	    inventoryComponent.getSlots().add(newOne);
+	    InventorySlot newOne = get.getWithNewName(getDefinition(2, getActiveHandY()));
+	    sendInventoryUpdate(newOne, get);
 	}
     }
 
@@ -259,7 +259,7 @@ public class Inventory extends Actor {
 	InventorySlot get = get(x, y);
 	if (get.getItemId() > 0) {
 	    MessageInteraction messageInteraction = new MessageInteraction(get.getItemId(), getItemInActiveHand().getItemId());
-	    context.sendDirectedMessage(messageInteraction);
+	    context.sendDirectedMessage(new MessageToSend(messageInteraction));
 	}
     }
 

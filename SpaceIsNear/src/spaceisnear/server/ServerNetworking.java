@@ -196,6 +196,16 @@ import spaceisnear.server.objects.items.*;
 	id = clients.get(id).getConnection().getID();
 	sendToConnectionID(id, message);
     }
+
+    public void sendToPlayer(Player player, NetworkableMessage message) {
+	for (int i = 0; i < clients.size(); i++) {
+	    Client client = clients.get(i);
+	    if (client.getPlayer() == player) {
+		sendToClientID(i, message);
+	    }
+	    break;
+	}
+    }
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
     private int messagesSent;

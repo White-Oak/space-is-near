@@ -13,9 +13,13 @@ import spaceisnear.game.objects.items.Size;
     private final Size size;
     private final String name;
 
-    public InventorySlot(InventorySlot slot, String newName) {
+    private InventorySlot(InventorySlot slot, String newName) {
 	itemId = slot.itemId;
 	size = slot.size;
 	name = newName;
+    }
+
+    public InventorySlot getWithNewName(String newName) {
+	return new InventorySlot(this, newName);
     }
 }

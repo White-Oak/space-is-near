@@ -12,9 +12,15 @@ import spaceisnear.abstracts.Context;
 public class MessageToSend extends DirectedMessage {
 
     @Getter private final NetworkableMessage message;
+    @Getter private final boolean broadcast;
 
-    public MessageToSend(NetworkableMessage m) {
+    public MessageToSend(NetworkableMessage m, boolean broadcast) {
 	super(MessageType.NETWORKING, Context.NETWORKING_ID);
 	message = m;
+	this.broadcast = broadcast;
+    }
+
+    public MessageToSend(NetworkableMessage m) {
+	this(m, true);
     }
 }

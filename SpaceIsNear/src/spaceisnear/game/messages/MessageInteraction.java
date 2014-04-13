@@ -2,7 +2,7 @@ package spaceisnear.game.messages;
 
 import lombok.Getter;
 
-public class MessageInteraction extends DirectedMessage {
+public class MessageInteraction extends DirectedMessage implements NetworkableMessage {
 
     @Getter private final int interactedWith;
 
