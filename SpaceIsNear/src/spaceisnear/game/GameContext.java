@@ -5,6 +5,7 @@
  */
 package spaceisnear.game;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import java.util.*;
@@ -34,7 +35,15 @@ import spaceisnear.server.ServerContext;
     @Getter private final Corev2 core;
     public static final int HIDDEN_CLIENT_OBJECTS = 1;
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
-    @Getter private World world = new World(new Vector2(), true);
+    @Getter private final static World world = new World(new Vector2(), true);
+    @Getter private final static RayHandler rayHandler;
+
+    static {
+	rayHandler = new RayHandler(world);
+	RayHandler.useDiffuseLight(true);
+	rayHandler.setCulling(true);
+//	rayHandler.setAmbientLight(new Color(1, 1, 1, 0f));
+    }
 
     @Override
     public void sendThemAll(Message m) {

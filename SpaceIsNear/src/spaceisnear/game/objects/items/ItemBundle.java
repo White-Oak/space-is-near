@@ -27,7 +27,7 @@ public class ItemBundle {
     public boolean stuckedByAddingFromScript;
     public String description;
 
-    public Property[] defaultProperties; //script names reserved@Data
+    public Property[] defaultProperties;
 
     @Data public class Property {
 

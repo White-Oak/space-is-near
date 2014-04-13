@@ -9,10 +9,9 @@
  */
 package spaceisnear.game.components.server;
 
-import spaceisnear.abstracts.Context;
-import spaceisnear.game.components.Component;
-import spaceisnear.game.components.ComponentType;
+import spaceisnear.game.components.*;
 import spaceisnear.game.messages.*;
+import spaceisnear.game.ui.console.*;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.Player;
 
@@ -29,6 +28,8 @@ public class HealthComponent extends Component {
     public static final int SUFFOCATING_DAMAGE = -10;
     public static final int LIGHT_SUFFOCATING_DAMAGE = -1;
     private static final int KNOCKBACKED_PASSES = 200;
+    private static final int FLOOD_DELTA = 150;
+    private boolean ableToFlood = true;
 
     /**
      *
@@ -45,12 +46,16 @@ public class HealthComponent extends Component {
 	    case HURT:
 		HurtMessage hm = (HurtMessage) message;
 		changeHealth(hm.getDamage());
-		final ServerContext context = (ServerContext) getContext();
 		final Player player = (Player) getOwner();
 		switch (hm.getType()) {
 		    case SUFFOCATING:
-			final String nickname = player.getNickname();
-//			context.log(new LogString(nickname + " задыхается.", LogLevel.TALKING, getPosition()));
+			if (ableToFlood) {
+			    final ServerContext context = (ServerContext) getContext();
+			    final String nickname = player.getNickname();
+			    context.log(new LogString(nickname + " задыхается.", LogLevel.TALKING, getPosition()));
+			    ableToFlood = false;
+			    registerForOneShotTask(() -> ableToFlood = true, FLOOD_DELTA);
+			}
 			break;
 		}
 		final VariablePropertiesComponent variablePropertiesComponent = getOwner().getVariablePropertiesComponent();
@@ -62,6 +67,7 @@ public class HealthComponent extends Component {
 			variablePropertiesComponent.setProperty("knockbacked", true);
 			registerForOneShotTask(() -> variablePropertiesComponent.setProperty("knockbacked", false),
 				KNOCKBACKED_PASSES);
+			//I suppose it should not be knockbacking but animation sending
 			getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
 			break;
 
@@ -73,8 +79,6 @@ public class HealthComponent extends Component {
 
 		}
 		break;
-	    case TIME_PASSED:
-
 	}
     }
 
@@ -97,7 +101,7 @@ public class HealthComponent extends Component {
 
     public void changeHealth(int delta) {
 	setStateValueNamed("health", getHealth() + delta);
-	Context.LOG.log(getHealth());
+	//Context.LOG.log(getHealth());
     }
 
     public int getHealth() {

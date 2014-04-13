@@ -1,8 +1,8 @@
 package spaceisnear.game.components.client;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-import spaceisnear.game.GameContext;
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
+import com.badlogic.gdx.graphics.Color;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
@@ -11,54 +11,51 @@ import spaceisnear.game.messages.properties.MessagePropertySet;
 
 public class LightComponent extends Component {
 
-    private Body body;
-    private static final PolygonShape BOX;
-
-    static {
-	BOX = new PolygonShape();
-	BOX.setAsBox(0.5f, 0.5f);
-    }
-
-    public LightComponent() {
-	super(ComponentType.LIGHT);
-    }
+    private final PointLight light;
 
     @Override
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
 	    case PROPERTY_SET:
 		MessagePropertySet mps = (MessagePropertySet) message;
-		GameContext gc = (GameContext) getContext();
-		if (mps.getName().equals("blockingLight")) {
+		if (light != null && mps.getName().equals("lightEnabled")) {
 		    Object property = mps.getValue();
 		    if (property != null) {
-			if ((Boolean) property && body == null) {
-			    // Create our body definition
-			    BodyDef groundBodyDef = new BodyDef();
-			    groundBodyDef.type = BodyDef.BodyType.StaticBody;
-			    // Set its world position
-			    groundBodyDef.position.set(new Vector2(getPosition().getX(), getPosition().getY()));
-
-			    // Create a body from the defintion and add it to the world
-			    body = gc.getWorld().createBody(groundBodyDef);
-
-			    // Create a fixture from our polygon shape and add it to our ground body  
-			    body.createFixture(BOX, 0.0f);
-			}
-		    } else {
-			if (body != null) {
-			    gc.getWorld().destroyBody(body);
+			if ((Boolean) property) {
+			    light.setActive(true);
+			} else {
+			    light.setActive(false);
 			}
 		    }
 		}
 		break;
 	    case MOVED:
+		if (light != null) {
+		    light.setPosition(getPosition().getX() + 0.5f, getPosition().getY() + 0.5f);
+		}
+		break;
 	    case TELEPORTED:
-		if (body != null) {
+		if (light != null) {
 		    MessageMoved mm = (MessageMoved) message;
-		    body.setTransform(mm.getX() + 0.5f, mm.getY() + 0.5f, 0);
+		    light.setPosition(mm.getX() + 0.5f, mm.getY() + 0.5f);
 		}
 		break;
 	}
+    }
+
+    public LightComponent(LightProperty property, RayHandler rayHandler) {
+	super(ComponentType.LIGHT);
+	light = new PointLight(rayHandler, 64);
+	light.setColor(property.color);
+	light.setDistance(property.distance);
+	light.setSoft(true);
+	light.setSoftnessLenght(2.5f);
+	light.setStaticLight(true);
+    }
+
+    public static class LightProperty {
+
+	Color color;
+	int distance;
     }
 }

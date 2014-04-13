@@ -4,13 +4,15 @@
  */
 package spaceisnear.game.objects.items;
 
+import spaceisnear.game.components.client.LightComponent;
 import java.util.List;
+import spaceisnear.Utils;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.*;
-import spaceisnear.game.components.client.ItemPaintableComponent;
-import spaceisnear.game.components.client.LightComponent;
+import spaceisnear.game.components.client.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.*;
+import spaceisnear.game.objects.items.ItemBundle.Property;
 
 /**
  *
@@ -24,8 +26,23 @@ public class StaticItem extends ClientGameObject {
 	super(GameObjectType.ITEM);
 	PositionComponent pc = new PositionComponent(p);
 	properties = new ItemPropertiesComponent(itemId);
-	addComponents(pc, properties, new ItemPaintableComponent(), new LightComponent());
+	addComponents(pc, properties, new ItemPaintableComponent(), new ShadowComponent());
 	message(new MessagePropertySet(getId(), "blockingLight", ItemsArchive.itemsArchive.getBundle(itemId).blockingLight));
+    }
+
+    @Override
+    public void setContext(GameContext context) {
+	super.setContext(context); //To change body of generated methods, choose Tools | Templates.
+	Property[] propertys = ItemsArchive.itemsArchive.getBundle(getProperties().getId()).defaultProperties;
+	if (propertys != null) {
+	    for (Property property : propertys) {
+		if (property.getName().equals("light")) {
+		    LightComponent.LightProperty lightProp;
+		    lightProp = Utils.GSON.fromJson((String) property.getValue(), LightComponent.LightProperty.class);
+		    addComponents(new LightComponent(lightProp, GameContext.getRayHandler()));
+		}
+	    }
+	}
     }
 
     public StaticItem(int itemId) {

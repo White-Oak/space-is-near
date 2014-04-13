@@ -99,7 +99,7 @@ import spaceisnear.server.objects.ServerGameObject;
 	}
     }
 
-    private void registerForTimeMessages() {
+    private synchronized void registerForTimeMessages() {
 	((ServerGameObject) getOwner()).registerForTimeMessages();
 	needsTime = true;
     }

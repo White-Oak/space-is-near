@@ -274,5 +274,7 @@
     -atmosphere editor
 	-editing pressures
     -log viewer
--lighting system
++lighting system
++Inventory interaction
+-Context menus in inventory
 

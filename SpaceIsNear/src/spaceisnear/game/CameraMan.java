@@ -89,7 +89,7 @@ public final class CameraMan {
 	camera.update();
     }
 
-    public boolean belongsToCamera(Position p) {
+    public boolean belongsToCamera(Position p, GameContext context) {
 	int px = p.getX();
 	int py = p.getY();
 	if (px < 0 || py < 0) {
@@ -99,7 +99,14 @@ public final class CameraMan {
 //	final boolean yBelongs = py + 1 > this.y + 4 && py - this.y < getMaxYTiles() + 1 - 5;
 	final boolean xBelongs = px + 2 > this.x && px - this.x < getMaxXTiles() + 1;
 	final boolean yBelongs = py + 2 > this.y && py - this.y < getMaxYTiles() + 1;
-	return xBelongs && yBelongs;
+	float xx = px + 0.5f;
+	float yy = py + 0.5f;
+	boolean lighted = context.getCore().getPointLight().contains(px, py);
+	Position position = context.getPlayer().getPosition();
+	lighted |= context.getCore().getPointLight().contains(xx + Math.signum(position.getX() - px), yy);
+	lighted |= context.getCore().getPointLight().contains(xx, yy + Math.signum(position.getY() - py));
+	lighted |= context.getCore().getPointLight().contains(xx + Math.signum(position.getX() - px), yy + Math.signum(position.getY() - py));
+	return xBelongs && yBelongs && lighted;
     }
 
     public int getMaxXTiles() {

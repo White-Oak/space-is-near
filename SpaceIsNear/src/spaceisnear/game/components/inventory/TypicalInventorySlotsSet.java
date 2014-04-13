@@ -7,7 +7,6 @@ package spaceisnear.game.components.inventory;
 import java.util.HashMap;
 import lombok.Getter;
 import lombok.Setter;
-import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.items.Size;
@@ -16,7 +15,7 @@ import spaceisnear.game.objects.items.Size;
  *
  * @author White Oak
  */
-public class TypicalInventorySlotsSet {
+public final class TypicalInventorySlotsSet {
 
     private final InventorySlot head = new InventorySlot(Size.MEDIUM, "head"),
 	    body = new InventorySlot(Size.MEDIUM, "body"),
@@ -53,7 +52,7 @@ public class TypicalInventorySlotsSet {
 	add(rightPocket);
     }
 
-    private void add(InventorySlot slot) {
+    public void add(InventorySlot slot) {
 	slots.put(slot.getName(), slot);
     }
 
@@ -61,14 +60,20 @@ public class TypicalInventorySlotsSet {
 	return slots.get(key);
     }
 
-    public void processMessage(Message message, Context context) {
-	for (InventorySlot inventorySlot : slots.values()) {
-	    int itemId = inventorySlot.getItemId();
-	    if (itemId != -1) {
-		AbstractGameObject get = context.getObjects().get(itemId);
-		get.message(message);
-	    }
+    public InventorySlot pull(String key) {
+	InventorySlot remove = slots.remove(key);
+	if (remove != null) {
+	    add(new InventorySlot(remove.getSize(), key));
 	}
+	return remove;
+    }
+
+    public void processMessage(Message message, Context context) {
+	slots.values().stream()
+		.map(inventorySlot -> inventorySlot.getItemId())
+		.filter(itemId -> (itemId != -1))
+		.map(itemId -> context.getObjects().get(itemId))
+		.forEach(get -> get.message(message));
     }
 
 }

@@ -6,8 +6,9 @@
 package spaceisnear.game.components.server;
 
 import spaceisnear.game.components.client.NetworkingComponent;
-import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageToSend;
+import spaceisnear.game.messages.*;
+import spaceisnear.server.ServerContext;
+import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.ServerNetworkingObject;
 
 public class ServerNetworkingComponent extends NetworkingComponent {
@@ -16,7 +17,15 @@ public class ServerNetworkingComponent extends NetworkingComponent {
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
 	    case NETWORKING:
-		((ServerNetworkingObject) getOwner()).send(((MessageToSend) message).getMessage());
+		final MessageToSend mts = (MessageToSend) message;
+		if (mts.isBroadcast()) {
+		    ((ServerNetworkingObject) getOwner()).send(mts.getMessage());
+		} else {
+		    ServerContext context = (ServerContext) getContext();
+		    final DirectedMessage message1 = (DirectedMessage) mts.getMessage();
+		    Player get = (Player) context.getObjects().get(message1.getId());
+		    context.getNetworking().sendToPlayer(get, mts.getMessage());
+		}
 		break;
 	}
     }

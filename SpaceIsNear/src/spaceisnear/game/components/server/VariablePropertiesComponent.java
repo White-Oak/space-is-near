@@ -50,7 +50,7 @@ public class VariablePropertiesComponent extends Component {
 			InteractionScriptProccessor interactionScriptProccessor = new InteractionScriptProccessor(context, this, null);
 			interactionScriptProccessor.run();
 		    } catch (ClassCastException e) {
-			e.printStackTrace();
+			Context.LOG.log(e);
 		    }
 		}
 	}

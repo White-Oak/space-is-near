@@ -4,16 +4,13 @@ import box2dLight.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import java.io.*;
 import java.util.*;
 import lombok.*;
 import org.apache.commons.cli.ParseException;
 import spaceisnear.*;
 import spaceisnear.abstracts.*;
-import spaceisnear.game.components.inventory.Inventory;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
@@ -41,8 +38,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
     private final SpriteBatch batch = new SpriteBatch();
     private long lastTimeMoved;
-    private final static long MINIMUM_TIME_TO_MOVE = 80L;
-    RayHandler rayHandler;
+    private final static long MINIMUM_TIME_TO_MOVE = 100L;
+
+    @Getter private PointLight pointLight;
+    private Body playerBody;
 
     public Corev2(Corev3 corev3) {
 	super(corev3);
@@ -73,6 +72,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	stage.setKeyboardFocus(inputCatcher);
 
 	inventory = new Inventory(context);
+	inventory.setBounds();
 	stage.addActor(inventory);
 
 	callToConnect();
@@ -95,8 +95,14 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	};
 	thread.start();
 
-//	rayHandler = new RayHandler(createPhysicsWorld());
-//	new PointLight(rayHandler, 10, new Color(1, 1, 1, 1), 5, 0, 0);
+	playerBody = GameContext.getWorld().createBody(new BodyDef());
+	RayHandler rayHandler = GameContext.getRayHandler();
+	pointLight = new PointLight(rayHandler, 64);
+	pointLight.setColor(new Color(1, 1, 1, 0.05f));
+	pointLight.setSoft(true);
+	pointLight.setSoftnessLenght(2f);
+	pointLight.setDistance(50);
+	pointLight.setStaticLight(true);
     }
 
     private void callToConnect() {
@@ -125,11 +131,23 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	}.start();
     }
 
+    public void addContextMenu(ContextMenu conmenu) {
+	if (menu == null) {
+	    if (conmenu == null) {
+		return;
+	    }
+	    menu = conmenu;
+	    stage.addActor(menu);
+	} else {
+	    menu.hide();
+	    menu = null;
+	}
+    }
+
     private void animate() {
 	context.sendAnimationStep();
 	inventory.processMessage(MESSAGE_ANIMATION_STEP);
     }
-    private int counterUpdate = -1;
 
     public void update(int delta) {
 	if (notpaused) {
@@ -178,6 +196,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    inventory.setMinimized(!inventory.isMinimized());
 		    lastTimeMoved = System.currentTimeMillis();
 		    break;
+		case Input.Keys.R:
+		    inventory.changeActiveHand();
+		    lastTimeMoved = System.currentTimeMillis();
+		    break;
 	    }
 	    if (mc != null) {
 		lastTimeMoved = System.currentTimeMillis();
@@ -203,51 +225,20 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	}
     }
 
-    private World createPhysicsWorld() {
-
-	World world = new World(new Vector2(0, -10), true);
-
-	ChainShape chainShape = new ChainShape();
-	chainShape.createLoop(new Vector2[]{new Vector2(-22, 1),
-					    new Vector2(22, 1), new Vector2(22, 31), new Vector2(0, 20),
-					    new Vector2(-22, 31)});
-	BodyDef chainBodyDef = new BodyDef();
-	chainBodyDef.type = BodyType.StaticBody;
-	world.createBody(chainBodyDef).createFixture(chainShape, 0);
-	chainShape.dispose();
-	return world;
-    }
-
     @Override
     public void draw() {
 	context.getCameraMan().moveCamera();
 	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
 
-	// Create our body definition
-	BodyDef groundBodyDef = new BodyDef();
-	// Set its world position
-	groundBodyDef.position.set(new Vector2(context.getPlayer().getPosition().getX(), context.getPlayer().getPosition().getY()));
+	GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
+	GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
+	playerBody.setTransform(getContext().getPlayer().getPosition().getX(), getContext().getPlayer().getPosition().getY(), 0);
+	pointLight.attachToBody(playerBody, 0.5f, 0.5f);
 
-	// Create a body from the defintion and add it to the world
-	Body groundBody = context.getWorld().createBody(groundBodyDef);
-
-	RayHandler.useDiffuseLight(true);
-	RayHandler rayHandler = new RayHandler(context.getWorld());
-	rayHandler.setCulling(true);
-	rayHandler.setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
-	PointLight pointLight = new PointLight(rayHandler, 128);
-	pointLight.setColor(new Color(1, 1, 1, 0.5f));
-	pointLight.setSoft(true);
-	pointLight.setSoftnessLenght(2f);
-	pointLight.setDistance(50);
-	pointLight.setStaticLight(true);
-	pointLight.attachToBody(groundBody, 0.5f, 0.5f);
-//	pointLight.setPosition(key, key);
 	batch.begin();
 	context.getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();
-	rayHandler.updateAndRender();
-	rayHandler.dispose();
+	GameContext.getRayHandler().updateAndRender();
 
 	context.getCameraMan().unmoveCamera();
     }
@@ -273,12 +264,12 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	int calculatedY = y / GameContext.TILE_HEIGHT;
 	int tileX = toAddX + calculatedX;
 	int tileY = toAddY + calculatedY;
-	if (tileX < 0 || tileY < 0) {
-	    return;
-	}
-	log(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
+	//log(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
 	if (button == 1) {
 	    if (menu == null) {
+		if (tileX < 0 || tileY < 0) {
+		    return;
+		}
 		createContextMenuWithItems(x, y, tileX, tileY);
 	    } else {
 		menu.hide();
@@ -291,35 +282,42 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	ContextMenu contextMenu = new ContextMenu(null, stage);
 	contextMenu.setPosition(x, y);
 	java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
-	for (AbstractGameObject staticItem : itemsOn) {
-	    final StaticItem item = (StaticItem) staticItem;
-	    ContextMenu contextSubMenu = new ContextMenu(item.getProperties().getName(), stage);
-	    contextMenu.add(contextSubMenu);
-	    contextSubMenu.add("Learn");
-	    contextSubMenu.add("Pull");
-	    contextSubMenu.add("Take");
-	    contextMenu.setActivationListener((UIElement e) -> {
-		ContextMenu currentMenu = (ContextMenu) e;
-		switch (currentMenu.getSelected()) {
-		    case 0:
-			String description = item.getProperties().getDescription();
-			log(new LogString(description, LogLevel.TALKING));
-			break;
-		    case 1:
-			int id = item.getId();
-			int playerID = context.getPlayerID();
-			MessagePropertySet messagePropertySet = new MessagePropertySet(playerID, "pull", id);
-			MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-			context.sendDirectedMessage(messageToSend);
-			break;
-		}
-		menu.hide();
-		menu = null;
-	    });
-	}
+	itemsOn.stream()
+		.map(staticItem -> (StaticItem) staticItem)
+		.forEach(item -> addSubMenuFor(item, contextMenu));
 	menu = contextMenu;
 	stage.addActor(menu);
 //	testMenu(x, y);
+    }
+
+    private void addSubMenuFor(StaticItem item, ContextMenu contextMenu) {
+	ContextMenu contextSubMenu = new ContextMenu(item.getProperties().getName(), stage);
+	contextMenu.add(contextSubMenu);
+	contextSubMenu.add("Learn");
+	contextSubMenu.add("Pull");
+	contextSubMenu.add("Take");
+	contextMenu.setActivationListener((UIElement e) -> {
+	    procDefaultContextActions(e, item);
+	    menu.hide();
+	    menu = null;
+	});
+    }
+
+    private void procDefaultContextActions(UIElement e, final StaticItem item) {
+	ContextMenu currentMenu = (ContextMenu) e;
+	switch (currentMenu.getSelected()) {
+	    case 0:
+		String description = item.getProperties().getDescription();
+		log(new LogString(description, LogLevel.TALKING));
+		break;
+	    case 1:
+		int id = item.getId();
+		int playerID = context.getPlayerID();
+		MessagePropertySet messagePropertySet = new MessagePropertySet(playerID, "pull", id);
+		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+		context.sendDirectedMessage(messageToSend);
+		break;
+	}
     }
 
     public void log(LogString log) {
