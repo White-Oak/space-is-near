@@ -11,7 +11,6 @@ import lombok.*;
 import org.apache.commons.cli.ParseException;
 import spaceisnear.*;
 import spaceisnear.abstracts.*;
-import spaceisnear.game.components.inventory.Inventory;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
@@ -130,6 +129,19 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		}
 	    }
 	}.start();
+    }
+
+    public void addContextMenu(ContextMenu conmenu) {
+	if (menu == null) {
+	    if (conmenu == null) {
+		return;
+	    }
+	    menu = conmenu;
+	    stage.addActor(menu);
+	} else {
+	    menu.hide();
+	    menu = null;
+	}
     }
 
     private void animate() {
@@ -252,12 +264,12 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	int calculatedY = y / GameContext.TILE_HEIGHT;
 	int tileX = toAddX + calculatedX;
 	int tileY = toAddY + calculatedY;
-	if (tileX < 0 || tileY < 0) {
-	    return;
-	}
-	log(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
+	//log(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
 	if (button == 1) {
 	    if (menu == null) {
+		if (tileX < 0 || tileY < 0) {
+		    return;
+		}
 		createContextMenuWithItems(x, y, tileX, tileY);
 	    } else {
 		menu.hide();
@@ -270,35 +282,42 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	ContextMenu contextMenu = new ContextMenu(null, stage);
 	contextMenu.setPosition(x, y);
 	java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
-	for (AbstractGameObject staticItem : itemsOn) {
-	    final StaticItem item = (StaticItem) staticItem;
-	    ContextMenu contextSubMenu = new ContextMenu(item.getProperties().getName(), stage);
-	    contextMenu.add(contextSubMenu);
-	    contextSubMenu.add("Learn");
-	    contextSubMenu.add("Pull");
-	    contextSubMenu.add("Take");
-	    contextMenu.setActivationListener((UIElement e) -> {
-		ContextMenu currentMenu = (ContextMenu) e;
-		switch (currentMenu.getSelected()) {
-		    case 0:
-			String description = item.getProperties().getDescription();
-			log(new LogString(description, LogLevel.TALKING));
-			break;
-		    case 1:
-			int id = item.getId();
-			int playerID = context.getPlayerID();
-			MessagePropertySet messagePropertySet = new MessagePropertySet(playerID, "pull", id);
-			MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-			context.sendDirectedMessage(messageToSend);
-			break;
-		}
-		menu.hide();
-		menu = null;
-	    });
-	}
+	itemsOn.stream()
+		.map(staticItem -> (StaticItem) staticItem)
+		.forEach(item -> addSubMenuFor(item, contextMenu));
 	menu = contextMenu;
 	stage.addActor(menu);
 //	testMenu(x, y);
+    }
+
+    private void addSubMenuFor(StaticItem item, ContextMenu contextMenu) {
+	ContextMenu contextSubMenu = new ContextMenu(item.getProperties().getName(), stage);
+	contextMenu.add(contextSubMenu);
+	contextSubMenu.add("Learn");
+	contextSubMenu.add("Pull");
+	contextSubMenu.add("Take");
+	contextMenu.setActivationListener((UIElement e) -> {
+	    procDefaultContextActions(e, item);
+	    menu.hide();
+	    menu = null;
+	});
+    }
+
+    private void procDefaultContextActions(UIElement e, final StaticItem item) {
+	ContextMenu currentMenu = (ContextMenu) e;
+	switch (currentMenu.getSelected()) {
+	    case 0:
+		String description = item.getProperties().getDescription();
+		log(new LogString(description, LogLevel.TALKING));
+		break;
+	    case 1:
+		int id = item.getId();
+		int playerID = context.getPlayerID();
+		MessagePropertySet messagePropertySet = new MessagePropertySet(playerID, "pull", id);
+		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+		context.sendDirectedMessage(messageToSend);
+		break;
+	}
     }
 
     public void log(LogString log) {

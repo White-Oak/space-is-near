@@ -1,4 +1,4 @@
-package spaceisnear.game.components.inventory;
+package spaceisnear.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -8,12 +8,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
 import lombok.Getter;
 import lombok.Setter;
-import spaceisnear.game.GameContext;
-import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageInteraction;
+import spaceisnear.game.components.inventory.*;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.Player;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;
+import spaceisnear.game.ui.UIElement;
+import spaceisnear.game.ui.console.LogLevel;
+import spaceisnear.game.ui.console.LogString;
+import spaceisnear.game.ui.context.ContextMenu;
 
 public class Inventory extends Actor {
 
@@ -54,7 +57,7 @@ public class Inventory extends Actor {
 		if (i == 1) {
 		    localDeltaX >>= 1;
 		}
-		for (int j = 0; j < 4; j++) {
+		for (int j = 0; j < ACTIVE_HAND_START_Y; j++) {
 		    renderer.rect(localDeltaX + startingX + i * (TILE_WIDTH + TILE_PADDING),
 			    startingY + j * (TILE_HEIGHT + TILE_PADDING),
 			    TILE_WIDTH, TILE_HEIGHT);
@@ -70,7 +73,8 @@ public class Inventory extends Actor {
 	//active hand representing
 	renderer.begin(ShapeRenderer.ShapeType.Line);
 	renderer.setColor(new Color(0, 1, 1, 1));
-	renderer.rect(startingX + (TILE_WIDTH + TILE_PADDING) * 2 - 1, startingY + (4 + activeHand) * (TILE_HEIGHT + TILE_PADDING) - 1,
+	renderer.rect(startingX + (TILE_WIDTH + TILE_PADDING) * 2 - 1,
+		startingY + getActiveHandY() * (TILE_HEIGHT + TILE_PADDING) - 1,
 		TILE_WIDTH + 2, TILE_HEIGHT + 2);
     }
 
@@ -135,7 +139,7 @@ public class Inventory extends Actor {
 	Color backgroundColor = new Color(1, 1, 1, 0.5f);
 	renderer.setColor(backgroundColor);
 	renderer.rect(startingX - TILE_PADDING + deltaX, startingY - TILE_PADDING,
-		MAX_DELTA_X - deltaX, TILE_PADDING + (TILE_HEIGHT + TILE_PADDING) * 4);
+		MAX_DELTA_X - deltaX, TILE_PADDING + (TILE_HEIGHT + TILE_PADDING) * ACTIVE_HAND_START_Y);
 	renderer.rect(startingX + (TILE_WIDTH + TILE_PADDING) * 2 - TILE_PADDING, startingY - TILE_PADDING,
 		TILE_WIDTH + TILE_PADDING * 2, INVENTORY_HEIGHT);
 
@@ -200,18 +204,32 @@ public class Inventory extends Actor {
     }
 
     private InventorySlot getItemInActiveHand() {
-	return inventoryComponent.getSlots().get(itemsPlacementHidden[4 + activeHand]);
+	return get(2, getActiveHandY());
     }
 
     private InventorySlot pullItemInActiveHand() {
-	return inventoryComponent.getSlots().pull(itemsPlacementHidden[4 + activeHand]);
+	return inventoryComponent.getSlots().pull(itemsPlacementHidden[ACTIVE_HAND_START_Y + activeHand]);
     }
 
     private InventorySlot get(int x, int y) {
 	return inventoryComponent.getSlots().get(getDefinition(x, y));
     }
 
+    private StaticItem getItem(int x, int y) {
+	final InventorySlot get = get(x, y);
+	if (get == null || get.getItemId() < 0) {
+	    return null;
+	}
+	return (StaticItem) context.getObjects().get(get.getItemId());
+    }
+
     private String getDefinition(int x, int y) {
+	if (y >= ACTIVE_HAND_START_Y) {
+	    x -= 2;
+	}
+	if (x < 0) {
+	    return null;
+	}
 	return minimized
 		? (itemsPlacementHidden[y])
 		: (itemsPlacement[y][x]);
@@ -232,7 +250,7 @@ public class Inventory extends Actor {
     private void moveToActiveHandFrom(int x, int y) {
 	InventorySlot get = pull(x, y);
 	if (get.getItemId() > 0) {
-	    InventorySlot newOne = new InventorySlot(get, getDefinition(0, 4 + activeHand));
+	    InventorySlot newOne = new InventorySlot(get, getDefinition(0, getActiveHandY()));
 	    inventoryComponent.getSlots().add(newOne);
 	}
     }
@@ -245,13 +263,18 @@ public class Inventory extends Actor {
 	}
     }
 
+    private int getActiveHandY() {
+	return ACTIVE_HAND_START_Y + activeHand;
+    }
+    private static final int ACTIVE_HAND_START_Y = 4;
+
     public void mouseClicked(int x, int y, int button) {
 	int tileX = x / (TILE_WIDTH + TILE_PADDING);
 	int tileY = y / (TILE_HEIGHT + TILE_PADDING);
 	//System.out.println(String.format("You reached that at %s %s", tileX, tileY));
-	if (tileY < 4) {
-	    switch (button) {
-		case 0:
+	switch (button) {
+	    case 0:
+		if (tileY != getActiveHandY()) {
 		    if (getItemInActiveHand().getItemId() > 0) {
 			if (get(tileX, tileY).getItemId() < 0) {
 			    moveActiveHandItemTo(tileX, tileY);
@@ -263,10 +286,11 @@ public class Inventory extends Actor {
 			    moveToActiveHandFrom(tileX, tileY);
 			}
 		    }
-		    break;
-		case 1:
-		    break;
-	    }
+		}
+		break;
+	    case 1:
+		createContextMenuWithItem(x, y, getItem(tileX, tileY));
+		break;
 	}
     }
 
@@ -277,5 +301,36 @@ public class Inventory extends Actor {
     public void changeActiveHand() {
 	activeHand++;
 	activeHand %= 2;
+    }
+
+    private void createContextMenuWithItem(int x, int y, StaticItem item) {
+	if (item == null) {
+	    context.getCore().addContextMenu(null);
+	    return;
+	}
+	ContextMenu contextMenu = new ContextMenu(null, context.getCore().getStage());
+	contextMenu.setPosition(getX() + x, getY() + y);
+	addSubMenuFor(item, contextMenu);
+	context.getCore().addContextMenu(contextMenu);
+    }
+
+    private void addSubMenuFor(StaticItem item, ContextMenu contextMenu) {
+	ContextMenu contextSubMenu = new ContextMenu(item.getProperties().getName(), context.getCore().getStage());
+	contextMenu.add(contextSubMenu);
+	contextSubMenu.add("Learn");
+	contextMenu.setActivationListener((UIElement e) -> {
+	    procDefaultContextActions(e, item);
+	    context.getCore().addContextMenu(null);
+	});
+    }
+
+    private void procDefaultContextActions(UIElement e, final StaticItem item) {
+	ContextMenu currentMenu = (ContextMenu) e;
+	switch (currentMenu.getSelected()) {
+	    case 0:
+		String description = item.getProperties().getDescription();
+		context.getCore().log(new LogString(description, LogLevel.TALKING));
+		break;
+	}
     }
 }
