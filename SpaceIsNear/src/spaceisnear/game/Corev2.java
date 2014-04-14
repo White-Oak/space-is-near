@@ -287,7 +287,8 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	    if (dx <= 2 && dy <= 2) {
 		java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
 		MessageInteracted messageInteracted;
-		messageInteracted = new MessageInteracted(itemsOn.get(itemsOn.size() - 1).getId(), -1);
+		int interactedWith = inventory.getItemInActiveHand().getItemId();
+		messageInteracted = new MessageInteracted(itemsOn.get(itemsOn.size() - 1).getId(), interactedWith);
 		MessageToSend messageToSend = new MessageToSend(messageInteracted);
 		context.sendDirectedMessage(messageToSend);
 	    }

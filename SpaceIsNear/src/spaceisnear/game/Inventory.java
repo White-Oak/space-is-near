@@ -204,7 +204,7 @@ public class Inventory extends Actor {
 	});
     }
 
-    private InventorySlot getItemInActiveHand() {
+    public InventorySlot getItemInActiveHand() {
 	return get(2, getActiveHandY());
     }
 
