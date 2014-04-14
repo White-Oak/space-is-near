@@ -258,7 +258,7 @@ public class Inventory extends Actor {
     private void interactWithItemInActiveHand(int x, int y) {
 	InventorySlot get = get(x, y);
 	if (get.getItemId() > 0) {
-	    MessageInteraction messageInteraction = new MessageInteraction(get.getItemId(), getItemInActiveHand().getItemId());
+	    MessageInteracted messageInteraction = new MessageInteracted(get.getItemId(), getItemInActiveHand().getItemId());
 	    context.sendDirectedMessage(new MessageToSend(messageInteraction));
 	}
     }

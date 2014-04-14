@@ -14,6 +14,7 @@ import spaceisnear.abstracts.*;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
+import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.game.ui.UIElement;
 import spaceisnear.game.ui.console.*;
@@ -274,6 +275,21 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	    } else {
 		menu.hide();
 		menu = null;
+	    }
+	} else if (button == 0) {
+	    if (tileX < 0 || tileY < 0) {
+		return;
+	    }
+	    final Position position = context.getPlayer().getPosition();
+	    int dx = Math.abs(position.getX() - tileX);
+	    int dy = Math.abs(position.getY() - tileY);
+	    System.out.println(String.format("dx %d dy %d", dx, dy));
+	    if (dx <= 2 && dy <= 2) {
+		java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
+		MessageInteracted messageInteracted;
+		messageInteracted = new MessageInteracted(itemsOn.get(itemsOn.size() - 1).getId(), -1);
+		MessageToSend messageToSend = new MessageToSend(messageInteracted);
+		context.sendDirectedMessage(messageToSend);
 	    }
 	}
     }

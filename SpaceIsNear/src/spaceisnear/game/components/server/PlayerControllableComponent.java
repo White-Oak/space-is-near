@@ -93,7 +93,7 @@ public class PlayerControllableComponent extends Component {
 			return mm;
 		    }
 		} else {
-		    MessageInteraction interaction = new MessageInteraction(staticItem.getId(), -1);
+		    MessageInteracted interaction = new MessageInteracted(staticItem.getId(), -1);
 		    context.sendDirectedMessage(interaction);
 		}
 	    }

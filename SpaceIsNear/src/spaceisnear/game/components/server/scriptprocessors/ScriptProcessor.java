@@ -99,8 +99,8 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 		break;
 	    case "setFullyPathable":
 		boolean set = Boolean.parseBoolean(values[0].getValue());
-		setProperty("blockingPath", set);
-		setProperty("blockingAir", set);
+		setProperty("blockingPath", String.valueOf(set));
+		setProperty("blockingAir", String.valueOf(set));
 		ServerContext context1 = context;
 		context1.getObstacles().setReacheable(currentRequester.getPosition().getX(), currentRequester.getPosition().getY(), set);
 		context1.getAtmosphere().setAirReacheable(currentRequester.getPosition().getX(), currentRequester.getPosition().getY(), set);

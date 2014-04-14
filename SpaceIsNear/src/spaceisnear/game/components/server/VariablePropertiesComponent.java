@@ -4,6 +4,7 @@ import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.server.scriptprocessors.*;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.MessageInteracted;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
@@ -42,12 +43,14 @@ public class VariablePropertiesComponent extends Component {
 		    processPropertySetMessage(mps);
 		}
 		break;
-	    case INTERACTED:
+	    case INTERACTION:
 		if (getOwner().getType() == GameObjectType.ITEM) {
 		    try {
 			//Context.LOG.log("Trying to script interaction");
+			MessageInteracted mu = (MessageInteracted) message;
 			ServerContext context = (ServerContext) getContext();
-			InteractionScriptProccessor interactionScriptProccessor = new InteractionScriptProccessor(context, this, null);
+			InteractionScriptProccessor interactionScriptProccessor;
+			interactionScriptProccessor = new InteractionScriptProccessor(context, this, mu.getInteractedWith());
 			interactionScriptProccessor.run();
 		    } catch (ClassCastException e) {
 			Context.LOG.log(e);

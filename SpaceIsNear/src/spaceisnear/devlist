@@ -257,18 +257,18 @@
 0.1.0
 +Doors opening/closing
     -Interaction with no item in active hand or with id should lead to opening a door.
-    -After door began opening it should remain impassable for a period of time (?).
 +total rework of starting UI and logic
     -professions' choosing
 +IDs' basics (ID of player, his profession)
     -added icon for id
 +HealthComponent
-    -knockbacking if critical
+    +knockbacking if critical
     -dying if dead
 +Atmosphere
     -knockbacking if big difference between two tiles in pressure
 +MessageKnockbacked
-    -processing on server
+    +processing on server
+    -animation change for player
 -place properties of objects that are near connected player near in array for faster connection
 -System of context editors for server
     -atmosphere editor
@@ -276,5 +276,5 @@
     -log viewer
 +lighting system
 +Inventory interaction
--Context menus in inventory
++Context menus in inventory
 
