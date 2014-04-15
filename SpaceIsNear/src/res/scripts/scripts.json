@@ -12,5 +12,12 @@
     "messageProcessing" = false,
     "interaction" = true,
     "time" = true
+},
+{
+    "name" = "lamp",
+    "contextMenuInit" = false,
+    "messageProcessing" = false,
+    "interaction" = true,
+    "time" = false
 }
 ]
