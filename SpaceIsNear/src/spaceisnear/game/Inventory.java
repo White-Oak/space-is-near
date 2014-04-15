@@ -108,13 +108,10 @@ public class Inventory extends Actor {
 			    int id = get.getProperties().getId();
 			    int[] imageIds = ItemsArchive.itemsArchive.getImageIds(id);
 			    TextureRegion textureRegion = ItemsArchive.itemsArchive.getTextureRegion(imageIds[0]);
-			    if (strings.length != 1) {
-				batch.draw(textureRegion, startingX + localDeltaX + (strings.length - 1 - j) * (TILE_WIDTH + TILE_PADDING),
-					startingY + i * (TILE_HEIGHT + TILE_PADDING));
-			    } else {
-				batch.draw(textureRegion, startingX + 2 * (TILE_WIDTH + TILE_PADDING),
-					startingY + i * (TILE_HEIGHT + TILE_PADDING));
-			    }
+			    final int length = strings.length == 1 ? 2 : (strings.length - 1 - j);
+			    batch.draw(textureRegion,
+				    startingX + localDeltaX + length * (TILE_WIDTH + TILE_PADDING) + (TILE_WIDTH - GameContext.TILE_WIDTH) / 2,
+				    startingY + i * (TILE_HEIGHT + TILE_PADDING) + (TILE_HEIGHT - GameContext.TILE_HEIGHT) / 2);
 			}
 		    }
 		}
