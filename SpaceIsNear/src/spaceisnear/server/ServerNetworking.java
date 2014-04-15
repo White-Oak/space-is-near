@@ -288,10 +288,13 @@ import spaceisnear.server.objects.items.*;
     private void processOldPlayer(Client client) {
 	sendToAll(new MessagePaused());
 	Context.LOG.log("Server's been paused");
-	sendWorld(client);//	
+	ObjectMessaged[] world = getWorld();
+	sendWorldInformation(world, client);
+	sendCreatedsOfWorld(world, client.getConnection());
 	orderEveryoneToRogerAndWait();
 	sendPlayer(client);
 	sendToAll(new MessageUnpaused());
+	sendPropertiesOfWorld(world, client);
 	Context.LOG.log("Server has continued his work");
     }
 
@@ -301,7 +304,9 @@ import spaceisnear.server.objects.items.*;
 	sendToAll(new MessagePaused());
 	Context.LOG.log("Server\'s been paused");
 	List<ObjectMessaged> objectPlayer = createPlayer(client);
-	sendWorld(client);
+	ObjectMessaged[] world = getWorld();
+	sendWorldInformation(world, client);
+	sendCreatedsOfWorld(world, client.getConnection());
 	sendPlayer(client);
 	//rework
 	clients.stream()
@@ -314,6 +319,7 @@ import spaceisnear.server.objects.items.*;
 		});
 	//	
 	sendToAll(new MessageUnpaused());
+	sendPropertiesOfWorld(world, client);
 	Context.LOG.log("Server has continued his work");
 	//@working fix that
 	Runnable runnable = () -> {
@@ -341,16 +347,33 @@ import spaceisnear.server.objects.items.*;
 	waitForAllToRoger();
     }
 
-    private void sendWorld(Client client) {
-	ObjectMessaged[] world = getWorld();
+    private void sortPropertiesByClosestToPlayer(List<MessagePropertable> propertables, Player player) {
+	final Position playerPosition = player.getPosition();
+	propertables.sort((MessagePropertable o1, MessagePropertable o2) -> {
+	    int id = o1.getId();
+	    AbstractGameObject ago = core.getContext().getObjects().get(id);
+	    Position position1 = ago.getPosition();
+	    id = o2.getId();
+	    ago = core.getContext().getObjects().get(id);
+	    Position position2 = ago.getPosition();
+	    int distanceTo1 = playerPosition.distanceTo(position1);
+	    int distanceTo2 = playerPosition.distanceTo(position2);
+	    return Integer.compare(distanceTo1, distanceTo2);
+	});
+    }
+
+    private void sendWorldInformation(ObjectMessaged[] world, Client client) {
+	MessageWorldInformation mwi = getWorldInformation(world);
+	sendToConnection(client.getConnection(), mwi);
+    }
+
+    private MessageWorldInformation getWorldInformation(ObjectMessaged[] world) {
 	int accumulator = 0;
 	for (ObjectMessaged objectMessaged : world) {
 	    accumulator += objectMessaged.propertables.size();
 	}
 	MessageWorldInformation mwi = new MessageWorldInformation(world.length, accumulator);
-	sendToConnection(client.getConnection(), mwi);
-	sendCreatedsOfWorld(world, client.getConnection());
-	sendPropertiesOfWorld(world, client.getConnection());
+	return mwi;
     }
 
     private void sendCreatedsOfWorld(ObjectMessaged[] world, Connection connection) {
@@ -385,12 +408,15 @@ import spaceisnear.server.objects.items.*;
 	}
     }
 
-    private void sendPropertiesOfWorld(ObjectMessaged[] world, Connection connection) {
+    private void sendPropertiesOfWorld(ObjectMessaged[] world, Client client) {
 	//properties
+	List<MessagePropertable> propertables = new ArrayList<>();
 	for (ObjectMessaged objectMessaged : world) {
 	    List<MessagePropertable> propertable = objectMessaged.propertables;
-	    sendProperties(propertable, connection);
+	    propertables.addAll(propertable);
 	}
+	sortPropertiesByClosestToPlayer(propertables, client.getPlayer());
+	sendProperties(propertables, client.getConnection());
     }
 
     private void sendProperties(List<MessagePropertable> propertable, Connection connection) {

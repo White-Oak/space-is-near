@@ -24,4 +24,9 @@ import lombok.*;
 	return new StringBuilder().append('(').append(x).append(", ").append(y).append(')').toString();
     }
 
+    public int distanceTo(Position p) {
+	int dx = Math.abs(p.x - x);
+	int dy = Math.abs(p.y - y);
+	return dx + dy;
+    }
 }
