@@ -4,6 +4,8 @@
     "contextMenuInit" = false,
     "messageProcessing" = true,
     "interaction" = false,
+    "contextMenuRequesting" = true,
+    "contextMenuProccessing" = true,
     "time" = false
 },
 {
@@ -11,6 +13,8 @@
     "contextMenuInit" = false,
     "messageProcessing" = false,
     "interaction" = true,
+    "contextMenuRequesting" = true,
+    "contextMenuProccessing" = true,
     "time" = true
 },
 {
@@ -18,6 +22,8 @@
     "contextMenuInit" = false,
     "messageProcessing" = false,
     "interaction" = true,
+    "contextMenuRequesting" = true,
+    "contextMenuProccessing" = true,
     "time" = false
 }
 ]

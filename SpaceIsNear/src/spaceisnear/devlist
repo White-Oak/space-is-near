@@ -257,18 +257,12 @@
 0.1.0
 +Doors opening/closing
     +Interaction with no item in active hand or with id should lead to opening a door.
-+total rework of starting UI and logic
-    -professions' choosing
 +IDs' basics (ID of player, his profession)
     +added icon for id
 +HealthComponent
     +knockbacking if critical
-    -dying if dead
-+Atmosphere
-    -knockbacking if big difference between two tiles in pressure
 +MessageKnockbacked
     +processing on server
-    -animation change for player
 +place properties of objects that are near connected player near in array for faster connection
 +lighting system
 +Inventory interaction
@@ -278,3 +272,11 @@
 	+editing pressures
 
 0.1.1
++MessageKnockbacked
+    -animation change for player
++HealthComponent
+    -dying if dead
++total rework of starting UI and logic
+    -professions' choosing
++Atmosphere
+    -knockbacking if big difference between two tiles in pressure
