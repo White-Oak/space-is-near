@@ -1,10 +1,12 @@
 package spaceisnear.server.objects;
 
 import lombok.Getter;
+import lombok.Setter;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.inventory.InventoryComponent;
 import spaceisnear.game.components.server.*;
+import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.server.ServerContext;
 
@@ -14,6 +16,7 @@ import spaceisnear.server.ServerContext;
 public class Player extends ServerGameObject {
 
     @Getter private final HealthComponent healthComponent;
+    @Getter @Setter private ServerContextMenu menu;
 
     public Player(ServerContext context) {
 	super(GameObjectType.PLAYER, context);
@@ -53,4 +56,5 @@ public class Player extends ServerGameObject {
     public void setNickname(String nickname) {
 	getNameComponent().setNickname(nickname);
     }
+
 }

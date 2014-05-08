@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.*;
 import lombok.*;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.ArrayUtils;
 import spaceisnear.*;
 import spaceisnear.abstracts.*;
 import spaceisnear.game.messages.*;
@@ -299,9 +300,17 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	ContextMenu contextMenu = new ContextMenu(null, stage);
 	contextMenu.setPosition(x, y);
 	java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
+	ArrayList<Integer> ids = new ArrayList<>();
 	itemsOn.stream()
 		.map(staticItem -> (StaticItem) staticItem)
-		.forEach(item -> addSubMenuFor(item, contextMenu));
+		.forEach(item -> {
+		    addSubMenuFor(item, contextMenu);
+		    ids.add(item.getId());
+		});
+	final int[] toPrimitive = ArrayUtils.toPrimitive(ids.toArray(new Integer[ids.size()]));
+	MessageActionsRequest messageActionsRequest = new MessageActionsRequest(toPrimitive);
+	MessageToSend messageToSend = new MessageToSend(messageActionsRequest);
+	context.sendDirectedMessage(messageToSend);
 	menu = contextMenu;
 	stage.addActor(menu);
 //	testMenu(x, y);

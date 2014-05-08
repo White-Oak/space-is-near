@@ -2,7 +2,7 @@ package spaceisnear.game.messages.properties;
 
 import spaceisnear.game.components.inventory.InventoryComponent.Update;
 import spaceisnear.game.messages.*;
-import spaceisnear.server.ServerContext;
+import spaceisnear.server.*;
 
 public class MessageInventoryUpdated extends DirectedMessage implements MessagePropertable {
 
@@ -14,8 +14,7 @@ public class MessageInventoryUpdated extends DirectedMessage implements MessageP
     }
 
     @Override
-    public void processForServer(ServerContext context) {
-	super.processForServer(context); //To change body of generated methods, choose Tools | Templates.
+    public void processForServer(ServerContext context, Client client) {
 	context.sendDirectedMessage(new MessageToSend(this));
     }
 

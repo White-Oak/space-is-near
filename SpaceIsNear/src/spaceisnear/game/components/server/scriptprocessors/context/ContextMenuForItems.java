@@ -1,6 +1,7 @@
 package spaceisnear.game.components.server.scriptprocessors.context;
 
 import java.util.ArrayList;
+import spaceisnear.game.messages.MessageActionsOffer;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;
 
@@ -10,7 +11,7 @@ import spaceisnear.server.objects.items.StaticItem;
  */
 public class ContextMenuForItems {
 
-    public static ServerContextMenu getMenu(ServerContext context, StaticItem[] items) {
+    private static ServerContextMenu getMenu(ServerContext context, StaticItem[] items) {
 	ArrayList<ServerContextSubMenu> subMenus = new ArrayList<>();
 	for (int i = 0; i < items.length; i++) {
 	    StaticItem staticItem = items[i];
@@ -19,6 +20,10 @@ public class ContextMenuForItems {
 		    staticItem.getProperties().getId()));
 	}
 	return new ServerContextMenu(subMenus.toArray(new ServerContextSubMenu[subMenus.size()]));
+    }
+
+    public static MessageActionsOffer getMessage(ServerContext context, StaticItem[] items) {
+	return new MessageActionsOffer(getMenu(context, items));
     }
 
 }

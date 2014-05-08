@@ -96,6 +96,7 @@ import spaceisnear.server.objects.items.*;
 
     private void processBundle(Message message, Connection connection) {
 	MessageType mt = message.getMessageType();
+	final Client clientByConnection = getClientByConnection(connection);
 	switch (mt) {
 	    case PLAYER_INFO: {
 		MessagePlayerInformation mpi = (MessagePlayerInformation) message;
@@ -107,7 +108,6 @@ import spaceisnear.server.objects.items.*;
 	    break;
 	    case CLIENT_INFO: {
 		MessageClientInformation mci = (MessageClientInformation) message;
-		final Client clientByConnection = getClientByConnection(connection);
 		clientByConnection.setClientInformation(mci);
 		String messageS = mci.getLogin() + " requested access with password " + mci.getPassword();
 		boolean accessible = accountManager.isAccessible(mci.getLogin(), mci.getPassword());
@@ -132,7 +132,7 @@ import spaceisnear.server.objects.items.*;
 	    }
 	    break;
 	    default:
-		message.processForServer(core.getContext());
+		message.processForServer(core.getContext(), clientByConnection);
 		break;
 
 	}

@@ -1,4 +1,3 @@
-addDefaultActions {}
 isOpened = getProperty {opened}
 if(isOpened == null){
     isOpened = false

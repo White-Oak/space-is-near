@@ -1,10 +1,9 @@
 package spaceisnear.game.messages;
 
 import java.io.Serializable;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import spaceisnear.game.GameContext;
-import spaceisnear.server.ServerContext;
+import spaceisnear.server.*;
 
 /**
  * @author LPzhelud
@@ -22,7 +21,8 @@ import spaceisnear.server.ServerContext;
 
     }
 
-    public void processForServer(ServerContext context) {
+    public void processForServer(ServerContext context, Client client) {
 
     }
+
 }
