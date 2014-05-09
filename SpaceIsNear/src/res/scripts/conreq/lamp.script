@@ -1,3 +1,4 @@
+addDefaultActions {}
 isEnabled = getProperty {lightEnabled}
 if(isEnabled == null){
     isEnabled = true

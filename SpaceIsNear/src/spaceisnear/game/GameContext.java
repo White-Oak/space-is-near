@@ -13,6 +13,7 @@ import lombok.*;
 import spaceisnear.abstracts.*;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.PaintableComponent;
+import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.*;
 import spaceisnear.server.ServerContext;
@@ -113,4 +114,13 @@ import spaceisnear.server.ServerContext;
     public void removeAnimated(AbstractGameObject animated) {
 	animateds.remove(animated);
     }
+
+    public void menuWantsToHide() {
+	core.menuWantsToHide();
+    }
+
+    public void updateCurrentMenu(ServerContextMenu update) {
+	core.updateCurrentMenu(update);
+    }
+
 }

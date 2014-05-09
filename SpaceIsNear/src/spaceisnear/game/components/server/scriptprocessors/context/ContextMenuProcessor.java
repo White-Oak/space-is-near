@@ -14,7 +14,7 @@ import spaceisnear.server.objects.items.StaticItem;
  *
  * @author White Oak
  */
-class ContextMenuProcessor implements IAcceptable, ExceptionHandler, ActivationListener {
+public class ContextMenuProcessor implements IAcceptable, ExceptionHandler, ActivationListener {
 
     private final static Function[] fs = {
 	new NativeFunction("interact"),
@@ -26,9 +26,14 @@ class ContextMenuProcessor implements IAcceptable, ExceptionHandler, ActivationL
 
     public ContextMenuProcessor(StaticItem item, ServerContext context) {
 	interpretator = ServerItemsArchive.ITEMS_ARCHIVE.getInterprator(item.getProperties().getId(), new Constant[]{}, fs,
-		this, 5);
+		this, 4);
 	this.item = item;
 	this.context = context;
+    }
+
+    public void run(int chosen) {
+	this.chosen = chosen;
+	interpretator.run(this, true);
     }
 
     @Override

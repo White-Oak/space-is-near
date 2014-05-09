@@ -17,6 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
+import spaceisnear.game.GameContext;
+import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
+import spaceisnear.game.components.server.scriptprocessors.context.ServerContextSubMenu;
+import spaceisnear.game.messages.MessageActionChosen;
+import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.UIElement;
 
@@ -62,7 +67,7 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 
 	});
     }
-    private final ShapeRenderer renderer = new ShapeRenderer();
+    private final static ShapeRenderer renderer = new ShapeRenderer();
 
     @Override
     public void paint(SpriteBatch batch) {
@@ -228,6 +233,48 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 		menu.setY(getY() + i * getLineHeight());
 	    }
 	}
+    }
+
+    public synchronized void setItems(ServerContextMenu menu, GameContext context) {
+	assert menu != null;
+	final ServerContextSubMenu[] subMenus = menu.getSubMenus();
+	assert subMenus != null;
+	assert items.size() == subMenus.length;
+	//hiding what was shown
+	if (selectedItem instanceof ContextMenu) {
+	    ContextMenu current = (ContextMenu) selectedItem;
+	    current.hide();
+	}
+	//Making temporary copy of old list to save items' names
+	ArrayList<ContextMenuItemable> temporary = new ArrayList<>(items);
+	//Clearing old list
+	items.clear();
+	maxWidth = height = 0;
+	//Adding all menus
+	for (int i = 0; i < subMenus.length; i++) {
+	    ServerContextSubMenu serverContextSubMenu = subMenus[i];
+	    ContextMenu contextMenu = new ContextMenu(temporary.get(i).getLabel(), stage);
+	    add(contextMenu);
+	    for (int j = 0; j < serverContextSubMenu.getActions().length; j++) {
+		String string = serverContextSubMenu.getActions()[j];
+		contextMenu.add(string);
+	    }
+
+	    //Creating new listeners
+	    final int currentIndex = i;
+	    contextMenu.setActivationListener(element -> {
+		MessageActionChosen messageActionChosen;
+		messageActionChosen = new MessageActionChosen(contextMenu.getSelected(), currentIndex);
+		MessageToSend messageToSend = new MessageToSend(messageActionChosen);
+		context.sendDirectedMessage(messageToSend);
+		context.menuWantsToHide();
+	    });
+	}
+	//to prevent overflowing
+	if (selected >= items.size()) {
+	    selected = items.size() - 1;
+	}
+	System.out.println("Done!");
     }
 
 }

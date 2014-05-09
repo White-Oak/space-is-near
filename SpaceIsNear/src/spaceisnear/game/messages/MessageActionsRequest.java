@@ -24,7 +24,7 @@ public class MessageActionsRequest extends Message implements NetworkableMessage
 	for (int i = 0; i < ids.length; i++) {
 	    int j = ids[i];
 	    assert j > 0 : "id of an item cannot be less than zero!";
-	    StaticItem item = (StaticItem) context.getObjects().get(i);
+	    StaticItem item = (StaticItem) context.getObjects().get(j);
 	    if (item == null) {
 		Exception ex = new NullPointerException("Object " + j + " no longer exists or has been called due to wrong usage.");
 		Context.LOG.log(ex);

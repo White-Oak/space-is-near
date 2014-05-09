@@ -7,7 +7,7 @@ import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.inventory.InventorySlot;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
-import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
+import spaceisnear.game.components.server.scriptprocessors.context.*;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
@@ -248,7 +248,12 @@ public final class ServerContext extends Context {
 	client.getPlayer().setMenu(menu);
     }
 
-    public void proccessActionInContext(Client client, int chosen) {
-
+    public void proccessActionInContext(Client client, int itemNumber, int chosen) {
+	final ServerContextMenu menu = client.getPlayer().getMenu();
+	final ServerContextSubMenu subMenu = menu.getSubMenus()[itemNumber];
+	int itemId = subMenu.getItemId();
+	StaticItem item = (StaticItem) objects.get(itemId);
+	ContextMenuProcessor contextMenuProcessor = new ContextMenuProcessor(item, this);
+	contextMenuProcessor.run(chosen - subMenu.getDefaults());
     }
 }

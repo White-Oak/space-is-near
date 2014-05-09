@@ -18,6 +18,7 @@ public class MessageActionsOffer extends Message implements NetworkableMessage {
 
     @Override
     public void processForClient(GameContext context) {
+	context.updateCurrentMenu(menu);
     }
 
 }

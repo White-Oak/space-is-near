@@ -12,6 +12,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.ArrayUtils;
 import spaceisnear.*;
 import spaceisnear.abstracts.*;
+import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;
@@ -308,12 +309,25 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    ids.add(item.getId());
 		});
 	final int[] toPrimitive = ArrayUtils.toPrimitive(ids.toArray(new Integer[ids.size()]));
+	//sending message to ask for set of actions
 	MessageActionsRequest messageActionsRequest = new MessageActionsRequest(toPrimitive);
 	MessageToSend messageToSend = new MessageToSend(messageActionsRequest);
 	context.sendDirectedMessage(messageToSend);
+	//Adding to CONTEXT
 	menu = contextMenu;
 	stage.addActor(menu);
 //	testMenu(x, y);
+    }
+
+    public void updateCurrentMenu(ServerContextMenu update) {
+	if (menu != null) {
+	    menu.setItems(update, context);
+	}
+    }
+
+    public void menuWantsToHide() {
+	menu.hide();
+	menu = null;
     }
 
     private void addSubMenuFor(StaticItem item, ContextMenu contextMenu) {
@@ -324,8 +338,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	contextSubMenu.add("Take");
 	contextMenu.setActivationListener((UIElement e) -> {
 	    procDefaultContextActions(e, item);
-	    menu.hide();
-	    menu = null;
+	    menuWantsToHide();
 	});
     }
 

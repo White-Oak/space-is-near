@@ -15,9 +15,11 @@ public class ContextMenuForItems {
 	ArrayList<ServerContextSubMenu> subMenus = new ArrayList<>();
 	for (int i = 0; i < items.length; i++) {
 	    StaticItem staticItem = items[i];
-	    ArrayList<String> subMenu = new ContextSubMenuForItemsCreator(staticItem, context).getSubMenu();
+	    final ContextSubMenuForItemsCreator subCreator = new ContextSubMenuForItemsCreator(staticItem, context);
+	    subCreator.run();
+	    ArrayList<String> subMenu = subCreator.getSubMenu();
 	    subMenus.add(new ServerContextSubMenu(subMenu.toArray(new String[subMenu.size()]),
-		    staticItem.getProperties().getId()));
+		    staticItem.getProperties().getId(), subCreator.getDefaults()));
 	}
 	return new ServerContextMenu(subMenus.toArray(new ServerContextSubMenu[subMenus.size()]));
     }
