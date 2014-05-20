@@ -18,7 +18,7 @@ public class ContextMenuProcessor implements IAcceptable, ExceptionHandler, Acti
 
     private final static Function[] fs = {
 	new NativeFunction("interact"),
-	new NativeFunction("getChosen", 1)};
+	new NativeFunction("getChosen")};
     private final Interpretator interpretator;
     private int chosen;
     private final StaticItem item;
@@ -33,7 +33,9 @@ public class ContextMenuProcessor implements IAcceptable, ExceptionHandler, Acti
 
     public void run(int chosen) {
 	this.chosen = chosen;
-	interpretator.run(this, true);
+	if (interpretator != null) {
+	    interpretator.run(this, false);
+	}
     }
 
     @Override

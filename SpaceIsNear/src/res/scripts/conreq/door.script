@@ -3,7 +3,7 @@ isOpened = getProperty {opened}
 if(isOpened == null){
     isOpened = false
 }
-if(isOpened == true) {
+if(isOpened == true){
     add {"Close"}
 }
 else{

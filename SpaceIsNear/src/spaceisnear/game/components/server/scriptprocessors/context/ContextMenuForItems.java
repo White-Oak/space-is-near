@@ -19,7 +19,7 @@ public class ContextMenuForItems {
 	    subCreator.run();
 	    ArrayList<String> subMenu = subCreator.getSubMenu();
 	    subMenus.add(new ServerContextSubMenu(subMenu.toArray(new String[subMenu.size()]),
-		    staticItem.getProperties().getId(), subCreator.getDefaults()));
+		    staticItem.getId(), subCreator.getDefaults()));
 	}
 	return new ServerContextMenu(subMenus.toArray(new ServerContextSubMenu[subMenus.size()]));
     }

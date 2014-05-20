@@ -1,5 +1,6 @@
 package spaceisnear.game.messages;
 
+import lombok.Getter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
 
@@ -9,7 +10,7 @@ import spaceisnear.game.components.server.scriptprocessors.context.ServerContext
  */
 public class MessageActionsOffer extends Message implements NetworkableMessage {
 
-    private final ServerContextMenu menu;
+    @Getter private final ServerContextMenu menu;
 
     public MessageActionsOffer(ServerContextMenu menu) {
 	super(MessageType.CONTEXT_ACTIONS_OFFER);

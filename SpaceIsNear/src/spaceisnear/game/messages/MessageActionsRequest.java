@@ -32,7 +32,10 @@ public class MessageActionsRequest extends Message implements NetworkableMessage
 	    }
 	    items[i] = item;
 	}
+	//
+	//
 	MessageActionsOffer message = ContextMenuForItems.getMessage(context, items);
+	client.getPlayer().setMenu(message.getMenu());
 	MessageToSend messageToSend = new MessageToSend(message);
 	context.sendDirectedMessage(messageToSend);
     }

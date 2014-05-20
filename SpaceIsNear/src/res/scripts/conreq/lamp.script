@@ -3,7 +3,7 @@ isEnabled = getProperty {lightEnabled}
 if(isEnabled == null){
     isEnabled = true
 }
-if(isEnabled == true) {
+if(isEnabled == true){
     add {"Turn off"}
 }
 else{
