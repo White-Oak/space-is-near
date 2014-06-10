@@ -10,6 +10,7 @@
 package spaceisnear.game.components.server;
 
 import java.util.List;
+import java.util.Optional;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
@@ -83,18 +84,21 @@ public class PlayerControllableComponent extends Component {
 	    StaticItem staticItem = (StaticItem) abstractGameObject;
 	    boolean blockingPath = checkIfBlocking(staticItem);
 	    if (blockingPath) {
-		Boolean property = (Boolean) staticItem.getVariableProperties().getProperty("stucked");
-		if (property != null && !property) {
-		    if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
-			MessageMoved mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
-			staticItem.message(mm);
-			getContext().sendDirectedMessage(new MessageToSend(mm));
-			mm = new MessageMoved(deltaX, deltaY, getOwnerId());
-			return mm;
+		Optional<Object> prop = staticItem.getVariableProperties().getProperty("stucked");
+		if (prop.isPresent()) {
+		    boolean property = (boolean) prop.get();
+		    if (!property) {
+			if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
+			    MessageMoved mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
+			    staticItem.message(mm);
+			    getContext().sendDirectedMessage(new MessageToSend(mm));
+			    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
+			    return mm;
+			}
+		    } else {
+			MessageInteracted interaction = new MessageInteracted(staticItem.getId(), -1);
+			context.sendDirectedMessage(interaction);
 		    }
-		} else {
-		    MessageInteracted interaction = new MessageInteracted(staticItem.getId(), -1);
-		    context.sendDirectedMessage(interaction);
 		}
 	    }
 	}
@@ -103,8 +107,9 @@ public class PlayerControllableComponent extends Component {
 
     private boolean checkIfBlocking(StaticItem staticItem) {
 	boolean blockingPath = staticItem.getProperties().getBundle().blockingPath;
-	String blockingPathString = (String) staticItem.getVariableProperties().getProperty("blockingPath");
-	if (blockingPathString != null) {
+	Optional<Object> property = staticItem.getVariableProperties().getProperty("blockingPath");
+	if (property.isPresent()) {
+	    String blockingPathString = (String) property.get();
 	    blockingPath = Boolean.parseBoolean(blockingPathString);
 	}
 	return blockingPath;

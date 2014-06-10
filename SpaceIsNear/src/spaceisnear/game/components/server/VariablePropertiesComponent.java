@@ -1,5 +1,6 @@
 package spaceisnear.game.components.server;
 
+import java.util.Optional;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.server.scriptprocessors.*;
@@ -87,7 +88,7 @@ public class VariablePropertiesComponent extends Component {
 	addState(name, value);
     }
 
-    public Object getProperty(String name) {
-	return getStateValueNamed(name);
+    public Optional<Object> getProperty(String name) {
+	return Optional.of(getStateValueNamed(name));
     }
 }
