@@ -10,7 +10,6 @@
 package spaceisnear.game.components.server;
 
 import java.util.List;
-import java.util.Optional;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
@@ -84,9 +83,9 @@ public class PlayerControllableComponent extends Component {
 	    StaticItem staticItem = (StaticItem) abstractGameObject;
 	    boolean blockingPath = checkIfBlocking(staticItem);
 	    if (blockingPath) {
-		Optional<Object> prop = staticItem.getVariableProperties().getProperty("stucked");
-		if (prop.isPresent()) {
-		    boolean property = (boolean) prop.get();
+		Object prop = staticItem.getVariableProperties().getProperty("stucked");
+		if (prop != null) {
+		    boolean property = (boolean) prop;
 		    if (!property) {
 			if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
 			    MessageMoved mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
@@ -107,9 +106,9 @@ public class PlayerControllableComponent extends Component {
 
     private boolean checkIfBlocking(StaticItem staticItem) {
 	boolean blockingPath = staticItem.getProperties().getBundle().blockingPath;
-	Optional<Object> property = staticItem.getVariableProperties().getProperty("blockingPath");
-	if (property.isPresent()) {
-	    String blockingPathString = (String) property.get();
+	Object property = staticItem.getVariableProperties().getProperty("blockingPath");
+	if (property != null) {
+	    String blockingPathString = (String) property;
 	    blockingPath = Boolean.parseBoolean(blockingPathString);
 	}
 	return blockingPath;

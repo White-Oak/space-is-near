@@ -1,4 +1,4 @@
-package spaceisnear.game.components.server.newscripts;
+package spaceisnear.game.components.server.scriptsv2;
 
 import java.util.Optional;
 import spaceisnear.server.objects.items.StaticItem;
@@ -12,16 +12,16 @@ public abstract class ItemScript extends CustomScript {
     private StaticItem item;
 
     protected boolean getBooleanPropertyOrFalse(String name) {
-	Optional<Object> property = getProperty(name);
+	Object property = getProperty(name);
 	boolean is = false;
-	if (property.isPresent()) {
-	    assert property.get().getClass() == Boolean.class;
-	    is = (Boolean) property.get();
+	if (property != null) {
+	    assert property.getClass() == Boolean.class;
+	    is = (Boolean) property;
 	}
 	return is;
     }
 
-    protected Optional<Object> getProperty(String name) {
+    protected Object getProperty(String name) {
 	return item.getVariableProperties().getProperty(name);
     }
 
@@ -31,4 +31,14 @@ public abstract class ItemScript extends CustomScript {
     protected Optional<StaticItem> getItem() {
 	return Optional.of(item);
     }
+
+    protected void setFullyPathable(boolean pathable) {
+    }
+
+    protected void sendAnimationQueueToRequestor(String queue, int i) {
+    }
+
+    protected void registerForTimeMessage(int i) {
+    }
+
 }

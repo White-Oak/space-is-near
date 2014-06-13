@@ -1,12 +1,12 @@
 package res.scripts.interaction;
 
-import spaceisnear.game.components.server.newscripts.InteractionScript;
+import spaceisnear.game.components.server.scriptsv2.InteractionScript;
 
 /**
  *
  * @author White Oak
  */
-public class ScriptLamp extends InteractionScript {
+public class Script_lamp extends InteractionScript {
 
     @Override
     public void script() {
@@ -23,9 +23,6 @@ public class ScriptLamp extends InteractionScript {
     }
 
     private void setPropertyAndSend(String lightEnabled, boolean enabled) {
-    }
-
-    private void sendAnimationQueueToRequestor(String string, int i) {
     }
 
 }

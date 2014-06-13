@@ -1,12 +1,12 @@
 package res.scripts.conreq;
 
-import spaceisnear.game.components.server.newscripts.ContextRequestScript;
+import spaceisnear.game.components.server.scriptsv2.ContextRequestScript;
 
 /**
  *
  * @author White Oak
  */
-public final class ScriptDoor extends ContextRequestScript {
+public final class Script_door extends ContextRequestScript {
 
     @Override
     public void script() {

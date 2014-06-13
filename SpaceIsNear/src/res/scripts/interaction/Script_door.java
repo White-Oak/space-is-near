@@ -1,12 +1,12 @@
 package res.scripts.interaction;
 
-import spaceisnear.game.components.server.newscripts.InteractionScript;
+import spaceisnear.game.components.server.scriptsv2.InteractionScript;
 
 /**
  *
  * @author White Oak
  */
-public class ScriptDoor extends InteractionScript {
+public class Script_door extends InteractionScript {
 
     @Override
     public void script() {
@@ -23,15 +23,6 @@ public class ScriptDoor extends InteractionScript {
 		sendAnimationQueueToRequestor("3, 2, 1, 0", 200);
 	    }
 	});
-    }
-
-    private void setFullyPathable(boolean pathable) {
-    }
-
-    private void sendAnimationQueueToRequestor(String queue, int i) {
-    }
-
-    private void registerForTimeMessage(int i) {
     }
 
 }

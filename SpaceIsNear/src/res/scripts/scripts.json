@@ -1,6 +1,6 @@
 [
 {
-    "name" = "pda",
+    "scriptName" = "pda",
     "contextMenuInit" = false,
     "messageProcessing" = true,
     "interaction" = false,
@@ -9,7 +9,7 @@
     "time" = false
 },
 {
-    "name" = "door",
+    "scriptName" = "door",
     "contextMenuInit" = false,
     "messageProcessing" = false,
     "interaction" = true,
@@ -18,7 +18,7 @@
     "time" = true
 },
 {
-    "name" = "lamp",
+    "scriptName" = "lamp",
     "contextMenuInit" = false,
     "messageProcessing" = false,
     "interaction" = true,

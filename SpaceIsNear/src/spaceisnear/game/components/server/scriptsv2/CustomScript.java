@@ -1,4 +1,4 @@
-package spaceisnear.game.components.server.newscripts;
+package spaceisnear.game.components.server.scriptsv2;
 
 import spaceisnear.server.ServerContext;
 

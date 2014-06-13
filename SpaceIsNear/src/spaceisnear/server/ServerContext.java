@@ -152,8 +152,8 @@ public final class ServerContext extends Context {
 		.filter(abstractGameObject -> abstractGameObject.getType() == GameObjectType.ITEM)
 		.map(abstractGameObject -> (StaticItem) abstractGameObject)
 		.filter(item -> item.getProperties().getId() == ServerItemsArchive.ITEMS_ARCHIVE.getIdByName("radio"))
-		.filter(item -> item.getVariableProperties().getProperty("frequency").get().equals(frequency))
-		.filter(item -> (boolean) item.getVariableProperties().getProperty("enabled").get())
+		.filter(item -> item.getVariableProperties().getProperty("frequency").equals(frequency))
+		.filter(item -> (boolean) item.getVariableProperties().getProperty("enabled"))
 		.map(item -> item.getPosition())
 		.forEach(position -> {
 		    START_RECURSION(bufferMap, position.getX() - 1, position.getY(), MAXIMUM_TILES_TO_BE_HEARD - 1);
@@ -228,12 +228,12 @@ public final class ServerContext extends Context {
 	    String name = get.getProperties().getName();
 	    if (name.equals("ear_radio")) {
 		VariablePropertiesComponent variableProperties = get.getVariableProperties();
-		Optional<Object> property = variableProperties.getProperty("frequency");
-		if (property.isPresent()) {
-		    if (frequency.equals(property.get())) {
+		Object property = variableProperties.getProperty("frequency");
+		if (property != null) {
+		    if (frequency.equals(property)) {
 			property = variableProperties.getProperty("enabled");
-			if (property.isPresent()) {
-			    radioPlayer = (boolean) property.get();
+			if (property != null) {
+			    radioPlayer = (boolean) property;
 			}
 		    }
 		}
