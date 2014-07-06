@@ -1,4 +1,4 @@
-package spaceisnear.game.components.server.scriptsv2;
+package spaceisnear.server.scriptsv2;
 
 import spaceisnear.server.ServerContext;
 
@@ -9,6 +9,10 @@ import spaceisnear.server.ServerContext;
 public abstract class CustomScript {
 
     protected ServerContext context;
+
+    public void init(ServerContext context) {
+	this.context = context;
+    }
 
     public abstract void script();
 

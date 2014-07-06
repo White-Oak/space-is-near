@@ -1,6 +1,6 @@
 package res.scripts.conreq;
 
-import spaceisnear.game.components.server.scriptsv2.ContextRequestScript;
+import spaceisnear.server.scriptsv2.ContextRequestScript;
 
 /**
  *

@@ -18,6 +18,7 @@ import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.objects.*;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 import spaceisnear.server.objects.items.StaticItem;
+import spaceisnear.server.scriptsv2.ScriptsManager;
 
 /**
  * @author LPzhelud
@@ -35,6 +36,7 @@ public final class ServerContext extends Context {
     private static final int MAXIMUM_TILES_TO_BE_HEARD = 20, MAXIMUM_TILES_TO_BE_WHISPERED = 2;
     public static final int HIDDEN_SERVER_OBJECTS = 1;
     private final List<AbstractGameObject> timeNeeding = new ArrayList<>();
+    @Getter private final ScriptsManager scriptsManager;
 
     @Override
     public synchronized void sendThemAll(Message m) {
@@ -73,6 +75,7 @@ public final class ServerContext extends Context {
     public ServerContext(final ServerNetworking networking, final List<AbstractGameObject> objects,
 			 ObstaclesLayer obstacles,
 			 AtmosphericLayer atmosphere) {
+	this.scriptsManager = new ScriptsManager();
 	this.networking = networking;
 	this.objects = objects;
 	this.obstacles = obstacles;

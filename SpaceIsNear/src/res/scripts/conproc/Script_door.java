@@ -1,6 +1,6 @@
 package res.scripts.conproc;
 
-import spaceisnear.game.components.server.scriptsv2.ContextProcessorScript;
+import spaceisnear.server.scriptsv2.ContextProcessorScript;
 
 /**
  *

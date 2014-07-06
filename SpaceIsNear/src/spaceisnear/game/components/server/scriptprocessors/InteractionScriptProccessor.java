@@ -8,7 +8,7 @@ import spaceisnear.server.ServerContext;
  *
  * @author White Oak
  */
-public class InteractionScriptProccessor extends ScriptProcessor {
+@Deprecated public class InteractionScriptProccessor extends ScriptProcessor {
 
     private final static Function[] f = {new NativeFunction("getItem")};
     private final int currentInteractor;

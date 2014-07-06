@@ -1,6 +1,6 @@
 package res.scripts.time;
 
-import spaceisnear.game.components.server.scriptsv2.TimeScript;
+import spaceisnear.server.scriptsv2.TimeScript;
 
 /**
  *
@@ -14,7 +14,7 @@ public class Script_door extends TimeScript {
 	if (isOpened) {
 	    setFullyPathable(false);
 	    setProperty("opened", false);
-	    sendAnimationQueueToRequestor("3, 2, 1, 0", 200);
+	    sendAnimationQueueToRequestor(new int[]{3, 2, 1, 0}, 200);
 	}
     }
 

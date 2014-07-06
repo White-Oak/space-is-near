@@ -1,6 +1,6 @@
 package res.scripts.messages;
 
-import spaceisnear.game.components.server.scriptsv2.MessageReceivedScript;
+import spaceisnear.server.scriptsv2.MessageReceivedScript;
 import spaceisnear.game.messages.MessageType;
 
 /**
