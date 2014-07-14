@@ -8,7 +8,7 @@ package spaceisnear.game.messages;
 import lombok.Getter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.ui.console.LogString;
-import spaceisnear.server.ServerContext;
+import spaceisnear.server.*;
 
 public class MessageLog extends Message implements NetworkableMessage {
 
@@ -20,7 +20,7 @@ public class MessageLog extends Message implements NetworkableMessage {
     }
 
     @Override
-    public void processForServer(ServerContext context) {
+    public void processForServer(ServerContext context, Client client) {
 	context.log(log);
     }
 

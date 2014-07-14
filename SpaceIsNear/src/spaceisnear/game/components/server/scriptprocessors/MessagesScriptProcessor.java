@@ -6,7 +6,7 @@ import spaceisnear.game.components.Component;
 import spaceisnear.game.messages.Message;
 import spaceisnear.server.ServerContext;
 
-public class MessagesScriptProcessor extends ScriptProcessor {
+@Deprecated public class MessagesScriptProcessor extends ScriptProcessor {
 
     private final static Function[] f = {
 	new NativeFunction("getPropertyMessageName"),

@@ -8,7 +8,7 @@
 	"blockingLight": false,
 	"imageIds": [1],
 	"stuckedByAddingFromScript": false,
-	"description": "Universal tool",
+	"description": "Universal tool.",
 	"defaultProperties": null
     },
     {
@@ -20,7 +20,7 @@
 	"blockingLight": false,
 	"imageIds": [0],
 	"stuckedByAddingFromScript": true,
-	"description": "Universal covering for floor",
+	"description": "Universal covering for floor.",
 	"defaultProperties": null
     },
     {
@@ -32,7 +32,7 @@
 	"blockingLight": false,
 	"imageIds": [4],
 	"stuckedByAddingFromScript": true,
-	"description": "Universal obstacle. Now reinforced",
+	"description": "Universal covering for dangerful floor.",
 	"defaultProperties": null
     },
     {
@@ -44,7 +44,7 @@
 	"blockingLight": true,
 	"imageIds": [1],
 	"stuckedByAddingFromScript": false,
-	"description": "Universal obstacle",
+	"description": "Universal obstacle.",
 	"defaultProperties": null
     },
     {
@@ -56,7 +56,7 @@
 	"blockingLight": true,
 	"imageIds": [3],
 	"stuckedByAddingFromScript": true,
-	"description": "Universal obstacle. Now reinforced",
+	"description": "Universal obstacle. Now reinforced.",
 	"defaultProperties": null
     },
     {
@@ -68,7 +68,7 @@
 	"blockingLight": false,
 	"imageIds": [6],
 	"stuckedByAddingFromScript": true,
-	"description": "Universal obstacle with glass. Now reinforced",
+	"description": "Universal obstacle with glass. Now reinforced.",
 	"defaultProperties": null
     },
     {
@@ -80,7 +80,7 @@
 	"blockingLight": false,
 	"imageIds": [2],
 	"stuckedByAddingFromScript": true,
-	"description": "Universal speaker system",
+	"description": "Universal speaker system.",
 	"defaultProperties": [{"name": "frequency", "value": "145.9"}, {"name": "enabled", "value": true}]
     },
     {
@@ -92,7 +92,7 @@
 	"blockingLight": false,
 	"imageIds": [7],
 	"stuckedByAddingFromScript": false,
-	"description": "Universal radio system for wearing on ear",
+	"description": "Universal radio system for wearing on ear.",
 	"defaultProperties": [{"name": "frequency", "value": "145.9"}, {"name": "enabled", "value": true}]
     },
     {
@@ -105,7 +105,7 @@
 	"blockingLight": false,
 	"imageIds": [2],
 	"stuckedByAddingFromScript": false,
-	"description": "Universal pda to work with",
+	"description": "Universal pda to work with.",
 	"defaultProperties": null
     },
     {
@@ -116,7 +116,7 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"blockingLight": false,
-	"imageIds": [6],
+	"imageIds": [18],
 	"stuckedByAddingFromScript": false,
 	"description": "Inlined Destructor",
 	"defaultProperties": null
@@ -140,7 +140,7 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"blockingLight": false,
-	"imageIds": [16],
+	"imageIds": [16, 17],
 	"stuckedByAddingFromScript": true,
 	"description": "Lamp. It lights.",
 	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:1, a: 0.4f}, distance: 20}"}]
@@ -152,9 +152,9 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"blockingLight": false,
-	"imageIds": [16],
+	"imageIds": [16, 17],
 	"stuckedByAddingFromScript": true,
-	"description": "Lamp. It lights.",
+	"description": "Lamp. It lights dangerly.",
 	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 0, b:0, a: 0.2f}, distance: 20}"}]
     },
     {
@@ -164,9 +164,9 @@
 	"blockingPath": false,
 	"blockingAir": false,
 	"blockingLight": false,
-	"imageIds": [16],
+	"imageIds": [16, 17],
 	"stuckedByAddingFromScript": true,
-	"description": "Lamp. It lights.",
+	"description": "Lamp. It lights cheaply.",
 	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:0.5f, a: 0.4f}, distance: 20}"}]
     }
 ]

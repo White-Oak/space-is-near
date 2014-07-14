@@ -26,4 +26,9 @@ public class MessageYourPlayerDiscovered extends Message implements NetworkableM
 	context.getCore().getNetworking().setPlayable(true);
     }
 
+    @Override
+    public int getId() {
+	return playerID;
+    }
+
 }

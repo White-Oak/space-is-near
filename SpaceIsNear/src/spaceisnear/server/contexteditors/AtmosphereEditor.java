@@ -1,10 +1,8 @@
 package spaceisnear.server.contexteditors;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.event.*;
+import javax.swing.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.server.ServerContext;
 
@@ -49,6 +47,7 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 	final Shower shower = new Shower();
 	shower.setBackground(Color.black);
 	jFrame.addKeyListener(shower);
+	jFrame.addMouseListener(shower);
 	jFrame.setBackground(Color.black);
 	jFrame.setTitle("Atmosphere Editor");
 	jFrame.setSize(600, 600);
@@ -68,7 +67,7 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 	return jFrame != null && jFrame.isVisible();
     }
 
-    private class Shower extends JPanel implements KeyListener {
+    private class Shower extends JPanel implements KeyListener, MouseListener {
 
 	int x, y;
 
@@ -118,6 +117,39 @@ public class AtmosphereEditor extends ContextEditor implements InterfaceShowable
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	    int x1 = e.getX();
+	    int y1 = e.getY();
+	    if (x1 > 0 && y1 > 0) {
+		int xTile = x * GameContext.TILE_WIDTH + x1 / GameContext.TILE_WIDTH;
+		int yTile = y * GameContext.TILE_HEIGHT + y1 / GameContext.TILE_HEIGHT;
+		try {
+		    int pressure = pressures[xTile][yTile];
+		    String showInputDialog = JOptionPane.showInputDialog("Set the pressure:", pressure);
+		    pressures[xTile][yTile] = Integer.parseInt(showInputDialog);
+		} catch (ArrayIndexOutOfBoundsException ex) {
+
+		}
+	    }
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
 	}
 
     }

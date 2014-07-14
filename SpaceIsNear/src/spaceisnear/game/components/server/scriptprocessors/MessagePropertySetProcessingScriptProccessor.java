@@ -10,7 +10,7 @@ import spaceisnear.server.ServerContext;
  *
  * @author White Oak
  */
-public class MessagePropertySetProcessingScriptProccessor extends MessagesScriptProcessor {
+@Deprecated public class MessagePropertySetProcessingScriptProccessor extends MessagesScriptProcessor {
 
     private final MessagePropertySet currentMessage;
 

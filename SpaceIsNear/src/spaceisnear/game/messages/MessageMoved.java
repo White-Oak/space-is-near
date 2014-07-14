@@ -8,7 +8,7 @@ package spaceisnear.game.messages;
 import lombok.Getter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.objects.Position;
-import spaceisnear.server.ServerContext;
+import spaceisnear.server.*;
 
 /**
  * Sent only by server.
@@ -47,7 +47,7 @@ public class MessageMoved extends DirectedMessage implements NetworkableMessage 
     }
 
     @Override
-    public void processForServer(ServerContext context) {
+    public void processForServer(ServerContext context, Client client) {
 	context.sendDirectedMessage(this);
 	context.sendThemAll(this);
     }

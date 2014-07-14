@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
  * @author White Oak
  */
 @RequiredArgsConstructor
-class OneShotTask {
+public class OneShotTask {
 
     private final Taskable task;
     private final int ticksToPass;
@@ -18,7 +18,7 @@ class OneShotTask {
      *
      * @return true - if task has processed, false - otherwise
      */
-    public boolean tick() {
+    public synchronized boolean tick() {
 	ticksPassed++;
 	if (!done && isReadyToStart()) {
 	    process();

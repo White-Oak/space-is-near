@@ -6,9 +6,12 @@
 package spaceisnear.server.objects;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
-import spaceisnear.game.components.Component;
+import spaceisnear.game.components.*;
+import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.MessageType;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.server.ServerContext;
 
@@ -21,6 +24,36 @@ import spaceisnear.server.ServerContext;
     @Getter @Setter private boolean destroyed = false;
     @Getter private final GameObjectType type;
     @Getter private final ServerContext context;
+    private final List<OneShotTask> tasks = new ArrayList<>();
+
+    public void registerForOneShotTask(Taskable consumer, int ticksToPass) {
+	tasks.add(new OneShotTask(consumer, ticksToPass));
+	registerForTimeMessages();
+    }
+
+    public void checkTimes() {
+	for (int i = 0; i < tasks.size(); i++) {
+	    OneShotTask oneShotTask = tasks.get(i);
+	    if (oneShotTask.tick()) {
+		tasks.remove(i);
+		i--;
+	    }
+	}
+	if (tasks.isEmpty()) {
+	    unregisterForTimeMessages();
+	}
+    }
+
+    @Override
+    public synchronized void process() {
+	ConcurrentLinkedQueue<Message> messages = getMessages();
+	boolean anyMatch = messages.stream()
+		.anyMatch(message -> message.getMessageType() == MessageType.TIME_PASSED);
+	if (anyMatch) {
+	    checkTimes();
+	}
+	super.process();
+    }
 
     public void setId(int id) {
 	if (this.id == -1) {
@@ -57,4 +90,5 @@ import spaceisnear.server.ServerContext;
 		.reduce(result, (accumulator, _item) -> accumulator | _item);
 	return result;
     }
+
 }

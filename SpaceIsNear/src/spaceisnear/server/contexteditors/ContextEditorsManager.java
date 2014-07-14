@@ -46,17 +46,21 @@ public class ContextEditorsManager {
 
     public void startUpdateCycle(ServerContext context) {
 	Runnable r = () -> {
-	    while (true) {
-		update(context);
-		makeChanges(context);
-		repaint();
-		try {
-		    Thread.sleep(1000L);
-		} catch (InterruptedException ex) {
-		    ServerContext.LOG.log(ex);
-		}
-	    }
+	    updateCycle(context);
 	};
 	new Thread(r, "Context Editors Manager's update cycle").start();
+    }
+
+    private void updateCycle(ServerContext context) {
+	while (true) {
+	    update(context);
+	    makeChanges(context);
+	    repaint();
+	    try {
+		Thread.sleep(1000L);
+	    } catch (InterruptedException ex) {
+		ServerContext.LOG.log(ex);
+	    }
+	}
     }
 }

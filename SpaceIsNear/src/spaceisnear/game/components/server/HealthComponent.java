@@ -29,7 +29,8 @@ public class HealthComponent extends Component {
     public static final int LIGHT_SUFFOCATING_DAMAGE = -1;
     private static final int KNOCKBACKED_PASSES = 200;
     private static final int FLOOD_DELTA = 150;
-    private boolean ableToFlood = true;
+    private static final int FLOOD_DELTA_FOR_KNOCKBACKING = 1500;
+    private boolean ableToFlood = true, ableToFloodKnockbacking = true;
 
     /**
      *
@@ -44,10 +45,10 @@ public class HealthComponent extends Component {
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
 	    case HURT:
-		HurtMessage hm = (HurtMessage) message;
-		changeHealth(hm.getDamage());
+		HurtMessage hurtMessage = (HurtMessage) message;
+		changeHealth(hurtMessage.getDamage());
 		final Player player = (Player) getOwner();
-		switch (hm.getType()) {
+		switch (hurtMessage.getType()) {
 		    case SUFFOCATING:
 			if (ableToFlood) {
 			    final ServerContext context = (ServerContext) getContext();
@@ -58,17 +59,24 @@ public class HealthComponent extends Component {
 			}
 			break;
 		}
-		final VariablePropertiesComponent variablePropertiesComponent = getOwner().getVariablePropertiesComponent();
+		final VariablePropertiesComponent variablePropertiesComponent;
+		variablePropertiesComponent = getOwner().getVariablePropertiesComponent();
 		//
 		switch (getState()) {
 		    case CRITICICAL:
-			MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
-//			getContext().sendToID(messageKnockbacked, player.getId());
-			variablePropertiesComponent.setProperty("knockbacked", true);
-			registerForOneShotTask(() -> variablePropertiesComponent.setProperty("knockbacked", false),
-				KNOCKBACKED_PASSES);
-			//I suppose it should not be knockbacking but animation sending
-			getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
+			if (ableToFloodKnockbacking) {
+			    MessageKnockbacked messageKnockbacked = new MessageKnockbacked(player.getId());
+			    variablePropertiesComponent.setProperty("knockbacked", true);
+			    registerForOneShotTask(() -> variablePropertiesComponent.setProperty("knockbacked", false),
+				    KNOCKBACKED_PASSES);
+			    final ServerContext context = (ServerContext) getContext();
+			    final String nickname = player.getNickname();
+			    context.log(new LogString(nickname + " упал без сознания.", LogLevel.TALKING, getPosition()));
+			    //I suppose it should not be knockbacking but animation sending
+			    getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
+			    ableToFloodKnockbacking = false;
+			    registerForOneShotTask(() -> ableToFloodKnockbacking = true, FLOOD_DELTA_FOR_KNOCKBACKING);
+			}
 			break;
 
 		    case DEAD:

@@ -9,4 +9,5 @@ import spaceisnear.game.messages.NetworkableMessage;
 
 public interface MessagePropertable extends NetworkableMessage {
 
+    public int getId();
 }

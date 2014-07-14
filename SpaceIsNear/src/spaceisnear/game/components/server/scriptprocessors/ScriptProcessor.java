@@ -6,6 +6,7 @@ import org.whiteoak.parsing.interpretating.ast.*;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.messages.*;
+import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.ServerContext;
@@ -16,12 +17,13 @@ import spaceisnear.server.objects.items.StaticItem;
  *
  * @author White Oak
  */
-public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
+@Deprecated public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 
     private final static Function[] fs = {
 	new NativeFunction("dontProcessOnYourOwn"),
 	new NativeFunction("getProperty", 1),
 	new NativeFunction("setProperty", 2),
+	new NativeFunction("setPropertyAndSend", 2),
 	new NativeFunction("sendPlayerPrivateMessage", 1),
 	new NativeFunction("concatenateProperty", 2),
 	new NativeFunction("sendAnimationQueueToRequestor", 2),
@@ -61,6 +63,13 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 	    case "dontProcessOnYourOwn":
 		currentRequester.setDontProcess(true);
 		break;
+	    case "setPropertyAndSend": {
+		final MessagePropertySet messagePropertySet;
+		messagePropertySet = new MessagePropertySet(currentRequester.getOwnerId(),
+			values[0].getValue(), values[1].getValue());
+		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+		context.sendDirectedMessage(messageToSend);
+	    }
 	    case "setProperty":
 		setProperty(values[0].getValue(), values[1].getValue());
 		break;
@@ -99,8 +108,8 @@ public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 		break;
 	    case "setFullyPathable":
 		boolean set = Boolean.parseBoolean(values[0].getValue());
-		setProperty("blockingPath", set);
-		setProperty("blockingAir", set);
+		setProperty("blockingPath", String.valueOf(!set));
+		setProperty("blockingAir", String.valueOf(!set));
 		ServerContext context1 = context;
 		context1.getObstacles().setReacheable(currentRequester.getPosition().getX(), currentRequester.getPosition().getY(), set);
 		context1.getAtmosphere().setAirReacheable(currentRequester.getPosition().getX(), currentRequester.getPosition().getY(), set);

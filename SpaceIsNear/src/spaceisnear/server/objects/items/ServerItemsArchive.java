@@ -92,6 +92,12 @@ public class ServerItemsArchive extends ItemsArchivable {
 	    case 2:
 		dir = "time/";
 		break;
+	    case 3:
+		dir = "conreq/";
+		break;
+	    case 4:
+		dir = "conproc/";
+		break;
 	}
 	return dir;
     }
@@ -99,7 +105,7 @@ public class ServerItemsArchive extends ItemsArchivable {
     private class InterpretatorBundle {
 
 	//interaction, messages, time
-	Interpretator[] interpretators = new Interpretator[3];
+	Interpretator[] interpretators = new Interpretator[5];
 
     }
 

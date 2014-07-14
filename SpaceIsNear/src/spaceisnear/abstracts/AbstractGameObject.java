@@ -38,9 +38,7 @@ public abstract class AbstractGameObject {
 	for (int i = 0; i < savedSize; i++) {
 	    Message message = messages.poll();
 	    components.forEach(component -> {
-		if (message.getMessageType() == MessageType.TIME_PASSED) {
-		    component.checkTimes();
-		} else {
+		if (message.getMessageType() != MessageType.TIME_PASSED) {
 		    component.processMessage(message);
 		}
 	    });

@@ -2,21 +2,20 @@ package spaceisnear.game.components.server;
 
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
-import spaceisnear.game.components.server.scriptprocessors.*;
 import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.MessageInteracted;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;
+import spaceisnear.server.scriptsv2.*;
 
 /**
  *
  * @author White Oak
  */
 public class VariablePropertiesComponent extends Component {
-
-    private MessagePropertySetProcessingScriptProccessor mpsp;
 
     public VariablePropertiesComponent() {
 	super(ComponentType.VARIABLES);
@@ -32,8 +31,15 @@ public class VariablePropertiesComponent extends Component {
 		    try {
 			//Context.LOG.log("Trying to script processing message");
 			ServerContext context = (ServerContext) getContext();
-			mpsp = new MessagePropertySetProcessingScriptProccessor(context, this, mps);
-			mpsp.run();
+			ScriptsManager scriptsManager = context.getScriptsManager();
+			StaticItem owner = (StaticItem) getOwner();
+			MessageReceivedScript scriptFor = (MessageReceivedScript) scriptsManager.getScriptFor(
+				ScriptsManager.ScriptType.MESSAGES,
+				owner.getProperties().getName());
+			if (scriptFor != null) {
+			    scriptFor.init(context, owner, message, this);
+			    scriptFor.script();
+			}
 		    } catch (ClassCastException e) {
 			Context.LOG.log(e);
 		    }
@@ -42,13 +48,22 @@ public class VariablePropertiesComponent extends Component {
 		    processPropertySetMessage(mps);
 		}
 		break;
-	    case INTERACTED:
+	    case INTERACTION:
 		if (getOwner().getType() == GameObjectType.ITEM) {
 		    try {
 			//Context.LOG.log("Trying to script interaction");
+			MessageInteracted mu = (MessageInteracted) message;
 			ServerContext context = (ServerContext) getContext();
-			InteractionScriptProccessor interactionScriptProccessor = new InteractionScriptProccessor(context, this, null);
-			interactionScriptProccessor.run();
+			ScriptsManager scriptsManager = context.getScriptsManager();
+			StaticItem owner = (StaticItem) getOwner();
+			InteractionScript scriptFor = (InteractionScript) scriptsManager.getScriptFor(
+				ScriptsManager.ScriptType.INTERACTION,
+				owner.getProperties().getName());
+			Context.LOG.log("Found script interaction");
+			if (scriptFor != null) {
+			    scriptFor.init(context, owner);
+			    scriptFor.script();
+			}
 		    } catch (ClassCastException e) {
 			Context.LOG.log(e);
 		    }

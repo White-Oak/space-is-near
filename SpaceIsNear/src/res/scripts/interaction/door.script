@@ -1,18 +1,18 @@
 item = getItem {}
-    if (item == null){
-	isOpened = getProperty {opened}
-	if(isOpened == null){
-	    isOpened = false
-	}
-	isOpened = invertBoolean {isOpened}
-	setProperty {opened, isOpened}
-	setFullyPathable {isOpened}
-	if (isOpened == true){
-	    sendAnimationQueueToRequestor {"0, 1, 2, 3", 200}
-	    setProperty {ticksSinceOpened, 0}
-	    registerForTimeMessage {150}
-	}
-	else {
-	    sendAnimationQueueToRequestor {"3, 2, 1, 0", 200}
-	}
-  }
+if (item < 0){
+    isOpened = getProperty {opened}
+    if(isOpened == null){
+	isOpened = false
+    }
+    isOpened = invertBoolean {isOpened}
+    setProperty {opened, isOpened}
+    setFullyPathable {isOpened}
+    if (isOpened == true){
+        sendAnimationQueueToRequestor {"0, 1, 2, 3", 200}
+        setProperty {ticksSinceOpened, 0}
+        registerForTimeMessage {150}
+    }
+else {
+    sendAnimationQueueToRequestor {"3, 2, 1, 0", 200}
+}
+}

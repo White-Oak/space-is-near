@@ -83,18 +83,21 @@ public class PlayerControllableComponent extends Component {
 	    StaticItem staticItem = (StaticItem) abstractGameObject;
 	    boolean blockingPath = checkIfBlocking(staticItem);
 	    if (blockingPath) {
-		Boolean property = (Boolean) staticItem.getVariableProperties().getProperty("stucked");
-		if (property != null && !property) {
-		    if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
-			MessageMoved mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
-			staticItem.message(mm);
-			getContext().sendDirectedMessage(new MessageToSend(mm));
-			mm = new MessageMoved(deltaX, deltaY, getOwnerId());
-			return mm;
+		Object prop = staticItem.getVariableProperties().getProperty("stucked");
+		if (prop != null) {
+		    boolean property = (boolean) prop;
+		    if (!property) {
+			if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
+			    MessageMoved mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
+			    staticItem.message(mm);
+			    getContext().sendDirectedMessage(new MessageToSend(mm));
+			    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
+			    return mm;
+			}
+		    } else {
+			MessageInteracted interaction = new MessageInteracted(staticItem.getId(), -1);
+			context.sendDirectedMessage(interaction);
 		    }
-		} else {
-		    MessageInteraction interaction = new MessageInteraction(staticItem.getId(), -1);
-		    context.sendDirectedMessage(interaction);
 		}
 	    }
 	}
@@ -103,8 +106,9 @@ public class PlayerControllableComponent extends Component {
 
     private boolean checkIfBlocking(StaticItem staticItem) {
 	boolean blockingPath = staticItem.getProperties().getBundle().blockingPath;
-	String blockingPathString = (String) staticItem.getVariableProperties().getProperty("blockingPath");
-	if (blockingPathString != null) {
+	Object property = staticItem.getVariableProperties().getProperty("blockingPath");
+	if (property != null) {
+	    String blockingPathString = (String) property;
 	    blockingPath = Boolean.parseBoolean(blockingPathString);
 	}
 	return blockingPath;

@@ -21,11 +21,8 @@ public class LightComponent extends Component {
 		if (light != null && mps.getName().equals("lightEnabled")) {
 		    Object property = mps.getValue();
 		    if (property != null) {
-			if ((Boolean) property) {
-			    light.setActive(true);
-			} else {
-			    light.setActive(false);
-			}
+			property = Boolean.parseBoolean((String) property);
+			light.setActive((Boolean) property);
 		    }
 		}
 		break;

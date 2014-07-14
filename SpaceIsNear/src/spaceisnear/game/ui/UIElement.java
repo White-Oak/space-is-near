@@ -15,7 +15,7 @@ import lombok.*;
 public abstract class UIElement extends Actor {
 
     protected static final BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
-    @Getter(AccessLevel.PROTECTED) private final ShapeRenderer renderer = new ShapeRenderer();
+    @Getter(AccessLevel.PROTECTED) private final static ShapeRenderer renderer = new ShapeRenderer();
     private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
 
     @Getter @Setter private ActivationListener activationListener;

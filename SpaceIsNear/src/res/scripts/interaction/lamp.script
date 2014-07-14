@@ -1,0 +1,15 @@
+item = getItem {}
+if (item < 0){
+    isEnabled = getProperty {lightEnabled}
+    if(isEnabled == null){
+	isEnabled = true
+    }
+    isEnabled = invertBoolean {isEnabled}
+    setPropertyAndSend {lightEnabled, isEnabled}
+    if (isEnabled == false){
+        sendAnimationQueueToRequestor {"1", 200}
+    }
+    else {
+	sendAnimationQueueToRequestor {"0", 200}
+    }
+}
