@@ -18,6 +18,7 @@ import spaceisnear.game.ui.console.LogString;
 import spaceisnear.server.objects.*;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 import spaceisnear.server.objects.items.StaticItem;
+import spaceisnear.server.scriptsv2.ContextProcessorScript;
 import spaceisnear.server.scriptsv2.ScriptsManager;
 
 /**
@@ -262,7 +263,11 @@ public final class ServerContext extends Context {
 	final ServerContextSubMenu subMenu = menu.getSubMenus()[itemNumber];
 	int itemId = subMenu.getItemId();
 	StaticItem item = (StaticItem) objects.get(itemId);
-	ContextMenuProcessor contextMenuProcessor = new ContextMenuProcessor(item, this);
-	contextMenuProcessor.run(chosen - subMenu.getDefaults());
+	ContextProcessorScript processorScript = (ContextProcessorScript) scriptsManager.getScriptFor(ScriptsManager.ScriptType.CONPROC,
+		item.getProperties().getName());
+	if (processorScript != null) {
+	    processorScript.init(this, item, chosen - subMenu.getDefaults());
+	    processorScript.script();
+	}
     }
 }

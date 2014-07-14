@@ -17,7 +17,7 @@ import spaceisnear.server.objects.items.StaticItem;
  *
  * @author White Oak
  */
-public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
+@Deprecated public abstract class ScriptProcessor implements IAcceptable, ExceptionHandler {
 
     private final static Function[] fs = {
 	new NativeFunction("dontProcessOnYourOwn"),
