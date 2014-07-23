@@ -70,27 +70,19 @@ public class PositionComponent extends Component {
     public void processMessage(Message message) {
 	int oldX = getX(), oldY = getY();
 	switch (message.getMessageType()) {
-	    case MOVED:
-		MessageMoved messagem = (MessageMoved) message;
-		int newX = getX() + messagem.getX();
-		int newY = getY() + messagem.getY();
-		try {
-		    registerForAnimation();
-		    delayX = messagem.getX() * GameContext.TILE_WIDTH;
-		    delayY = messagem.getY() * GameContext.TILE_HEIGHT;
-		    animation = true;
-		    timeAccumulated = 0;
-		} catch (ClassCastException e) {
-		}
-		setX(newX);
-		setY(newY);
-		break;
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
-		MessageTeleported messagetMessageMoved = (MessageTeleported) message;
+		MessageTeleported messaget = (MessageTeleported) message;
 		//here no check for obstacles
-		setX(messagetMessageMoved.getP().getX());
-		setY(messagetMessageMoved.getP().getY());
+		if (messaget.seemsLikeMoved()) {
+		    registerForAnimation();
+		    delayX = messaget.getX() * GameContext.TILE_WIDTH;
+		    delayY = messaget.getY() * GameContext.TILE_HEIGHT;
+		    animation = true;
+		    timeAccumulated = 0;
+		}
+		setX(messaget.getX());
+		setY(messaget.getY());
 		break;
 	    case ANIMATION_STEP:
 		checkAnimation();

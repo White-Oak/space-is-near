@@ -272,6 +272,7 @@
 	+editing pressures
 +Context menus for items on floor
 +New scripting system
+-Replace MessageMoved with MessageTeleported
 
 0.1.1
 +MessageKnockbacked

@@ -5,8 +5,7 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageMoved;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 
 public class LightComponent extends Component {
@@ -26,14 +25,9 @@ public class LightComponent extends Component {
 		    }
 		}
 		break;
-	    case MOVED:
-		if (light != null) {
-		    light.setPosition(getPosition().getX() + 0.5f, getPosition().getY() + 0.5f);
-		}
-		break;
 	    case TELEPORTED:
 		if (light != null) {
-		    MessageMoved mm = (MessageMoved) message;
+		    MessageTeleported mm = (MessageTeleported) message;
 		    light.setPosition(mm.getX() + 0.5f, mm.getY() + 0.5f);
 		}
 		break;
