@@ -73,7 +73,7 @@ public class PositionComponent extends Component {
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
 		//But MessageMoved is no longer used
-		MessageTeleported messaget = (MessageTeleported) message;
+		MessagePositionChanged messaget = (MessagePositionChanged) message;
 		//here no check for obstacles
 		if (isClient() && messaget.isActuallyMovedMessage(oldX, oldY)) {
 		    registerForAnimation();

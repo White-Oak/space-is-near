@@ -48,7 +48,7 @@ public class PlayerControllableComponent extends Component {
 			break;
 		}
 		if (mm != null) {
-		    final MessageTeleported messageTeleported = new MessageTeleported(position, getOwnerId(), mm);
+		    final MessagePositionChanged messageTeleported = new MessagePositionChanged(position, getOwnerId(), mm);
 		    getOwner().message(messageTeleported);
 //		    Context.LOG.log("So we say them to move");
 		    getContext().sendToNetwork(messageTeleported);
@@ -89,7 +89,7 @@ public class PlayerControllableComponent extends Component {
 		    boolean property = (boolean) prop;
 		    if (!property) {
 			if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
-			    final MessageTeleported messageTeleported = new MessageTeleported(staticItem.getPosition(), staticItem.getId(),
+			    final MessagePositionChanged messageTeleported = new MessagePositionChanged(staticItem.getPosition(), staticItem.getId(),
 				    new Position(deltaX, deltaY));
 			    staticItem.message(messageTeleported);
 			    getContext().sendDirectedMessage(new MessageToSend(messageTeleported));
@@ -127,7 +127,7 @@ public class PlayerControllableComponent extends Component {
 		    positionToPull.getY() - position.getY()) <= 1) {
 
 		Position mm1 = new Position(oldx - positionToPull.getX(), oldy - positionToPull.getY());
-		MessageTeleported messageTeleported = new MessageTeleported(get.getPosition(), get.getId(), mm1);
+		MessagePositionChanged messageTeleported = new MessagePositionChanged(get.getPosition(), get.getId(), mm1);
 		getContext().sendDirectedMessage(messageTeleported);
 		getContext().sendDirectedMessage(new MessageToSend(messageTeleported));
 	    } else {

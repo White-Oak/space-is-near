@@ -24,7 +24,7 @@ public class GamePlayerPositionComponent extends PositionComponent {
 	final GameContext context = (GameContext) getContext();
 	switch (message.getMessageType()) {
 	    case TELEPORTED: {
-		MessageTeleported messagem = (MessageTeleported) message;
+		MessagePositionChanged messagem = (MessagePositionChanged) message;
 		if (oldX != getX() || oldY != getY()) {
 		    context.getCameraMan().moveCameraToPlayer(messagem.getX(), messagem.getY());
 		}

@@ -272,7 +272,8 @@
 	+editing pressures
 +Context menus for items on floor
 +New scripting system
-+Replace MessageMoved with MessageTeleported #51
++Replace MessageMoved with MessageTeleported #51 
+    +Renamed MessageTeleported to MessagePositionChanged
 
 16.03.15
 So today I remembered about sin. 

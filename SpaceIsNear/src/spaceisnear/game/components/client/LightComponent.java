@@ -27,7 +27,7 @@ public class LightComponent extends Component {
 		break;
 	    case TELEPORTED:
 		if (light != null) {
-		    MessageTeleported mm = (MessageTeleported) message;
+		    MessagePositionChanged mm = (MessagePositionChanged) message;
 		    light.setPosition(mm.getX() + 0.5f, mm.getY() + 0.5f);
 		}
 		break;

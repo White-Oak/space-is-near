@@ -53,7 +53,7 @@ public class ShadowComponent extends Component {
 		break;
 	    case TELEPORTED:
 		if (body != null) {
-		    MessageTeleported mm = (MessageTeleported) message;
+		    MessagePositionChanged mm = (MessagePositionChanged) message;
 		    body.setTransform(mm.getX() + 0.5f, mm.getY() + 0.5f, 0);
 		}
 		break;
