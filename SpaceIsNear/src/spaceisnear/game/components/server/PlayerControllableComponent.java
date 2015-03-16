@@ -29,7 +29,7 @@ public class PlayerControllableComponent extends Component {
 	switch (message.getMessageType()) {
 	    case CONTROLLED:
 		MessageControlledByInput mc = (MessageControlledByInput) message;
-		MessageMoved mm = null;
+		Position mm = null;
 		Position position = getPosition();
 		int oldX = position.getX();
 		int oldY = position.getY();
@@ -48,23 +48,24 @@ public class PlayerControllableComponent extends Component {
 			break;
 		}
 		if (mm != null) {
-		    getOwner().message(mm);
+		    final MessagePositionChanged messageTeleported = new MessagePositionChanged(position, getOwnerId(), mm);
+		    getOwner().message(messageTeleported);
 //		    Context.LOG.log("So we say them to move");
-		    getContext().sendDirectedMessage(new MessageToSend(mm));
+		    getContext().sendToNetwork(messageTeleported);
 		}
 	}
     }
 
-    private MessageMoved moveCheck(final int oldx, final int oldy, int deltaX, int deltaY) {
+    private Position moveCheck(final int oldx, final int oldy, int deltaX, int deltaY) {
 	int x = oldx + deltaX;
 	int y = oldy + deltaY;
 	ServerContext context = (ServerContext) getContext();
-	MessageMoved mm = null;
+	Position mm = null;
 	Object knockbacked = getStateValueNamed("knockbacked");
 	if (knockbacked == null || (Boolean) knockbacked == false) {
 	    if (context.getObstacles().isReacheable(x, y)) {
 		//If cell is empty then simply move
-		mm = new MessageMoved(deltaX, deltaY, getOwnerId());
+		mm = new Position(deltaX, deltaY);
 	    } else if (context.isOnMap(x, y)) {
 		//else try to push item on that cell
 		mm = pushOn(x, y, deltaX, deltaY);
@@ -76,7 +77,7 @@ public class PlayerControllableComponent extends Component {
 	return mm;
     }
 
-    private MessageMoved pushOn(int x, int y, int deltaX, int deltaY) {
+    private Position pushOn(int x, int y, int deltaX, int deltaY) {
 	final ServerContext context = (ServerContext) getContext();
 	final List<AbstractGameObject> itemsOn = context.itemsOn(x, y);
 	for (AbstractGameObject abstractGameObject : itemsOn) {
@@ -88,11 +89,11 @@ public class PlayerControllableComponent extends Component {
 		    boolean property = (boolean) prop;
 		    if (!property) {
 			if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
-			    MessageMoved mm = new MessageMoved(deltaX, deltaY, staticItem.getId());
-			    staticItem.message(mm);
-			    getContext().sendDirectedMessage(new MessageToSend(mm));
-			    mm = new MessageMoved(deltaX, deltaY, getOwnerId());
-			    return mm;
+			    final MessagePositionChanged messageTeleported = new MessagePositionChanged(staticItem.getPosition(), staticItem.getId(),
+				    new Position(deltaX, deltaY));
+			    staticItem.message(messageTeleported);
+			    getContext().sendDirectedMessage(new MessageToSend(messageTeleported));
+			    return new Position(deltaX, deltaY);
 			}
 		    } else {
 			MessageInteracted interaction = new MessageInteracted(staticItem.getId(), -1);
@@ -125,9 +126,10 @@ public class PlayerControllableComponent extends Component {
 	    if (Math.abs(positionToPull.getX() - position.getX()) <= 1 && Math.abs(
 		    positionToPull.getY() - position.getY()) <= 1) {
 
-		MessageMoved mm1 = new MessageMoved(oldx - positionToPull.getX(), oldy - positionToPull.getY(), get.getId());
-		getContext().sendDirectedMessage(mm1);
-		getContext().sendDirectedMessage(new MessageToSend(mm1));
+		Position mm1 = new Position(oldx - positionToPull.getX(), oldy - positionToPull.getY());
+		MessagePositionChanged messageTeleported = new MessagePositionChanged(get.getPosition(), get.getId(), mm1);
+		getContext().sendDirectedMessage(messageTeleported);
+		getContext().sendDirectedMessage(new MessageToSend(messageTeleported));
 	    } else {
 		setStateValueNamed("pull", -1);
 	    }

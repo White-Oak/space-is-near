@@ -81,7 +81,13 @@
 	"imageIds": [2],
 	"stuckedByAddingFromScript": true,
 	"description": "Universal speaker system.",
-	"defaultProperties": [{"name": "frequency", "value": "145.9"}, {"name": "enabled", "value": true}]
+	"defaultProperties": [{
+		"name": "frequency",
+		"value": "145.9"
+	    }, {
+		"name": "enabled",
+		"value": true
+	    }]
     },
     {
 	"name": "ear_radio",
@@ -93,10 +99,15 @@
 	"imageIds": [7],
 	"stuckedByAddingFromScript": false,
 	"description": "Universal radio system for wearing on ear.",
-	"defaultProperties": [{"name": "frequency", "value": "145.9"}, {"name": "enabled", "value": true}]
+	"defaultProperties": [{
+		"name": "frequency",
+		"value": "145.9"
+	    }, {
+		"name": "enabled",
+		"value": true
+	    }]
     },
     {
-
 	"name": "pda",
 	"size": "SMALL",
 	"type": "TOOL",
@@ -109,7 +120,6 @@
 	"defaultProperties": null
     },
     {
-
 	"name": "id",
 	"size": "SMALL",
 	"type": "TOOL",
@@ -143,7 +153,10 @@
 	"imageIds": [16, 17],
 	"stuckedByAddingFromScript": true,
 	"description": "Lamp. It lights.",
-	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:1, a: 0.4f}, distance: 20}"}]
+	"defaultProperties": [{
+		"name": "light",
+		"value": "{color: {r: 1, g: 1, b:1, a: 0.4f}, distance: 20}"
+	    }]
     },
     {
 	"name": "lamp_danger",
@@ -155,7 +168,10 @@
 	"imageIds": [16, 17],
 	"stuckedByAddingFromScript": true,
 	"description": "Lamp. It lights dangerly.",
-	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 0, b:0, a: 0.2f}, distance: 20}"}]
+	"defaultProperties": [{
+		"name": "light",
+		"value": "{color: {r: 1, g: 0, b:0, a: 0.2f}, distance: 20}"
+	    }]
     },
     {
 	"name": "lamp_cheap",
@@ -167,6 +183,9 @@
 	"imageIds": [16, 17],
 	"stuckedByAddingFromScript": true,
 	"description": "Lamp. It lights cheaply.",
-	"defaultProperties": [{name: "light", value: "{color: {r: 1, g: 1, b:0.5f, a: 0.4f}, distance: 20}"}]
+	"defaultProperties": [{
+		"name": "light",
+		"value": "{color: {r: 1, g: 1, b:0.5f, a: 0.4f}, distance: 20}"
+	    }]
     }
 ]

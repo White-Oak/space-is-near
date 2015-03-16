@@ -263,7 +263,7 @@
     +knockbacking if critical
 +MessageKnockbacked
     +processing on server
-+place properties of objects that are near connected player near in array for faster connection
++send properties of objects that are near connected player first for faster connection
 +lighting system
 +Inventory interaction
 +Context menus in inventory
@@ -271,8 +271,20 @@
     +atmosphere editor
 	+editing pressures
 +Context menus for items on floor
--New scripting system
++New scripting system
++Replace MessageMoved with MessageTeleported #51 
+    +Renamed MessageTeleported to MessagePositionChanged
 
+16.03.15
+So today I remembered about sin. 
+It was a long-long time before this happened, but yeah, I am really excited about this happening.
+I learned a lot, I saw things and I've come with many refactorings to do.
+As soon as I took a look on the code I fixed the bug that drove me mad back then (when I gave up on commiting things).
+As a part of fixing it I introduced new abstract method isClient() to AbstractGameObject with final realizations in Server and Client Game Objects. 
+This will help to get rid of terribly looking infinite 'instances f's and will aid the code's health.
+As well I took a look on my devlist and considered it may take some reorganizations. First of all, there certainly should be an issue number near each line to relate.
+Secondly, there may be a need to do something about those '+'s and '-'s, what I'm of no aware at the moment.
+I also added some comments for lines that I was wondering about even a little. 
 0.1.1
 +MessageKnockbacked
     -animation change for player

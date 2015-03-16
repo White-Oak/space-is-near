@@ -8,8 +8,7 @@ package spaceisnear.abstracts;
 import java.util.LinkedList;
 import java.util.List;
 import spaceisnear.game.ClientLog;
-import spaceisnear.game.messages.DirectedMessage;
-import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.GameObjectType;
 
 /**
@@ -34,9 +33,13 @@ public abstract class Context {
     public List<AbstractGameObject> itemsOn(int x, int y) {
 	LinkedList<AbstractGameObject> items = new LinkedList<>();
 	getObjects().stream()
-		.filter(abstractGameObject
-			-> (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)))
+		.filter(abstractGameObject ->
+			 (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)))
 		.forEach(abstractGameObject -> items.add(abstractGameObject));
 	return items;
+    }
+
+    public void sendToNetwork(NetworkableMessage m) {
+	sendDirectedMessage(new MessageToSend(m));
     }
 }

@@ -454,7 +454,7 @@ import spaceisnear.server.objects.items.*;
 
     private List<MessagePropertable> getMessageProperties(AbstractGameObject object) {
 	List<MessagePropertable> propertiesList = new LinkedList<>();
-	propertiesList.add(new MessageTeleported(object.getPosition(), object.getId()));
+	propertiesList.add(new MessagePositionChanged(object.getPosition(), object.getId()));
 	switch (object.getType()) {
 	    case ITEM:
 		StaticItem item = (StaticItem) object;

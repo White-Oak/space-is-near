@@ -29,4 +29,12 @@ import lombok.*;
 	int dy = Math.abs(p.y - y);
 	return dx + dy;
     }
+
+    public Position getNewWithDelta(Position p) {
+	return getNewWithDelta(p.x, p.y);
+    }
+
+    public Position getNewWithDelta(int x, int y) {
+	return new Position(x + this.x, y + this.y);
+    }
 }

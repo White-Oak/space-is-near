@@ -5,8 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
-import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageMoved;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 
 public class ShadowComponent extends Component {
@@ -52,14 +51,9 @@ public class ShadowComponent extends Component {
 		    }
 		}
 		break;
-	    case MOVED:
-		if (body != null) {
-		    body.setTransform(getPosition().getX() + 0.5f, getPosition().getY() + 0.5f, 0);
-		}
-		break;
 	    case TELEPORTED:
 		if (body != null) {
-		    MessageMoved mm = (MessageMoved) message;
+		    MessagePositionChanged mm = (MessagePositionChanged) message;
 		    body.setTransform(mm.getX() + 0.5f, mm.getY() + 0.5f, 0);
 		}
 		break;

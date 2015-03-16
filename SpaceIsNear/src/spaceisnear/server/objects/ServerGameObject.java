@@ -91,4 +91,9 @@ import spaceisnear.server.ServerContext;
 	return result;
     }
 
+    @Override
+    public final boolean isClient() {
+	return false;
+    }
+
 }
