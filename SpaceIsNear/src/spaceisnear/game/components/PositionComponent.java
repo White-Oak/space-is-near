@@ -72,19 +72,20 @@ public class PositionComponent extends Component {
 	switch (message.getMessageType()) {
 	    case TELEPORTED:
 		//Note that MessageTeleported is the subclass of MessageMoved
+		//But MessageMoved is no longer used
 		MessageTeleported messaget = (MessageTeleported) message;
 		//here no check for obstacles
-		if (messaget.seemsLikeMoved()) {
+		if (isClient() && messaget.isActuallyMovedMessage(oldX, oldY)) {
 		    registerForAnimation();
-		    delayX = messaget.getX() * GameContext.TILE_WIDTH;
-		    delayY = messaget.getY() * GameContext.TILE_HEIGHT;
+		    delayX = (messaget.getX() - oldX) * GameContext.TILE_WIDTH;
+		    delayY = (messaget.getY() - oldY) * GameContext.TILE_HEIGHT;
 		    animation = true;
 		    timeAccumulated = 0;
 		}
 		setX(messaget.getX());
 		setY(messaget.getY());
 		break;
-	    case ANIMATION_STEP:
+	    case ANIMATION_STEP://client-only message
 		checkAnimation();
 	}
 	checkConsequnces(oldX, oldY);

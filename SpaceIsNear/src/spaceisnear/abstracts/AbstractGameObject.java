@@ -21,7 +21,13 @@ import spaceisnear.game.objects.*;
 public abstract class AbstractGameObject {
 
     @Setter @Getter private ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<>();
+    /**
+     * Cached once called getPositionComponent().
+     */
     private PositionComponent positionComponent;
+    /**
+     * Cached once called getVariablePropertiesComponent().
+     */
     private VariablePropertiesComponent properties;
     @Getter @Setter private boolean destroyed = false;
     @Getter @Setter(AccessLevel.PROTECTED) private List<Component> components = new ArrayList<>();
@@ -34,14 +40,15 @@ public abstract class AbstractGameObject {
 	if (destroyed) {
 	    return;
 	}
+	//If messages are continually added stack won't necome empty
+	//and we will ock ourselves here forever
 	int savedSize = messages.size();
 	for (int i = 0; i < savedSize; i++) {
 	    Message message = messages.poll();
-	    components.forEach(component -> {
-		if (message.getMessageType() != MessageType.TIME_PASSED) {
-		    component.processMessage(message);
-		}
-	    });
+	    //No idea about this check
+	    if (message.getMessageType() != MessageType.TIME_PASSED) {
+		components.forEach(component -> component.processMessage(message));
+	    }
 	}
     }
 
@@ -76,4 +83,6 @@ public abstract class AbstractGameObject {
     }
 
     public abstract int getId();
+
+    public abstract boolean isClient();
 }

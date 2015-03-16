@@ -51,7 +51,7 @@ public class PlayerControllableComponent extends Component {
 		    final MessageTeleported messageTeleported = new MessageTeleported(position, getOwnerId(), mm);
 		    getOwner().message(messageTeleported);
 //		    Context.LOG.log("So we say them to move");
-		    getContext().sendDirectedMessage(new MessageToSend(messageTeleported));
+		    getContext().sendToNetwork(messageTeleported);
 		}
 	}
     }

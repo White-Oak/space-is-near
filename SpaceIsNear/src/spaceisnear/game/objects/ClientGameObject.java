@@ -28,6 +28,8 @@ import spaceisnear.game.components.client.PaintableComponent;
 	    getComponents().forEach((component) -> {
 		component.setOwnerId(id);
 	    });
+	} else {
+	    System.out.println("[WARNING]: Somebody tried to change id of " + id + " but failed.");
 	}
     }
 
@@ -53,4 +55,10 @@ import spaceisnear.game.components.client.PaintableComponent;
 		.reduce(result, (accumulator, _item) -> accumulator | _item);
 	return result;
     }
+
+    @Override
+    public final boolean isClient() {
+	return true;
+    }
+
 }

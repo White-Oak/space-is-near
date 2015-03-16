@@ -91,4 +91,8 @@ import spaceisnear.server.objects.ServerGameObject;
     public boolean needsTime() {
 	return needsTime;
     }
+
+    public boolean isClient() {
+	return getOwner().isClient();
+    }
 }

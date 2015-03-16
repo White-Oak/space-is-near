@@ -50,6 +50,9 @@ import spaceisnear.server.ServerContext;
     public void sendThemAll(Message m) {
 	if (!(m instanceof DirectedMessage)) {
 	    objects.forEach(gameObject -> gameObject.message(m));
+	} else {
+	    System.out.println(
+		    "[WARNING]: There was a directed message of type " + m.getMessageType() + " that was tried to be sent to everyone");
 	}
     }
 
