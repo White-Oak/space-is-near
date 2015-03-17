@@ -56,13 +56,13 @@ public class Logger extends Logs.Logger {
 	builder.append(Logs.getLevelName(level));
 	builder.append("] ");
 	builder.append(message);
+	builder.append('\n');
 	if (ex != null) {
 	    StringWriter writer = new StringWriter(256);
 	    ex.printStackTrace(new PrintWriter(writer));
-	    builder.append('\n');
 	    builder.append(writer.toString().trim());
 	}
-	System.out.println(builder);
+	System.out.print(builder);
 	if (category != null) {
 	    switch (category) {
 		case "chat":
