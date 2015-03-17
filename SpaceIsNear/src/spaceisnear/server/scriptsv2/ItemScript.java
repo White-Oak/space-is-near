@@ -23,8 +23,11 @@ public abstract class ItemScript extends CustomScript {
 	Object property = getProperty(name);
 	boolean is = false;
 	if (property != null) {
-	    assert property.getClass() == Boolean.class;
-	    is = (Boolean) property;
+	    if (property instanceof Boolean) {
+		is = (Boolean) property;
+	    } else {
+		is = Boolean.valueOf((String) property);
+	    }
 	}
 	return is;
     }

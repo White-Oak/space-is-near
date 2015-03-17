@@ -156,6 +156,10 @@
 	"defaultProperties": [{
 		"name": "light",
 		"value": "{color: {r: 1, g: 1, b:1, a: 0.3f}, distance: 600}"
+	    },
+	    {
+		"name": "lightEnabled",
+		"value": "true"
 	    }]
     },
     {
@@ -171,6 +175,10 @@
 	"defaultProperties": [{
 		"name": "light",
 		"value": "{color: {r: 1, g: 0, b:0, a: 0.1f}, distance: 800}"
+	    },
+	    {
+		"name": "lightEnabled",
+		"value": "true"
 	    }]
     },
     {
@@ -186,6 +194,10 @@
 	"defaultProperties": [{
 		"name": "light",
 		"value": "{color: {r: 1, g: 1, b:0.5f, a: 0.2f}, distance: 800}"
+	    },
+	    {
+		"name": "lightEnabled",
+		"value": "true"
 	    }]
     }
 ]

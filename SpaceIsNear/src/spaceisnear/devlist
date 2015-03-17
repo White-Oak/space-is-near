@@ -280,6 +280,7 @@
     +Renamed MessageTeleported to MessagePositionChanged
 +Log system reworked #58
     *Note that minlog class Log is renamed to Logs to evade overlapping with kryonet Log class
+*Fixed bug when lamp appeared to be turned off on server launch
 
 0.1.0
 
