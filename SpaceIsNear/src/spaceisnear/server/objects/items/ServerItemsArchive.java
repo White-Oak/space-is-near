@@ -11,7 +11,7 @@ import org.whiteoak.parsing.interpretating.ast.Function;
 import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.server.ServerContext;
-import spaceisnear.server.objects.items.scripts.ItemScriptBundle;
+import spaceisnear.server.scriptsv2.ItemScriptBundle;
 
 /**
  *
@@ -29,7 +29,7 @@ public class ServerItemsArchive extends ItemsArchivable {
 	this.scripts = scripts;
 	interpretatorBundles = new InterpretatorBundle[scripts.length];
 	for (int i = 0; i < scripts.length; i++) {
-	    scriptIds.put(scripts[i].name, i);
+	    scriptIds.put(scripts[i].scriptName, i);
 	}
     }
 

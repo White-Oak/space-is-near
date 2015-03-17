@@ -15,6 +15,8 @@ public class ItemScriptBundle {
     public boolean time;
 
     public boolean hasScript() {
-	return contextMenuInit || messageProcessing || interaction || contextMenuRequesting || contextMenuProccessing || time;
+	return contextMenuInit || messageProcessing
+		|| interaction || contextMenuRequesting
+		|| contextMenuProccessing || time;
     }
 }

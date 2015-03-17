@@ -15,7 +15,7 @@ import spaceisnear.game.objects.items.ItemsReader;
 import spaceisnear.server.contexteditors.ContextEditorsManager;
 import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.items.*;
-import spaceisnear.server.objects.items.scripts.ItemScriptReader;
+import spaceisnear.server.scriptsv2.ItemScriptReader;
 
 /**
  * @author white_oak

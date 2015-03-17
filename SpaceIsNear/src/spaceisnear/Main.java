@@ -42,13 +42,7 @@ public class Main {
 		runSINInWeirdMode(optionValue);
 	    } else {
 		defaultLogger.client();
-		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "Space is Near";
-		cfg.width = 1200;
-		cfg.height = 600;
-		cfg.vSyncEnabled = true;
-		cfg.resizable = false;
-		cfg.useGL20 = true;
+		LwjglApplicationConfiguration cfg = configureApp();
 		IP = parse.getOptionValue("hostip");
 		final Corev3 corev3 = new Corev3();
 		lwjglApplication = new LwjglApplication(corev3, cfg);
@@ -57,6 +51,17 @@ public class Main {
 	    HelpFormatter formatter = new HelpFormatter();
 	    formatter.printHelp("SIN -mode <mode> -hostip <hostip>", options);
 	}
+    }
+
+    private static LwjglApplicationConfiguration configureApp() {
+	LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+	cfg.title = "Space is Near";
+	cfg.width = 1200;
+	cfg.height = 600;
+	cfg.vSyncEnabled = true;
+	cfg.resizable = false;
+	cfg.useGL20 = true;
+	return cfg;
     }
 
     private static Options prepareOptions() throws IllegalArgumentException {

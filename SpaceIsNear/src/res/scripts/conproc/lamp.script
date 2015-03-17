@@ -1,4 +1,0 @@
-chosen = getChosen {}
-if(chosen == 0){
-    interact {}
-}
