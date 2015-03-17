@@ -1,13 +1,13 @@
 package spaceisnear.server;
 
 import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.minlog.Logs;
 import de.ruedigermoeller.serialization.FSTObjectInput;
 import de.ruedigermoeller.serialization.FSTObjectOutput;
 import java.io.*;
 import java.util.*;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
@@ -45,7 +45,7 @@ import spaceisnear.server.objects.items.*;
 	    fstObjectOutput.writeObject(messageRogerRequested);
 	    ROGER_REQUSTED_BYTES = fstObjectOutput.getCopyOfWrittenBuffer();
 	} catch (Exception ex) {
-	    Context.LOG.log(ex);
+	    Logs.error("server", "While writing RogerRequested", ex);
 	}
     }
 
@@ -66,10 +66,10 @@ import spaceisnear.server.objects.items.*;
 			}
 		}
 	    } catch (IOException | ClassNotFoundException ex) {
-		Context.LOG.log(ex);
+		Logs.error("server", "While reading Message got over the net", ex);
 	    }
 	} else if (object instanceof String) {
-	    Context.LOG.log(object);
+	    Logs.info("server", (String) object);
 	}
     }
 
@@ -101,7 +101,7 @@ import spaceisnear.server.objects.items.*;
 	    case PLAYER_INFO: {
 		MessagePlayerInformation mpi = (MessagePlayerInformation) message;
 		getClientByConnection(connection).setPlayerInformation(mpi);
-		Context.LOG.log("Player information received");
+		Logs.info("Server", "Player information received");
 		sendToConnection(connection, new MessageJoined());
 		connectedWantsPlayer(getClientByConnection(connection));
 	    }
@@ -112,7 +112,7 @@ import spaceisnear.server.objects.items.*;
 		String messageS = mci.getLogin() + " requested access with password " + mci.getPassword();
 		boolean accessible = accountManager.isAccessible(mci.getLogin(), mci.getPassword());
 		messageS += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
-		core.getContext().logToServerLog(new LogString(messageS, LogLevel.DEBUG));
+		Logs.info("server", messageS);
 		sendToConnection(connection, new MessageAccess(accessible));
 		for (int i = 0; i < clients.size(); i++) {
 		    final Client client = clients.get(i);
@@ -128,7 +128,7 @@ import spaceisnear.server.objects.items.*;
 			}
 		    }
 		}
-		Context.LOG.log("Client information received");
+		Logs.info("server", "Client information received");
 	    }
 	    break;
 	    default:
@@ -144,7 +144,7 @@ import spaceisnear.server.objects.items.*;
 	    fstObjectOutput.writeObject(message);
 	    server.sendToAllTCP(fstObjectOutput.getBuffer());
 	} catch (IOException ex) {
-	    Context.LOG.log(ex);
+	    Logs.error("server", "While trying to send " + message.getMessageType().toString() + " to everyone", ex);
 	}
     }
 
@@ -159,36 +159,22 @@ import spaceisnear.server.objects.items.*;
 	    server.sendToTCP(connection.getID(), fstObjectOutput.getBuffer());
 	    messagesSent++;
 	} catch (Exception ex) {
-	    Context.LOG.log("Message caused trouble --" + message.getMessageType());
-	    Context.LOG.log(ex);
+	    Logs.error("server", "Message caused trouble --" + message.getMessageType(), ex);
 	}
 
     }
 
     public void sendToConnectionID(int id, NetworkableMessage message) {
-	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
-	    Connection connection = null;
-	    for (Client client : clients) {
-		if (client.getConnection().getID() == id) {
-		    connection = client.getConnection();
-		}
+	Connection connection = null;
+	for (Client client : clients) {
+	    if (client.getConnection().getID() == id) {
+		connection = client.getConnection();
 	    }
-	    if (connection == null) {
-		return;
-	    }
-	    server.sendToTCP(id, ROGER_REQUSTED_BYTES);
-	    waitForToRoger(connection);
-	    messagesSent = 0;
 	}
-	try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
-	    fstObjectOutput.writeObject(message);
-	    server.sendToTCP(id, fstObjectOutput.getBuffer());
-	    messagesSent++;
-	} catch (Exception ex) {
-	    Context.LOG.log("Message caused trouble --" + message.getMessageType());
-	    Context.LOG.log(ex);
+	if (connection == null) {
+	    return;
 	}
-
+	sendToConnection(connection, message);
     }
 
     public void sendToClientID(int id, NetworkableMessage message) {
@@ -287,7 +273,7 @@ import spaceisnear.server.objects.items.*;
 
     private void processOldPlayer(Client client) {
 	sendToAll(new MessagePaused());
-	Context.LOG.log("Server's been paused");
+	Logs.info("server", "Server's been paused");
 	ObjectMessaged[] world = getWorld();
 	sendWorldInformation(world, client);
 	sendCreatedsOfWorld(world, client.getConnection());
@@ -295,14 +281,14 @@ import spaceisnear.server.objects.items.*;
 	sendPlayer(client);
 	sendToAll(new MessageUnpaused());
 	sendPropertiesOfWorld(world, client);
-	Context.LOG.log("Server has continued his work");
+	Logs.info("server", "Server has continued his work");
     }
 
     private void processNewPlayer(final Client client) {
 //	waitForServerToStop();
 	//
 	sendToAll(new MessagePaused());
-	Context.LOG.log("Server\'s been paused");
+	Logs.info("server", "Server's been paused");
 	List<ObjectMessaged> objectPlayer = createPlayer(client);
 	ObjectMessaged[] world = getWorld();
 	sendWorldInformation(world, client);
@@ -320,7 +306,7 @@ import spaceisnear.server.objects.items.*;
 	//	
 	sendToAll(new MessageUnpaused());
 	sendPropertiesOfWorld(world, client);
-	Context.LOG.log("Server has continued his work");
+	Logs.info("server", "Server has continued his work");
 	//@working fix that
 	Runnable runnable = () -> {
 	    for (int i = 0; i < 20; i++) {
@@ -328,7 +314,7 @@ import spaceisnear.server.objects.items.*;
 	    }
 	    Player get = client.getPlayer();
 	    String message = get.getNickname() + " has connected to SIN!";
-	    core.getContext().log(new LogString(message, LogLevel.BROADCASTING, "145.9"));
+	    core.getContext().chatLog(new LogString(message, LogLevel.BROADCASTING, "145.9"));
 	};
 	new Thread(runnable, "Messaging about connected").start();
     }
@@ -426,7 +412,7 @@ import spaceisnear.server.objects.items.*;
     private void sendPlayer(Client client) {
 	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(client.getPlayer().getId());
 	sendToConnection(client.getConnection(), mypd);
-	Context.LOG.log("Player has sent");
+	Logs.info("server", "Player has sent");
     }
 
     private ObjectMessaged[] getWorld() {
@@ -526,7 +512,7 @@ import spaceisnear.server.objects.items.*;
 	try {
 	    Thread.sleep(100L);
 	} catch (InterruptedException ex) {
-	    Context.LOG.log(ex);
+	    Logs.error("server", "While trying to sleep in network thread", ex);
 	}
     }
 }

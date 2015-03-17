@@ -278,6 +278,7 @@
 +New scripting system
 +Replace MessageMoved with MessageTeleported #51 
     +Renamed MessageTeleported to MessagePositionChanged
++Log system reworked #58
 
 0.1.0
 

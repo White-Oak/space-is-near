@@ -1,5 +1,6 @@
 package spaceisnear.server.contexteditors;
 
+import com.esotericsoftware.minlog.Logs;
 import java.util.ArrayList;
 import spaceisnear.server.ServerContext;
 
@@ -59,7 +60,7 @@ public class ContextEditorsManager {
 	    try {
 		Thread.sleep(1000L);
 	    } catch (InterruptedException ex) {
-		ServerContext.LOG.log(ex);
+		Logs.error("server", "While trying to sleep in ContextEditorManager", ex);
 	    }
 	}
     }

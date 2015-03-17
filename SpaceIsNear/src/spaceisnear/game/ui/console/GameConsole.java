@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.esotericsoftware.minlog.Logs;
 import lombok.Getter;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageLog;
 import spaceisnear.game.messages.MessageToSend;
@@ -154,7 +154,7 @@ public class GameConsole extends Actor {
     private void sendPM(String receiver, String message) {
 	try {
 	    int receiverID = receiver.equals("me") ? context.getPlayerID() : Integer.parseInt(receiver);
-	    Context.LOG.log("Receiver is " + receiverID);
+	    Logs.debug("client", "Receiver is " + receiverID);
 	    StringBuilder stringBuilder = new StringBuilder(20);
 	    stringBuilder.append('[').append(context.getPlayerID()).append("] -> [").append(receiverID).append("] ")
 		    .append(context.getPlayer().getNickname()).append(" messages: ").append(message);

@@ -21,7 +21,7 @@ public class MessageLog extends Message implements NetworkableMessage {
 
     @Override
     public void processForServer(ServerContext context, Client client) {
-	context.log(log);
+	context.chatLog(log);
     }
 
     @Override

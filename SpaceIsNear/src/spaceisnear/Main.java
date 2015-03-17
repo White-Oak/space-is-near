@@ -8,10 +8,11 @@
 package spaceisnear;
 
 import com.badlogic.gdx.backends.lwjgl.*;
+import com.esotericsoftware.minlog.Logs;
 import java.io.IOException;
 import org.apache.commons.cli.*;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.Corev3;
+import spaceisnear.log.Logger;
 import spaceisnear.server.*;
 
 /**
@@ -22,8 +23,10 @@ public class Main {
 
     public static String IP;
     public static LwjglApplication lwjglApplication;
+    public static Logger defaultLogger = new Logger();
 
     public static void main(String[] args) throws ParseException {
+	Logs.setLogger(defaultLogger);
 	Options options = prepareOptions();
 	CommandLineParser parser = new BasicParser();
 	CommandLine parse = parser.parse(options, args);
@@ -38,6 +41,7 @@ public class Main {
 	    if (optionValue != null && !optionValue.equals("default")) {
 		runSINInWeirdMode(optionValue);
 	    } else {
+		defaultLogger.client();
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Space is Near";
 		cfg.width = 1200;
@@ -69,15 +73,17 @@ public class Main {
     private static void runSINInWeirdMode(String mode) {
 	switch (mode) {
 	    case "host":
-		Context.LOG.log("SIN is running in no-GUI mode");
+		defaultLogger.chat();
+		defaultLogger.server();
+		Logs.info("client", "SIN is running in no-GUI mode");
 		try {
 		    IP = "127.0.0.1";
 		    ServerCore serverCore = new ServerCore();
 		    serverCore.host();
 		    new Thread(serverCore, "SIN Server").start();
-		    Context.LOG.log("Hosted");
+		    Logs.info("server", "Hosted");
 		} catch (IOException ex) {
-		    Context.LOG.log(ex);
+		    Logs.error("client", "While trying to start server", ex);
 		}
 		break;
 	    case "editor":

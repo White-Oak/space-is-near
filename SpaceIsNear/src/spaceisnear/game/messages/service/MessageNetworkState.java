@@ -25,4 +25,18 @@ public class MessageNetworkState extends Message {
 	this.state = state;
     }
 
+    @Override
+    public String toString() {
+	switch (state) {
+	    case 1:
+		return "connected";
+	    case 2:
+		return "disconnected";
+	    case 3:
+		return "idle";
+	    default:
+		return "n/a";
+	}
+    }
+
 }

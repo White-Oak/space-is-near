@@ -1,6 +1,6 @@
 package spaceisnear.game.components.server;
 
-import spaceisnear.abstracts.Context;
+import com.esotericsoftware.minlog.Logs;
 import spaceisnear.game.components.*;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageInteracted;
@@ -41,7 +41,7 @@ public class VariablePropertiesComponent extends Component {
 			    scriptFor.script();
 			}
 		    } catch (ClassCastException e) {
-			Context.LOG.log(e);
+			Logs.error("server", "While trying to get script for changing property", e);
 		    }
 		}
 		if (!isDontProcess()) {
@@ -59,13 +59,13 @@ public class VariablePropertiesComponent extends Component {
 			InteractionScript scriptFor = (InteractionScript) scriptsManager.getScriptFor(
 				ScriptsManager.ScriptType.INTERACTION,
 				owner.getProperties().getName());
-			Context.LOG.log("Found script interaction");
+			Logs.debug("server", "Found script interaction");
 			if (scriptFor != null) {
 			    scriptFor.init(context, owner);
 			    scriptFor.script();
 			}
 		    } catch (ClassCastException e) {
-			Context.LOG.log(e);
+			Logs.error("server", "While trying to get script for interaction", e);
 		    }
 		}
 	}

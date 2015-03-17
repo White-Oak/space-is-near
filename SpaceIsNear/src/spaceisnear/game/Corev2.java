@@ -5,6 +5,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
+import com.esotericsoftware.minlog.Logs;
 import java.io.*;
 import java.util.*;
 import lombok.*;
@@ -56,7 +57,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	try {
 	    ItemsArchive.itemsArchive = new ItemsArchive(ItemsReader.read());
 	} catch (Exception ex) {
-	    Context.LOG.log(ex);
+	    Logs.error("client", "While trying to create ItemsArchive", ex);
 	}
 
 	context = new GameContext(new CameraMan(), objects, this);
@@ -91,7 +92,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    try {
 			Thread.sleep(MessageAnimationStep.STEP);
 		    } catch (InterruptedException ex) {
-			Context.LOG.log(ex);
+			Logs.error("client", "While trying to sleep in Animation thread", ex);
 		    }
 		}
 	    }
@@ -118,7 +119,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    try {
 			Main.main(new String[]{"-mode", "host", "-hostip", "null"});
 		    } catch (ParseException ex1) {
-			Context.LOG.log(ex1);
+			Logs.error("client", "While trying to start server", ex1);
 		    }
 		    synchronized (Corev2.this) {
 			try {
@@ -126,7 +127,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 			    log(new LogString("Starting server on " + Main.IP, LogLevel.WARNING));
 			    networking.connect(Main.IP, 54555);
 			} catch (IOException ex1) {
-			    Context.LOG.log(ex1);
+			    Logs.error("client", "While trying to connect to new server", ex1);
 			}
 		    }
 		}
@@ -258,7 +259,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     public void unpause() {
 	notpaused = true;
-	Context.LOG.log("Client has continued his work");
+	Logs.info("client", "Client has continued his work");
     }
 
     public void mouseClicked(int button, int x, int y) {
@@ -394,7 +395,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	    try {
 		Thread.sleep(50);
 	    } catch (InterruptedException ex) {
-		Context.LOG.log(ex);
+		Logs.error("client", "While trying to sleep in update client thread", ex);
 	    }
 	}
     }

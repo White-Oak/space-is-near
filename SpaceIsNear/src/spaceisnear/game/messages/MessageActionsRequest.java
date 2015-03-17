@@ -1,6 +1,6 @@
 package spaceisnear.game.messages;
 
-import spaceisnear.abstracts.Context;
+import com.esotericsoftware.minlog.Logs;
 import spaceisnear.game.components.server.scriptprocessors.context.ContextMenuForItems;
 import spaceisnear.server.*;
 import spaceisnear.server.objects.items.StaticItem;
@@ -27,7 +27,7 @@ public class MessageActionsRequest extends Message implements NetworkableMessage
 	    StaticItem item = (StaticItem) context.getObjects().get(j);
 	    if (item == null) {
 		Exception ex = new NullPointerException("Object " + j + " no longer exists or has been called due to wrong usage.");
-		Context.LOG.log(ex);
+		Logs.error("server", null, ex);
 		return;
 	    }
 	    items[i] = item;

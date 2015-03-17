@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.esotericsoftware.minlog.Logs;
 import lombok.Getter;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.MessageType;
@@ -42,7 +43,7 @@ public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener 
 	camera.setToOrtho(true);
 	camera.update();
 	font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
-	Context.LOG.log("Font has created -- don't worry");
+	Logs.info("client", "Font has created -- don't worry");
 	loginScreen = new LoginScreen(this);
 	lobby = new Lobby(this);
 	core = new Corev2(this);
@@ -58,7 +59,7 @@ public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener 
 		try {
 		    Thread.sleep(10000L);
 		} catch (InterruptedException ex) {
-		    Context.LOG.log(ex);
+		    Logs.error("client", "While trying to sleep in GC thread", ex);
 		}
 	    }
 	}, "GC Runner");
@@ -141,7 +142,7 @@ public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener 
 	    try {
 		Thread.sleep(100);
 	    } catch (InterruptedException ex) {
-		Context.LOG.log(ex);
+		Logs.error("client", "while trying to sleep in Corev3 update thread", ex);
 	    }
 	}
     }

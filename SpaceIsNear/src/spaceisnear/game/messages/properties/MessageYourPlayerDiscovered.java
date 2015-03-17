@@ -5,8 +5,8 @@
  */
 package spaceisnear.game.messages.properties;
 
+import com.esotericsoftware.minlog.Logs;
 import lombok.Getter;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.*;
 
@@ -22,7 +22,7 @@ public class MessageYourPlayerDiscovered extends Message implements NetworkableM
     @Override
     public void processForClient(GameContext context) {
 	context.setNewGamerPlayer(getPlayerID());
-	Context.LOG.log("Your player discovered at " + getPlayerID());
+	Logs.info("client", "Your player discovered at " + getPlayerID());
 	context.getCore().getNetworking().setPlayable(true);
     }
 

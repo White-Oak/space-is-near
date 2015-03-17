@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.*;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.objects.items.*;
 
@@ -47,7 +46,8 @@ public class ItemsHandler {
 	try {
 	    bundles = ItemsReader.read();
 	} catch (Exception ex) {
-	    Context.LOG.log(ex);
+//	    Context.LOG.log(ex);
+	    //@working
 	}
 	for (int i = 0; i < bundles.length; i++) {
 	    ItemBundle itemBundle = bundles[i];
@@ -94,7 +94,8 @@ public class ItemsHandler {
 		try {
 		    loader.addItems(read);
 		} catch (IOException ex) {
-		    Context.LOG.log(ex);
+//		    Context.LOG.log(ex);
+		    //@working
 		}
 		items.clear();
 		actions.clear();

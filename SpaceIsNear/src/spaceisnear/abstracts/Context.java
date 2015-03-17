@@ -7,7 +7,6 @@ package spaceisnear.abstracts;
 
 import java.util.LinkedList;
 import java.util.List;
-import spaceisnear.game.ClientLog;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.GameObjectType;
 
@@ -18,7 +17,6 @@ import spaceisnear.game.objects.GameObjectType;
 public abstract class Context {
 
     public final static int NETWORKING_ID = 0;
-    public static Log LOG = new ClientLog();
 
     public abstract void sendThemAll(Message m);
 
@@ -34,7 +32,7 @@ public abstract class Context {
 	LinkedList<AbstractGameObject> items = new LinkedList<>();
 	getObjects().stream()
 		.filter(abstractGameObject ->
-			 (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)))
+			(abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)))
 		.forEach(abstractGameObject -> items.add(abstractGameObject));
 	return items;
     }

@@ -1,7 +1,6 @@
 package spaceisnear.game.components.server.scriptprocessors;
 
 import org.whiteoak.parsing.interpretating.ast.Value;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.server.ServerContext;
@@ -26,7 +25,8 @@ import spaceisnear.server.ServerContext;
 	    case "getPropertyMessageName":
 		return currentMessage.getName();
 	    case "getPropertyMessageValue":
-		Context.LOG.log("Current message value is " + currentMessage.getValue());
+//		Context.LOG.log("Current message value is " + currentMessage.getValue());
+		//@working
 		return (String) currentMessage.getValue();
 	}
 	return super.callNativeFunction(name, values);

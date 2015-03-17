@@ -1,10 +1,10 @@
 package spaceisnear.server;
 
+import com.esotericsoftware.minlog.Logs;
 import java.io.IOException;
 import java.util.*;
 import lombok.Getter;
 import spaceisnear.abstracts.AbstractGameObject;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.HealthComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
@@ -38,7 +38,7 @@ public class ServerCore implements Runnable {
 	try {
 	    ServerItemsArchive.ITEMS_ARCHIVE = new ServerItemsArchive(ItemsReader.read(), ItemScriptReader.read());
 	} catch (Exception ex) {
-	    Context.LOG.log(ex);
+	    Logs.error("server", "While initializating ITEMS_ARCHIVE", ex);
 	}
 	ObstaclesLayer obstacles = new ObstaclesLayer(width, height);
 	AtmosphericLayer atmosphere = new AtmosphericLayer(width, height);
@@ -46,7 +46,7 @@ public class ServerCore implements Runnable {
 	//items adding
 	ItemAdder itemAdder = new ItemAdder(context);
 	itemAdder.addItems();
-	Context.LOG.log("done");
+	Logs.info("server", "done");
 //	editorsManager.addDefaultCase();
 //	editorsManager.startUpdateCycle(context);
     }
@@ -68,7 +68,7 @@ public class ServerCore implements Runnable {
 	    try {
 		Thread.sleep(QUANT_TIME);
 	    } catch (InterruptedException ex) {
-		Context.LOG.log(ex);
+		Logs.error("server", "While sleeping in server update thread", ex);
 	    }
 	    sendPressure();
 	}
@@ -130,7 +130,7 @@ public class ServerCore implements Runnable {
 		try {
 		    Thread.sleep(ATMOSPHERE_DELAY);
 		} catch (InterruptedException ex) {
-		    Context.LOG.log(ex);
+		    Logs.error("server", "While sleeping in atmosphere thread", ex);
 		}
 	    }
 	}

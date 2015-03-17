@@ -1,5 +1,6 @@
 package spaceisnear.server.objects.items;
 
+import com.esotericsoftware.minlog.Logs;
 import java.io.IOException;
 import java.util.HashMap;
 import lombok.Getter;
@@ -7,7 +8,6 @@ import org.whiteoak.parsing.interpretating.ExceptionHandler;
 import org.whiteoak.parsing.interpretating.Interpretator;
 import org.whiteoak.parsing.interpretating.ast.Constant;
 import org.whiteoak.parsing.interpretating.ast.Function;
-import spaceisnear.abstracts.Context;
 import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.objects.items.*;
 import spaceisnear.server.ServerContext;
@@ -54,7 +54,7 @@ public class ServerItemsArchive extends ItemsArchivable {
 			interpretator.parse(getClass().getResourceAsStream("/res/scripts/" + dir + name + ".script"),
 				false);
 		    } catch (IOException ex) {
-			Context.LOG.log(ex);
+			Logs.error("server", ex);
 		    }
 		    setInterpretatorByMode(mode, id, interpretator);
 		}

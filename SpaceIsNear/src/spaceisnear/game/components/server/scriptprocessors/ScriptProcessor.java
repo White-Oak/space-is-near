@@ -3,7 +3,6 @@ package spaceisnear.game.components.server.scriptprocessors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.whiteoak.parsing.interpretating.*;
 import org.whiteoak.parsing.interpretating.ast.*;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
@@ -51,7 +50,8 @@ import spaceisnear.server.objects.items.StaticItem;
 	    //Context.LOG.log("Running this shitty script");
 	    interpretator.run(this, false);
 	} else {
-	    Context.LOG.log("Theres nothing to run!");
+//	    Context.LOG.log("Theres nothing to run!");
+	    //@working
 	}
     }
 
@@ -75,7 +75,8 @@ import spaceisnear.server.objects.items.StaticItem;
 		break;
 	    case "sendPlayerPrivateMessage": {
 		int ownerId = ((StaticItem) currentRequester.getOwner()).getPlayerId();
-		Context.LOG.log("Sending private message to " + ownerId);
+//		Context.LOG.log("Sending private message to " + ownerId);
+		//@working
 		LogString logString = new LogString(values[0].getValue(), LogLevel.PRIVATE, ownerId);
 		MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 		context.sendDirectedMessage(messageToSend);

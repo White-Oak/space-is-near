@@ -3,7 +3,7 @@ package spaceisnear.starting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import spaceisnear.abstracts.Context;
+import com.esotericsoftware.minlog.Logs;
 import spaceisnear.game.Corev3;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
@@ -34,7 +34,7 @@ public class LoadingScreen extends ScreenImprovedGreatly {
 
     public void update() {
 	if (isCoreNotPaused()) {
-	    Context.LOG.log("Moving to Core...");
+	    Logs.info("client", "Moving to Core...");
 	    setScreen(3);
 	}
     }

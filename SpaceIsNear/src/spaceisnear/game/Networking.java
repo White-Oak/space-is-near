@@ -2,11 +2,11 @@ package spaceisnear.game;
 
 import com.esotericsoftware.kryonet.*;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.minlog.Logs;
 import de.ruedigermoeller.serialization.*;
 import java.io.*;
 import java.util.logging.*;
 import lombok.*;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
@@ -78,7 +78,7 @@ import spaceisnear.server.*;
 	    try (FSTObjectInput fstObjectInput = new FSTObjectInput(new ByteArrayInputStream((byte[]) object))) {
 		message = (Message) fstObjectInput.readObject();
 	    } catch (IOException | ClassNotFoundException ex) {
-		Context.LOG.log(ex);
+		Logs.error("client", "While trying to read message from the net", ex);
 	    }
 	    if (message != null) {
 		MessageType mt = message.getMessageType();

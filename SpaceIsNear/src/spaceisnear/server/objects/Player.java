@@ -2,7 +2,6 @@ package spaceisnear.server.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.inventory.InventoryComponent;
 import spaceisnear.game.components.server.*;
@@ -22,13 +21,9 @@ public class Player extends ServerGameObject {
 	super(GameObjectType.PLAYER, context);
 	PositionComponent pc = new PositionComponent(0, 0);
 	healthComponent = new HealthComponent();
-	try {
-	    addComponents(pc, healthComponent, new BreathingComponent(),
-		    new InventoryComponent(), new PlayerControllableComponent(), new NameComponent(),
-		    new VariablePropertiesComponent());
-	} catch (Exception ex) {
-	    Context.LOG.log(ex);
-	}
+	addComponents(pc, healthComponent, new BreathingComponent(),
+		new InventoryComponent(), new PlayerControllableComponent(), new NameComponent(),
+		new VariablePropertiesComponent());
     }
 
     public String getNickname() {

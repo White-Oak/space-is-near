@@ -1,5 +1,6 @@
 package spaceisnear.server;
 
+import com.esotericsoftware.minlog.Logs;
 import java.util.*;
 import lombok.Getter;
 import spaceisnear.abstracts.AbstractGameObject;
@@ -82,7 +83,6 @@ public final class ServerContext extends Context {
 	this.obstacles = obstacles;
 	this.atmosphere = atmosphere;
 	addObject(new ServerNetworkingObject(this));
-	LOG = new ServerLog();
 	checkSize();
     }
 
@@ -90,11 +90,6 @@ public final class ServerContext extends Context {
 	while (objects.size() < GameContext.HIDDEN_CLIENT_OBJECTS) {
 	    addObject(null);
 	}
-    }
-
-    public void logToServerLog(LogString string) {
-	log.log(string);
-	Context.LOG.log(string);
     }
 
     public boolean isHearingLogMessage(Position said, Position toHear) {
@@ -172,8 +167,8 @@ public final class ServerContext extends Context {
 	return (x >= 0 && x < obstacles.getWidth()) && (y >= 0 && y < obstacles.getHeight());
     }
 
-    public void log(final LogString log) {
-	logToServerLog(log);
+    public void chatLog(final LogString log) {
+	Logs.info("chat", "[" + log.getLevel() + "] " + log.toString());
 	switch (log.getLevel()) {
 	    case TALKING:
 		processIncomingTalkingLogMessage(log);

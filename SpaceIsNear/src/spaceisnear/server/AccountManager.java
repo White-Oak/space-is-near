@@ -1,17 +1,17 @@
 package spaceisnear.server;
 
+import com.esotericsoftware.minlog.Logs;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import spaceisnear.Utils;
-import spaceisnear.abstracts.Context;
 
 /**
  *
  * @author White Oak
  */
-public class AccountManager {
+public final class AccountManager {
 
     private HashMap<String, String> accounts = new HashMap<>();
     private final static Type typeOfT = new TypeToken<HashMap<String, String>>() {
@@ -28,7 +28,8 @@ public class AccountManager {
 		}
 	    }
 	} catch (IOException ex) {
-	    Context.LOG.log(ex);
+	    Logs.error("server", "While trying to read accounts info", ex);
+	    System.exit(1);
 	}
 	Thread thread = new Thread("Accounts' thread") {
 
@@ -38,7 +39,7 @@ public class AccountManager {
 		    try {
 			Thread.sleep(1000 * 30);
 		    } catch (InterruptedException ex) {
-			Context.LOG.log(ex);
+			Logs.error("server", "While trying to sleep in-between saving accounts info", ex);
 		    }
 		    saveAccounts();
 		}
@@ -59,10 +60,10 @@ public class AccountManager {
 		try (FileOutputStream fos = new FileOutputStream(file, false)) {
 		    fos.write(toJson.getBytes());
 		}
-		Context.LOG.log("Saved accounts' details");
+		Logs.info("server", "Saved accounts' details");
 	    }
 	} catch (IOException ex) {
-	    Context.LOG.log(ex);
+	    Logs.error("server", "While trying to save accounts", ex);
 	}
     }
 
