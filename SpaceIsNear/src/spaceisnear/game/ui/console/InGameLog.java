@@ -22,7 +22,7 @@ public class InGameLog {
     private final Stack<LogString> stack = new Stack<>();
     private final int x, y, width, height;
     private int linesNumber = 0;
-    private final BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
+    private final BitmapFont font = new BitmapFont(Gdx.files.classpath("segoe_ui.fnt"), true);
     @Setter private boolean acceptDebugMessages;
 
     public InGameLog(int x, int y, int width, int height) {

@@ -14,7 +14,7 @@ import lombok.*;
  */
 public abstract class UIElement extends Actor {
 
-    protected static final BitmapFont font = new BitmapFont(Gdx.files.classpath("default.fnt"), true);
+    protected static final BitmapFont font = new BitmapFont(Gdx.files.classpath("segoe_ui.fnt"), true);
     @Getter(AccessLevel.PROTECTED) private final static ShapeRenderer renderer = new ShapeRenderer();
     private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
 

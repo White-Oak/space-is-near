@@ -160,6 +160,10 @@ public final class TextField extends UIElement {
 	}
 	//
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
+	renderer.begin(ShapeRenderer.ShapeType.Filled);
+	renderer.setColor(new Color(0xecf0f1ff));
+	renderer.rect(0, 0, getWidth(), getHeight());
+	renderer.end();
 //	renderer.begin(ShapeRenderer.ShapeType.Line);
 //	renderer.setColor(Color.WHITE);
 //	renderer.rect(0, 0, getWidth(), getHeight());

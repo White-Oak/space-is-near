@@ -39,7 +39,7 @@ public class GameConsole extends Actor {
 	this.y = y;
 	setWidth(width);
 	setHeight(height - tf.getHeight());
-	font = new BitmapFont(Gdx.files.classpath("default.fnt"), false);
+	font = new BitmapFont(Gdx.files.classpath("segoe_ui.fnt"), false);
 	textField = tf;
 	log = new InGameLog(830, 2, width - 30, (int) (height - 2 - textField.getHeight()));
 	this.context = context;
@@ -82,9 +82,17 @@ public class GameConsole extends Actor {
 	//underneath
 	renderer.setColor(new Color(0xfcf7f7ff));
 	renderer.rect(getWidth() - 18, 0, 18, getHeight());
+	//actual scrollbar
 	renderer.setColor(new Color(0x7f8c8dff));
-	//width == 20
 	renderer.rect(getWidth() - 12, 5 + scrollBarY, 6, scrollBarSize - 10);
+	renderer.end();
+	//SHADOWS
+	renderer.begin(ShapeRenderer.ShapeType.Line);
+	renderer.setColor(new Color(0xbcc0c1ff));
+	renderer.line(0, 0, 0, getHeight() + 100);
+//	renderer.line(0, getHeight() - 2, getWidth(), getHeight() - 2);
+	renderer.setColor(new Color(0xd0d7d8ff));
+	renderer.line(-1, 0, -1, getHeight() + 100);
 	renderer.end();
 	//
 //	renderer.begin(ShapeRenderer.ShapeType.Line);
@@ -264,12 +272,8 @@ public class GameConsole extends Actor {
     private int oldy;
 
     public void mouseClicked(int x, int y) {
-	System.out.println("x: " + x + "y: " + y);
 	if (x > 0 && x > getWidth() - 18) {
-	    System.out.println("heyaaa1");
-
 	    if (y > scrollBarY && y < scrollBarY + scrollBarSize) {
-		System.out.println("heyaaa2");
 		scrollBarClicked = true;
 		oldy = y;
 	    }

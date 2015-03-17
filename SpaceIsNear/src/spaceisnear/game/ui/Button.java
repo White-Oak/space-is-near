@@ -34,24 +34,28 @@ public final class Button extends UIElement {
     @Override
     public void paint(SpriteBatch batch) {
 	ShapeRenderer renderer = getRenderer();
-	renderer.begin(ShapeRenderer.ShapeType.Line);
-	renderer.setColor(Color.BLACK);
-	renderer.rect(0, 0, getWidth(), getHeight());
+//	renderer.begin(ShapeRenderer.ShapeType.Line);
+//	renderer.setColor(Color.BLACK);
+//	renderer.rect(0, 0, getWidth(), getHeight());
+//	renderer.end();
+	renderer.begin(ShapeRenderer.ShapeType.Filled);
+	renderer.setColor(new Color(0xdce0e1ff));
+	renderer.rect(-getWidth() / 3, -getHeight() / 3, getWidth(), getHeight());
 	renderer.end();
 	batch.begin();
 	font.setColor(Color.BLACK);
-	font.draw(batch, label, getX() + WIDTH_PADDING, getY() + HEIGHT_PADDING);
+	font.draw(batch, label, getX(), getY());
 	batch.end();
     }
 
     @Override
     public float getPrefWidth() {
-	return font.getBounds(label).width + WIDTH_PADDING * 2;
+	return (font.getBounds(label).width + WIDTH_PADDING * 2) * 2;
     }
 
     @Override
     public float getPrefHeight() {
-	return font.getLineHeight() + HEIGHT_PADDING * 2;
+	return (font.getLineHeight() + HEIGHT_PADDING * 2) * 2;
     }
 
 }

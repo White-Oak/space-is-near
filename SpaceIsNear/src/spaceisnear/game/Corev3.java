@@ -42,7 +42,7 @@ public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener 
 	Gdx.input.setInputProcessor(multiplexer);
 	camera.setToOrtho(true);
 	camera.update();
-	font = new BitmapFont(Gdx.files.classpath("calibri.fnt"), true);
+	font = new BitmapFont(Gdx.files.classpath("segoe_ui.fnt"), true);
 	Logs.info("client", "Font has created -- don't worry");
 	loginScreen = new LoginScreen(this);
 	lobby = new Lobby(this);
