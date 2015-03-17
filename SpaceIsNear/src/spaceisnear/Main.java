@@ -24,13 +24,7 @@ public class Main {
     public static LwjglApplication lwjglApplication;
 
     public static void main(String[] args) throws ParseException {
-	Option mode = new Option("mode", true, "one of default, host, editor");
-	Option ip = new Option("hostip", true, "the ip adress of the host");
-	Option help = new Option("help", "displays the help");
-	Options options = new Options();
-	options.addOption(ip);
-	options.addOption(mode);
-	options.addOption(help);
+	Options options = prepareOptions();
 	CommandLineParser parser = new BasicParser();
 	CommandLine parse = parser.parse(options, args);
 	String optionValue = parse.getOptionValue("help");
@@ -57,8 +51,19 @@ public class Main {
 	    }
 	} else {
 	    HelpFormatter formatter = new HelpFormatter();
-	    formatter.printHelp("SIN mode <mode> hostip <hostip>", options);
+	    formatter.printHelp("SIN -mode <mode> -hostip <hostip>", options);
 	}
+    }
+
+    private static Options prepareOptions() throws IllegalArgumentException {
+	Option mode = new Option("mode", true, "one of default, host, editor");
+	Option ip = new Option("hostip", true, "the ip adress of the host");
+	Option help = new Option("help", "displays the help");
+	Options options = new Options();
+	options.addOption(ip);
+	options.addOption(mode);
+	options.addOption(help);
+	return options;
     }
 
     private static void runSINInWeirdMode(String mode) {
