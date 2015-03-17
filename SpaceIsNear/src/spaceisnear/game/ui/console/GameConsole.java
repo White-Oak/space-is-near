@@ -268,6 +268,9 @@ public class GameConsole extends Actor {
     public void pushMessage(LogString str) {
 	log.pushMessage(str, context);
 	scrollBarSize = sizeOfScrollBar();
+	if (!scrollBarClicked) {
+	    scrollBarY = sizeOfGameLog() - scrollBarSize;
+	}
     }
     private int oldy;
 
