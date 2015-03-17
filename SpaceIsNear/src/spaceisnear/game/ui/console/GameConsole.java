@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.esotericsoftware.minlog.Logs;
 import lombok.Getter;
 import spaceisnear.game.GameContext;
@@ -38,7 +38,7 @@ public class GameConsole extends Actor {
 	this.x = x;
 	this.y = y;
 	setWidth(width);
-	setHeight(height);
+	setHeight(height - tf.getHeight());
 	font = new BitmapFont(Gdx.files.classpath("default.fnt"), false);
 	textField = tf;
 	log = new InGameLog(830, 2, width - 30, (int) (height - 2 - textField.getHeight()));
@@ -47,26 +47,50 @@ public class GameConsole extends Actor {
 	camera.setToOrtho(true);
 	camera.update();
 	renderer.setProjectionMatrix(camera.combined);
+	addListener(new InputListener() {
+
+	    @Override
+	    public boolean touchDown(InputEvent event, float x, float y, int p, int pt) {
+		mouseClicked((int) x, (int) y);
+		return true;
+	    }
+
+	    @Override
+	    public void touchDragged(InputEvent event, float x, float y, int pointer) {
+		mouseDragged((int) x, (int) y);
+	    }
+
+	    @Override
+	    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+		mouseReleased((int) x, (int) y);
+	    }
+
+	});
     }
     private final ShapeRenderer renderer = new ShapeRenderer();
     private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
+
 	renderer.translate(x, 0, 0);
 	batch.end();
 	renderer.begin(ShapeRenderer.ShapeType.Filled);
-	renderer.setColor(Color.WHITE);
+	renderer.setColor(new Color(0xdce0e1ff));
 	renderer.rect(0, 0, getWidth(), getHeight());
 	//left scrollbar 
-	renderer.setColor(Color.GRAY);
-	renderer.rect(2, 2 + scrollBarY, 18, scrollBarSize);
+	//underneath
+	renderer.setColor(new Color(0xfcf7f7ff));
+	renderer.rect(getWidth() - 18, 0, 18, getHeight());
+	renderer.setColor(new Color(0x7f8c8dff));
+	//width == 20
+	renderer.rect(getWidth() - 12, 5 + scrollBarY, 6, scrollBarSize - 10);
 	renderer.end();
 	//
-	renderer.begin(ShapeRenderer.ShapeType.Line);
-	renderer.setColor(Color.BLACK);
-	renderer.line(0, 0, 0, getHeight());
-	renderer.end();
+//	renderer.begin(ShapeRenderer.ShapeType.Line);
+//	renderer.setColor(Color.BLACK);
+//	renderer.line(0, 0, 0, getHeight());
+//	renderer.end();
 	renderer.translate(-x, 0, 0);
 	batch.begin();
 	//
@@ -237,22 +261,25 @@ public class GameConsole extends Actor {
 	log.pushMessage(str, context);
 	scrollBarSize = sizeOfScrollBar();
     }
+    private int oldy;
 
-    public void mouseClicked(int button, int x, int y, int clickCount) {
+    public void mouseClicked(int x, int y) {
+	System.out.println("x: " + x + "y: " + y);
+	if (x > 0 && x > getWidth() - 18) {
+	    System.out.println("heyaaa1");
 
-    }
-
-    public void mousePressed(int button, int x, int y) {
-	if (x > this.x && x < this.x + 20) {
 	    if (y > scrollBarY && y < scrollBarY + scrollBarSize) {
+		System.out.println("heyaaa2");
 		scrollBarClicked = true;
+		oldy = y;
 	    }
 	}
     }
 
-    public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+    public void mouseDragged(int newx, int newy) {
 	if (scrollBarClicked) {
 	    int move = newy - oldy;
+	    oldy = newy;
 	    processDrag(move);
 	}
     }
@@ -266,7 +293,7 @@ public class GameConsole extends Actor {
 	}
     }
 
-    public void mouseReleased(int button, int x, int y) {
+    public void mouseReleased(int x, int y) {
 	scrollBarClicked = false;
     }
 
@@ -295,7 +322,7 @@ public class GameConsole extends Actor {
     }
 
     private int sizeOfGameLog() {
-	return (int) (getHeight() - textField.getHeight() - 4);
+	return (int) (getHeight());
     }
 
     public void mouseWheelMoved(int newValue) {

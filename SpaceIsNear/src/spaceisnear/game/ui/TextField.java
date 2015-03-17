@@ -160,14 +160,14 @@ public final class TextField extends UIElement {
 	}
 	//
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
-	renderer.begin(ShapeRenderer.ShapeType.Line);
-	renderer.setColor(Color.WHITE);
-	renderer.rect(0, 0, getWidth(), getHeight());
-	renderer.end();
-	renderer.begin(ShapeRenderer.ShapeType.Line);
-	renderer.setColor(Color.BLACK);
-	renderer.rect(0, 0, getWidth() + 1, getHeight());
-	renderer.end();
+//	renderer.begin(ShapeRenderer.ShapeType.Line);
+//	renderer.setColor(Color.WHITE);
+//	renderer.rect(0, 0, getWidth(), getHeight());
+//	renderer.end();
+//	renderer.begin(ShapeRenderer.ShapeType.Line);
+//	renderer.setColor(Color.BLACK);
+//	renderer.rect(0, 0, getWidth() + 1, getHeight());
+//	renderer.end();
 	//cursor
 	renderer.begin(ShapeRenderer.ShapeType.Line);
 	if (focused) {
@@ -195,6 +195,7 @@ public final class TextField extends UIElement {
 	currentPosition = text.length();
     }
 
+    @Override
     public void clear() {
 	text.setLength(0);
     }

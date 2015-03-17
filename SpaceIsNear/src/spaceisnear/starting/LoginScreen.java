@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import spaceisnear.game.Corev3;
 import spaceisnear.game.messages.service.onceused.MessageClientInformation;
-import spaceisnear.game.ui.TextField;
 import spaceisnear.game.ui.*;
+import spaceisnear.game.ui.TextField;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
@@ -49,7 +49,7 @@ public final class LoginScreen extends ScreenImprovedGreatly implements Activati
 	stage.addActor(password);
 	stage.addActor(ok);
 
-	setBackgroundColor(Color.WHITE);
+	setBackgroundColor(new Color(0xecf0f1ff));
     }
 
     @Override

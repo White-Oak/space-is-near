@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
 import spaceisnear.Utils;
-import spaceisnear.game.objects.items.ItemsReader;
 
 /**
  * This is actually v2.
@@ -54,6 +53,13 @@ public class ScriptsManager {
 	return "res.scripts." + dir;
     }
 
+    /**
+     * Gets script for ASSOCIATED name (lamp_danger -> lamp).
+     *
+     * @param mode
+     * @param itemName
+     * @return
+     */
     public CustomScript getScriptFor(ScriptType mode, String itemName) {
 	String ass = associates.get(itemName);
 	if (ass != null) {
@@ -70,7 +76,7 @@ public class ScriptsManager {
 		}
 		if (resultB) {
 		    try {
-			Class ref = Class.forName(dirByMode + "Script_" + itemName);
+			Class ref = Class.forName(dirByMode + "Script_" + ass);
 			Object newInstance = ref.newInstance();
 			result = (CustomScript) newInstance;
 		    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
@@ -109,14 +115,13 @@ public class ScriptsManager {
 
 	static void fillWithAssociates(HashMap<String, String> map) throws Exception {
 	    Associate[] read = read();
-	    for (int i = 0; i < read.length; i++) {
-		Associate associates = read[i];
+	    for (Associate associates : read) {
 		map.put(associates.name, associates.scriptName);
 	    }
 	}
 
 	private static Associate[] read() throws Exception {
-	    try (InputStream items = ItemsReader.class.getResourceAsStream("/res/scripts/associates.json")) {
+	    try (InputStream items = AssociatesReader.class.getResourceAsStream("/res/scripts/associates.json")) {
 		byte[] contents = Utils.getContents(items);
 		return Utils.GSON.fromJson(new String(contents), Associate[].class);
 	    } catch (Exception e) {

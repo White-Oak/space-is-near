@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.esotericsoftware.minlog.Logs;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.*;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.ArrayUtils;
@@ -125,6 +127,16 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 			try {
 			    log(new LogString("Couldn't find a host on " + Main.IP, LogLevel.WARNING));
 			    log(new LogString("Starting server on " + Main.IP, LogLevel.WARNING));
+			    new Thread(() -> {
+				for (int i = 0; i < 50; i++) {
+				    log(new LogString("Hey I'm just a sailor " + i, LogLevel.WARNING));
+				    try {
+					Thread.sleep(50L);
+				    } catch (InterruptedException ex1) {
+					Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex1);
+				    }
+				}
+			    }, "shitty wizard").start();
 			    networking.connect(Main.IP, 54555);
 			} catch (IOException ex1) {
 			    Logs.error("client", "While trying to connect to new server", ex1);
@@ -269,33 +281,31 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	int calculatedY = y / GameContext.TILE_HEIGHT;
 	int tileX = toAddX + calculatedX;
 	int tileY = toAddY + calculatedY;
-	//log(new LogString("Clicked: x " + tileX + " y " + tileY + " button " + button, LogLevel.DEBUG));
-	if (button == 1) {
-	    if (menu == null) {
-		if (tileX < 0 || tileY < 0) {
-		    return;
+	if (tileX < 0 || tileY < 0) {
+	    return;
+	}
+	switch (button) {
+	    case 1:
+		if (menu == null) {
+		    createContextMenuWithItems(x, y, tileX, tileY);
+		} else {
+		    menu.hide();
+		    menu = null;
 		}
-		createContextMenuWithItems(x, y, tileX, tileY);
-	    } else {
-		menu.hide();
-		menu = null;
-	    }
-	} else if (button == 0) {
-	    if (tileX < 0 || tileY < 0) {
-		return;
-	    }
-	    final Position position = context.getPlayer().getPosition();
-	    int dx = Math.abs(position.getX() - tileX);
-	    int dy = Math.abs(position.getY() - tileY);
-	    System.out.println(String.format("dx %d dy %d", dx, dy));
-	    if (dx <= 2 && dy <= 2) {
-		java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
-		MessageInteracted messageInteracted;
-		int interactedWith = inventory.getItemInActiveHand().getItemId();
-		messageInteracted = new MessageInteracted(itemsOn.get(itemsOn.size() - 1).getId(), interactedWith);
-		MessageToSend messageToSend = new MessageToSend(messageInteracted);
-		context.sendDirectedMessage(messageToSend);
-	    }
+		break;
+	    case 0:
+		final Position position = context.getPlayer().getPosition();
+		int dx = Math.abs(position.getX() - tileX);
+		int dy = Math.abs(position.getY() - tileY);
+		if (dx <= 2 && dy <= 2) {
+		    java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
+		    MessageInteracted messageInteracted;
+		    int interactedWith = inventory.getItemInActiveHand().getItemId();
+		    messageInteracted = new MessageInteracted(itemsOn.get(itemsOn.size() - 1).getId(), interactedWith);
+		    MessageToSend messageToSend = new MessageToSend(messageInteracted);
+		    context.sendDirectedMessage(messageToSend);
+		}
+		break;
 	}
     }
 

@@ -42,7 +42,7 @@ public class InGameLog {
 		String string = strings[j];
 		final int ycoord = y + ((int) font.getLineHeight()) * linesGone + startingY;
 		if (ycoord > 0) {
-		    font.draw(batch, string, x, ycoord);;
+		    font.draw(batch, string, x, ycoord);
 		    linesDrawn++;
 		}
 	    }
@@ -86,7 +86,7 @@ public class InGameLog {
 	    case BROADCASTING:
 		return new Color(0, 0.5f, 0, 1);
 	    case WARNING:
-		return Color.RED;
+		return new Color(0xe74c3cff);
 	    case OOC:
 		return Color.BLUE;
 	    case PRIVATE:

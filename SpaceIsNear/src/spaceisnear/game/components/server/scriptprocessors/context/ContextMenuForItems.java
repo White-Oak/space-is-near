@@ -15,9 +15,9 @@ public class ContextMenuForItems {
 
     private static ServerContextMenu getMenu(ServerContext context, StaticItem[] items) {
 	ArrayList<ServerContextSubMenu> subMenus = new ArrayList<>();
-	for (int i = 0; i < items.length; i++) {
-	    StaticItem staticItem = items[i];
-	    final ContextRequestScript requestScript = (ContextRequestScript) context.getScriptsManager().getScriptFor(
+	for (StaticItem staticItem : items) {
+	    final ScriptsManager scriptsManager = context.getScriptsManager();
+	    final ContextRequestScript requestScript = (ContextRequestScript) scriptsManager.getScriptFor(
 		    ScriptsManager.ScriptType.CONREQ, staticItem.getProperties().getName());
 	    if (requestScript != null) {
 		requestScript.init(context, staticItem);
@@ -29,7 +29,6 @@ public class ContextMenuForItems {
 		subMenus.add(new ServerContextSubMenu(new String[]{"Learn", "Pull", "Take"},
 			staticItem.getId(), 3));
 	    }
-
 	}
 	return new ServerContextMenu(subMenus.toArray(new ServerContextSubMenu[subMenus.size()]));
     }
