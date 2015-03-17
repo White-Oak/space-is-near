@@ -24,6 +24,7 @@ public final class CameraMan {
     @Getter private final OrthographicCamera lightsCamera = new OrthographicCamera();
     @Getter private final int horizontalTilesNumber;
     @Getter private final int verticalTilesNumber;
+    private final static int CAMERA_ANIMATION_FACTOR = 3;
 
     public CameraMan() {
 	verticalTilesNumber = GameContext.MAP_WIDTH;
@@ -34,16 +35,21 @@ public final class CameraMan {
     }
 
     public void animate() {
-	int dx = (x * GameContext.TILE_WIDTH - actualX) / 2;
-	int dy = (y * GameContext.TILE_HEIGHT - actualY) / 2;
-	if (dx == 0) {
+	int xx = x * GameContext.TILE_WIDTH - actualX;
+	if (Math.abs(xx) <= 1) {
 	    actualX = x * GameContext.TILE_WIDTH;
+	} else {
+	    int dx = (xx) / CAMERA_ANIMATION_FACTOR;
+	    actualX += dx;
 	}
-	if (dy == 0) {
+	final int yy = y * GameContext.TILE_HEIGHT - actualY;
+	if (Math.abs(yy) <= 1) {
 	    actualY = y * GameContext.TILE_HEIGHT;
+	} else {
+	    int dy = (yy) / CAMERA_ANIMATION_FACTOR;
+	    actualY += dy;
 	}
-	actualX += dx;
-	actualY += dy;
+
     }
 
     public void moveCameraTo(int x, int y) {
@@ -59,8 +65,8 @@ public final class CameraMan {
     private int savedActualX, savedActualY;
 
     public void moveCamera() {
-	savedActualX = actualX;
-	savedActualY = actualY;
+	savedActualX = (int) actualX;
+	savedActualY = (int) actualY;
 	camera.translate(savedActualX, savedActualY);
 	camera.update();
 //	lightsCamera.translate(savedX, savedY);
