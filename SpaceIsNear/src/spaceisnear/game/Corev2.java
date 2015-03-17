@@ -101,10 +101,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	playerBody = GameContext.getWorld().createBody(new BodyDef());
 	RayHandler rayHandler = GameContext.getRayHandler();
 	pointLight = new PointLight(rayHandler, 64);
-	pointLight.setColor(new Color(1, 1, 1, 0.05f));
+	pointLight.setColor(new Color(1, 1, 1, 0.2f));
 	pointLight.setSoft(true);
 	pointLight.setSoftnessLenght(2f);
-	pointLight.setDistance(50);
+	pointLight.setDistance(500);
 	pointLight.setStaticLight(true);
     }
 
@@ -235,7 +235,8 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
 	GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
 	GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getLightsCamera().combined);
-	playerBody.setTransform(getContext().getPlayer().getPosition().getX(), getContext().getPlayer().getPosition().getY(), 0);
+	playerBody.setTransform(getContext().getPlayer().getPosition().getX() * GameContext.TILE_WIDTH,
+		getContext().getPlayer().getPosition().getY() * GameContext.TILE_HEIGHT, 0);
 	pointLight.attachToBody(playerBody, 0.5f, 0.5f);
 
 	batch.begin();
