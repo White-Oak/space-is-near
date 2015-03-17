@@ -58,12 +58,16 @@ public class ItemAdder implements IAcceptable, ExceptionHandler {
     public static StaticItem addItem(Position p, int id, ServerContext context) {
 	StaticItem staticItem1 = new StaticItem(context, p, id);
 	context.addObject(staticItem1);
+	//path and air blocking checks
 	if (p != null) {
 	    final boolean blockingPath = ServerItemsArchive.ITEMS_ARCHIVE.isBlockingPath(id);
 	    if (blockingPath) {
 		context.getObstacles().setReacheable(p.getX(), p.getY(), false);
 	    }
-	    context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), !ServerItemsArchive.ITEMS_ARCHIVE.isBlockingAir(id));
+	    final boolean airReachable = !ServerItemsArchive.ITEMS_ARCHIVE.isBlockingAir(id);
+	    if (!airReachable) {
+		context.getAtmosphere().setAirReacheable(p.getX(), p.getY(), false);
+	    }
 	}
 	final ItemBundle bundle = ServerItemsArchive.ITEMS_ARCHIVE.getBundle(id);
 	boolean st = bundle.stuckedByAddingFromScript;
