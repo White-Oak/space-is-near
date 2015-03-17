@@ -3,6 +3,7 @@ package spaceisnear.game.components.client;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.*;
@@ -28,7 +29,7 @@ public class LightComponent extends Component {
 	    case TELEPORTED:
 		if (light != null) {
 		    MessagePositionChanged mm = (MessagePositionChanged) message;
-		    light.setPosition(mm.getX() + 0.5f, mm.getY() + 0.5f);
+		    light.setPosition((mm.getX() + 0.5f) * GameContext.TILE_WIDTH, (mm.getY() + 0.5f) * GameContext.TILE_HEIGHT);
 		}
 		break;
 	}
@@ -40,7 +41,7 @@ public class LightComponent extends Component {
 	light.setColor(property.color);
 	light.setDistance(property.distance);
 	light.setSoft(true);
-	light.setSoftnessLenght(2.5f);
+	light.setSoftnessLenght(128f);
 	light.setStaticLight(true);
     }
 

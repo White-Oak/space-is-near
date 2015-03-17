@@ -15,7 +15,7 @@ public class ShadowComponent extends Component {
 
     static {
 	BOX = new PolygonShape();
-	BOX.setAsBox(0.5f, 0.5f);
+	BOX.setAsBox(GameContext.TILE_WIDTH / 2, GameContext.TILE_HEIGHT / 2);
     }
 
     public ShadowComponent() {
@@ -36,7 +36,8 @@ public class ShadowComponent extends Component {
 			    BodyDef groundBodyDef = new BodyDef();
 			    groundBodyDef.type = BodyDef.BodyType.StaticBody;
 			    // Set its world position
-			    groundBodyDef.position.set(new Vector2(getPosition().getX(), getPosition().getY()));
+			    groundBodyDef.position.set(new Vector2((getPosition().getX() + 0.5f) * GameContext.TILE_WIDTH,
+				    (getPosition().getY() + 0.5f) * GameContext.TILE_HEIGHT));
 
 			    // Create a body from the defintion and add it to the world
 			    body = GameContext.getWorld().createBody(groundBodyDef);
@@ -54,7 +55,7 @@ public class ShadowComponent extends Component {
 	    case TELEPORTED:
 		if (body != null) {
 		    MessagePositionChanged mm = (MessagePositionChanged) message;
-		    body.setTransform(mm.getX() + 0.5f, mm.getY() + 0.5f, 0);
+		    body.setTransform((mm.getX() + 0.5f) * GameContext.TILE_WIDTH, (mm.getY() + 0.5f) * GameContext.TILE_HEIGHT, 0);
 		}
 		break;
 	}

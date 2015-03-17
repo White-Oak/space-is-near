@@ -10,7 +10,6 @@ public class Script_door extends InteractionScript {
 
     @Override
     public void script() {
-	System.out.println("hey");
 	boolean isOpened = getBooleanPropertyOrFalse("opened");
 	isOpened = !isOpened;
 	setProperty("opened", isOpened);

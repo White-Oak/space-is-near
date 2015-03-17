@@ -58,6 +58,7 @@ import spaceisnear.server.ServerContext;
 
     public void sendAnimationStep() {
 	animateds.forEach(abstractGameObject -> abstractGameObject.message(MESSAGE_ANIMATION_STEP));
+	cameraMan.animate();
     }
 
     @Override

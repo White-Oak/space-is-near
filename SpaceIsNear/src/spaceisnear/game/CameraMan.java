@@ -17,6 +17,7 @@ public final class CameraMan {
 
     @Getter private int x;
     @Getter private int y;
+    private int actualX, actualY;
     @Setter private int windowWidth;
     @Setter private int windowHeight;
     @Getter private final OrthographicCamera camera = new OrthographicCamera();
@@ -28,23 +29,21 @@ public final class CameraMan {
 	verticalTilesNumber = GameContext.MAP_WIDTH;
 	horizontalTilesNumber = verticalTilesNumber;
 	camera.setToOrtho(true);
-	lightsCamera.setToOrtho(true, 1200f / GameContext.TILE_WIDTH, 600f / GameContext.TILE_HEIGHT);
+//	lightsCamera.setToOrtho(true, 1200f / GameContext.TILE_WIDTH, 600f / GameContext.TILE_HEIGHT);
+	lightsCamera.setToOrtho(true);
     }
 
-    public void moveCamera(int deltax, int deltay) {
-	if (deltax != 0) {
-	    if (deltax > 0) {
-		cameraRight();
-	    } else {
-		cameraLeft();
-	    }
-	} else {
-	    if (deltay > 0) {
-		cameraDown();
-	    } else {
-		cameraUp();
-	    }
+    public void animate() {
+	int dx = (x * GameContext.TILE_WIDTH - actualX) / 2;
+	int dy = (y * GameContext.TILE_HEIGHT - actualY) / 2;
+	if (dx == 0) {
+	    actualX = x * GameContext.TILE_WIDTH;
 	}
+	if (dy == 0) {
+	    actualY = y * GameContext.TILE_HEIGHT;
+	}
+	actualX += dx;
+	actualY += dy;
     }
 
     public void moveCameraTo(int x, int y) {
@@ -57,35 +56,22 @@ public final class CameraMan {
 	moveCameraTo(x - (getMaxXTiles() >> 1), y - (getMaxYTiles() >> 1));
     }
 
-    private void cameraUp() {
-	y--;
-    }
-
-    private void cameraDown() {
-	y++;
-    }
-
-    private void cameraLeft() {
-	x--;
-    }
-
-    private void cameraRight() {
-	x++;
-    }
-    private int savedX, savedY;
+    private int savedActualX, savedActualY;
 
     public void moveCamera() {
-	savedX = x;
-	savedY = y;
-	camera.translate(savedX * GameContext.TILE_WIDTH, savedY * GameContext.TILE_HEIGHT);
+	savedActualX = actualX;
+	savedActualY = actualY;
+	camera.translate(savedActualX, savedActualY);
 	camera.update();
-	lightsCamera.translate(savedX, savedY);
+//	lightsCamera.translate(savedX, savedY);
+	lightsCamera.translate(savedActualX, savedActualY);
 	lightsCamera.update();
     }
 
     public void unmoveCamera() {
-	camera.translate(-savedX * GameContext.TILE_WIDTH, -savedY * GameContext.TILE_HEIGHT);
-	lightsCamera.translate(-savedX, -savedY);
+	camera.translate(-savedActualX, -savedActualY);
+//	lightsCamera.translate(-savedX, -savedY);
+	lightsCamera.translate(-savedActualX, -savedActualY);
 	camera.update();
     }
 
@@ -99,13 +85,19 @@ public final class CameraMan {
 //	final boolean yBelongs = py + 1 > this.y + 4 && py - this.y < getMaxYTiles() + 1 - 5;
 	final boolean xBelongs = px + 2 > this.x && px - this.x < getMaxXTiles() + 1;
 	final boolean yBelongs = py + 2 > this.y && py - this.y < getMaxYTiles() + 1;
-	float xx = px + 0.5f;
-	float yy = py + 0.5f;
-	boolean lighted = context.getCore().getPointLight().contains(px, py);
+	float xx = (px + 0.5f);
+	float yy = (py + 0.5f);
+	boolean lighted = context.getCore().getPointLight().contains(px * GameContext.TILE_WIDTH, py * GameContext.TILE_HEIGHT);
 	Position position = context.getPlayer().getPosition();
-	lighted |= context.getCore().getPointLight().contains(xx + Math.signum(position.getX() - px), yy);
-	lighted |= context.getCore().getPointLight().contains(xx, yy + Math.signum(position.getY() - py));
-	lighted |= context.getCore().getPointLight().contains(xx + Math.signum(position.getX() - px), yy + Math.signum(position.getY() - py));
+	lighted |= context.getCore().getPointLight().
+		contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
+			yy * GameContext.TILE_HEIGHT);
+	lighted |= context.getCore().getPointLight().
+		contains(xx * GameContext.TILE_WIDTH,
+			(yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
+	lighted |= context.getCore().getPointLight().
+		contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
+			(yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
 	return xBelongs && yBelongs && lighted;
     }
 
