@@ -36,21 +36,25 @@ public class Main {
 	    formatter.printHelp("SIN -mode <mode> -hostip <hostip>", options);
 	    return;
 	}
-	if (parse.hasOption("hostip")) {
-	    optionValue = parse.getOptionValue("mode");
-	    if (optionValue != null && !optionValue.equals("default")) {
+
+	optionValue = parse.getOptionValue("mode");
+	if (optionValue != null && !optionValue.equals("default")) {
+	    if (parse.hasOption("mode")) {
 		runSINInWeirdMode(optionValue);
 	    } else {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("SIN -mode <mode> -hostip <hostip>", options);
+	    }
+	} else {
+	    if (parse.hasOption("hostip")) {
 		defaultLogger.client();
 		LwjglApplicationConfiguration cfg = configureApp();
 		IP = parse.getOptionValue("hostip");
 		final Corev3 corev3 = new Corev3();
 		lwjglApplication = new LwjglApplication(corev3, cfg);
 	    }
-	} else {
-	    HelpFormatter formatter = new HelpFormatter();
-	    formatter.printHelp("SIN -mode <mode> -hostip <hostip>", options);
 	}
+
     }
 
     private static LwjglApplicationConfiguration configureApp() {
@@ -80,7 +84,7 @@ public class Main {
 	    case "host":
 		defaultLogger.chat();
 		defaultLogger.server();
-		Logs.info("client", "SIN is running in no-GUI mode");
+		Logs.info("server", "SIN is running in no-GUI mode");
 		try {
 		    IP = "127.0.0.1";
 		    ServerCore serverCore = new ServerCore();
@@ -88,7 +92,7 @@ public class Main {
 		    new Thread(serverCore, "SIN Server").start();
 		    Logs.info("server", "Hosted");
 		} catch (IOException ex) {
-		    Logs.error("client", "While trying to start server", ex);
+		    Logs.error("server", "While trying to start server", ex);
 		}
 		break;
 	    case "editor":
