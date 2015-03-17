@@ -41,7 +41,7 @@ public class LightComponent extends Component {
 	light.setColor(property.color);
 	light.setDistance(property.distance);
 	light.setSoft(true);
-	light.setSoftnessLenght(2.5f);
+	light.setSoftnessLenght(128f);
 	light.setStaticLight(true);
     }
 

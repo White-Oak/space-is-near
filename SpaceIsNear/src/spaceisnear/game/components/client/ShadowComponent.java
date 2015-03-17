@@ -1,5 +1,6 @@
 package spaceisnear.game.components.client;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
@@ -35,7 +36,8 @@ public class ShadowComponent extends Component {
 			    BodyDef groundBodyDef = new BodyDef();
 			    groundBodyDef.type = BodyDef.BodyType.StaticBody;
 			    // Set its world position
-//			    groundBodyDef.position.set(new Vector2(getPosition().getX(), getPosition().getY()));
+			    groundBodyDef.position.set(new Vector2((getPosition().getX() + 0.5f) * GameContext.TILE_WIDTH,
+				    (getPosition().getY() + 0.5f) * GameContext.TILE_HEIGHT));
 
 			    // Create a body from the defintion and add it to the world
 			    body = GameContext.getWorld().createBody(groundBodyDef);

@@ -254,7 +254,7 @@
 	+Pressure map is copied to internal map for editor
 	+moving on JFrame
 
-0.1.0
+0.0.10
 +Doors opening/closing
     +Interaction with no item in active hand or with id should lead to opening a door.
 +IDs' basics (ID of player, his profession)
@@ -263,7 +263,7 @@
     +knockbacking if critical
 +MessageKnockbacked
     +processing on server
-+send properties of objects that are near connected player first for faster connection
+--
 +lighting system
 +Inventory interaction
 +Context menus in inventory
@@ -271,9 +271,16 @@
     +atmosphere editor
 	+editing pressures
 +Context menus for items on floor
++Camera animated #56
+    +lights been tweaked
+--
++send properties of objects that are near connected player first for faster connection
 +New scripting system
 +Replace MessageMoved with MessageTeleported #51 
     +Renamed MessageTeleported to MessagePositionChanged
+
+0.1.0
+
 
 16.03.15
 So today I remembered about sin. 
