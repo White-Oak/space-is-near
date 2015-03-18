@@ -261,7 +261,7 @@ public final class ServerContext extends Context {
 	ContextProcessorScript processorScript = (ContextProcessorScript) scriptsManager.getScriptFor(ScriptsManager.ScriptType.CONPROC,
 		item.getProperties().getName());
 	if (processorScript != null) {
-	    processorScript.init(this, item, chosen - subMenu.getDefaults());
+	    processorScript.init(this, item, chosen - subMenu.getDefaults(), client.getPlayer().getId());
 	    processorScript.script();
 	}
     }

@@ -8,6 +8,7 @@ import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
+import spaceisnear.server.objects.ServerGameObject;
 import spaceisnear.server.objects.items.StaticItem;
 import spaceisnear.server.scriptsv2.*;
 
@@ -61,7 +62,7 @@ public class VariablePropertiesComponent extends Component {
 				owner.getProperties().getName());
 			Logs.debug("server", "Found script interaction");
 			if (scriptFor != null) {
-			    scriptFor.init(context, owner);
+			    scriptFor.init(context, owner, (ServerGameObject) context.getObjects().get(mu.getInteractedWith()));
 			    scriptFor.script();
 			}
 		    } catch (ClassCastException e) {

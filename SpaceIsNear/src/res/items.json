@@ -141,7 +141,10 @@
 	"imageIds": [11, 10, 9, 8],
 	"stuckedByAddingFromScript": true,
 	"description": "Door. It opens and then closes.",
-	"defaultProperties": null
+	"defaultProperties": [{
+		"name": "allowed",
+		"value": "CCleaner"
+	    }]
     },
     {
 	"name": "lamp",

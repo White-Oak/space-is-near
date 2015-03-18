@@ -10,7 +10,7 @@ public abstract class CustomScript {
 
     protected ServerContext context;
 
-    public void init(ServerContext context) {
+    public final void init(ServerContext context) {
 	this.context = context;
     }
 

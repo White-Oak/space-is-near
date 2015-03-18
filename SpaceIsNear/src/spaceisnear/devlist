@@ -285,6 +285,7 @@
     +Status bar (mode, tiles under the cursor)
     -ERASER tool (eraser mode)
 -Door properties implemented properly
+    
 --
 +send properties of objects that are near connected player first for faster connection
 +New scripting system

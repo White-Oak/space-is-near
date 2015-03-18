@@ -14,7 +14,7 @@ public abstract class ItemScript extends CustomScript {
 
     @Getter private StaticItem item;
 
-    public void init(ServerContext context, StaticItem item) {
+    public final void init(ServerContext context, StaticItem item) {
 	super.init(context);
 	this.item = item;
     }
