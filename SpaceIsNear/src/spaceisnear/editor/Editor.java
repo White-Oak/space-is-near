@@ -91,11 +91,15 @@ public class Editor implements Screen {
 		case 2:
 		    itemAdder.setMode(MapAction.Type.DELETE);
 		    break;
+		case 3:
+		    itemAdder.setMode(MapAction.Type.PROPERTIES);
+		    break;
 	    }
 	});
 	menuItem.add(new ContextMenuItem("(A)dd mode"));
 	menuItem.add(new ContextMenuItem("(F)ill mode"));
 	menuItem.add(new ContextMenuItem("(D)elete mode"));
+	menuItem.add(new ContextMenuItem("(P)roperties mode"));
 	menuBar.add(menuItem);
 	menuBar.setWidth(Gdx.graphics.getWidth() - RightTab.TAB_WIDTH);
     }

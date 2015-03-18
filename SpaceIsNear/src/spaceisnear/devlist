@@ -282,6 +282,9 @@
     *if mouse moved to another tile before releasing button, then no action will happen
     +rewrote save/load mechanism for editor
 	+adapted load mechanism in game
+    -Status bar (mode, tiles under the cursor)
+    -ERASER tool (eraser mode)
+-Door properties implemented properly
 --
 +send properties of objects that are near connected player first for faster connection
 +New scripting system

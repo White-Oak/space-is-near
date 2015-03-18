@@ -93,6 +93,8 @@ public class ItemRenderer extends Actor {
 				    blocked = false;
 				});
 				contextMenu.show();
+			    } else {
+				blocked = false;
 			    }
 			}
 			break;
