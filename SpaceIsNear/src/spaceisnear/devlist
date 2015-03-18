@@ -275,6 +275,8 @@
     +lights been tweaked
 *Design changes
 +Auto-scrolling in-chat #59
+*editor padding fix
+-editor properties mode
 --
 +send properties of objects that are near connected player first for faster connection
 +New scripting system
@@ -283,6 +285,7 @@
 +Log system reworked #58
     *Note that minlog class Log is renamed to Logs to evade overlapping with kryonet Log class
 *Fixed bug when lamp appeared to be turned off on server launch 
+-chat multi-line support fix
 
 0.1.0
 

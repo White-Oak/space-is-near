@@ -56,7 +56,7 @@ public class Logger extends Logs.Logger {
 	builder.append(Logs.getLevelName(level));
 	builder.append("] ");
 	builder.append(message);
-	builder.append('\n');
+	builder.append(System.lineSeparator());
 	if (ex != null) {
 	    StringWriter writer = new StringWriter(256);
 	    ex.printStackTrace(new PrintWriter(writer));
