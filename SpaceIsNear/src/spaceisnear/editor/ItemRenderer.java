@@ -33,6 +33,7 @@ public class ItemRenderer extends Actor {
     private final OrthographicCamera camera;
     private boolean blocked;
     private PropertiesWindow propertiesWindow;
+    @Getter private int currentX, currentY;
 
     private MapAction setCurrentActionWith(Item item) {
 	MapAction mapAction = new MapAction(mode, item);
@@ -43,7 +44,6 @@ public class ItemRenderer extends Actor {
     public ItemRenderer(final RightTab tab) {
 	addCaptureListener(new InputListener() {
 	    private int pressedX, pressedY;
-	    private int currentX, currentY;
 
 	    private int getTilesX(float realx) {
 		realx -= posX;
@@ -53,6 +53,13 @@ public class ItemRenderer extends Actor {
 	    private int getTilesY(float realy) {
 		realy -= posY;
 		return (int) realy / GameContext.TILE_HEIGHT;
+	    }
+
+	    @Override
+	    public boolean mouseMoved(InputEvent event, float x, float y) {
+		currentX = getTilesX(x);
+		currentY = getTilesY(y);
+		return true;
 	    }
 
 	    @Override
@@ -118,8 +125,7 @@ public class ItemRenderer extends Actor {
 	    }
 
 	    @Override
-	    public void touchUp(InputEvent event, float x, float y, int pointer, int button
-	    ) {
+	    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 		if (!blocked) {
 		    pressedX = getTilesX(x);
 		    pressedY = getTilesY(y);
@@ -155,6 +161,7 @@ public class ItemRenderer extends Actor {
 			    mode = MapAction.Type.PROPERTIES;
 			    break;
 		    }
+
 		}
 		return true;
 	    }

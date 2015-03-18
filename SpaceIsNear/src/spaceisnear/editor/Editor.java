@@ -9,9 +9,11 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.Getter;
-import spaceisnear.game.ui.MenuBar;
-import spaceisnear.game.ui.MenuItem;
+import spaceisnear.game.ui.*;
 import spaceisnear.game.ui.context.ContextMenu;
 import spaceisnear.game.ui.context.ContextMenuItem;
 
@@ -27,6 +29,10 @@ public class Editor implements Screen {
     private final Stage stage = new Stage();
     private final ItemsHandler handler = ItemsHandler.HANDLER;
     private final MenuBar menuBar;
+    private final StatusBar statusBar;
+    private final RightTab rightTab;
+    private final ItemRenderer itemAdder;
+    private int posX, posY;
 
     @Getter private final Texture sprites;
 
@@ -43,20 +49,43 @@ public class Editor implements Screen {
 	menuBar = new MenuBar();
 	initializeMenuBar();
 
+	statusBar = new StatusBar();
+	statusBar.setWidth(Gdx.graphics.getWidth() - RightTab.TAB_WIDTH);
+	statusBar.setY(Gdx.graphics.getHeight() - statusBar.getHeight());
+
 	itemAdder = new ItemRenderer(rightTab);
 	itemAdder.setBounds(0, menuBar.getHeight(), Gdx.graphics.getWidth() - RightTab.TAB_WIDTH,
 		Gdx.graphics.getHeight() - menuBar.getHeight());
 
 	stage.addActor(itemAdder);
 	stage.addActor(menuBar);
+	stage.addActor(statusBar);
 	stage.addActor(rightTab);
 	stage.setCamera(camera);
 	stage.setKeyboardFocus(itemAdder);
 	Gdx.input.setInputProcessor(stage);
     }
-    private final RightTab rightTab;
-    private final ItemRenderer itemAdder;
-    private int posX, posY;
+
+    private void statusesChecker() {
+	while (true) {
+	    statusBar.setStatus(0, "Current mode: " + itemAdder.getMode().toString());
+	    ArrayList<Item> items = handler.getItems();
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("(");
+	    items.stream()
+		    .filter(item -> (item.getX() == itemAdder.getCurrentX() && item.getY() == itemAdder.getCurrentY()))
+		    .forEach(item -> sb.append(handler.getName(item.getId())).append(", "));
+	    if (sb.length() > 1) {
+		sb.delete(sb.length() - 2, sb.length());
+	    }
+	    statusBar.setStatus(1, sb.append(")"));
+	    try {
+		Thread.sleep(100L);
+	    } catch (InterruptedException ex) {
+		Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+    }
 
     private void initializeMenuBar() {
 	MenuItem menuItem = new MenuItem("File", stage);
@@ -133,6 +162,7 @@ public class Editor implements Screen {
 
     @Override
     public void show() {
+	new Thread(this::statusesChecker, "Status Bar updater").start();
     }
 
     @Override
