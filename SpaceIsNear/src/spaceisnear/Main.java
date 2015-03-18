@@ -47,12 +47,15 @@ public class Main {
 	    }
 	} else {
 	    if (parse.hasOption("hostip")) {
-		defaultLogger.client();
-		LwjglApplicationConfiguration cfg = configureApp();
 		IP = parse.getOptionValue("hostip");
-		final Corev3 corev3 = new Corev3();
-		lwjglApplication = new LwjglApplication(corev3, cfg);
+	    } else {
+		IP = "127.0.0.1";
 	    }
+	    defaultLogger.client();
+	    LwjglApplicationConfiguration cfg = configureApp();
+	    final Corev3 corev3 = new Corev3();
+	    lwjglApplication = new LwjglApplication(corev3, cfg);
+
 	}
 
     }

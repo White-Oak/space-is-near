@@ -50,7 +50,7 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 	stage.addActor(proLabel);
 	stage.addActor(profession);
 
-	setBackgroundColor(Color.WHITE);
+	setBackgroundColor(new Color(0xecf0f1ff));
     }
 
     @Override
