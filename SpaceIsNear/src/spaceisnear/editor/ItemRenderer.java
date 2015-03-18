@@ -39,12 +39,12 @@ public class ItemRenderer extends Actor {
 	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 		x -= posX;
 		y -= posY;
-		x /= GameContext.TILE_WIDTH;
-		y /= GameContext.TILE_HEIGHT;
-		pressedX = (int) x;
-		pressedY = (int) y;
+		System.out.println("x " + x + "y " + y);
+		pressedX = (int) x / GameContext.TILE_WIDTH;
+		pressedY = (int) y / GameContext.TILE_HEIGHT;
 		currentX = pressedX;
 		currentY = pressedY;
+		System.out.println("x " + pressedX + "y " + pressedY);
 		MapAction mapAction = new MapAction(mode, new Item(tab.getChosenOne(), pressedX, pressedY));
 		if (mode == MapAction.Type.FILL) {
 		    mapAction.setFillX(currentX);
@@ -122,19 +122,19 @@ public class ItemRenderer extends Actor {
 //	ScissorStack.pushScissors(scissors);
 	handler.getItems().forEach((item) -> {
 	    final int x = item.getX() * GameContext.TILE_WIDTH + posX;
-	    final int y = item.getY() * GameContext.TILE_HEIGHT + posY;
+	    final int y = (int) (item.getY() * GameContext.TILE_HEIGHT + posY + getY());
 	    if (x > -GameContext.TILE_WIDTH && x < getWidth() && y > -GameContext.TILE_HEIGHT && y < getHeight()) {
 		batch.draw(handler.getTextureRegion(item.getId()), x, y);
 	    }
 	});
 	if (handler.getCurrentAction() != null) {
-	    handler.getCurrentAction().draw(batch, posX, posY);
+	    handler.getCurrentAction().draw(batch, posX, (int) (posY + getY()));
 	}
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.setTransformMatrix(batch.getTransformMatrix());
 	renderer.begin(ShapeRenderer.ShapeType.Line);
 	renderer.setColor(Color.RED);
-	renderer.rect(posX, posY, 64 * GameContext.TILE_WIDTH, 64 * GameContext.TILE_HEIGHT);
+	renderer.rect(posX, posY + getY(), 64 * GameContext.TILE_WIDTH, 64 * GameContext.TILE_HEIGHT);
 	renderer.end();
 //	ScissorStack.popScissors();
     }

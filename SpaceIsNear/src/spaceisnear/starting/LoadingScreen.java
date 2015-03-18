@@ -29,7 +29,7 @@ public class LoadingScreen extends ScreenImprovedGreatly {
 
 	stage.addActor(loadingLabel);
 	stage.addActor(progress);
-	setBackgroundColor(Color.WHITE);
+	setBackgroundColor(new Color(0xecf0f1ff));
     }
 
     public void update() {
