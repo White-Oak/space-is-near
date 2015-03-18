@@ -1,0 +1,13 @@
+[{
+	"itemId": 1,
+	"x": 15,
+	"y": 8,
+	"properties": [{
+		"name": "qwe",
+		"value": "123"
+	    }]
+    }, {
+	"itemId": 1,
+	"x": 15,
+	"y": 9
+    }]

@@ -2,7 +2,6 @@ package spaceisnear.editor;
 
 import java.util.Collection;
 import javax.swing.*;
-import lombok.*;
 
 /**
  *
@@ -23,15 +22,15 @@ public class PropertiesWindow {
 	propertiesList.setVisibleRowCount(8);
     }
 
-    public void setListData(Property... propertys) {
-	DefaultListModel<Property> model = (DefaultListModel<Property>) propertiesList.getModel();
-	for (Property property : propertys) {
+    public void setListData(ItemProperty... propertys) {
+	DefaultListModel<ItemProperty> model = (DefaultListModel<ItemProperty>) propertiesList.getModel();
+	for (ItemProperty property : propertys) {
 	    model.addElement(property);
 	}
     }
 
-    public void setListData(Collection<Property> propertys) {
-	DefaultListModel<Property> model = (DefaultListModel<Property>) propertiesList.getModel();
+    public void setListData(Collection<ItemProperty> propertys) {
+	DefaultListModel<ItemProperty> model = (DefaultListModel<ItemProperty>) propertiesList.getModel();
 	propertys.forEach(property -> model.addElement(property));
     }
 
@@ -48,9 +47,9 @@ public class PropertiesWindow {
 	return propertiesPanel.isCancelled();
     }
 
-    public Property[] getProperties() {
-	DefaultListModel<Property> model = (DefaultListModel<Property>) propertiesList.getModel();
-	Property[] propertys = new Property[model.size()];
+    public ItemProperty[] getProperties() {
+	DefaultListModel<ItemProperty> model = (DefaultListModel<ItemProperty>) propertiesList.getModel();
+	ItemProperty[] propertys = new ItemProperty[model.size()];
 	for (int i = 0; i < model.size(); i++) {
 	    propertys[i] = model.get(i);
 	}
@@ -61,14 +60,4 @@ public class PropertiesWindow {
 	props.dispose();
     }
 
-    @Getter @Setter @RequiredArgsConstructor public static class Property {
-
-	private final String name, value;
-
-	@Override
-	public String toString() {
-	    return name + " : " + value;
-	}
-
-    }
 }

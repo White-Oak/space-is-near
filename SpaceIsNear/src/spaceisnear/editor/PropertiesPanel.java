@@ -37,7 +37,7 @@ public class PropertiesPanel extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
-        propertiesList.setModel(new DefaultListModel<PropertiesWindow.Property>());
+        propertiesList.setModel(new DefaultListModel<ItemProperty>());
         jScrollPane1.setViewportView(propertiesList);
 
         jButton1.setText("Delete");
@@ -136,8 +136,8 @@ public class PropertiesPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-	DefaultListModel<PropertiesWindow.Property> model = (DefaultListModel<PropertiesWindow.Property>) propertiesList.getModel();
-	model.addElement(new PropertiesWindow.Property(jTextField1.getText(), jTextField2.getText()));
+	DefaultListModel<ItemProperty> model = (DefaultListModel<ItemProperty>) propertiesList.getModel();
+	model.addElement(new ItemProperty(jTextField1.getText(), jTextField2.getText()));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

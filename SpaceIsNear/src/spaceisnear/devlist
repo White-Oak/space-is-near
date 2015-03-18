@@ -277,9 +277,11 @@
 +Auto-scrolling in-chat #59
 +editor:
     *padding drawing fix
-    -properties mode
+    +properties mode
     +context menus when in delete or properties mode
     *if mouse moved to another tile before releasing button, then no action will happen
+    +rewrote save/load mechanism for editor
+	+adapted load mechanism in game
 --
 +send properties of objects that are near connected player first for faster connection
 +New scripting system

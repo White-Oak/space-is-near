@@ -6,7 +6,6 @@
 package spaceisnear.editor;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +55,7 @@ import spaceisnear.game.GameContext;
 	    case PROPERTIES:
 		PropertiesWindow propertiesWindow = new PropertiesWindow();
 		propertiesWindow.init();
-		List<PropertiesWindow.Property> list = new LinkedList<>();
+		List<ItemProperty> list = item.getProperties();
 		propertiesWindow.setListData(list);
 		propertiesWindow.show();
 		while (!propertiesWindow.isFinished()) {
@@ -67,8 +66,8 @@ import spaceisnear.game.GameContext;
 		    }
 		}
 		if (!propertiesWindow.isCancelled()) {
-		    PropertiesWindow.Property[] properties = propertiesWindow.getProperties();
-		    for (PropertiesWindow.Property property : properties) {
+		    ItemProperty[] properties = propertiesWindow.getProperties();
+		    for (ItemProperty property : properties) {
 			item.add(property);
 		    }
 		}

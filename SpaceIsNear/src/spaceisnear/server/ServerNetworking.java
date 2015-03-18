@@ -257,7 +257,7 @@ import spaceisnear.server.objects.items.*;
 	final ServerContext context = core.getContext();
 	final ServerItemsArchive itemsArchive = ServerItemsArchive.ITEMS_ARCHIVE;
 	int idByName = itemsArchive.getIdByName(itemName);
-	StaticItem item = ItemAdder.addItem(new Position(-1, -1), idByName, context);
+	StaticItem item = ItemAdder.addItem(new Position(-1, -1), idByName, context, null);
 	item.setPlayerId(player.getId());
 	player.getInventoryComponent().getSlots().get(nameOfInventorySlot).setItemId(item.getId());
 	return item;

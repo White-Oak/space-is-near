@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.*;
+import spaceisnear.Utils;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.objects.items.*;
 
@@ -72,46 +73,39 @@ public class ItemsHandler {
 
     public void save() {
 	try {
-	    FileHandle fh = Gdx.files.local("additems.txt");
+	    FileHandle fh = Gdx.files.local("additems.json");
 	    File f = fh.file();
 	    if (f.exists()) {
 		f.delete();
 	    }
 	    f.createNewFile();
+	    List<SaveLoadAction> slas = new LinkedList<>();
 	    items.stream()
 		    .sorted((item1, item2) -> item1.getId() - item2.getId())
-		    .forEach((item) -> fh.writeString(
-				    "addItem {" + bundles[item.getId()].name + ", " + item.getX()
-				    + ", " + item.getY() + "}" + System.lineSeparator(), true));
+		    .forEach(item -> slas.add(new SaveLoadAction(item)));
+	    fh.writeString(Utils.GSON.toJson(slas), false);
 	} catch (IOException ex) {
 	    Logger.getLogger(ItemsHandler.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
     public void load() {
-	FileHandle fh = Gdx.files.local("additems.txt");
+	FileHandle fh = Gdx.files.local("additems.json");
 	File f = fh.file();
 	if (f.exists()) {
-	    InputStream read = null;
-	    try {
-		read = new FileInputStream(f);
-		Loader loader = new Loader();
-		try {
-		    loader.addItems(read);
-		} catch (IOException ex) {
-//		    Context.LOG.log(ex);
-		    //@working
-		}
+	    {
+		SaveLoadAction[] slas = Utils.GSON.fromJson(fh.reader(), SaveLoadAction[].class);
 		items.clear();
 		actions.clear();
-		items.addAll(loader.getItems());
-	    } catch (FileNotFoundException ex) {
-		Logger.getLogger(ItemsHandler.class.getName()).log(Level.SEVERE, null, ex);
-	    } finally {
-		try {
-		    read.close();
-		} catch (IOException ex) {
-		    Logger.getLogger(ItemsHandler.class.getName()).log(Level.SEVERE, null, ex);
+		for (SaveLoadAction sla : slas) {
+		    final ItemProperty[] properties = sla.getProperties();
+		    final Item item;
+		    if (properties != null) {
+			item = new Item(sla.getItemId(), sla.getX(), sla.getY(), Arrays.asList(properties));
+		    } else {
+			item = new Item(sla.getItemId(), sla.getX(), sla.getY());
+		    }
+		    items.add(item);
 		}
 	    }
 	}

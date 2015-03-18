@@ -13,13 +13,19 @@ import lombok.*;
  *
  * @author White Oak
  */
-@Data @RequiredArgsConstructor public class Item {
+@Data @AllArgsConstructor public class Item {
 
-    @NonNull private int id;
-    @NonNull private int x, y;
-    private List<PropertiesWindow.Property> properties = new LinkedList<>();
+    private int id;
+    private int x, y;
+    private List<ItemProperty> properties = new LinkedList<>();
 
-    public boolean add(PropertiesWindow.Property e) {
+    public Item(int id, int x, int y) {
+	this.id = id;
+	this.x = x;
+	this.y = y;
+    }
+
+    public boolean add(ItemProperty e) {
 	return properties.add(e);
     }
 
