@@ -5,15 +5,22 @@
  */
 package spaceisnear.editor;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import java.util.LinkedList;
+import java.util.List;
+import lombok.*;
 
 /**
  *
  * @author White Oak
  */
-@Data @AllArgsConstructor public class Item {
+@Data @RequiredArgsConstructor public class Item {
 
-    private int id;
-    private int x, y;
+    @NonNull private int id;
+    @NonNull private int x, y;
+    private List<PropertiesWindow.Property> properties = new LinkedList<>();
+
+    public boolean add(PropertiesWindow.Property e) {
+	return properties.add(e);
+    }
+
 }

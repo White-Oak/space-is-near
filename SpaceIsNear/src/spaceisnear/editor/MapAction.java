@@ -6,7 +6,10 @@
 package spaceisnear.editor;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.Data;
 import spaceisnear.game.GameContext;
 
@@ -22,7 +25,7 @@ import spaceisnear.game.GameContext;
 
     public static enum Type {
 
-	FILL, ADD, DELETE
+	FILL, ADD, DELETE, PROPERTIES
     }
 
     private void addItem(List<Item> items, Item item) {
@@ -48,14 +51,29 @@ import spaceisnear.game.GameContext;
 		addItem(items, item);
 		break;
 	    case DELETE:
-		for (int i = items.size() - 1; i > 0; i--) {
-		    Item item1 = items.get(i);
-		    if (item1.getX() == item.getX() && item1.getY() == item.getY()) {
-			items.remove(i);
-			item.setId(item1.getId());
+		items.remove(item);
+		break;
+	    case PROPERTIES:
+		PropertiesWindow propertiesWindow = new PropertiesWindow();
+		propertiesWindow.init();
+		List<PropertiesWindow.Property> list = new LinkedList<>();
+		propertiesWindow.setListData(list);
+		propertiesWindow.show();
+		while (!propertiesWindow.isFinished()) {
+		    try {
+			Thread.sleep(200L);
+		    } catch (InterruptedException ex) {
+			Logger.getLogger(MapAction.class.getName()).log(Level.SEVERE, null, ex);
 		    }
 		}
-
+		if (!propertiesWindow.isCancelled()) {
+		    PropertiesWindow.Property[] properties = propertiesWindow.getProperties();
+		    for (PropertiesWindow.Property property : properties) {
+			item.add(property);
+		    }
+		}
+		propertiesWindow.dispose();
+		break;
 	}
     }
 

@@ -16,9 +16,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 import spaceisnear.game.GameContext;
+import spaceisnear.game.ui.context.ContextMenu;
 
 /**
  *
@@ -29,78 +31,134 @@ public class ItemRenderer extends Actor {
     final ItemsHandler handler = ItemsHandler.HANDLER;
     @Getter @Setter private MapAction.Type mode = MapAction.Type.ADD;
     private final OrthographicCamera camera;
+    private boolean blocked;
+    private PropertiesWindow propertiesWindow;
+
+    private MapAction setCurrentActionWith(Item item) {
+	MapAction mapAction = new MapAction(mode, item);
+	handler.setCurrentAction(mapAction);
+	return mapAction;
+    }
 
     public ItemRenderer(final RightTab tab) {
 	addCaptureListener(new InputListener() {
 	    private int pressedX, pressedY;
 	    private int currentX, currentY;
 
+	    private int getTilesX(float realx) {
+		realx -= posX;
+		return (int) realx / GameContext.TILE_WIDTH;
+	    }
+
+	    private int getTilesY(float realy) {
+		realy -= posY;
+		return (int) realy / GameContext.TILE_HEIGHT;
+	    }
+
 	    @Override
 	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		x -= posX;
-		y -= posY;
-		System.out.println("x " + x + "y " + y);
-		pressedX = (int) x / GameContext.TILE_WIDTH;
-		pressedY = (int) y / GameContext.TILE_HEIGHT;
-		currentX = pressedX;
-		currentY = pressedY;
-		System.out.println("x " + pressedX + "y " + pressedY);
-		MapAction mapAction = new MapAction(mode, new Item(tab.getChosenOne(), pressedX, pressedY));
-		if (mode == MapAction.Type.FILL) {
-		    mapAction.setFillX(currentX);
-		    mapAction.setFillY(currentY);
+		if (!blocked) {
+		    pressedX = getTilesX(x);
+		    pressedY = getTilesY(y);
+		    currentX = pressedX;
+		    currentY = pressedY;
+//		    System.out.println("x " + pressedX + " y " + pressedY);
+		    switch (mode) {
+			case ADD:
+			case FILL: {
+			    MapAction mapAction = setCurrentActionWith(new Item(tab.getChosenOne(), pressedX, pressedY));
+			    if (mode == MapAction.Type.FILL) {
+				mapAction.setFillX(currentX);
+				mapAction.setFillY(currentY);
+			    }
+			}
+			break;
+			case DELETE:
+			case PROPERTIES: {
+			    blocked = true;
+			    ArrayList<Item> items = handler.getItems();
+			    ArrayList<Item> itemsMenu = new ArrayList<>();
+			    items.stream()
+				    .filter(item -> (item.getX() == currentX && item.getY() == currentY))
+				    .forEach(item -> itemsMenu.add(item));
+			    if (!itemsMenu.isEmpty()) {
+				ContextMenu contextMenu = new ContextMenu("", getStage(), (int) x, (int) y);
+				itemsMenu.forEach(item -> contextMenu.add(handler.getName(item.getId())));
+				contextMenu.setActivationListener(actor -> {
+				    int selected = contextMenu.getSelected();
+				    Item item = itemsMenu.get(selected);
+				    setCurrentActionWith(item);
+				    handler.addCurrentAction();
+				    contextMenu.hide();
+				    blocked = false;
+				});
+				contextMenu.show();
+			    }
+			}
+			break;
+		    }
 		}
-		handler.setCurrentAction(mapAction);
 		return true;
 	    }
 
 	    @Override
 	    public void touchDragged(InputEvent event, float x, float y, int pointer) {
-		x -= posX;
-		y -= posY;
-		x /= GameContext.TILE_WIDTH;
-		y /= GameContext.TILE_HEIGHT;
-		currentX = (int) x;
-		currentY = (int) y;
-		switch (mode) {
-		    case FILL:
-			handler.getCurrentAction().setFillX(currentX);
-			handler.getCurrentAction().setFillY(currentY);
-			break;
+		if (!blocked) {
+		    currentX = getTilesX(x);
+		    currentY = getTilesY(y);
+		    switch (mode) {
+			case FILL:
+			    handler.getCurrentAction().setFillX(currentX);
+			    handler.getCurrentAction().setFillY(currentY);
+			    break;
+		    }
 		}
 	    }
 
 	    @Override
-	    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-		handler.addCurrentAction();
+	    public void touchUp(InputEvent event, float x, float y, int pointer, int button
+	    ) {
+		if (!blocked) {
+		    pressedX = getTilesX(x);
+		    pressedY = getTilesY(y);
+		    if (pressedX == currentX && pressedY == currentY) {
+			handler.addCurrentAction();
+		    }
+		}
 	    }
 
 	    @Override
 	    public boolean keyDown(InputEvent event, int keycode) {
-		switch (keycode) {
-		    case Input.Keys.A:
-			mode = MapAction.Type.ADD;
-			break;
-		    case Input.Keys.D:
-			mode = MapAction.Type.DELETE;
-			break;
-		    case Input.Keys.F:
-			mode = MapAction.Type.FILL;
-			break;
-		    case Input.Keys.S:
-			handler.save();
-			break;
-		    case Input.Keys.L:
-			handler.load();
-			break;
-		    case Input.Keys.E:
-			Gdx.app.exit();
-			break;
+		if (!blocked) {
+		    switch (keycode) {
+			case Input.Keys.A:
+			    mode = MapAction.Type.ADD;
+			    break;
+			case Input.Keys.D:
+			    mode = MapAction.Type.DELETE;
+			    break;
+			case Input.Keys.F:
+			    mode = MapAction.Type.FILL;
+			    break;
+			case Input.Keys.S:
+			    handler.save();
+			    break;
+			case Input.Keys.L:
+			    handler.load();
+			    break;
+			case Input.Keys.E:
+			    Gdx.app.exit();
+			    break;
+			case Input.Keys.P:
+			    mode = MapAction.Type.PROPERTIES;
+			    break;
+		    }
 		}
 		return true;
 	    }
 
-	});
+	}
+	);
 	camera = new OrthographicCamera(getWidth(), getHeight());
 	camera.setToOrtho(true);
     }

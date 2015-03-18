@@ -31,6 +31,10 @@ public class ItemsHandler {
 	return ids.get(name);
     }
 
+    public String getName(int id) {
+	return bundles[id].name;
+    }
+
     public ItemsHandler() {
 	sprites = new Texture(Gdx.files.classpath("res").child("sprites.png"));
 	int tilesX = sprites.getWidth() / GameContext.TILE_WIDTH;
@@ -41,6 +45,7 @@ public class ItemsHandler {
 		regions[i * tilesX + j] = new TextureRegion(sprites,
 			j * GameContext.TILE_WIDTH, i * GameContext.TILE_HEIGHT,
 			GameContext.TILE_WIDTH, GameContext.TILE_HEIGHT);
+		regions[i * tilesX + j].flip(false, true);
 	    }
 	}
 	try {
