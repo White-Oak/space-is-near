@@ -120,6 +120,14 @@ import spaceisnear.game.GameContext;
 	    if (line.charAt(i) == ' ') {
 		previousSpace = i;
 	    }
+	    if (line.charAt(i) == '\n') {
+		String toAdd = line.substring(0, i);
+		list.add(toAdd);
+		line = line.substring(i + 1);
+		previousSpace = 0;
+		i = 0;
+		continue;
+	    }
 	    if (font.getBounds(before).width > maxWidth) {
 		if (previousSpace != 0) {
 		    String toAdd = line.substring(0, previousSpace);
@@ -127,6 +135,7 @@ import spaceisnear.game.GameContext;
 		    line = line.substring(previousSpace + 1);
 		    previousSpace = 0;
 		    i = 0;
+		    continue;
 		}
 	    }
 	    i++;

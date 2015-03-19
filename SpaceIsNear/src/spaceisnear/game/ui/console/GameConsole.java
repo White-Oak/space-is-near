@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.esotericsoftware.minlog.Logs;
 import lombok.Getter;
+import spaceisnear.Utils;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageChat;
 import spaceisnear.game.messages.MessageToSend;
@@ -178,6 +179,10 @@ public class GameConsole extends Actor {
 		if (split.length > 1) {
 		    sendPM(split[1], toStandAloneString(split, 2));
 		}
+		break;
+	    case "help":
+		byte[] contents = Utils.getContents(getClass().getResourceAsStream("/res/chatHelp"));
+		pushMessage(new ChatString(new String(contents), LogLevel.PRIVATE));
 		break;
 	}
     }
