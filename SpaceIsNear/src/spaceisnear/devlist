@@ -301,6 +301,10 @@
 -NETWORK FIXES
 +chat multi-line support fix
 -chat fix not being able to refocus main area
++button fixes
+    *Positioning
+    +Hover animation
++text field hover animation
 
 0.1.0
 +editor:

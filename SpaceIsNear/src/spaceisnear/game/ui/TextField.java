@@ -5,8 +5,10 @@
  */
 package spaceisnear.game.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -16,7 +18,7 @@ import lombok.Getter;
  *
  * @author White Oak
  */
-public final class TextField extends UIElement {
+public final class TextField extends UIElement implements Hoverable {
 
     private StringBuilder text = new StringBuilder();
     private int currentPosition;
@@ -27,9 +29,31 @@ public final class TextField extends UIElement {
     private int keycode;
     private long lastTimeActed;
     private final static long DELTA_ACTED = 100L;
+    private Color borderColor = new Color(0x0);
+    volatile private Color currentColor = borderColor.cpy();
+    private Color finalColor = new Color(0xff);
+
+    @Override
+    public void hoverAnimation(boolean hovered) {
+	if (hovered) {
+	    if (!currentColor.equals(finalColor)) {
+		currentColor.add(new Color(0x10));
+	    }
+	} else {
+	    if (!currentColor.equals(borderColor)) {
+		currentColor.sub(new Color(0x10));
+	    }
+	}
+    }
+
+    public void setBorderColor(Color color) {
+	this.borderColor = color;
+	currentColor = color;
+	finalColor = color.cpy().sub(new Color(0x30303000));
+    }
 
     public TextField() {
-	init();
+	this("");
     }
 
     public TextField(CharSequence text) {
@@ -86,6 +110,7 @@ public final class TextField extends UIElement {
 	});
 	setHeight(getPrefHeight());
 	setWidth(getPrefWidth());
+	setHoverable(this);
     }
 
     public void checkKeys() {
@@ -167,13 +192,17 @@ public final class TextField extends UIElement {
 //	renderer.begin(ShapeRenderer.ShapeType.Line);
 //	renderer.setColor(Color.WHITE);
 //	renderer.rect(0, 0, getWidth(), getHeight());
-//	renderer.end();
-//	renderer.begin(ShapeRenderer.ShapeType.Line);
-//	renderer.setColor(Color.BLACK);
-//	renderer.rect(0, 0, getWidth() + 1, getHeight());
-//	renderer.end();
+//	renderer.end();\
+	Gdx.gl.glEnable(GL20.GL_BLEND);
+	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+	renderer.begin(ShapeRenderer.ShapeType.Line);
+	renderer.setColor(currentColor);
+	renderer.rect(0, 0, getWidth() + 1, getHeight());
+	renderer.end();
+	Gdx.gl.glDisable(GL20.GL_BLEND);
 	//cursor
 	renderer.begin(ShapeRenderer.ShapeType.Line);
+	font.setColor(Color.BLACK);
 	if (focused) {
 	    final float x = 10 + font.getBounds(text, 0, currentPosition).width + startingXText;
 	    renderer.line(x, 3, x, font.getLineHeight() + 2);

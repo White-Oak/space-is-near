@@ -78,7 +78,7 @@ import spaceisnear.game.GameContext;
 	    case TALKING:
 		return Color.BLACK;
 	    case BROADCASTING:
-		return new Color(0, 0.5f, 0, 1);
+		return new Color(0x16a085ff);
 	    case WARNING:
 		return new Color(0xe74c3cff);
 	    case OOC:
