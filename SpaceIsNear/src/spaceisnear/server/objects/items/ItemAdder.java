@@ -1,9 +1,6 @@
 package spaceisnear.server.objects.items;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import spaceisnear.Utils;
 import spaceisnear.editor.*;
 import spaceisnear.game.objects.Position;
@@ -54,14 +51,11 @@ public class ItemAdder {
     }
 
     public void addItems() throws IOException {
-	FileHandle fh = Gdx.files.local("additems.json");
-	File f = fh.file();
+	File f = new File("additems.json");
 	if (f.exists()) {
-	    {
-		SaveLoadAction[] slas = Utils.GSON.fromJson(fh.reader(), SaveLoadAction[].class);
-		for (SaveLoadAction sla : slas) {
-		    addItem(new Position(sla.getX(), sla.getY()), sla.getItemId(), context, sla.getProperties());
-		}
+	    SaveLoadAction[] slas = Utils.GSON.fromJson(new FileReader(f), SaveLoadAction[].class);
+	    for (SaveLoadAction sla : slas) {
+		addItem(new Position(sla.getX(), sla.getY()), sla.getItemId(), context, sla.getProperties());
 	    }
 	}
     }

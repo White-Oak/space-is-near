@@ -117,7 +117,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    networking.connect(Main.IP, 54555);
 		} catch (IOException ex) {
 		    try {
-			Main.main(new String[]{"-mode", "host", "-hostip", "null"});
+			Main.main(new String[]{"-mode", "host"});
 		    } catch (ParseException ex1) {
 			Logs.error("client", "While trying to start server", ex1);
 		    }

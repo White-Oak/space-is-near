@@ -43,7 +43,7 @@
 	"blockingAir": true,
 	"blockingLight": true,
 	"imageIds": [1],
-	"stuckedByAddingFromScript": false,
+	"stuckedByAddingFromScript": true,
 	"description": "Universal obstacle.",
 	"defaultProperties": null
     },

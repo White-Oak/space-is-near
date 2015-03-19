@@ -46,7 +46,6 @@ public class ServerCore implements Runnable {
 	//items adding
 	ItemAdder itemAdder = new ItemAdder(context);
 	itemAdder.addItems();
-	Logs.info("server", "done");
 //	editorsManager.addDefaultCase();
 //	editorsManager.startUpdateCycle(context);
     }

@@ -93,7 +93,7 @@ public class Main {
 		    ServerCore serverCore = new ServerCore();
 		    serverCore.host();
 		    new Thread(serverCore, "SIN Server").start();
-		    Logs.info("server", "Hosted");
+		    Logs.info("server", "Server started");
 		} catch (IOException ex) {
 		    Logs.error("server", "While trying to start server", ex);
 		}
