@@ -37,19 +37,23 @@ public class Script_door extends InteractionScript {
 	boolean allowed = false;
 	String allowedString = (String) getProperty("allowed");
 	if (allowedString != null) {
-	    ServerGameObject interactor = getInteractor();
-	    List<Component> components = interactor.getComponents();
-	    for (Component component : components) {
-		if (component.getType() == ComponentType.INVENTORY) {
-		    InventoryComponent ic = (InventoryComponent) component;
-		    int itemId = ic.getSlots().get("id").getItemId();
-		    if (itemId != -1) {
-			StaticItem card = (StaticItem) context.getObjects().get(itemId);
-			String profession = (String) card.getVariableProperties().getProperty("profession");
-			assert profession != null;
-			allowed = allowedString.contains(profession);
+	    if (!allowedString.equals("all")) {
+		ServerGameObject interactor = getInteractor();
+		List<Component> components = interactor.getComponents();
+		for (Component component : components) {
+		    if (component.getType() == ComponentType.INVENTORY) {
+			InventoryComponent ic = (InventoryComponent) component;
+			int itemId = ic.getSlots().get("id").getItemId();
+			if (itemId != -1) {
+			    StaticItem card = (StaticItem) context.getObjects().get(itemId);
+			    String profession = (String) card.getVariableProperties().getProperty("profession");
+			    assert profession != null;
+			    allowed = allowedString.contains(profession);
+			}
 		    }
 		}
+	    } else {
+		allowed = true;
 	    }
 	}
 	return allowed;

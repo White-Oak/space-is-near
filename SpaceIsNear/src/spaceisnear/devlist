@@ -254,7 +254,7 @@
 	+Pressure map is copied to internal map for editor
 	+moving on JFrame
 
-0.0.10 
+0.0.10 r228
 +Doors opening/closing
     +Interaction with no item in active hand or with id should lead to opening a door.
 +IDs' basics (ID of player, his profession)
