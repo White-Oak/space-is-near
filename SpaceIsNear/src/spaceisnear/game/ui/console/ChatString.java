@@ -13,7 +13,7 @@ import spaceisnear.game.objects.Position;
  *
  * @author White Oak
  */
-public class LogString implements Serializable {
+public class ChatString implements Serializable {
 
     @Getter private final String message;
     private int timesMessaged = 1;
@@ -22,7 +22,7 @@ public class LogString implements Serializable {
     @Getter private final String frequency;
     @Getter private final int receiverID;
 
-    LogString() {
+    ChatString() {
 	this.message = null;
 	this.level = null;
 	this.position = null;
@@ -30,11 +30,11 @@ public class LogString implements Serializable {
 	this.receiverID = 0;
     }
 
-    public LogString(String message, LogLevel level) {
+    public ChatString(String message, LogLevel level) {
 	this(message, level, null, null, 0);
     }
 
-    private LogString(String message, LogLevel level, Position position, String frequency, int receiverID) {
+    private ChatString(String message, LogLevel level, Position position, String frequency, int receiverID) {
 	this.message = message;
 	this.level = level;
 	this.position = position;
@@ -42,15 +42,15 @@ public class LogString implements Serializable {
 	this.receiverID = receiverID;
     }
 
-    public LogString(String message, LogLevel level, Position position) {
+    public ChatString(String message, LogLevel level, Position position) {
 	this(message, level, position, null, 0);
     }
 
-    public LogString(String message, LogLevel level, String frequency) {
+    public ChatString(String message, LogLevel level, String frequency) {
 	this(message, level, null, frequency, 0);
     }
 
-    public LogString(String message, LogLevel level, int receiverID) {
+    public ChatString(String message, LogLevel level, int receiverID) {
 	this(message, level, null, null, receiverID);
     }
 

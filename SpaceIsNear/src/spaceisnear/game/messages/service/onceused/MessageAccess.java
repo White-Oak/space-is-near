@@ -4,7 +4,7 @@ import lombok.Getter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.ui.console.LogLevel;
-import spaceisnear.game.ui.console.LogString;
+import spaceisnear.game.ui.console.ChatString;
 
 public class MessageAccess extends Message implements NetworkableMessage {
 
@@ -19,7 +19,7 @@ public class MessageAccess extends Message implements NetworkableMessage {
     public void processForClient(GameContext context) {
 	context.getCore().getNetworking().setLogined(isAccess());
 	if (!context.getCore().getNetworking().isLogined()) {
-	    context.getCore().log(new LogString("Incorrect pair of login/password", LogLevel.WARNING));
+	    context.getCore().chat(new ChatString("Incorrect pair of login/password", LogLevel.WARNING));
 	}
     }
 

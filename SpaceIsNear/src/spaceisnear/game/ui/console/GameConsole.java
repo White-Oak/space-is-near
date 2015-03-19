@@ -41,7 +41,7 @@ public class GameConsole extends Actor {
 	setHeight(height - tf.getHeight());
 	font = new BitmapFont(Gdx.files.classpath("segoe_ui.fnt"), false);
 	textField = tf;
-	log = new InGameLog(830, 2, width - 30, (int) (height - 2 - textField.getHeight()));
+	log = new InGameLog(830, 2, width - 60, (int) (height - 2 - textField.getHeight()));
 	this.context = context;
 	scrollBarSize = sizeOfScrollBar();
 	camera.setToOrtho(true);
@@ -110,7 +110,7 @@ public class GameConsole extends Actor {
 	GamerPlayer player = ((GameContext) context).getPlayer();
 	String nickname = player.getNickname();
 	message = nickname + " says: " + message;
-	LogString logString = new LogString(message, LogLevel.TALKING, player.getPosition());
+	ChatString logString = new ChatString(message, LogLevel.TALKING, player.getPosition());
 	sendLogString(logString);
     }
 
@@ -127,7 +127,7 @@ public class GameConsole extends Actor {
 		sendOOC(text);
 	    }
 	} else {
-	    pushMessage(new LogString("You cannot write messages while not connected!", LogLevel.WARNING));
+	    pushMessage(new ChatString("You cannot write messages while not connected!", LogLevel.WARNING));
 	}
 	textField.setText("");
     }
@@ -135,7 +135,7 @@ public class GameConsole extends Actor {
     private void sendOOC(String text) {
 	MessageClientInformation mci = context.getCore().getNetworking().getMci();
 	text = mci.getLogin() + ": " + text;
-	LogString logString = new LogString(text, LogLevel.OOC);
+	ChatString logString = new ChatString(text, LogLevel.OOC);
 	sendLogString(logString);
     }
 
@@ -143,7 +143,7 @@ public class GameConsole extends Actor {
 	GamerPlayer player = context.getPlayer();
 	String nickname = player.getNickname();
 	message = nickname + " whispers: " + message;
-	LogString logString = new LogString(message, LogLevel.WHISPERING, player.getPosition());
+	ChatString logString = new ChatString(message, LogLevel.WHISPERING, player.getPosition());
 	sendLogString(logString);
     }
 
@@ -190,14 +190,14 @@ public class GameConsole extends Actor {
 	    StringBuilder stringBuilder = new StringBuilder(20);
 	    stringBuilder.append('[').append(context.getPlayerID()).append("] -> [").append(receiverID).append("] ")
 		    .append(context.getPlayer().getNickname()).append(" messages: ").append(message);
-	    LogString logString = new LogString(stringBuilder.toString(), LogLevel.PRIVATE, receiverID);
+	    ChatString logString = new ChatString(stringBuilder.toString(), LogLevel.PRIVATE, receiverID);
 	    sendLogString(logString);
 	} catch (NumberFormatException numberFormatException) {
-	    pushMessage(new LogString(receiver + " is not a correct ID", LogLevel.WARNING));
+	    pushMessage(new ChatString(receiver + " is not a correct ID", LogLevel.WARNING));
 	}
     }
 
-    private void sendLogString(LogString logString) {
+    private void sendLogString(ChatString logString) {
 	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
 	context.sendDirectedMessage(messageToSend);
     }
@@ -215,7 +215,7 @@ public class GameConsole extends Actor {
 	    } else {
 		standAloneMessage = toStandAloneString(message, 2);
 	    }
-	    LogString logString = new LogString(nickname + " broadcasts: " + standAloneMessage, LogLevel.BROADCASTING, frequency);
+	    ChatString logString = new ChatString(nickname + " broadcasts: " + standAloneMessage, LogLevel.BROADCASTING, frequency);
 	    sendLogString(logString);
 	}
     }
@@ -265,7 +265,7 @@ public class GameConsole extends Actor {
 	return false;
     }
 
-    public void pushMessage(LogString str) {
+    public void pushMessage(ChatString str) {
 	log.pushMessage(str, context);
 	scrollBarSize = sizeOfScrollBar();
 	if (!scrollBarClicked) {

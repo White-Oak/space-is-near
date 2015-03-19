@@ -16,7 +16,7 @@ import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Position;
-import spaceisnear.game.ui.console.LogString;
+import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.server.objects.*;
 import spaceisnear.server.objects.items.ServerItemsArchive;
 import spaceisnear.server.objects.items.StaticItem;
@@ -168,7 +168,7 @@ public final class ServerContext extends Context {
 	return (x >= 0 && x < obstacles.getWidth()) && (y >= 0 && y < obstacles.getHeight());
     }
 
-    public void chatLog(final LogString log) {
+    public void chatLog(final ChatString log) {
 	Logs.info("chat", "[" + log.getLevel() + "] " + log.toString());
 	switch (log.getLevel()) {
 	    case TALKING:
@@ -197,7 +197,7 @@ public final class ServerContext extends Context {
 	}
     }
 
-    private void processIncomingTalkingLogMessage(final LogString log) {
+    private void processIncomingTalkingLogMessage(final ChatString log) {
 	for (int i = 0; i < players.size(); i++) {
 	    Player player = players.get(i);
 	    Position positionToHear = player.getPosition();
@@ -208,7 +208,7 @@ public final class ServerContext extends Context {
 	}
     }
 
-    private void processIncomingWhisperingLogMessage(final LogString log) {
+    private void processIncomingWhisperingLogMessage(final ChatString log) {
 	for (int i = 0; i < players.size(); i++) {
 	    Player player = players.get(i);
 	    Position positionToHear = player.getPosition();

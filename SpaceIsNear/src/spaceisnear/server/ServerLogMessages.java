@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import spaceisnear.game.ui.console.LogString;
+import spaceisnear.game.ui.console.ChatString;
 
 /**
  *
@@ -34,7 +34,7 @@ public class ServerLogMessages {
 	}
     }
 
-    public void log(LogString string) {
+    public void log(ChatString string) {
 	try {
 	    Date date = new Date(System.currentTimeMillis());
 	    logFOS.write(("[" + date.toString() + "]").getBytes("UTF-8"));

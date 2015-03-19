@@ -16,7 +16,7 @@ import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;
 import spaceisnear.game.ui.UIElement;
 import spaceisnear.game.ui.console.LogLevel;
-import spaceisnear.game.ui.console.LogString;
+import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.game.ui.context.ContextMenu;
 
 public class Inventory extends Actor {
@@ -326,7 +326,7 @@ public class Inventory extends Actor {
 	switch (currentMenu.getSelected()) {
 	    case 0:
 		String description = item.getProperties().getDescription();
-		context.getCore().log(new LogString(description, LogLevel.TALKING));
+		context.getCore().chat(new ChatString(description, LogLevel.TALKING));
 		break;
 	}
     }

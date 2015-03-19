@@ -53,7 +53,7 @@ public class HealthComponent extends Component {
 			if (ableToFlood) {
 			    final ServerContext context = (ServerContext) getContext();
 			    final String nickname = player.getNickname();
-			    context.chatLog(new LogString(nickname + " задыхается.", LogLevel.TALKING, getPosition()));
+			    context.chatLog(new ChatString(nickname + " задыхается.", LogLevel.TALKING, getPosition()));
 			    ableToFlood = false;
 			    registerForOneShotTask(() -> ableToFlood = true, FLOOD_DELTA);
 			}
@@ -71,7 +71,7 @@ public class HealthComponent extends Component {
 				    KNOCKBACKED_PASSES);
 			    final ServerContext context = (ServerContext) getContext();
 			    final String nickname = player.getNickname();
-			    context.chatLog(new LogString(nickname + " упал без сознания.", LogLevel.TALKING, getPosition()));
+			    context.chatLog(new ChatString(nickname + " упал без сознания.", LogLevel.TALKING, getPosition()));
 			    //I suppose it should not be knockbacking but animation sending
 			    getContext().sendToID(new MessageToSend(messageKnockbacked), player.getId());
 			    ableToFloodKnockbacking = false;

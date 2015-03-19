@@ -299,7 +299,7 @@
 ---
 ---
 -NETWORK FIXES
--chat multi-line support fix
++chat multi-line support fix
 -chat fix not being able to refocus main area
 
 0.1.0

@@ -14,7 +14,7 @@ import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.objects.*;
 import spaceisnear.game.ui.console.LogLevel;
-import spaceisnear.game.ui.console.LogString;
+import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.server.Client;
 import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.items.*;
@@ -314,8 +314,8 @@ import spaceisnear.server.objects.items.*;
 	    }
 	    Player get = client.getPlayer();
 	    String message = get.getNickname() + " has connected to SIN!";
-	    core.getContext().chatLog(new LogString(message, LogLevel.BROADCASTING, "145.9"));
-	    core.getContext().chatLog(new LogString("The city of Dunwall warns you: DO NOT USE CHAT. It is broken.", LogLevel.BROADCASTING,
+	    core.getContext().chatLog(new ChatString(message, LogLevel.BROADCASTING, "145.9"));
+	    core.getContext().chatLog(new ChatString("The city of Dunwall warns you: DO NOT USE CHAT. It is broken.", LogLevel.BROADCASTING,
 		    "145.9"));
 	};
 	new Thread(runnable, "Messaging about connected").start();

@@ -125,11 +125,14 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    }
 		    synchronized (Corev2.this) {
 			try {
-			    log(new LogString("Couldn't find a host on " + Main.IP, LogLevel.WARNING));
-			    log(new LogString("Starting server on " + Main.IP, LogLevel.WARNING));
+			    chat(new ChatString("Couldn't find a host on " + Main.IP, LogLevel.WARNING));
+			    chat(new ChatString("Starting server on " + Main.IP, LogLevel.WARNING));
 			    new Thread(() -> {
 				for (int i = 0; i < 50; i++) {
-				    log(new LogString("Hey I'm just a sailor " + i, LogLevel.WARNING));
+				    chat(new ChatString("Hey I'm just a sailor " + i
+					    + " and this is biggest-biggest string and I'd like to test this fulfully "
+					    + "cause I'm no noob and I can into multi-lining",
+					    LogLevel.WARNING));
 				    try {
 					Thread.sleep(50L);
 				    } catch (InterruptedException ex1) {
@@ -359,7 +362,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	switch (currentMenu.getSelected()) {
 	    case 0:
 		String description = item.getProperties().getDescription();
-		log(new LogString(description, LogLevel.TALKING));
+		chat(new ChatString(description, LogLevel.TALKING));
 		break;
 	    case 1:
 		int id = item.getId();
@@ -371,7 +374,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	}
     }
 
-    public void log(LogString log) {
+    public void chat(ChatString log) {
 	if (getConsole() != null) {
 	    getConsole().pushMessage(log);
 	}
