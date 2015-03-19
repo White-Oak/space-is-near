@@ -119,6 +119,7 @@ public final class TextField extends UIElement implements Hoverable {
 		switch (keycode) {
 		    case Input.Keys.ENTER:
 			activated();
+			keycode = 0;
 			break;
 		    case Input.Keys.BACKSPACE:
 			removeCharacter();

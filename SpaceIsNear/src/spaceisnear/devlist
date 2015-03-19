@@ -300,7 +300,7 @@
 ---
 -NETWORK FIXES
 +chat multi-line support fix
--chat fix not being able to refocus main area
++fix chat keeping resending last message
 +button fixes
     *Positioning
     +Hover animation
