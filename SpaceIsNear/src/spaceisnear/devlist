@@ -284,8 +284,7 @@
 	+adapted load mechanism in game
     +Status bar (mode, tiles under the cursor)
     -ERASER tool (eraser mode)
--Door properties implemented properly
-    
+ˇ+Door properties implemented properlyˇ
 --
 +send properties of objects that are near connected player first for faster connection
 +New scripting system
@@ -295,6 +294,10 @@
     *Note that minlog class Log is renamed to Logs to evade overlapping with kryonet Log class
 *Fixed bug when lamp appeared to be turned off on server launch 
 -chat multi-line support fix
+-chat fix not being able to refocus main area
+
+0.0.11
+-NETWORK FIXES
 
 0.1.0
 

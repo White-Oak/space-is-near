@@ -89,14 +89,15 @@ public class PlayerControllableComponent extends Component {
 		    boolean property = (boolean) prop;
 		    if (!property) {
 			if (context.getObstacles().isReacheable(x + deltaX, y + deltaY)) {
-			    final MessagePositionChanged messageTeleported = new MessagePositionChanged(staticItem.getPosition(), staticItem.getId(),
+			    final MessagePositionChanged messageTeleported = new MessagePositionChanged(staticItem.getPosition(),
+				    staticItem.getId(),
 				    new Position(deltaX, deltaY));
 			    staticItem.message(messageTeleported);
 			    getContext().sendDirectedMessage(new MessageToSend(messageTeleported));
 			    return new Position(deltaX, deltaY);
 			}
 		    } else {
-			MessageInteracted interaction = new MessageInteracted(staticItem.getId(), -1);
+			MessageInteracted interaction = new MessageInteracted(staticItem.getId(), getOwnerId());
 			context.sendDirectedMessage(interaction);
 		    }
 		}

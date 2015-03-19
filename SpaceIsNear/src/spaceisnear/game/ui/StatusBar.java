@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Setter;
-import static spaceisnear.game.ui.UIElement.getRenderer;
 
 /**
  *
