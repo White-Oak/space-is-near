@@ -254,7 +254,7 @@
 	+Pressure map is copied to internal map for editor
 	+moving on JFrame
 
-0.0.10
+0.0.10 
 +Doors opening/closing
     +Interaction with no item in active hand or with id should lead to opening a door.
 +IDs' basics (ID of player, his profession)
@@ -263,6 +263,9 @@
     +knockbacking if critical
 +MessageKnockbacked
     +processing on server
++Door properties
+    +allowed (for different professions)
++Proffesions list (professions.json)
 --
 +lighting system
 +Inventory interaction
@@ -283,8 +286,6 @@
     +rewrote save/load mechanism for editor
 	+adapted load mechanism in game
     +Status bar (mode, tiles under the cursor)
-    -ERASER tool (eraser mode)
-ˇ+Door properties implemented properlyˇ
 --
 +send properties of objects that are near connected player first for faster connection
 +New scripting system
@@ -293,13 +294,17 @@
 +Log system reworked #58
     *Note that minlog class Log is renamed to Logs to evade overlapping with kryonet Log class
 *Fixed bug when lamp appeared to be turned off on server launch 
+
+0.0.11
+---
+---
+-NETWORK FIXES
 -chat multi-line support fix
 -chat fix not being able to refocus main area
 
-0.0.11
--NETWORK FIXES
-
 0.1.0
++editor:
+    -ERASER tool (eraser mode)
 
 
 16.03.15

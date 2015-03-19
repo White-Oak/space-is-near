@@ -28,7 +28,7 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 	Label loginLabel = new Label("Nickname", labelStyle);
 	Label proLabel = new Label("Profession", labelStyle);
 	nickname = new TextField(getRandomName());
-	profession = new TextField("CCleaner");
+	profession = new TextField(Jobs.getRandomProfession());
 	join = new Button("Join!");
 
 	int x = (Gdx.graphics.getWidth() - 400) >> 1;
@@ -69,7 +69,7 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 	String[] names = {"Aaron", "Abbey", "Acacia", "Adam", "Aden", "Adolph",
 			  "Alexia", "Alf", "Alexandria", "Amber", "Azura", "Antonio", "Amadeus"};
 	String[] surnames = {"Setters", "Shann", "Shaw", "Shield", "Settle",
-			     "Shady", "Share", "Shark", "Shill", "Sherwin", "Vivaldi", "Mozart"};
+			     "Shady", "Share", "Shark", "Shill", "Sherwin", "Vivaldi", "Mozart", "Strain"};
 	Random rnd = new Random();
 	return names[rnd.nextInt(names.length)] + " " + surnames[rnd.nextInt(surnames.length)];
     }
