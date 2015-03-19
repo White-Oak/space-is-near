@@ -10,11 +10,11 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.server.*;
 
-public class MessageLog extends Message implements NetworkableMessage {
+public class MessageChat extends Message implements NetworkableMessage {
 
     @Getter private final ChatString log;
 
-    public MessageLog(ChatString log) {
+    public MessageChat(ChatString log) {
 	super(MessageType.LOG);
 	this.log = log;
     }

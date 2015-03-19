@@ -305,6 +305,8 @@
     *Positioning
     +Hover animation
 +text field hover animation
+*chat messages fixed
+    -chat help included
 
 0.1.0
 +editor:

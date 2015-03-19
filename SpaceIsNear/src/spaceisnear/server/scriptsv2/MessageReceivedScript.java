@@ -1,8 +1,7 @@
 package spaceisnear.server.scriptsv2;
 
 import spaceisnear.game.components.server.VariablePropertiesComponent;
-import spaceisnear.game.messages.Message;
-import spaceisnear.game.messages.MessageType;
+import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;
@@ -29,9 +28,6 @@ public abstract class MessageReceivedScript extends ItemScript {
     protected String getPropertyMessageName() {
 	assert message.getMessageType() == MessageType.PROPERTY_SET;
 	return ((MessagePropertySet) message).getName();
-    }
-
-    protected void sendPlayerPrivateMessage(String value) {
     }
 
     protected Object getPropertyMessageValue() {

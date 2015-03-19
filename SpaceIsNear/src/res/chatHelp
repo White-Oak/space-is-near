@@ -1,0 +1,23 @@
+-d
+-debug on/off
+
+-stoppull 
+Stops pulling
+
+-h
+-broadcast all/{freq} message
+    all = 145.9
+    {freq} should match "[0-9]{3}[.][0-9]". ex: 981.0
+Broadcasts a message
+
+-ooc
+Sends a message to OOC
+
+-w
+-whisper 
+Whispers a message
+
+-pm me/{id}
+    me = your id
+    id = id of a player
+Sends a private message 

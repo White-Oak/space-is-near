@@ -49,6 +49,7 @@ import spaceisnear.game.GameContext;
 
     public void pushMessage(ChatString str, GameContext context) {
 	if (str.getReceiverID() != 0 && str.getReceiverID() != context.getPlayerID()) {
+	    System.out.println(str.getReceiverID());
 	    return;
 	}
 	if (!acceptDebugMessages && str.getLevel() == LogLevel.DEBUG) {
@@ -78,13 +79,15 @@ import spaceisnear.game.GameContext;
 	    case TALKING:
 		return Color.BLACK;
 	    case BROADCASTING:
-		return new Color(0x16a085ff);
+		return new Color(0x16d065ff);
 	    case WARNING:
 		return new Color(0xe74c3cff);
 	    case OOC:
-		return Color.BLUE;
+		return new Color(0x3498dbff);
 	    case PRIVATE:
-		return Color.MAGENTA;
+		return new Color(0x9b59b6ff);
+	    case WHISPERING:
+		return new Color(0x7f8c8dff);
 	    default:
 		return Color.GRAY;
 	}

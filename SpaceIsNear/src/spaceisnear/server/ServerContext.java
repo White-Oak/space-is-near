@@ -1,7 +1,5 @@
 package spaceisnear.server;
 
-import spaceisnear.game.components.server.context.ServerContextMenu;
-import spaceisnear.game.components.server.context.ServerContextSubMenu;
 import com.esotericsoftware.minlog.Logs;
 import java.util.*;
 import lombok.Getter;
@@ -10,6 +8,8 @@ import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.inventory.InventorySlot;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
+import spaceisnear.game.components.server.context.ServerContextMenu;
+import spaceisnear.game.components.server.context.ServerContextSubMenu;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
@@ -180,19 +180,22 @@ public final class ServerContext extends Context {
 		    Player player = players.get(i);
 		    boolean radioPlayer = doesPlayerHasEnabledRadioOnFrequency(player, log.getFrequency());
 		    if (radioPlayer || bufferMap[player.getPosition().getX()][player.getPosition().getY()] > 0) {
-			getNetworking().sendToClientID(i, new MessageLog(log));
+			getNetworking().sendToClientID(i, new MessageChat(log));
 		    }
 		}
 		break;
 	    case OOC:
-		getNetworking().sendToAll(new MessageLog(log));
+		getNetworking().sendToAll(new MessageChat(log));
 		break;
 	    case WHISPERING:
 		processIncomingWhisperingLogMessage(log);
 		break;
 	    case PRIVATE:
-		Player get = (Player) getObjects().get(log.getReceiverID());
-		get.message(new MessagePropertySet(log.getReceiverID(), "messages", log.getMessage()));
+		final AbstractGameObject get1 = getObjects().get(log.getReceiverID());
+		if (get1.getType() == GameObjectType.PLAYER) {
+		    Player get = (Player) get1;
+		    get.message(new MessagePropertySet(log.getReceiverID(), "messages", log));
+		}
 		break;
 	}
     }
@@ -203,7 +206,7 @@ public final class ServerContext extends Context {
 	    Position positionToHear = player.getPosition();
 	    Position positionToSay = log.getPosition();
 	    if (isHearingLogMessage(positionToSay, positionToHear)) {
-		getNetworking().sendToClientID(i, new MessageLog(log));
+		getNetworking().sendToClientID(i, new MessageChat(log));
 	    }
 	}
     }
@@ -214,7 +217,7 @@ public final class ServerContext extends Context {
 	    Position positionToHear = player.getPosition();
 	    Position positionToSay = log.getPosition();
 	    if (isHearingLogMessage(positionToSay, positionToHear)) {
-		getNetworking().sendToClientID(i, new MessageLog(log));
+		getNetworking().sendToClientID(i, new MessageChat(log));
 	    }
 	}
     }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.esotericsoftware.minlog.Logs;
 import lombok.Getter;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.messages.MessageLog;
+import spaceisnear.game.messages.MessageChat;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.messages.service.onceused.MessageClientInformation;
@@ -150,8 +150,7 @@ public class GameConsole extends Actor {
     private void processControlSequence(String text) {
 	String substring = text.substring(1);
 	String[] split = substring.split(" ");
-	String cs = split[0];
-	String message = substring.substring(split[0].length() + 1);
+	String message = substring.substring(split[0].length()).trim();
 	switch (split[0]) {
 	    case "d":
 	    case "debug":
@@ -198,7 +197,7 @@ public class GameConsole extends Actor {
     }
 
     private void sendLogString(ChatString logString) {
-	MessageToSend messageToSend = new MessageToSend(new MessageLog(logString));
+	MessageToSend messageToSend = new MessageToSend(new MessageChat(logString));
 	context.sendDirectedMessage(messageToSend);
     }
 
@@ -233,18 +232,19 @@ public class GameConsole extends Actor {
     }
 
     private boolean isGoodFrequency(String frequency) {
-	String[] split1 = frequency.split("\\.");
-	if (split1.length == 2) {
-	    if (split1[0].length() <= 3 && split1[1].length() == 1) {
-		String regex = "[0-9]+";
-		if (split1[0].matches(regex)) {
-		    if (split1[1].length() == 1) {
-			return split1[1].matches(regex);
-		    }
-		}
-	    }
-	}
-	return false;
+	return frequency.matches("[0-9]{3}[.][0-9]");
+//	String[] split1 = frequency.split("\\.");
+//	if (split1.length == 2) {
+//	    if (split1[0].length() <= 3 && split1[1].length() == 1) {
+//		String regex = "[0-9]+";
+//		if (split1[0].matches(regex)) {
+//		    if (split1[1].length() == 1) {
+//			return split1[1].matches(regex);
+//		    }
+//		}
+//	    }
+//	}
+//	return false;
     }
 
     private void processDebugRequestMessage(String[] split) {

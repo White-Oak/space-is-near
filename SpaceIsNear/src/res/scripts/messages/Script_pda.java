@@ -1,7 +1,9 @@
 package res.scripts.messages;
 
-import spaceisnear.server.scriptsv2.MessageReceivedScript;
+import spaceisnear.game.messages.MessageChat;
 import spaceisnear.game.messages.MessageType;
+import spaceisnear.game.ui.console.ChatString;
+import spaceisnear.server.scriptsv2.MessageReceivedScript;
 
 /**
  *
@@ -18,10 +20,9 @@ public class Script_pda extends MessageReceivedScript {
 		//Tell method that we are fine with handling the message by ourself
 		dontProcessOnYourOwn();
 		//Add to property
-		String value = (String) getPropertyMessageValue();
-		value += System.lineSeparator() + value;
+		ChatString value = (ChatString) getPropertyMessageValue();
 		//Send to player the message
-		sendPlayerPrivateMessage(value);
+		context.sendToNetwork(new MessageChat(value));
 	    }
 	}
     }

@@ -8,8 +8,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.esotericsoftware.minlog.Logs;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.*;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.ArrayUtils;
@@ -127,19 +125,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 			try {
 			    chat(new ChatString("Couldn't find a host on " + Main.IP, LogLevel.WARNING));
 			    chat(new ChatString("Starting server on " + Main.IP, LogLevel.WARNING));
-			    new Thread(() -> {
-				for (int i = 0; i < 50; i++) {
-				    chat(new ChatString("Hey I'm just a sailor " + i
-					    + " and this is biggest-biggest string and I'd like to test this fulfully "
-					    + "cause I'm no noob and I can into multi-lining",
-					    LogLevel.WARNING));
-				    try {
-					Thread.sleep(50L);
-				    } catch (InterruptedException ex1) {
-					Logger.getLogger(Corev2.class.getName()).log(Level.SEVERE, null, ex1);
-				    }
-				}
-			    }, "shitty wizard").start();
 			    networking.connect(Main.IP, 54555);
 			} catch (IOException ex1) {
 			    Logs.error("client", "While trying to connect to new server", ex1);
