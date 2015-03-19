@@ -13,7 +13,7 @@ import lombok.*;
 import spaceisnear.abstracts.*;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.PaintableComponent;
-import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
+import spaceisnear.game.components.server.context.ServerContextMenu;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.*;
 import spaceisnear.server.ServerContext;

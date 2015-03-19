@@ -1,6 +1,6 @@
 name: door
-allowed: CCleaner, Captain,...
+allowed: all | Janitor, Captain,...
 ---
 name: id
 name: Ally Belcher
-proffession: CCleaner
+proffession: Janitor

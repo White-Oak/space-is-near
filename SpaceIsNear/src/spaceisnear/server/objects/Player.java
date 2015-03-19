@@ -5,7 +5,7 @@ import lombok.Setter;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.inventory.InventoryComponent;
 import spaceisnear.game.components.server.*;
-import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
+import spaceisnear.game.components.server.context.ServerContextMenu;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.server.ServerContext;
 

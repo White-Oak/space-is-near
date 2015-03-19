@@ -1,5 +1,7 @@
 package spaceisnear.server;
 
+import spaceisnear.game.components.server.context.ServerContextMenu;
+import spaceisnear.game.components.server.context.ServerContextSubMenu;
 import com.esotericsoftware.minlog.Logs;
 import java.util.*;
 import lombok.Getter;
@@ -8,7 +10,6 @@ import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.inventory.InventorySlot;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
-import spaceisnear.game.components.server.scriptprocessors.context.*;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;

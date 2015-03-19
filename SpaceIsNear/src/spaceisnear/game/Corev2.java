@@ -15,7 +15,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.ArrayUtils;
 import spaceisnear.*;
 import spaceisnear.abstracts.*;
-import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
+import spaceisnear.game.components.server.context.ServerContextMenu;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.NetworkingObject;

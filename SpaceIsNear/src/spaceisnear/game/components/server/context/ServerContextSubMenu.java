@@ -1,4 +1,4 @@
-package spaceisnear.game.components.server.scriptprocessors.context;
+package spaceisnear.game.components.server.context;
 
 import java.io.Serializable;
 import lombok.Data;

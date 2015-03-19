@@ -1,7 +1,7 @@
 package spaceisnear.game.messages;
 
 import com.esotericsoftware.minlog.Logs;
-import spaceisnear.game.components.server.scriptprocessors.context.ContextMenuForItems;
+import spaceisnear.game.components.server.context.ContextMenuForItems;
 import spaceisnear.server.*;
 import spaceisnear.server.objects.items.StaticItem;
 

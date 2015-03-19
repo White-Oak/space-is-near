@@ -2,7 +2,7 @@ package spaceisnear.game.messages;
 
 import lombok.Getter;
 import spaceisnear.game.GameContext;
-import spaceisnear.game.components.server.scriptprocessors.context.ServerContextMenu;
+import spaceisnear.game.components.server.context.ServerContextMenu;
 
 /**
  *
