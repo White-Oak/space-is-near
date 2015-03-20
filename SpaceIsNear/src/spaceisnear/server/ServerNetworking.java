@@ -266,8 +266,10 @@ import spaceisnear.server.objects.items.*;
 	return item;
     }
 
+    public final static int BUFFER_SIZE = 256 * 512, O_BUFFER_SIZE = 512;
+
     public void host() throws IOException {
-	server = new Server(256 * 1024, 1024);
+	server = new Server(BUFFER_SIZE, O_BUFFER_SIZE);
 	Registerer.registerEverything(server);
 	server.start();
 	server.addListener(this);

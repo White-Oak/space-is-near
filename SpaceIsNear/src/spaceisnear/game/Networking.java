@@ -22,7 +22,7 @@ import spaceisnear.server.*;
     @Setter @Getter private boolean logined, joined, playable;
 
     public void connect(String host, int tcpPort) throws IOException {
-	client = new Client(256 * 1024, 1024);
+	client = new Client(ServerNetworking.BUFFER_SIZE, ServerNetworking.O_BUFFER_SIZE);
 	Registerer.registerEverything(client);
 	client.start();
 	client.addListener(this);
