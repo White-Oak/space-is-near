@@ -9,6 +9,7 @@
  */
 package spaceisnear.game.components.server;
 
+import spaceisnear.game.messages.properties.MessagePositionChanged;
 import java.util.List;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.Component;

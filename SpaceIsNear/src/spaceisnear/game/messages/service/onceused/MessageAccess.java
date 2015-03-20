@@ -1,14 +1,14 @@
 package spaceisnear.game.messages.service.onceused;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.*;
-import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.game.ui.console.ChatString;
+import spaceisnear.game.ui.console.LogLevel;
 
-public class MessageAccess extends Message implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageAccess extends Message implements NetworkableMessage {
 
-    @Getter private final boolean access;
+    @Getter private boolean access;
 
     public MessageAccess(boolean access) {
 	super(MessageType.ACCESS);

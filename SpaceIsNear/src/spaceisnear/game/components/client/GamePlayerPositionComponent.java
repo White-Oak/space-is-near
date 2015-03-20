@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.components.client;
 
+import spaceisnear.game.messages.properties.MessagePositionChanged;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.messages.*;

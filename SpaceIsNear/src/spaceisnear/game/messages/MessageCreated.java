@@ -5,7 +5,7 @@
  */
 package spaceisnear.game.messages;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.objects.*;
 import spaceisnear.starting.LoadingScreen;
@@ -15,9 +15,9 @@ import spaceisnear.starting.LoadingScreen;
  *
  * @author White Oak
  */
-public class MessageCreated extends Message implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PROTECTED) public class MessageCreated extends Message implements NetworkableMessage {
 
-    @Getter private final GameObjectType type;
+    @Getter private GameObjectType type;
 
     public MessageCreated(GameObjectType type) {
 	super(MessageType.CREATED_SIMPLIFIED);

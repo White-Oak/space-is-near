@@ -1,15 +1,15 @@
 package spaceisnear.game.messages;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.Utils;
 import spaceisnear.server.*;
 
 /**
  * @author LPzhelud
  */
-public class MessageControlledByInput extends DirectedMessage implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageControlledByInput extends DirectedMessage implements NetworkableMessage {
 
-    @Getter private final Type type;
+    @Getter private Type type;
 
     public MessageControlledByInput(Type type, int id) {
 	super(MessageType.CONTROLLED, id);

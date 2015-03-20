@@ -5,7 +5,7 @@
  */
 package spaceisnear.game.messages.properties;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.DirectedMessage;
@@ -13,9 +13,9 @@ import spaceisnear.game.messages.MessageType;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Player;
 
-public class MessageNicknameSet extends DirectedMessage implements MessagePropertable {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageNicknameSet extends DirectedMessage implements MessagePropertable {
 
-    @Getter private final String nickname;
+    @Getter private String nickname;
 
     public MessageNicknameSet(int id, String nickname) {
 	super(MessageType.NICKNAME_SET, id);

@@ -1,6 +1,8 @@
 package spaceisnear.game.messages;
 
 import com.esotericsoftware.minlog.Logs;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import spaceisnear.game.components.server.context.ContextMenuForItems;
 import spaceisnear.server.*;
 import spaceisnear.server.objects.items.StaticItem;
@@ -9,9 +11,9 @@ import spaceisnear.server.objects.items.StaticItem;
  *
  * @author White Oak
  */
-public class MessageActionsRequest extends Message implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageActionsRequest extends Message implements NetworkableMessage {
 
-    private final int ids[];
+    private int ids[];
 
     public MessageActionsRequest(int[] ids) {
 	super(MessageType.CONTEXT_ACTIONS_REQUEST);

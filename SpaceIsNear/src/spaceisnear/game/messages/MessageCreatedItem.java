@@ -5,16 +5,16 @@
  */
 package spaceisnear.game.messages;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.StaticItem;
 import spaceisnear.starting.LoadingScreen;
 
-public class MessageCreatedItem extends MessageCreated {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageCreatedItem extends MessageCreated {
 
-    @Getter private final int id;
+    @Getter private int id;
 
     public MessageCreatedItem(int id) {
 	super(GameObjectType.ITEM, MessageType.CREATED_SIMPLIFIED_ITEM);

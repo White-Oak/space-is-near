@@ -1,6 +1,6 @@
 package spaceisnear.game.messages.service.onceused;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.messages.*;
 
 /**
@@ -8,9 +8,9 @@ import spaceisnear.game.messages.*;
  *
  * @author White Oak
  */
-public class MessagePlayerInformation extends Message implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessagePlayerInformation extends Message implements NetworkableMessage {
 
-    @Getter private final String desiredNickname, desiredProfession;
+    @Getter private String desiredNickname, desiredProfession;
 
     public MessagePlayerInformation(String desiredNickname, String desiredProfession) {
 	super(MessageType.PLAYER_INFO);

@@ -5,10 +5,8 @@
  */
 package spaceisnear.game.messages;
 
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.inventory.InventorySlot;
@@ -17,12 +15,9 @@ import spaceisnear.game.messages.properties.MessagePropertable;
 import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.Player;
 
-public class MessageInventorySet extends DirectedMessage implements MessagePropertable {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageInventorySet extends DirectedMessage implements MessagePropertable {
 
-    @Getter private final HashMap<String, InventorySlot> slots;
-
-    private final static Type typeOfT = new TypeToken<HashMap<String, InventorySlot>>() {
-    }.getType();
+    @Getter private HashMap<String, InventorySlot> slots;
 
     public MessageInventorySet(int id, TypicalInventorySlotsSet set) {
 	super(MessageType.INVENTORY_SET, id);

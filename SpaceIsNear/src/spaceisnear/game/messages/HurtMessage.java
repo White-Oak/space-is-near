@@ -6,17 +6,17 @@
  */
 package spaceisnear.game.messages;
 
-import lombok.Getter;
+import lombok.*;
 
 /**
  * Sent both to client and server if player was hurt. Otherwise \u0432\u0402\u201d sent only to server.
  *
  * @author White Oak
  */
-public class HurtMessage extends DirectedMessage implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class HurtMessage extends DirectedMessage implements NetworkableMessage {
 
-    @Getter private final int damage;
-    @Getter private final Type type;
+    @Getter private int damage;
+    @Getter private Type type;
 
     public HurtMessage(int damage, Type type, int id) {
 	super(MessageType.HURT, id);

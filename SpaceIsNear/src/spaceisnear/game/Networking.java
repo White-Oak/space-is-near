@@ -2,10 +2,7 @@ package spaceisnear.game;
 
 import com.esotericsoftware.kryonet.*;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.minlog.Logs;
-import de.ruedigermoeller.serialization.*;
 import java.io.*;
-import java.util.logging.*;
 import lombok.*;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.service.*;
@@ -21,7 +18,7 @@ import spaceisnear.server.*;
     private Client client;
     private final static MessageRogered ROGERED = new MessageRogered();
     @Getter @Setter private MessagePlayerInformation mpi;
-    @Getter @Setter private MessageClientInformation mci;
+    @Getter @Setter private MessageLogin mci;
     @Setter @Getter private boolean logined, joined, playable;
 
     public void connect(String host, int tcpPort) throws IOException {
@@ -45,19 +42,21 @@ import spaceisnear.server.*;
     }
 
     public void send(NetworkableMessage message) {
+//	if (client != null && client.isConnected()) {
+//	    try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
+//		fstObjectOutput.writeObject(message);
+//		client.sendTCP(fstObjectOutput.getBuffer());
+//	    } catch (Exception ex) {
+//		Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
+//	    }
+//	}
 	if (client != null && client.isConnected()) {
-	    try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
-		fstObjectOutput.writeObject(message);
-		client.sendTCP(fstObjectOutput.getBuffer());
-	    } catch (Exception ex) {
-		Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
-	    }
+	    client.sendTCP(message);
 	}
     }
 
     @Override
     public void connected(Connection connection) {
-	connection.sendTCP("Got it");
 	core.getContext().sendThemAll(new MessageNetworkState(1));
     }
 
@@ -73,31 +72,36 @@ import spaceisnear.server.*;
 
     @Override
     public void received(Connection connection, Object object) {
-	if (object instanceof byte[]) {
-	    Message message = null;
-	    try (FSTObjectInput fstObjectInput = new FSTObjectInput(new ByteArrayInputStream((byte[]) object))) {
-		message = (Message) fstObjectInput.readObject();
-	    } catch (IOException | ClassNotFoundException ex) {
-		Logs.error("client", "While trying to read message from the net", ex);
-	    }
-	    if (message != null) {
-		MessageType mt = message.getMessageType();
-		switch (mt) {
-		    case ROGER_REQUESTED:
+	processMessage((Message) object);
+//	if (object instanceof byte[]) {
+//	    Message message = null;
+//	    try (FSTObjectInput fstObjectInput = new FSTObjectInput(new ByteArrayInputStream((byte[]) object))) {
+//		message = (Message) fstObjectInput.readObject();
+//	    } catch (IOException | ClassNotFoundException ex) {
+//		Logs.error("client", "While trying to read message from the net", ex);
+//	    }
+//	    processMessage(message);
+//	}
+    }
+
+    private void processMessage(Message message) {
+	if (message != null) {
+	    MessageType mt = message.getMessageType();
+	    switch (mt) {
+		case ROGER_REQUESTED:
 //		    Context.LOG.log("No time to explain — roger that!");
-			send(ROGERED);
-			break;
-		    case JOINED:
-			joined = true;
-			break;
-		    default:
-			message.processForClient(core.getContext());
-			break;
-		}
+		    send(ROGERED);
+		    break;
+		case JOINED:
+		    joined = true;
+		    break;
+		default:
+		    message.processForClient(core.getContext());
+		    break;
 	    }
+	}
 //	    Context.LOG.log("Message received");
 //	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));
-	}
     }
 
     public void close() {

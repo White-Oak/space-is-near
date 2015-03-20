@@ -5,14 +5,16 @@
  */
 package spaceisnear.game.messages.service.onceused;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.*;
 import spaceisnear.starting.LoadingScreen;
 
-public class MessageWorldInformation extends Message implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageWorldInformation extends Message implements NetworkableMessage {
 
-    public final int amountOfItems;
-    public final int propertyAmount;
+    public int amountOfItems;
+    public int propertyAmount;
 
     public MessageWorldInformation(int amountOfItems, int propertyAmount) {
 	super(MessageType.WORLD_INFO);

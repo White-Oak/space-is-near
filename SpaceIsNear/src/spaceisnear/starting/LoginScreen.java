@@ -4,7 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import spaceisnear.game.Corev3;
-import spaceisnear.game.messages.service.onceused.MessageClientInformation;
+import spaceisnear.game.messages.service.onceused.MessageLogin;
 import spaceisnear.game.ui.*;
 import spaceisnear.game.ui.TextField;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
@@ -55,7 +55,7 @@ public final class LoginScreen extends ScreenImprovedGreatly implements Activati
     @Override
     public void componentActivated(UIElement actor) {
 	if (isConnected() && actor == ok) {
-	    send(new MessageClientInformation(login.getText(), password.getText()));
+	    send(new MessageLogin(login.getText(), password.getText()));
 	}
     }
 }

@@ -1,10 +1,10 @@
 package spaceisnear.game.messages;
 
-import lombok.Getter;
+import lombok.*;
 
-public class MessageInteracted extends DirectedMessage implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageInteracted extends DirectedMessage implements NetworkableMessage {
 
-    @Getter private final int interactedWith;
+    @Getter private int interactedWith;
 
     public MessageInteracted(int id, int interactedWith) {
 	super(MessageType.INTERACTION, id);

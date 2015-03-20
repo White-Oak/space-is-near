@@ -5,14 +5,14 @@
  */
 package spaceisnear.game.messages;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.server.*;
 
-public class MessageChat extends Message implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageChat extends Message implements NetworkableMessage {
 
-    @Getter private final ChatString log;
+    @Getter private ChatString log;
 
     public MessageChat(ChatString log) {
 	super(MessageType.LOG);

@@ -1,15 +1,17 @@
-package spaceisnear.game.messages;
+package spaceisnear.game.messages.properties;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.GameContext;
+import spaceisnear.game.messages.DirectedMessage;
+import spaceisnear.game.messages.MessageType;
 import spaceisnear.game.messages.properties.MessagePropertable;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.Client;
 import spaceisnear.server.ServerContext;
 
-public class MessagePositionChanged extends DirectedMessage implements MessagePropertable {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessagePositionChanged extends DirectedMessage implements MessagePropertable {
 
-    @Getter private final Position p;
+    @Getter private Position p;
 
     public MessagePositionChanged(Position p, int id) {
 	super(MessageType.TELEPORTED, id);

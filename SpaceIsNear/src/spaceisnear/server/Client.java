@@ -2,7 +2,7 @@ package spaceisnear.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import lombok.Data;
-import spaceisnear.game.messages.service.onceused.MessageClientInformation;
+import spaceisnear.game.messages.service.onceused.MessageLogin;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.server.objects.Player;
 
@@ -13,7 +13,7 @@ import spaceisnear.server.objects.Player;
 @Data public class Client {
 
     private Connection connection;
-    private MessageClientInformation clientInformation;
+    private MessageLogin clientInformation;
     private MessagePlayerInformation playerInformation;
     private Player player;
     private boolean rogered;

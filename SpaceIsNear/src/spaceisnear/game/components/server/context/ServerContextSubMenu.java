@@ -1,15 +1,15 @@
 package spaceisnear.game.components.server.context;
 
 import java.io.Serializable;
-import lombok.Data;
+import lombok.*;
 
 /**
  *
  * @author White Oak
  */
-@Data public class ServerContextSubMenu implements Serializable {
+@AllArgsConstructor @Getter @NoArgsConstructor(access = AccessLevel.PRIVATE) public class ServerContextSubMenu implements Serializable {
 
-    private final String[] actions;
-    private final int itemId;
-    private final int defaults;
+    private String[] actions;
+    private int itemId;
+    private int defaults;
 }

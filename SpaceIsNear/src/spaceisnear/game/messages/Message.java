@@ -8,9 +8,9 @@ import spaceisnear.server.*;
 /**
  * @author LPzhelud
  */
-@RequiredArgsConstructor public abstract class Message implements Serializable {
+@RequiredArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED) public abstract class Message implements Serializable {
 
-    @Getter private final MessageType messageType;
+    @Getter @NonNull private MessageType messageType;
 
     @Override
     public String toString() {

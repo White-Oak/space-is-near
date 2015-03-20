@@ -9,7 +9,7 @@ import lombok.Getter;
 import spaceisnear.abstracts.Context;
 import spaceisnear.game.messages.MessageType;
 import spaceisnear.game.messages.NetworkableMessage;
-import spaceisnear.game.messages.service.onceused.MessageClientInformation;
+import spaceisnear.game.messages.service.onceused.MessageLogin;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.ui.ActivationListener;
@@ -117,7 +117,7 @@ public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener 
 
     public void send(NetworkableMessage m) {
 	if (m.getMessageType() == MessageType.CLIENT_INFO) {
-	    core.getNetworking().setMci((MessageClientInformation) m);
+	    core.getNetworking().setMci((MessageLogin) m);
 	}
 	if (m.getMessageType() == MessageType.PLAYER_INFO) {
 	    core.getNetworking().setMpi((MessagePlayerInformation) m);

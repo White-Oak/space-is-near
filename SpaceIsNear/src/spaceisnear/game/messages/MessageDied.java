@@ -4,7 +4,10 @@
  */
 package spaceisnear.game.messages;
 
-public class MessageDied extends DirectedMessage implements NetworkableMessage {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageDied extends DirectedMessage implements NetworkableMessage {
 
     public MessageDied(int id) {
 	super(MessageType.DIED, id);

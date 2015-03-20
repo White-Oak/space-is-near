@@ -11,7 +11,7 @@ import lombok.*;
 /**
  * @author white_oak
  */
-@AllArgsConstructor public class Position implements Serializable {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) @AllArgsConstructor public class Position implements Serializable {
 
     @Getter @Setter private int x, y;
 

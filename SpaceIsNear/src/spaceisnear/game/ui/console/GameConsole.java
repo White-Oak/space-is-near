@@ -14,7 +14,7 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.MessageChat;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.game.messages.properties.MessagePropertySet;
-import spaceisnear.game.messages.service.onceused.MessageClientInformation;
+import spaceisnear.game.messages.service.onceused.MessageLogin;
 import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.ui.TextField;
 
@@ -134,7 +134,7 @@ public class GameConsole extends Actor {
     }
 
     private void sendOOC(String text) {
-	MessageClientInformation mci = context.getCore().getNetworking().getMci();
+	MessageLogin mci = context.getCore().getNetworking().getMci();
 	text = mci.getLogin() + ": " + text;
 	ChatString logString = new ChatString(text, LogLevel.OOC);
 	sendLogString(logString);

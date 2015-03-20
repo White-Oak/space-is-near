@@ -1,5 +1,6 @@
 package spaceisnear.game.components.client;
 
+import spaceisnear.game.messages.properties.MessagePositionChanged;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import spaceisnear.game.GameContext;

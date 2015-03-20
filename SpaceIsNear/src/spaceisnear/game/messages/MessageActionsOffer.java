@@ -1,6 +1,6 @@
 package spaceisnear.game.messages;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.context.ServerContextMenu;
 
@@ -8,9 +8,9 @@ import spaceisnear.game.components.server.context.ServerContextMenu;
  *
  * @author White Oak
  */
-public class MessageActionsOffer extends Message implements NetworkableMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageActionsOffer extends Message implements NetworkableMessage {
 
-    @Getter private final ServerContextMenu menu;
+    @Getter private ServerContextMenu menu;
 
     public MessageActionsOffer(ServerContextMenu menu) {
 	super(MessageType.CONTEXT_ACTIONS_OFFER);

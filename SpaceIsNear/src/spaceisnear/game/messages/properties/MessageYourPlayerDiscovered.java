@@ -6,13 +6,13 @@
 package spaceisnear.game.messages.properties;
 
 import com.esotericsoftware.minlog.Logs;
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.*;
 
-public class MessageYourPlayerDiscovered extends Message implements NetworkableMessage, MessagePropertable {
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageYourPlayerDiscovered extends Message implements NetworkableMessage, MessagePropertable {
 
-    @Getter private final int playerID;
+    @Getter private int playerID;
 
     public MessageYourPlayerDiscovered(int playerID) {
 	super(MessageType.DISCOVERED_PLAYER);

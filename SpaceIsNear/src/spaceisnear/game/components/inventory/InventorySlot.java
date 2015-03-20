@@ -7,11 +7,11 @@ import spaceisnear.game.objects.items.Size;
 /**
  * @author White Oak
  */
-@Data @AllArgsConstructor @RequiredArgsConstructor public class InventorySlot implements Serializable {
+@Data @AllArgsConstructor @RequiredArgsConstructor @NoArgsConstructor(access = AccessLevel.PRIVATE) public class InventorySlot implements Serializable {
 
     private int itemId = -1;
-    private final Size size;
-    private final String name;
+    @NonNull private Size size;
+    @NonNull private String name;
 
     private InventorySlot(InventorySlot slot, String newName) {
 	itemId = slot.itemId;

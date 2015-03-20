@@ -4,7 +4,7 @@
  */
 package spaceisnear.game.messages;
 
-import lombok.Getter;
+import lombok.*;
 import spaceisnear.game.GameContext;
 import spaceisnear.server.*;
 
@@ -12,9 +12,9 @@ import spaceisnear.server.*;
  *
  * @author White Oak
  */
-public abstract class DirectedMessage extends Message {
+@NoArgsConstructor(access = AccessLevel.PROTECTED) public abstract class DirectedMessage extends Message {
 
-    @Getter protected final int id;
+    @Getter protected int id;
 
     public DirectedMessage(MessageType messageType, int id) {
 	super(messageType);
