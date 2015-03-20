@@ -1,10 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package spaceisnear;
 
 import com.badlogic.gdx.backends.lwjgl.*;

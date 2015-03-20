@@ -42,14 +42,6 @@ import spaceisnear.server.*;
     }
 
     public void send(NetworkableMessage message) {
-//	if (client != null && client.isConnected()) {
-//	    try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
-//		fstObjectOutput.writeObject(message);
-//		client.sendTCP(fstObjectOutput.getBuffer());
-//	    } catch (Exception ex) {
-//		Logger.getLogger(ServerNetworking.class.getName()).log(Level.SEVERE, null, ex);
-//	    }
-//	}
 	if (client != null && client.isConnected()) {
 	    client.sendTCP(message);
 	}
@@ -73,15 +65,6 @@ import spaceisnear.server.*;
     @Override
     public void received(Connection connection, Object object) {
 	processMessage((Message) object);
-//	if (object instanceof byte[]) {
-//	    Message message = null;
-//	    try (FSTObjectInput fstObjectInput = new FSTObjectInput(new ByteArrayInputStream((byte[]) object))) {
-//		message = (Message) fstObjectInput.readObject();
-//	    } catch (IOException | ClassNotFoundException ex) {
-//		Logs.error("client", "While trying to read message from the net", ex);
-//	    }
-//	    processMessage(message);
-//	}
     }
 
     private void processMessage(Message message) {

@@ -192,10 +192,7 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
     }
 
     public void hide() {
-	if (selectedItem instanceof ContextMenu) {
-	    ContextMenu menu = (ContextMenu) selectedItem;
-	    menu.hide();
-	}
+	collapseShownMenus();
 	stage.getActors().removeValue(this, true);
     }
 
@@ -239,42 +236,51 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 	assert menu != null;
 	final ServerContextSubMenu[] subMenus = menu.getSubMenus();
 	assert subMenus != null;
-	assert items.size() == subMenus.length;
+	assert items.size() == subMenus.length; //assure that received menu is of needed length
+	collapseShownMenus();
+	//Making temporary copy of old list to save items' names
+	List<ContextMenuItemable> temporary = new ArrayList<>(items);
+	//Clearing old list
+	items.clear();
+	maxWidth = height = 0;
+	addAllMenus(subMenus, temporary, context);
+	//to prevent overflowing
+	if (selected >= items.size()) {
+	    selected = items.size() - 1;
+	}
+    }
+
+    private void collapseShownMenus() {
 	//hiding what was shown
 	if (selectedItem instanceof ContextMenu) {
 	    ContextMenu current = (ContextMenu) selectedItem;
 	    current.hide();
 	}
-	//Making temporary copy of old list to save items' names
-	ArrayList<ContextMenuItemable> temporary = new ArrayList<>(items);
-	//Clearing old list
-	items.clear();
-	maxWidth = height = 0;
+    }
+
+    private void addAllMenus(final ServerContextSubMenu[] subMenus, List<ContextMenuItemable> temporary, GameContext context) {
 	//Adding all menus
 	for (int i = 0; i < subMenus.length; i++) {
 	    ServerContextSubMenu serverContextSubMenu = subMenus[i];
 	    ContextMenu contextMenu = new ContextMenu(temporary.get(i).getLabel(), stage);
 	    add(contextMenu);
-	    for (int j = 0; j < serverContextSubMenu.getActions().length; j++) {
-		String string = serverContextSubMenu.getActions()[j];
+	    //adding all actions to the submenu
+	    for (String string : serverContextSubMenu.getActions()) {
 		contextMenu.add(string);
 	    }
 
 	    //Creating new listeners
 	    final int currentIndex = i;
+	    final int currentItemId = subMenus[i].getItemId();
 	    contextMenu.setActivationListener(element -> {
 		MessageActionChosen messageActionChosen;
-		messageActionChosen = new MessageActionChosen(contextMenu.getSelected(), currentIndex);
+		//@working check if this is not bugged
+		messageActionChosen = new MessageActionChosen(contextMenu.getSelected(), currentItemId);
 		MessageToSend messageToSend = new MessageToSend(messageActionChosen);
 		context.sendDirectedMessage(messageToSend);
 		context.menuWantsToHide();
 	    });
 	}
-	//to prevent overflowing
-	if (selected >= items.size()) {
-	    selected = items.size() - 1;
-	}
-	System.out.println("Done!");
     }
 
 }

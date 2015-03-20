@@ -11,7 +11,7 @@ public class Script_lamp extends ContextProcessorScript {
     @Override
     public void script() {
 	int chosen = getChosen();
-	if (chosen == 0) {
+	if (chosen == 3) {
 	    interact();
 	}
     }

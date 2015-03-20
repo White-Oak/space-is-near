@@ -5,7 +5,7 @@ package box2dLight;
  *
  */
 
-import shaders.LightShader;
+import box2dLight.shaders.LightShader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

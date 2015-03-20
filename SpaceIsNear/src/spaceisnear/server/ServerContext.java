@@ -8,8 +8,6 @@ import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.inventory.InventorySlot;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
-import spaceisnear.game.components.server.context.ServerContextMenu;
-import spaceisnear.game.components.server.context.ServerContextSubMenu;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
@@ -253,19 +251,12 @@ public final class ServerContext extends Context {
 	return timeNeeding.remove(e);
     }
 
-    public void addMenu(Client client, ServerContextMenu menu) {
-	client.getPlayer().setMenu(menu);
-    }
-
-    public void proccessActionInContext(Client client, int itemNumber, int chosen) {
-	final ServerContextMenu menu = client.getPlayer().getMenu();
-	final ServerContextSubMenu subMenu = menu.getSubMenus()[itemNumber];
-	int itemId = subMenu.getItemId();
+    public void proccessActionInContext(Client client, int itemId, int chosen) {
 	StaticItem item = (StaticItem) objects.get(itemId);
-	ContextProcessorScript processorScript = (ContextProcessorScript) scriptsManager.getScriptFor(ScriptsManager.ScriptType.CONPROC,
-		item.getProperties().getName());
+	ContextProcessorScript processorScript = (ContextProcessorScript) scriptsManager
+		.getScriptFor(ScriptsManager.ScriptType.CONPROC, item.getProperties().getName());
 	if (processorScript != null) {
-	    processorScript.init(this, item, chosen - subMenu.getDefaults(), client.getPlayer().getId());
+	    processorScript.init(this, item, chosen, client.getPlayer().getId());
 	    processorScript.script();
 	}
     }

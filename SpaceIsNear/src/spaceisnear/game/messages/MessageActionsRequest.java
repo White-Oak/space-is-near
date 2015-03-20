@@ -37,7 +37,6 @@ import spaceisnear.server.objects.items.StaticItem;
 	//
 	//
 	MessageActionsOffer message = ContextMenuForItems.getMessage(context, items);
-	client.getPlayer().setMenu(message.getMenu());
 	MessageToSend messageToSend = new MessageToSend(message);
 	context.sendDirectedMessage(messageToSend);
     }

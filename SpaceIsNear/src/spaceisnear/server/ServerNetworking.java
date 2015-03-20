@@ -37,41 +37,19 @@ import spaceisnear.server.objects.items.*;
 
     @Override
     public void received(Connection connection, Object object) {
-	if (!(object instanceof String)) {
+	if (object instanceof Message) {
 	    Message message = (Message) object;
 	    switch (message.getMessageType()) {
 		case ROGERED:
 		    getClientByConnection(connection).setRogered(true);
 		    break;
 		default:
-		    if (!core.isPaused()) {
-			connectionsForMessages.add(connection);
-			messages.add(message);
-		    }
+		    connectionsForMessages.add(connection);
+		    messages.add(message);
 	    }
 	} else {
-	    Logs.info("server", (String) object);
+	    Logs.info("server", "Got string over the net: " + object);
 	}
-//	if (object instanceof byte[]) {
-//	    byte[] b = (byte[]) object;
-//	    try (FSTObjectInput objectInput = new FSTObjectInput(new ByteArrayInputStream(b))) {
-//		Message message = (Message) objectInput.readObject();
-//		switch (message.getMessageType()) {
-//		    case ROGERED:
-//			getClientByConnection(connection).setRogered(true);
-//			break;
-//		    default:
-//			if (!core.isPaused()) {
-//			    connectionsForMessages.add(connection);
-//			    messages.add(message);
-//			}
-//		}
-//	    } catch (IOException | ClassNotFoundException ex) {
-//		Logs.error("server", "While reading Message got over the net", ex);
-//	    }
-//	} else if (object instanceof String) {
-//	    Logs.info("server", (String) object);
-//	}
     }
 
     public void processReceivedQueue() {
@@ -99,72 +77,80 @@ import spaceisnear.server.objects.items.*;
 	MessageType mt = message.getMessageType();
 	final Client clientByConnection = getClientByConnection(connection);
 	switch (mt) {
-	    case PLAYER_INFO: {
-		MessagePlayerInformation mpi = (MessagePlayerInformation) message;
-		getClientByConnection(connection).setPlayerInformation(mpi);
-		Logs.info("Server", "Player information received");
-		sendToConnection(connection, new MessageJoined());
-		connectedWantsPlayer(getClientByConnection(connection));
-	    }
-	    break;
-	    case CLIENT_INFO: {
-		MessageLogin mci = (MessageLogin) message;
-		clientByConnection.setClientInformation(mci);
-		String messageS = mci.getLogin() + " requested access with password " + mci.getPassword();
-		boolean accessible = accountManager.isAccessible(mci.getLogin(), mci.getPassword());
-		messageS += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
-		Logs.info("server", messageS);
-		sendToConnection(connection, new MessageAccess(accessible));
-		for (int i = 0; i < clients.size(); i++) {
-		    final Client client = clients.get(i);
-		    if (clientByConnection != client) {
-			MessageLogin clientInformation = client.getClientInformation();
-			if (clientInformation.getLogin().equals(mci.getLogin())) {
-			    client.setConnection(connection);
-			    clients.remove(clientByConnection);
-			    sendToConnection(connection, new MessageJoined());
-			    Runnable runnable = () -> processOldPlayer(client);
-			    new Thread(runnable, "sending world to old player").start();
-			    break;
-			}
-		    }
-		}
-		Logs.info("server", "Client information received");
-	    }
-	    break;
+	    case PLAYER_INFO:
+		processPlayerInformation(message, connection);
+		break;
+	    case LOGIN_INFO:
+		processLoginInformation(message, clientByConnection, connection);
+		break;
 	    default:
 		message.processForServer(core.getContext(), clientByConnection);
 		break;
-
 	}
-//	    Context.LOG.log("Message received");
+    }
+
+    private void processLoginInformation(Message message, final Client clientByConnection, Connection connection) {
+	MessageLogin mci = (MessageLogin) message;
+	clientByConnection.setClientInformation(mci);
+	String messageS = mci.getLogin() + " requested access with password " + mci.getPassword();
+	boolean accessible = accountManager.isAccessible(mci.getLogin(), mci.getPassword());
+	messageS += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
+	Logs.info("server", messageS);
+	sendToConnection(connection, new MessageAccess(accessible));
+	if (accessible) {
+	    seeIfOldClient(clientByConnection, mci, connection);
+	    Logs.info("server", "Client information received");
+	}
+    }
+
+    private synchronized void seeIfOldClient(final Client clientByConnection, MessageLogin mci, Connection connection) {
+	clients.stream()
+		.filter(client -> clientByConnection != client)//newly created client is still in list
+		.filter(client -> client.getClientInformation().getLogin().equals(mci.getLogin()))
+		.forEach(client -> {
+		    client.setConnection(connection);
+		    clients.remove(clientByConnection);
+		    sendToConnection(connection, new MessageJoined());
+		    Runnable runnable = () -> processOldPlayer(client);
+		    new Thread(runnable, "sending world to old player").start();
+		});
+//	for (Client client : clients) {
+//	    //newly created client is still in list
+//	    if (clientByConnection != client) {
+//		MessageLogin clientInformation = client.getClientInformation();
+//		if (clientInformation.getLogin().equals(mci.getLogin())) {
+//		    client.setConnection(connection);
+//		    clients.remove(clientByConnection);
+//		    sendToConnection(connection, new MessageJoined());
+//		    Runnable runnable = () -> processOldPlayer(client);
+//		    new Thread(runnable, "sending world to old player").start();
+//		    break;
+//		}
+//	    }
+//	}
+    }
+
+    private void processPlayerInformation(Message message, Connection connection) {
+	MessagePlayerInformation mpi = (MessagePlayerInformation) message;
+	final Client client = getClientByConnection(connection);
+	client.setPlayerInformation(mpi);
+	Logs.info("Server", "Player information received");
+	sendToConnection(connection, new MessageJoined());
+	connectedWantsPlayer(client);
     }
 
     public void sendToAll(NetworkableMessage message) {
 	server.sendToAllTCP(message);
-//	try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
-//	    fstObjectOutput.writeObject(message);
-//	    server.sendToAllTCP(fstObjectOutput.getBuffer());
-//	} catch (IOException ex) {
-//	    Logs.error("server", "While trying to send " + message.getMessageType().toString() + " to everyone", ex);
-//	}
     }
 
     public void sendToConnection(Connection connection, NetworkableMessage message) {
 	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
-//	    server.sendToTCP(connection.getID(), ROGER_REQUSTED_BYTES);
 	    server.sendToTCP(connection.getID(), new MessageRogerRequested());
 	    waitForToRoger(connection);
 	    messagesSent = 0;
 	}
 	server.sendToTCP(connection.getID(), message);
 	messagesSent++;
-//	try (FSTObjectOutput fstObjectOutput = new FSTObjectOutput()) {
-//	    fstObjectOutput.writeObject(message);
-//	} catch (Exception ex) {
-//	    Logs.error("server", "Message caused trouble --" + message.getMessageType(), ex);
-//	}
-
     }
 
     public void sendToConnectionID(int id, NetworkableMessage message) {
@@ -181,9 +167,7 @@ import spaceisnear.server.objects.items.*;
     }
 
     public void sendToClientID(int id, NetworkableMessage message) {
-//	baos.reset();
-	id = clients.get(id).getConnection().getID();
-	sendToConnectionID(id, message);
+	sendToConnection(clients.get(id).getConnection(), message);
     }
 
     public void sendToPlayer(Player player, NetworkableMessage message) {
@@ -195,7 +179,6 @@ import spaceisnear.server.objects.items.*;
 	    break;
 	}
     }
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
     private int messagesSent;
     private final int MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING = 255;
@@ -232,7 +215,6 @@ import spaceisnear.server.objects.items.*;
     }
 
     private List<ObjectMessaged> createPlayer(Client client) {
-	//1
 	List<ObjectMessaged> list = new LinkedList<>();
 
 	Player player = core.addPlayer();
@@ -293,7 +275,7 @@ import spaceisnear.server.objects.items.*;
 //	waitForServerToStop();
 	//
 	sendToAll(new MessagePaused());
-	Logs.info("server", "Server's been paused");
+
 	List<ObjectMessaged> objectPlayer = createPlayer(client);
 	ObjectMessaged[] world = getWorld();
 	sendWorldInformation(world, client);
@@ -309,12 +291,12 @@ import spaceisnear.server.objects.items.*;
 		    });
 		});
 	//	
+
 	sendToAll(new MessageUnpaused());
 	sendPropertiesOfWorld(world, client);
-	Logs.info("server", "Server has continued his work");
 	//@working fix that
 	Runnable runnable = () -> {
-	    for (int i = 0; i < 20; i++) {
+	    for (int i = 0; i < 15; i++) {
 		waitSomeTime();
 	    }
 	    Player get = client.getPlayer();

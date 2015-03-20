@@ -17,4 +17,5 @@ import spaceisnear.game.messages.*;
 	this.desiredNickname = desiredNickname;
 	this.desiredProfession = desiredProfession;
     }
+
 }

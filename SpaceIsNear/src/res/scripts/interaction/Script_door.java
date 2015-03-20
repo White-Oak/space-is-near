@@ -18,7 +18,7 @@ public class Script_door extends InteractionScript {
     public void script() {
 	boolean isOpened = getBooleanPropertyOrFalse("opened");
 	isOpened = !isOpened;
-	//if closing the door than who cares
+	//if closing the door then who cares
 	//if opening then check for allowance
 	if (!isOpened || checkAllowance()) {
 	    setProperty("opened", isOpened);

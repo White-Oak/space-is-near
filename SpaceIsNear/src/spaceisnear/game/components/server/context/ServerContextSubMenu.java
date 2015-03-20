@@ -11,5 +11,4 @@ import lombok.*;
 
     private String[] actions;
     private int itemId;
-    private int defaults;
 }

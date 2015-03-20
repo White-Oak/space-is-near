@@ -8,7 +8,7 @@ import spaceisnear.game.messages.*;
     @Getter private String login, password;
 
     public MessageLogin(String login, String password) {
-	super(MessageType.CLIENT_INFO);
+	super(MessageType.LOGIN_INFO);
 	this.login = login;
 	this.password = password;
     }

@@ -1,9 +1,9 @@
 package box2dLight;
 
-import shaders.DiffuseShader;
-import shaders.Gaussian;
-import shaders.ShadowShader;
-import shaders.WithoutShadowShader;
+import box2dLight.shaders.DiffuseShader;
+import box2dLight.shaders.Gaussian;
+import box2dLight.shaders.ShadowShader;
+import box2dLight.shaders.WithoutShadowShader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

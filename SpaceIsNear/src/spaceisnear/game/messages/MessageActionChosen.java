@@ -11,17 +11,17 @@ import spaceisnear.server.ServerContext;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageActionChosen extends Message implements NetworkableMessage {
 
-    private int chosen, chosenItem;
+    private int chosen, chosenItemId;
 
     public MessageActionChosen(int chosen, int chosenItem) {
 	super(MessageType.CONTEXT_ACTION_CHOSEN);
 	this.chosen = chosen;
-	this.chosenItem = chosenItem;
+	this.chosenItemId = chosenItem;
     }
 
     @Override
     public void processForServer(ServerContext context, Client client) {
-	context.proccessActionInContext(client, chosenItem, chosen);
+	context.proccessActionInContext(client, chosenItemId, chosen);
     }
 
 }

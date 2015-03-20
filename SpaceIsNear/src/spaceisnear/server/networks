@@ -1,0 +1,12 @@
+client -> connected (if someone is connecting currently then disconnect)
+server adds new client to his list
+client -> LOGIN_INFO
+server checks if client is his old buddy
+yes: server replaces old client with new one, though sending JOINED to client first
+yes: server starts data transferring (????)
+yes: client moves straight to loading screen waiting for data transfer
+no: client moves to the lobby screen
+client -> PLAYER_INFO
+server saves player's information 
+server sends PAUSED to all (?????)
+server 

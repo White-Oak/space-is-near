@@ -24,14 +24,14 @@ public class ContextMenuForItems {
 		requestScript.script();
 		ArrayList<String> subMenu = requestScript.getSubMenu();
 		subMenus.add(new ServerContextSubMenu(subMenu.toArray(new String[subMenu.size()]),
-			staticItem.getId(), requestScript.getDefaults()));
+			staticItem.getId()));
 	    } else {
-		subMenus.add(new ServerContextSubMenu(new String[]{"Learn", "Pull", "Take"},
-			staticItem.getId(), 3));
+		subMenus.add(new ServerContextSubMenu(ACTIONS_DEFAULT, staticItem.getId()));
 	    }
 	}
 	return new ServerContextMenu(subMenus.toArray(new ServerContextSubMenu[subMenus.size()]));
     }
+    private static final String[] ACTIONS_DEFAULT = new String[]{"Learn", "Pull", "Take"};
 
     public static MessageActionsOffer getMessage(ServerContext context, StaticItem[] items) {
 	return new MessageActionsOffer(getMenu(context, items));

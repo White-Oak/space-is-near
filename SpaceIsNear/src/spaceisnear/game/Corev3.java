@@ -116,7 +116,7 @@ public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener 
     }
 
     public void send(NetworkableMessage m) {
-	if (m.getMessageType() == MessageType.CLIENT_INFO) {
+	if (m.getMessageType() == MessageType.LOGIN_INFO) {
 	    core.getNetworking().setMci((MessageLogin) m);
 	}
 	if (m.getMessageType() == MessageType.PLAYER_INFO) {

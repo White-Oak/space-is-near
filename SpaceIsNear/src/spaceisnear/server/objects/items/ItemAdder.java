@@ -1,6 +1,8 @@
 package spaceisnear.server.objects.items;
 
+import com.esotericsoftware.minlog.Logs;
 import java.io.*;
+import lombok.RequiredArgsConstructor;
 import spaceisnear.Utils;
 import spaceisnear.editor.*;
 import spaceisnear.game.objects.Position;
@@ -11,7 +13,7 @@ import spaceisnear.server.ServerContext;
  *
  * @author White Oak
  */
-public class ItemAdder {
+@RequiredArgsConstructor public class ItemAdder {
 
     private final ServerContext context;
 
@@ -46,11 +48,8 @@ public class ItemAdder {
 	return item;
     }
 
-    public ItemAdder(ServerContext context) {
-	this.context = context;
-    }
-
     public void addItems() throws IOException {
+	long time = System.currentTimeMillis();
 	File f = new File("additems.json");
 	if (f.exists()) {
 	    SaveLoadAction[] slas = Utils.GSON.fromJson(new FileReader(f), SaveLoadAction[].class);
@@ -58,6 +57,8 @@ public class ItemAdder {
 		addItem(new Position(sla.getX(), sla.getY()), sla.getItemId(), context, sla.getProperties());
 	    }
 	}
+	time = System.currentTimeMillis() - time;
+	Logs.info("server", "Map was loaded in " + time + " ms.");
     }
 
 }
