@@ -46,7 +46,7 @@ public class ItemPaintableComponent extends PaintableComponent {
 	    case PROPERTY_SET:
 		MessagePropertySet mps = (MessagePropertySet) message;
 		if (mps.getName().equals("rotate")) {
-		    rotate = (int) mps.getValue();
+		    rotate = Integer.parseInt((String) mps.getValue());
 		}
 		break;
 	    case ANIMATION_CHANGED:

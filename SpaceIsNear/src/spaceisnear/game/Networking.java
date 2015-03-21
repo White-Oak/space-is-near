@@ -64,7 +64,9 @@ import spaceisnear.server.*;
 
     @Override
     public void received(Connection connection, Object object) {
-	processMessage((Message) object);
+	if (object instanceof Message) {
+	    processMessage((Message) object);
+	}
     }
 
     private void processMessage(Message message) {

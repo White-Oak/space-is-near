@@ -48,7 +48,9 @@ import spaceisnear.server.objects.items.*;
 		    messages.add(message);
 	    }
 	} else {
-	    Logs.info("server", "Got string over the net: " + object);
+	    if (object instanceof String) {
+		Logs.info("server", "Got string over the net: " + object);
+	    }
 	}
     }
 
@@ -439,8 +441,9 @@ import spaceisnear.server.objects.items.*;
 		for (Map.Entry<String, Object> entry : entrySet) {
 		    switch (entry.getKey()) {
 			case "rotate": {
-			    int value = (int) entry.getValue();
-			    if (value != 0) {
+			    //@working wtf
+			    Object value = entry.getValue();
+			    if (value != null) {
 				propertiesList.add(new MessagePropertySet(item.getId(), "rotate", value));
 			    }
 			}
