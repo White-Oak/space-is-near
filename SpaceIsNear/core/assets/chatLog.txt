@@ -1,0 +1,119 @@
+[Sun Mar 22 19:28:36 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Antonio Share has connected to SIN!
+[Sun Mar 22 19:28:36 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Antonio Share, and wishes best luck.
+[Sun Mar 22 19:41:41 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adam Settle has connected to SIN!
+[Sun Mar 22 19:41:41 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adam Settle, and wishes best luck.
+[Sun Mar 22 19:42:31 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alf Shark has connected to SIN!
+[Sun Mar 22 19:42:31 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alf Shark, and wishes best luck.
+[Sun Mar 22 20:16:31 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adolph Settle has connected to SIN!
+[Sun Mar 22 20:16:31 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adolph Settle, and wishes best luck.
+[Sun Mar 22 20:19:20 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Amadeus Vivaldi has connected to SIN!
+[Sun Mar 22 20:19:20 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Amadeus Vivaldi, and wishes best luck.
+[Sun Mar 22 20:25:47 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Aaron Vivaldi has connected to SIN!
+[Sun Mar 22 20:25:47 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Aaron Vivaldi, and wishes best luck.
+[Sun Mar 22 20:29:08 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Aden Shaw has connected to SIN!
+[Sun Mar 22 20:29:08 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Aden Shaw, and wishes best luck.
+[Sun Mar 22 20:33:46 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adolph Sherwin has connected to SIN!
+[Sun Mar 22 20:33:46 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adolph Sherwin, and wishes best luck.
+[Sun Mar 22 20:36:00 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Azura Share has connected to SIN!
+[Sun Mar 22 20:36:00 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Azura Share, and wishes best luck.
+[Sun Mar 22 20:36:53 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alexia Strain has connected to SIN!
+[Sun Mar 22 20:36:53 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alexia Strain, and wishes best luck.
+[Sun Mar 22 20:37:27 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Aaron Sherwin has connected to SIN!
+[Sun Mar 22 20:37:27 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Aaron Sherwin, and wishes best luck.
+[Sun Mar 22 20:40:56 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adolph Sherwin has connected to SIN!
+[Sun Mar 22 20:40:56 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adolph Sherwin, and wishes best luck.
+[Sun Mar 22 20:46:09 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adam Strain has connected to SIN!
+[Sun Mar 22 20:46:09 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adam Strain, and wishes best luck.
+[Sun Mar 22 20:46:41 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alf Setters has connected to SIN!
+[Sun Mar 22 20:46:41 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alf Setters, and wishes best luck.
+[Sun Mar 22 20:46:57 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adolph Settle has connected to SIN!
+[Sun Mar 22 20:46:57 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adolph Settle, and wishes best luck.
+[Sun Mar 22 22:00:42 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adam Shann has connected to SIN!
+[Sun Mar 22 22:02:40 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Antonio Strain has connected to SIN!
+[Sun Mar 22 22:03:16 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Antonio Shield has connected to SIN!
+[Sun Mar 22 22:04:47 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Antonio Shark has connected to SIN!
+[Sun Mar 22 22:08:23 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Abbey Settle has connected to SIN!
+[Sun Mar 22 22:10:20 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alf Shady has connected to SIN!
+[Sun Mar 22 22:24:41 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Abbey Setters has connected to SIN!
+[Mon Mar 23 19:10:24 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Abbey Shaw has connected to SIN!
+[Mon Mar 23 19:11:27 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alf Sherwin has connected to SIN!
+[Mon Mar 23 19:12:10 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Antonio Setters has connected to SIN!
+[Mon Mar 23 19:12:48 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Aaron Shady has connected to SIN!
+[Mon Mar 23 19:17:15 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alf Share has connected to SIN!
+[Mon Mar 23 19:17:15 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alf Share, and wishes best luck.
+[Mon Mar 23 19:18:00 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alexandria Shill has connected to SIN!
+[Mon Mar 23 19:18:00 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alexandria Shill, and wishes best luck.
+[Mon Mar 23 19:21:03 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alf Shield has connected to SIN!
+[Mon Mar 23 19:21:03 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alf Shield, and wishes best luck.
+[Mon Mar 23 19:21:32 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alexandria Shark has connected to SIN!
+[Mon Mar 23 19:21:32 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alexandria Shark, and wishes best luck.
+[Mon Mar 23 19:22:13 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alexia Strain has connected to SIN!
+[Mon Mar 23 19:22:13 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alexia Strain, and wishes best luck.
+[Mon Mar 23 19:25:01 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adam Strain has connected to SIN!
+[Mon Mar 23 19:25:01 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adam Strain, and wishes best luck.
+[Mon Mar 23 19:26:02 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Aden Mozart has connected to SIN!
+[Mon Mar 23 19:26:02 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Aden Mozart, and wishes best luck.
+[Mon Mar 23 19:28:31 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adolph Shield has connected to SIN!
+[Mon Mar 23 19:28:31 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adolph Shield, and wishes best luck.
+[Mon Mar 23 19:28:47 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Azura Shady has connected to SIN!
+[Mon Mar 23 19:28:47 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Azura Shady, and wishes best luck.
+[Mon Mar 23 19:29:11 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Abbey Shady has connected to SIN!
+[Mon Mar 23 19:29:11 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Abbey Shady, and wishes best luck.
+[Mon Mar 23 19:31:03 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Acacia Strain has connected to SIN!
+[Mon Mar 23 19:31:03 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Acacia Strain, and wishes best luck.
+[Mon Mar 23 19:31:43 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Acacia Strain has connected to SIN!
+[Mon Mar 23 19:31:43 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Acacia Strain, and wishes best luck.
+[Mon Mar 23 19:36:26 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Azura Shark has connected to SIN!
+[Mon Mar 23 19:36:26 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Azura Shark, and wishes best luck.
+[Mon Mar 23 19:36:44 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adolph Mozart has connected to SIN!
+[Mon Mar 23 19:36:44 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adolph Mozart, and wishes best luck.
+[Mon Mar 23 19:38:24 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alexia Shield has connected to SIN!
+[Mon Mar 23 19:38:24 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alexia Shield, and wishes best luck.
+[Mon Mar 23 19:38:34 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adam Setters has connected to SIN!
+[Mon Mar 23 19:38:34 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adam Setters, and wishes best luck.
+[Mon Mar 23 19:39:49 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Amadeus Shark has connected to SIN!
+[Mon Mar 23 19:39:49 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Amadeus Shark, and wishes best luck.
+[Mon Mar 23 19:40:18 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Acacia Shann has connected to SIN!
+[Mon Mar 23 19:40:18 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Acacia Shann, and wishes best luck.
+[Mon Mar 23 19:40:40 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Amadeus Shield has connected to SIN!
+[Mon Mar 23 19:40:40 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Amadeus Shield, and wishes best luck.
+[Mon Mar 23 20:50:56 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alexandria Shield has connected to SIN!
+[Mon Mar 23 20:50:56 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alexandria Shield, and wishes best luck.
+[Mon Mar 23 20:55:32 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adolph Shield has connected to SIN!
+[Mon Mar 23 20:55:32 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adolph Shield, and wishes best luck.
+[Mon Mar 23 20:57:07 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Abbey Shark has connected to SIN!
+[Mon Mar 23 20:57:07 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Abbey Shark, and wishes best luck.
+[Mon Mar 23 20:59:22 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Acacia Shady has connected to SIN!
+[Mon Mar 23 20:59:22 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Acacia Shady, and wishes best luck.
+[Mon Mar 23 21:00:33 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Antonio Sherwin has connected to SIN!
+[Mon Mar 23 21:00:33 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Antonio Sherwin, and wishes best luck.
+[Mon Mar 23 21:01:02 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Azura Shill has connected to SIN!
+[Mon Mar 23 21:01:02 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Azura Shill, and wishes best luck.
+[Mon Mar 23 21:04:50 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Abbey Mozart has connected to SIN!
+[Mon Mar 23 21:04:50 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Abbey Mozart, and wishes best luck.
+[Mon Mar 23 21:05:35 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Amadeus Mozart has connected to SIN!
+[Mon Mar 23 21:05:35 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Amadeus Mozart, and wishes best luck.
+[Mon Mar 23 21:06:20 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Amber Shady has connected to SIN!
+[Mon Mar 23 21:06:20 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Amber Shady, and wishes best luck.
+[Mon Mar 23 21:08:19 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adolph Shield has connected to SIN!
+[Mon Mar 23 21:08:19 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adolph Shield, and wishes best luck.
+[Mon Mar 23 21:09:47 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Aden Setters has connected to SIN!
+[Mon Mar 23 21:09:47 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Aden Setters, and wishes best luck.
+[Mon Mar 23 21:10:09 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alf Mozart has connected to SIN!
+[Mon Mar 23 21:10:09 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alf Mozart, and wishes best luck.
+[Mon Mar 23 21:10:38 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alexia Shann has connected to SIN!
+[Mon Mar 23 21:10:38 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alexia Shann, and wishes best luck.
+[Mon Mar 23 21:15:31 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Antonio Mozart has connected to SIN!
+[Mon Mar 23 21:15:31 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Antonio Mozart, and wishes best luck.
+[Mon Mar 23 21:16:11 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alexandria Shaw has connected to SIN!
+[Mon Mar 23 21:16:11 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alexandria Shaw, and wishes best luck.
+[Mon Mar 23 21:16:36 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Aden Share has connected to SIN!
+[Mon Mar 23 21:16:37 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Aden Share, and wishes best luck.
+[Mon Mar 23 21:17:22 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Adam Shield has connected to SIN!
+[Mon Mar 23 21:17:22 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Adam Shield, and wishes best luck.
+[Mon Mar 23 21:23:59 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Amadeus Sherwin has connected to SIN!
+[Mon Mar 23 21:23:59 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Amadeus Sherwin, and wishes best luck.
+[Mon Mar 23 21:24:21 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Amadeus Shark has connected to SIN!
+[Mon Mar 23 21:24:21 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Amadeus Shark, and wishes best luck.
+[Mon Mar 23 21:24:51 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Alf Mozart has connected to SIN!
+[Mon Mar 23 21:24:51 MSK 2015]: [INFO] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alf Mozart, and wishes best luck.

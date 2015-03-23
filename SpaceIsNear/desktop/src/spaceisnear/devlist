@@ -1,0 +1,341 @@
+0.0.1 r44
++Objects' sending
++Turning host button into 'hosting server and connecting to client' button:
+	+new Bundle system (no getBytes, but getBundle in NetworkableMessage)
+	+removed server from sin.game.Networking
+	+sending and receiving information about new client
+	+sending the world to the client
+	+adding player when player is connected
+	+pausing server when new client is connecting
+	+pausing clients when client is connecting
+	+unpausing
+	+starting server in separate thread
+	+adding loading screen (connecting)
++adding some information to Player's object
++new messages: connection broken, rogered, world sent, map sent
++new component: Name
+
+0.0.2 r63
++there are now directed and non-directed messages. Directed cannot be sent to everyone
+-Basic items system
+    +new items: Cloth, Tool, Environment
+-Obstacles' system
+    +Obstacles layer
+    +checking for reacheableness in PositionComponent
+-Atmosphere
+    +Atmosphere layer
+    +removed from client-side
+-Inventory
+    +each inventory consists of inventory slots
+*PlayerControllableComponent was replaced with GamePlayerPositionComponent
++added NetworkingComponent and MessageToSend for the architecture to look good
+-added HealthComponent
+    +actual hitpoints
+    +server processes health states of players (alive, critical etc)
++added HurtMessage
+    +types of damage
++added MessageKnockbacked
+*now components that rely on Position search PositionComponent in a list of objects' components
+*Players now have different components on server and client: dealt with sending them over the net
+*Components had bad newInstance method: recoded
++added enum for components (ComponentType)
+*ComponentStates are stored now in a hashmap inside Component for easy-access
+*ServerGameObject and ClientGameObject are now subclasses of abstract AbstractGameObject
+
+0.0.3 r70
+-Basic items system
+    +realized ItemsArchive
+    +designed definition's format
+    +realized ItemBundle (name, size, blockingAir, blockingPath, imageIds)
+    +realized reading definitions of items from file
+    +loading images of items into an array of archive
+    +adding items from a script
+    +sending items over the net 
+    +drawing items on the map
++added empty slots on server-side's objects list for networking, ui, etc 
++Camera is always centered at player
++Camera movement for teleporting messages
++Scaling
+*Send not the whole world in one time (MessageWorldSent) but all objects in turn instead.
+*MessageCreateds are sent with a dealy not to overflow buffer
++Send DiscoveredYourPlayerMessage to get client knowing which object is his player.
+*Networking -> ServerNetworking (renamed)
+
+0.0.4 r81
+-Basic items system
+    +items that block passing through
+    +items that prevents air going through
++Obstacles' system
+    +added items set blocking tile status
+    +items block movement
+    *removed from client instance
+-Atmosphere
+    +added items set blocking-air tile status
+    +the separate thread calculating atmosphere and hull breaches
+    +if there are no plitkas on the tile then it is counted as hull breach
+	+the pressure is set to zero in that point
+    *removed from client instance
+    +make items block air leaks (for blockingAir items of course)
++Animated player movement
++In-game console
+-In-game chat
+    +sending messages over the net
+    +logging all the messages the server get
+    +sending to player only messages that they can hear
+    +write player's name the message was sent
+    +scrolling
+-RADIOSYSTEM
+    +two type of messages: local and and frequency-message
+    +server discovers whether someone is in range of local message or not
+	+local messages are transfered in 4 ways from the player by 10 tiles
+*Client will connect properly with bad ping
++LoadingScreen has objects counter
++map sending removed
+*movement of players with different FPS was fixed
++Being able to enter nickname
+*draw only items that are in the screen (already was done)
+*now server (not client) decides whether player is able to move on next tile
+
+0.0.5 r94
++Basic items system
+    +stucked/unstucked items
+    +pushing unstucked items
+	+correctly moving obstacles and air
+    +pulling
+	+make pulling be able to be disabled (escape button or -stoppull)
+	+stucked items are not pulled
+	+items are pulled only 1 tile away from you
++Atmosphere
+    +gasping if air is leaking 
+    +decreasing health if amount of air is not enough to live
+    +update health every atmosphere update
++HealthComponent
+    +suffocating if not enough air
++HurtMessage
+    +processing on server
++Mouse interaction
+    +selection of tile where player has clicked
+    +rightclicking will call context menu with the list of items
+	+with actions (only Learn currently)
++Context menus
+-In-game chat
+    +ingame commands (like "-debug on/off")
+    +scrolling
+    *messages are drawn in-bound of log screen
+-RADIOSYSTEM
+    +server discovers whether someone is in range of local message or not
+	+air unrecheable tiles do not let local messages to get through
++being able to run server in no-GUI mode
++server should process incoming messages in the same thread as processing objects to avoid concurrent modification
++lombokked code again
++New objects' sending system
+
+0.0.6 r100
+-Developed items' system
+    +items' images can be rotated by 90, 180, 270
+    +items' properties are sent if they differ from default
+-Inventory
+    +each inventory slot has his size, item field and name
+    +inventory is sent over the net
+    +radio for ear
+-In-game chat
+    +make some DEBUG messages
+    +make some broadcasting
+    +make some broadcasting when new player is connected
++RADIOSYSTEM
+    +server discovers whether someone is in range of frequncy message or not
+*fixed blurred font and wrong colors of font
+*graphics performance update
++editor
++porting SIN from Slick to libGDX
+
+0.0.7 r104
++optimizing MessageCreateds
+*Brought back:
+    +context menu appearance/disappearance
+    +log drawing
+    +text field drawing
+    +chatting
+    +context menu working
+    +text field features
+    +inventory
++In-game chat
+    +make OOC
+    +make some warnings
++total rework of starting UI and logic
+    +login and password inputting
+    +nickname inputting
+*Moved to GitHub
+*fixed bug when hero could move for wrong number of tiles
+
+0.0.8 r127
++total rework of starting UI and logic
+    +login and password checking
+    +login and password saving
++Professions' basics
+    +added to id
+    +added to lobby screen
++IDs' basics (ID of player, his profession)
+    +added to items.json
+    +added to player's inventory
+    +added to id's variables
+	+name
+	+profession
++PDAs basics (working as radio)
++Inventory basics
+    *now based on HashMap
+    +UI
+	+different placement of items for full and hidden inventory 
+	+animation
++In-game chat
+    +whisper
+    +make PM using PDAs
+	"[XXX]->[YYY] %name% messages: %text%"
+	+added "-pm" directive for console. It sends PRIVATE logs to Server
+	+added server processing of private messages
+	+added script for pda
+	+added PDA to every Player's inventory
+	+processing of private messages on server and client
+	+logging PMs to server's log
+-Developed items' system
+    +Scripting message processing system for items
+	+ItemScriptBundle
+	+reading ItemScriptBundles from scripts.json
+	    +scripts.json only contains boolean values for SIN to know if there is a need to search for a file with script
+	+scripts are named after "name" field like "pda" has "pda.script"
+	+scripts are only loaded by request once per item
+	+added MessageProcessingScriptProccessor that will process scripts for PROPERTY_SET messages
+	+map scipts' ids to items' ids
+	+get Player's object holding an item
++Separate thread calculating animations
+*Inventory has moved into InventoryPaintableComponent
+*Rewrote world's sending system
+*IP is reading from file in jar
+*rewrote "accounts.txt" handling
++added name generator borrowed from @riseremi
+*Reworked log system
+*NameComponent is no longer Paintable — maybe remove it later
+
+0.0.9 
+*Removed massive creations of Iterators and SpriteBatches
+*Removed some debug messages, added others
+*IP and mode of running are now reading from commandline arguments
+*Added check for id of private messages, so they eon't be read by everyone
+*Players do hear themselves again
+*Added handling of repeating keys for TextField
+*Placing cursor in textfield where mouse has clicked
+*Rewrote server pausing logic
+*rewrote serialization of messages
+*removed tons of ANIMATION_STEP messages sending
+*fixed bug where old messages had not procecessed for new objects based on old ones
+*only connected and active clients are now to roger when requested by server
++switch-case code is replaced by good one
+*removed tons of TIME_PASSED messages sending
++Doors opening/closing
+    +Movement towards a closed door should be treated as interaction with no item.
+    +A door is closed after some time had passed.
+    +Animation of closing/opening is sent
+-Developed items' system
+    +Animation
+    *recoded scipts' architecture
++gotta do something with disconnected players
+    +disconnected clients are able to authorize again through AccountsManager
+    +reconnected player should not be the cause of "creating new player" process
+	all they get is world-snapshot
+    +new type of message for joining the game — MessageJoined
+    +processing of Messagejoined
+*Rogered logic has been changed
++place simmilar objects near in objects array on start
+-System of context editors for server
+    +architecture introduced
+    -atmosphere editor
+	+AtmosphereEditor
+	+JFramewith JPanel on it
+	+Pressure map is copied to internal map for editor
+	+moving on JFrame
+
+0.0.10 r228
++Doors opening/closing
+    +Interaction with no item in active hand or with id should lead to opening a door.
++IDs' basics (ID of player, his profession)
+    +added icon for id
++HealthComponent
+    +knockbacking if critical
++MessageKnockbacked
+    +processing on server
++Door properties
+    +allowed (for different professions)
++Proffesions list (professions.json)
+--
++lighting system
++Inventory interaction
++Context menus in inventory
++System of context editors for server
+    +atmosphere editor
+	+editing pressures
++Context menus for items on floor
++Camera animated #56
+    +lights been tweaked
+*Design changes
++Auto-scrolling in-chat #59
++editor:
+    *padding drawing fix
+    +properties mode
+    +context menus when in delete or properties mode
+    *if mouse moved to another tile before releasing button, then no action will happen
+    +rewrote save/load mechanism for editor
+	+adapted load mechanism in game
+    +Status bar (mode, tiles under the cursor)
+--
++send properties of objects that are near connected player first for faster connection
++New scripting system
++Replace MessageMoved with MessageTeleported #51 
+    +Renamed MessageTeleported to MessagePositionChanged
++Log system reworked #58
+    *Note that minlog class Log is renamed to Logs to evade overlapping with kryonet Log class
+*Fixed bug when lamp appeared to be turned off on server launch 
+
+0.0.11
+-NETWORK
+    -chunks 
+    -fixes
+---
+---
++chat multi-line support fix
++fix chat keeping resending last message
++button fixes
+    *Positioning
+    +Hover animation
++text field hover animation
+*chat messages fixed
+    +chat help included
+-Spawn points
+
+0.1.0
++editor:
+    -ERASER tool (eraser mode)
+
+
+16.03.15
+So today I remembered about sin. 
+It was a long-long time before this happened, but yeah, I am really excited about me coding again.
+I learned a lot, I saw things and I've come with many refactorings to do.
+As soon as I took a look on the code I fixed the bug that drove me mad back then (when I gave up on commiting things).
+As a part of fixing it I introduced new abstract method isClient() to AbstractGameObject with final realizations in Server and Client Game Objects. 
+This will help to get rid of terribly looking infinite 'instances f's and will aid the code's health.
+As well I took a look on my devlist and considered it may take some reorganizations. First of all, there certainly should be an issue number near each line to relate.
+Secondly, there may be a need to do something about those '+'s and '-'s, what I'm of no aware at the moment. Thirdly, I beleive structural changes, new features and improvements should be separeted.
+I also commented lines that I wondered about even a little while reading through the code .
+Back then (Jule 2014) I decided to go for 0.1 milestone asap, but now I feel more like taking a grasp on things and seeing what can be done to make the code look more healthy, as there are some bad-coded things which I do not like.
+---
+This evening I walked a little bit around my district and brought up all the memories form more than half of year ago. Ah, sweet old nostalgia.
+ 
+0.1.1
++MessageKnockbacked
+    -animation change for player
++HealthComponent
+    -dying if dead
++total rework of starting UI and logic
+    -professions' choosing
++Atmosphere
+    -knockbacking if big difference between two tiles in pressure
