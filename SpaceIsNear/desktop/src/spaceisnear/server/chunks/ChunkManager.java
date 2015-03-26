@@ -1,5 +1,8 @@
 package spaceisnear.server.chunks;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import org.apache.commons.collections4.CollectionUtils;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.objects.Position;
@@ -62,7 +65,7 @@ public class ChunkManager {
 	return isNearChunk(chunk, p.getX(), p.getY());
     }
 
-    private boolean isNearChunk(Chunk chunk, int x, int y) {
+    public boolean isNearChunk(Chunk chunk, int x, int y) {
 	final int x1 = chunk.getX();
 	final int y1 = chunk.getY();
 	return ((x > x1 - Chunk.CHUNK_SIZE && x < x1 + Chunk.CHUNK_SIZE * 2)
@@ -75,5 +78,28 @@ public class ChunkManager {
 	    return isNearChunk(chunk, positionComponent.getPosition());
 	}
 	return false;
+    }
+
+    public boolean isNearChunk(Chunk chunk1, Chunk chunk2) {
+	return isNearChunk(chunk1, chunk2.getX(), chunk2.getY());
+    }
+
+    public Collection<Chunk> getChunksNear(Chunk chunk) {
+	ArrayList<Chunk> chunkerino = new ArrayList<>(9);
+	if (chunk != null) {
+	    for (int i = chunk.getX() / Chunk.CHUNK_SIZE - 1; i < 2; i++) {
+		for (int j = chunk.getY() / Chunk.CHUNK_SIZE - 1; j < 2; j++) {
+		    if (i > 0 && j > 0) {
+			chunkerino.add(getChunk(i, j));
+		    }
+		}
+	    }
+	}
+	assert chunkerino.size() > 3;
+	return chunkerino;
+    }
+
+    public Collection<Chunk> substractEnvironments(Chunk from, Chunk what) {
+	return CollectionUtils.subtract(getChunksNear(from), getChunksNear(what));
     }
 }

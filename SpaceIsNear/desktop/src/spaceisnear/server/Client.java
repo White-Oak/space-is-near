@@ -19,6 +19,7 @@ import spaceisnear.server.objects.Player;
     private Player player;
     private boolean rogered;
     private Chunk chunk;
+    private Chunk newChunk;
 
     public Client(Connection connection) {
 	this.connection = connection;

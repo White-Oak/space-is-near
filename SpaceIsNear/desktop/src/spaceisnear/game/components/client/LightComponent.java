@@ -44,7 +44,7 @@ public class LightComponent extends Component {
 	light.setSoft(true);
 	light.setSoftnessLength(128f);
 	light.setStaticLight(true);
-	light.setActive(false);
+//	light.setActive(false);
 	light.update();
     }
 

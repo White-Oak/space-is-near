@@ -47,6 +47,7 @@ public class GameContext extends Context {
 	rayHandler = new RayHandler(world);
 	RayHandler.useDiffuseLight(true);
 	rayHandler.setCulling(true);
+	rayHandler.setBlur(true);
 //	rayHandler.setAmbientLight(new Color(1, 1, 1, 0f));
     }
 

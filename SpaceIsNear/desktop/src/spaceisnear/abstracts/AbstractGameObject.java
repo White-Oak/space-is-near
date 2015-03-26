@@ -57,7 +57,10 @@ public abstract class AbstractGameObject {
     public abstract GameObjectType getType();
 
     public Position getPosition() {
-	return getPositionComponent().getPosition();
+	if (getPositionComponent() != null) {
+	    return getPositionComponent().getPosition();
+	}
+	return null;
     }
 
     public PositionComponent getPositionComponent() {

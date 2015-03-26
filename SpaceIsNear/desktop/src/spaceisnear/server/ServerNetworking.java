@@ -264,18 +264,17 @@ import spaceisnear.server.objects.items.*;
 	server.addListener(this);
 	server.bind(54555);
     }
+//@working REWORK
 
     private void processOldPlayer(Client client) {
 	sendToAll(new MessagePaused());
-	Logs.info("server", "Server's been paused");
-	ObjectMessaged[] world = getWorld();
+	Collection<ObjectMessaged> world = getWorldNear(client.getChunk());
 	sendWorldInformation(world, client);
 	sendCreatedsOfWorld(world, client.getConnection());
 	orderEveryoneToRogerAndWait();
 	sendPlayerDiscovered(client);
 	sendToAll(new MessageUnpaused());
 	sendPropertiesOfWorld(world, client);
-	Logs.info("server", "Server has continued his work");
     }
 
     private void processNewPlayer(final Client client) {
@@ -284,8 +283,8 @@ import spaceisnear.server.objects.items.*;
 	sendToAll(new MessagePaused());
 
 	List<ObjectMessaged> objectPlayer = createPlayer(client);
-	ObjectMessaged[] world = getWorldNear(client.getChunk());
-	System.out.println(world.length);
+	Collection<ObjectMessaged> world = getWorldNear(client.getChunk());
+	System.out.println(world.size());
 	sendWorldInformation(world, client);
 	sendCreatedsOfWorld(world, client.getConnection());
 	sendPlayerDiscovered(client);
@@ -350,59 +349,32 @@ import spaceisnear.server.objects.items.*;
 	});
     }
 
-    private void sendWorldInformation(ObjectMessaged[] world, Client client) {
+    private void sendWorldInformation(Collection<ObjectMessaged> world, Client client) {
 	MessageWorldInformation mwi = getWorldInformation(world);
 	sendToConnection(client.getConnection(), mwi);
     }
 
-    private MessageWorldInformation getWorldInformation(ObjectMessaged[] world) {
-	int accumulator = 0;
-	for (ObjectMessaged objectMessaged : world) {
-	    accumulator += objectMessaged.propertables.size();
-	}
-	MessageWorldInformation mwi = new MessageWorldInformation(world.length, accumulator);
+    private MessageWorldInformation getWorldInformation(Collection<ObjectMessaged> world) {
+	int propertablesSize = 0;
+	propertablesSize = world.stream()
+		.map(objectMessaged -> objectMessaged.propertables.size())
+		.reduce(propertablesSize, Integer::sum);
+	MessageWorldInformation mwi = new MessageWorldInformation(world.size(), propertablesSize);
 	return mwi;
     }
 
-    private void sendCreatedsOfWorld(ObjectMessaged[] world, Connection connection) {
-	MessageCloned cloned = null;
-	for (int i = 0; i < world.length; i++) {
-	    ObjectMessaged objectMessaged = world[i];
-	    MessageCreated messageCreated = objectMessaged.created;
-	    if (i > 0 && messageCreated instanceof MessageCreatedItem && world[i - 1].created instanceof MessageCreatedItem) {
-		MessageCreatedItem mci = (MessageCreatedItem) messageCreated;
-		MessageCreatedItem mcilast = (MessageCreatedItem) world[i - 1].created;
-		if (mci.getId() == mcilast.getId()) {
-		    int amount = cloned == null ? 1 : cloned.amount + 1;
-		    cloned = new MessageCloned();
-		    cloned.amount = amount;
-		    continue;
-		} else {
-		    if (cloned != null) {
-			sendToConnection(connection, cloned);
-			cloned = null;
-		    }
-		}
-	    } else {
-		if (cloned != null) {
-		    sendToConnection(connection, cloned);
-		    cloned = null;
-		}
-	    }
-	    sendToConnection(connection, messageCreated);
-	}
-	if (cloned != null) {
-	    sendToConnection(connection, cloned);
-	}
+    private void sendCreatedsOfWorld(Collection<ObjectMessaged> world, Connection connection) {
+	world.stream()
+		.map(objectMessaged -> objectMessaged.created)
+		.forEach(messageCreated -> sendToConnection(connection, messageCreated));
     }
 
-    private void sendPropertiesOfWorld(ObjectMessaged[] world, Client client) {
+    private void sendPropertiesOfWorld(Collection<ObjectMessaged> world, Client client) {
 	//properties
 	List<MessagePropertable> propertables = new ArrayList<>();
-	for (ObjectMessaged objectMessaged : world) {
-	    List<MessagePropertable> propertable = objectMessaged.propertables;
-	    propertables.addAll(propertable);
-	}
+	world.stream()
+		.map(objectMessaged -> objectMessaged.propertables)
+		.forEach(propertable -> propertables.addAll(propertable));
 	sortPropertiesByClosestToPlayer(propertables, client.getPlayer());
 	sendProperties(propertables, client.getConnection());
     }
@@ -414,30 +386,30 @@ import spaceisnear.server.objects.items.*;
     private void sendPlayerDiscovered(Client client) {
 	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(client.getPlayer().getId());
 	sendToConnection(client.getConnection(), mypd);
-	Logs.info("server", "Player has sent");
+	Logs.info("server", "PlayerDiscovered message has been sent");
     }
 
-    private ObjectMessaged[] getWorldNear(Chunk chunk) {
+    private Collection<ObjectMessaged> getWorldNear(Chunk chunk) {
 	ServerContext context = core.getContext();
 	Collection<AbstractGameObject> objects = context.getObjects().values();
-	List<ObjectMessaged> messagesToReturn = new ArrayList<>();
+	List<ObjectMessaged> messagesToReturn = new LinkedList<>();
 	objects.stream()
 		.filter(object -> chunkManager.isNearChunk(chunk, object))
 		.map(object -> getObjectMessaged(object))
 		.filter(objectMessaged -> objectMessaged != null)
 		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
-	return messagesToReturn.toArray(new ObjectMessaged[messagesToReturn.size()]);
+	return messagesToReturn;
     }
 
-    private ObjectMessaged[] getWorld() {
-	ServerContext context = core.getContext();
-	Collection<AbstractGameObject> objects = context.getObjects().values();
-	List<ObjectMessaged> messagesToReturn = new ArrayList<>();
+    private Collection<ObjectMessaged> getWorldIn(Collection<Chunk> chunks) {
+	Collection<AbstractGameObject> objects = core.getContext().getObjects().values();
+	List<ObjectMessaged> messagesToReturn = new LinkedList<>();
 	objects.stream()
+		.filter(object -> chunks.stream().anyMatch(chunk -> chunkManager.isInChunk(chunk, object.getPosition())))
 		.map(object -> getObjectMessaged(object))
 		.filter(objectMessaged -> objectMessaged != null)
 		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
-	return messagesToReturn.toArray(new ObjectMessaged[messagesToReturn.size()]);
+	return messagesToReturn;
     }
 
     private ObjectMessaged getObjectMessaged(AbstractGameObject object) {
@@ -454,7 +426,10 @@ import spaceisnear.server.objects.items.*;
 
     private List<MessagePropertable> getMessageProperties(AbstractGameObject object) {
 	List<MessagePropertable> propertiesList = new LinkedList<>();
-	propertiesList.add(new MessagePositionChanged(object.getPosition(), object.getId()));
+	final Position position = object.getPosition();
+	if (position != null) {
+	    propertiesList.add(new MessagePositionChanged(position, object.getId()));
+	}
 	switch (object.getType()) {
 	    case ITEM:
 		StaticItem item = (StaticItem) object;
@@ -465,9 +440,8 @@ import spaceisnear.server.objects.items.*;
 			case "rotate": {
 			    //@working wtf
 			    Object value = entry.getValue();
-			    if (value != null) {
-				propertiesList.add(new MessagePropertySet(item.getId(), "rotate", value));
-			    }
+			    assert value != null;
+			    propertiesList.add(new MessagePropertySet(item.getId(), "rotate", value));
 			}
 			break;
 		    }
@@ -529,5 +503,30 @@ import spaceisnear.server.objects.items.*;
 	} catch (InterruptedException ex) {
 	    Logs.error("server", "While trying to sleep in network thread", ex);
 	}
+    }
+
+    public void playerChunkUpdated(int playerID) {
+	Client client = null;
+	for (Client clienterino : clients) {
+	    if (clienterino.getPlayer().getId() == playerID) {
+		client = clienterino;
+	    }
+	}
+	assert client != null : "Trying to update chunk for non-player?!!";
+	Chunk newChunk = chunkManager.getChunkByPosition(client.getPlayer().getPosition());
+	client.setNewChunk(newChunk);
+    }
+
+    private void sendNewChunksToPlayer(Client client) {
+	Chunk oldChunk = client.getChunk();
+	Chunk newChunk = client.getNewChunk();
+	Collection<Chunk> toBeSent = chunkManager.substractEnvironments(newChunk, oldChunk);
+	sendChunksToClient(toBeSent, client);
+    }
+
+    private void sendChunksToClient(Collection<Chunk> toBeSent, Client client) {
+	Collection<ObjectMessaged> worldIn = getWorldIn(toBeSent);
+	sendCreatedsOfWorld(worldIn, client.getConnection());
+	sendPropertiesOfWorld(worldIn, client);
     }
 }

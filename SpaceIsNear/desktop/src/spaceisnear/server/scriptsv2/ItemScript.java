@@ -1,6 +1,7 @@
 package spaceisnear.server.scriptsv2;
 
 import lombok.Getter;
+import org.apache.commons.collections4.MapUtils;
 import spaceisnear.game.messages.MessageAnimationChanged;
 import spaceisnear.game.messages.MessageToSend;
 import spaceisnear.server.ServerContext;
@@ -20,16 +21,7 @@ public abstract class ItemScript extends CustomScript {
     }
 
     protected boolean getBooleanPropertyOrFalse(String name) {
-	Object property = getProperty(name);
-	boolean is = false;
-	if (property != null) {
-	    if (property instanceof Boolean) {
-		is = (Boolean) property;
-	    } else {
-		is = Boolean.valueOf((String) property);
-	    }
-	}
-	return is;
+	return MapUtils.getBooleanValue(item.getVariableProperties().getStates(), name);
     }
 
     protected Object getProperty(String name) {

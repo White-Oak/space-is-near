@@ -4,7 +4,6 @@ import box2dLight.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.*;
 import com.esotericsoftware.minlog.Logs;
 import java.io.*;
 import java.util.*;
@@ -45,7 +44,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private final static long MINIMUM_TIME_TO_MOVE = 100L;
 
     @Getter private PointLight pointLight;
-    private Body playerBody;
 
     private final FPSLogger logger = new FPSLogger();
 
@@ -99,10 +97,9 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	};
 	thread.start();
 
-	playerBody = GameContext.getWorld().createBody(new BodyDef());
 	RayHandler rayHandler = GameContext.getRayHandler();
 	pointLight = new PointLight(rayHandler, 64);
-	pointLight.setColor(new Color(1, 1, 1, 0.87f));
+	pointLight.setColor(new Color(1, 1, 1, 0f));
 	pointLight.setSoft(true);
 	pointLight.setSoftnessLength(64f);
 	pointLight.setDistance(500);

@@ -9,14 +9,15 @@
  */
 package spaceisnear.game.components.server;
 
-import spaceisnear.game.messages.properties.MessagePositionChanged;
 import java.util.List;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.*;
+import spaceisnear.game.messages.properties.MessagePositionChanged;
 import spaceisnear.game.objects.Position;
 import spaceisnear.server.ServerContext;
+import spaceisnear.server.chunks.Chunk;
 import spaceisnear.server.objects.items.StaticItem;
 
 public class PlayerControllableComponent extends Component {
@@ -75,7 +76,20 @@ public class PlayerControllableComponent extends Component {
 	if (mm != null) {
 	    checkPull(oldx, oldy);
 	}
+	if (mm != null) {
+	    if (movedToAnotherChunk(oldx, oldy, x, y)) {
+
+	    }
+	}
 	return mm;
+    }
+
+    private boolean movedToAnotherChunk(int oldX, int oldY, int newX, int newY) {
+	oldX /= Chunk.CHUNK_SIZE;
+	oldY /= Chunk.CHUNK_SIZE;
+	newX /= Chunk.CHUNK_SIZE;
+	newY /= Chunk.CHUNK_SIZE;
+	return oldX != newX || oldY != newY;
     }
 
     private Position pushOn(int x, int y, int deltaX, int deltaY) {

@@ -45,6 +45,7 @@ project(":desktop") {
 	compile "com.google.code.gson:gson:2.3.1"
 	compile "com.esotericsoftware:kryonet:2.22.0-RC1"
 	compile "org.projectlombok:lombok:1.16.2"
+	compile "org.apache.commons:commons-collections4:4.0"
     }
 }
 

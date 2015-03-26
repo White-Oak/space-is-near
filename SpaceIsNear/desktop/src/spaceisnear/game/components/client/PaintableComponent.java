@@ -42,7 +42,7 @@ public abstract class PaintableComponent extends Component {
 
     public final void paint(SpriteBatch batch) {
 	final GameContext name = (GameContext) getContext();
-	if (true || name.getCameraMan().belongsToCamera(getPosition(), name)) {
+	if (name.getCameraMan().belongsToCamera(getPosition(), name)) {
 	    int xto, yto;
 //	    if (GameContext.TILE_WIDTH == 32) {
 //		xto = (getX() << 5) - getDelayX();

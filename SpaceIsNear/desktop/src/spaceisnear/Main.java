@@ -25,31 +25,32 @@ public class Main {
 	CommandLine parse = parser.parse(options, args);
 	String optionValue = parse.getOptionValue("help");
 	if (optionValue != null) {
-	    HelpFormatter formatter = new HelpFormatter();
-	    formatter.printHelp("SIN -mode <mode> -hostip <hostip>", options);
-	    return;
-	}
-
-	optionValue = parse.getOptionValue("mode");
-	if (optionValue != null && !optionValue.equals("default")) {
-	    if (parse.hasOption("mode")) {
-		runSINInWeirdMode(optionValue);
-	    } else {
-		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp("SIN -mode <mode> -hostip <hostip>", options);
-	    }
+	    printHelp(options);
 	} else {
-	    if (parse.hasOption("hostip")) {
-		IP = parse.getOptionValue("hostip");
+	    optionValue = parse.getOptionValue("mode");
+	    if (optionValue != null && !optionValue.equals("default")) {
+		if (parse.hasOption("mode")) {
+		    runSINInWeirdMode(optionValue);
+		} else {
+		    printHelp(options);
+		}
 	    } else {
-		IP = "127.0.0.1";
+		if (parse.hasOption("hostip")) {
+		    IP = parse.getOptionValue("hostip");
+		} else {
+		    IP = "127.0.0.1";
+		}
+		defaultLogger.client();
+		LwjglApplicationConfiguration cfg = configureApp();
+		final Corev3 corev3 = new Corev3();
+		lwjglApplication = new LwjglApplication(corev3, cfg);
 	    }
-	    defaultLogger.client();
-	    LwjglApplicationConfiguration cfg = configureApp();
-	    final Corev3 corev3 = new Corev3();
-	    lwjglApplication = new LwjglApplication(corev3, cfg);
 	}
+    }
 
+    private static void printHelp(Options options) {
+	HelpFormatter formatter = new HelpFormatter();
+	formatter.printHelp("SIN -mode <mode> -hostip <hostip>", options);
     }
 
     private static LwjglApplicationConfiguration configureApp() {
@@ -66,8 +67,8 @@ public class Main {
     }
 
     private static Options prepareOptions() throws IllegalArgumentException {
-	Option mode = new Option("mode", true, "one of default, host, editor");
-	Option ip = new Option("hostip", true, "the ip adress of the host");
+	Option mode = new Option("mode", true, "one of [default, host, editor]");
+	Option ip = new Option("hostip", true, "the ip address of the host");
 	Option help = new Option("help", "displays the help");
 	Options options = new Options();
 	options.addOption(ip);
