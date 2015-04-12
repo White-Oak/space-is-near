@@ -13,6 +13,7 @@ import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.objects.NetworkingObject;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.UIElement;
+import spaceisnear.game.ui.console.ConsoleListenerImpl;
 import spaceisnear.game.ui.console.GameConsole;
 import spaceisnear.starting.*;
 import spaceisnear.starting.ui.ScreenImproved;
@@ -134,7 +135,8 @@ public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener 
 	textField.setActivationListener(this);
 	textField.setBounds(800, Gdx.graphics.getHeight() - textField.getPrefHeight(), 400, textField.getPrefHeight());
 	//
-	console = new GameConsole(800, 0, 400, 600, context, textField);
+	console = new GameConsole(800, 0, 400, 600, textField);
+	console.setConsoleListener(new ConsoleListenerImpl(context));
 	console.setPosition(800, 0);
     }
 
@@ -145,7 +147,7 @@ public class Corev3 extends com.badlogic.gdx.Game implements ActivationListener 
 
     @Override
     public void componentActivated(UIElement actor) {
-	console.processInputedMessage();
+	console.processInputMessage();
 	((ScreenImproved) getScreen()).getStage().setKeyboardFocus(null);
     }
 

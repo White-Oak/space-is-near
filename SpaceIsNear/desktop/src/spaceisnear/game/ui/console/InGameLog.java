@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.*;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import spaceisnear.game.GameContext;
 import spaceisnear.game.ui.UIElement;
 
 /**
@@ -46,11 +45,7 @@ import spaceisnear.game.ui.UIElement;
 	return height / (int) f.getLineHeight();
     }
 
-    public void pushMessage(ChatString str, GameContext context) {
-	if (str.getReceiverID() != 0 && str.getReceiverID() != context.getPlayerID()) {
-	    System.out.println(str.getReceiverID());
-	    return;
-	}
+    public void pushMessage(ChatString str) {
 	if (!acceptDebugMessages && str.getLevel() == LogLevel.DEBUG) {
 	    return;
 	}
