@@ -21,7 +21,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
     public void create() {
 	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 	Label loadingLabel = new Label("Loading", labelStyle);
-	progress = new Label("0/0", labelStyle);
+	progress = new Label("0 / 0", labelStyle);
 
 	int x = (Gdx.graphics.getWidth() - 400) >> 1;
 	int y = Gdx.graphics.getHeight() >> 1;
@@ -36,15 +36,10 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
     @Override
     public void update() {
+	progress.setText(CURRENT_AMOUNT + " / " + LOADING_AMOUNT);
 	if (networking.isPlayable()) {
 	    Log.info("client", "Moving to Core...");
 	}
-    }
-
-    @Override
-    public void draw() {
-	progress.setText(CURRENT_AMOUNT + " / " + LOADING_AMOUNT);
-	update();
     }
 
 }

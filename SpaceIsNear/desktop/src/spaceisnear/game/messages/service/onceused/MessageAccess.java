@@ -20,7 +20,6 @@ import spaceisnear.game.ui.console.LogLevel;
     public void processForClient(GameContext context) {
 	final Networking networking = context.getEngine().getNetworking();
 	networking.setLogined(isAccess());
-	System.out.println("see!");
 	if (!networking.isLogined()) {
 	    context.getEngine().chat(new ChatString("Incorrect pair of login/password", LogLevel.WARNING));
 	}
