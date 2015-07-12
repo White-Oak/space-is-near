@@ -23,8 +23,10 @@ public final class Corev3 extends com.badlogic.gdx.Game {
     @Getter private Viewport viewport;
     @Setter private ScreenImprovedGreatly startingScreen;
     @Setter private Updatable updatable;
-    private GameConsolev2 consolev2;
+    private final GameConsolev2 consolev2 = new GameConsolev2();
     private Batch savedBatch;
+    //
+    @Setter private ScreenImprovedGreatly nextScreen;
 
     public GameConsole getConsole() {
 	return consolev2.getConsole();
@@ -39,7 +41,7 @@ public final class Corev3 extends com.badlogic.gdx.Game {
 	multiplexer.addProcessor(consoleStage);
 	camera = (OrthographicCamera) viewport.getCamera();
 	camera.setToOrtho(true);
-	consolev2 = new GameConsolev2(consoleStage);
+	consolev2.init(consoleStage);
 	if (startingScreen != null) {
 	    setScreenImproved(startingScreen);
 	}
@@ -75,6 +77,10 @@ public final class Corev3 extends com.badlogic.gdx.Game {
     }
 
     @Override public void render() {
+	if (nextScreen != null) {
+	    setScreenImproved(nextScreen);
+	    nextScreen = null;
+	}
 	super.render();
 	consolev2.draw();
     }

@@ -4,6 +4,8 @@ import box2dLight.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import java.util.*;
 import lombok.*;
 import me.whiteoak.minlog.Log;
@@ -24,7 +26,6 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
  */
 @RequiredArgsConstructor public final class Corev2 extends ScreenImprovedGreatly {
 
-    private final Map<Integer, AbstractGameObject> objects = Collections.synchronizedMap(new HashMap<>());
     @Setter private int key;
     @Getter private boolean notpaused;
 
@@ -35,7 +36,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
     private InputCatcher inputCatcher;
     private Inventory inventory;
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
-    private final SpriteBatch batch = new SpriteBatch();
+    private SpriteBatch batch;
     private long lastTimeMoved;
     private final static long MINIMUM_TIME_TO_MOVE = 100L;
 
@@ -43,10 +44,12 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
     private final FPSLogger logger = new FPSLogger();
     //
+    public static RayHandler rayHandler;
+    public static World world;
 
     @Override
     public void create() {
-
+	batch = new SpriteBatch();
 	//camera setup
 	cameraMan = new CameraMan();
 	cameraMan.setWindowWidth(800);
@@ -79,7 +82,11 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	};
 	thread.start();
 
-	RayHandler rayHandler = GameContext.getRayHandler();
+	world = new World(new Vector2(), true);
+	rayHandler = new RayHandler(world);
+	RayHandler.useDiffuseLight(true);
+	rayHandler.setCulling(true);
+	rayHandler.setBlur(true);
 	pointLight = new PointLight(rayHandler, 64);
 	pointLight.setColor(new Color(1, 1, 1, 0f));
 	pointLight.setSoft(true);
@@ -188,7 +195,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	batch.begin();
 	getContext().getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();
-	GameContext.getRayHandler().updateAndRender();
+	rayHandler.updateAndRender();
 
 	cameraMan.unmoveCamera(getCamera());
 	logger.log();
@@ -279,7 +286,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	switch (currentMenu.getSelected()) {
 	    case 0:
 		String description = item.getProperties().getDescription();
-		chat(new ChatString(description, LogLevel.TALKING));
+		getEngine().chat(new ChatString(description, LogLevel.TALKING));
 		break;
 	    case 1:
 		int id = item.getId();
@@ -288,12 +295,6 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
 		getContext().sendDirectedMessage(messageToSend);
 		break;
-	}
-    }
-
-    public void chat(ChatString log) {
-	if (getConsole() != null) {
-	    getConsole().pushMessage(log);
 	}
     }
 }

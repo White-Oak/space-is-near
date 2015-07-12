@@ -30,7 +30,7 @@ public abstract class ScreenImprovedGreatly implements ScreenImproved {
     }
 
     public final void setScreen(ScreenImprovedGreatly screen) {
-	corev3.setScreenImproved(screen);
+	corev3.setNextScreen(screen);
     }
 
     public GameConsole getConsole() {

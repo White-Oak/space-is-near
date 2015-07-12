@@ -1,12 +1,13 @@
 package spaceisnear.game.components.client;
 
-import spaceisnear.game.messages.properties.MessagePositionChanged;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import spaceisnear.game.Corev2;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.*;
+import spaceisnear.game.messages.properties.MessagePositionChanged;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 
 public class ShadowComponent extends Component {
@@ -41,14 +42,14 @@ public class ShadowComponent extends Component {
 				    (getPosition().getY() + 0.5f) * GameContext.TILE_HEIGHT));
 
 			    // Create a body from the defintion and add it to the world
-			    body = GameContext.getWorld().createBody(groundBodyDef);
+			    body = Corev2.world.createBody(groundBodyDef);
 
 			    // Create a fixture from our polygon shape and add it to our ground body  
 			    body.createFixture(BOX, 0.0f);
 			}
 		    } else {
 			if (body != null) {
-			    GameContext.getWorld().destroyBody(body);
+			    Corev2.world.destroyBody(body);
 			}
 		    }
 		}

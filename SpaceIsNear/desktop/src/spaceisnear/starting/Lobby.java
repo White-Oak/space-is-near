@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import java.util.Random;
+import lombok.RequiredArgsConstructor;
 import spaceisnear.game.Networking;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.ui.*;
@@ -13,17 +14,14 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
  *
  * @author White Oak
  */
-public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
+@RequiredArgsConstructor public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 
     private TextField nickname, profession;
     private Button join;
-    private Networking networking;
+    private final Networking networking;
 
-    public Lobby() {
-	init();
-    }
-
-    private void init() {
+    @Override
+    public void create() {
 	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 	Label loginLabel = new Label("Nickname", labelStyle);
 	Label proLabel = new Label("Profession", labelStyle);
@@ -63,7 +61,7 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
     @Override
     public void update() {
 	if (networking.isJoined()) {
-	    LoadingScreen loadingScreen = new LoadingScreen();
+	    LoadingScreen loadingScreen = new LoadingScreen(networking);
 	    setScreen(loadingScreen);
 	}
     }

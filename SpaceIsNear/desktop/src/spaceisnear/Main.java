@@ -2,15 +2,12 @@ package spaceisnear;
 
 import com.badlogic.gdx.backends.lwjgl.*;
 import java.io.IOException;
-import java.util.concurrent.Future;
 import me.whiteoak.minlog.FileLogger;
 import me.whiteoak.minlog.Log;
 import org.apache.commons.cli.*;
 import spaceisnear.game.Engine;
-import spaceisnear.game.Networking;
 import spaceisnear.server.*;
 import spaceisnear.starting.LoginScreen;
-import spaceisnear.starting.Starter;
 import spaceisnear.starting.ui.Corev3;
 
 /**
@@ -44,16 +41,19 @@ public class Main {
 		} else {
 		    IP = "127.0.0.1";
 		}
-		LwjglApplicationConfiguration cfg = configureApp();
-		final Corev3 corev3 = new Corev3();
-		final Engine engine = new Engine(corev3);
-		final Starter starter = new Starter(corev3.getConsole(), engine.getNetworking());
-		final Future<Networking> callToConnect = starter.callToConnect(IP);
-		corev3.setStartingScreen(new LoginScreen(callToConnect));
-		corev3.setUpdatable(engine);
-		lwjglApplication = new LwjglApplication(corev3, cfg);
+		runSIN();
 	    }
 	}
+    }
+
+    private static void runSIN() {
+	LwjglApplicationConfiguration cfg = configureApp();
+	final Corev3 corev3 = new Corev3();
+	final Engine engine = new Engine(corev3);
+	final LoginScreen loginScreen = new LoginScreen();
+	corev3.setStartingScreen(loginScreen);
+	corev3.setUpdatable(engine);
+	lwjglApplication = new LwjglApplication(corev3, cfg);
     }
 
     private static void testVozvratKaretki() {

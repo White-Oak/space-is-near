@@ -21,21 +21,25 @@ import spaceisnear.game.ui.console.*;
     public Future<Networking> callToConnect(String IP) {
 	Callable<Networking> callable = () -> {
 	    try {
-		networking.connect(IP, 54555);
-	    } catch (IOException ex) {
 		try {
-		    Main.main(new String[]{"-mode", "host"});
-		} catch (ParseException ex1) {
-		    Log.error("client", "While trying to start server", ex1);
-		}
-		try {
+		    networking.connect(IP, 54555);
+		} catch (IOException ex) {
 		    console.pushMessage(new ChatString("Couldn't find a host on " + IP, LogLevel.WARNING));
 		    console.pushMessage(new ChatString("Starting server on 127.0.0.1", LogLevel.WARNING));
-		    networking.connect("127.0.0.1", 54555);
-		} catch (IOException ex1) {
-		    Log.error("client", "While trying to connect to localhost server", ex1);
-		    System.exit(1);
+		    try {
+			Main.main(new String[]{"-mode", "host"});
+		    } catch (ParseException ex1) {
+			Log.error("client", "While trying to start server", ex1);
+		    }
+		    try {
+			networking.connect("127.0.0.1", 54555);
+		    } catch (IOException ex1) {
+			Log.error("client", "While trying to connect to localhost server", ex1);
+			System.exit(1);
+		    }
 		}
+	    } catch (Exception e) {
+		Log.error("WTF", e);
 	    }
 	    return networking;
 	};

@@ -4,15 +4,16 @@
  */
 package spaceisnear.game.objects.items;
 
-import spaceisnear.game.ui.Position;
 import java.util.List;
 import spaceisnear.Utils;
+import spaceisnear.game.Corev2;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.*;
 import spaceisnear.game.objects.items.ItemBundle.Property;
+import spaceisnear.game.ui.Position;
 
 /**
  *
@@ -39,7 +40,7 @@ public class StaticItem extends ClientGameObject {
 		if (property.getName().equals("light")) {
 		    LightComponent.LightProperty lightProp;
 		    lightProp = Utils.GSON.fromJson((String) property.getValue(), LightComponent.LightProperty.class);
-		    addComponents(new LightComponent(lightProp, GameContext.getRayHandler()));
+		    addComponents(new LightComponent(lightProp, Corev2.rayHandler));
 		}
 	    }
 	}

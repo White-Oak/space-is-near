@@ -3,6 +3,7 @@ package spaceisnear.starting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import lombok.RequiredArgsConstructor;
 import me.whiteoak.minlog.Log;
 import spaceisnear.game.Networking;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
@@ -10,13 +11,14 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 /**
  * @author White Oak
  */
-public class LoadingScreen extends ScreenImprovedGreatly {
+@RequiredArgsConstructor public class LoadingScreen extends ScreenImprovedGreatly {
 
     public static int LOADING_AMOUNT, CURRENT_AMOUNT;
-    private final Label progress;
-    private Networking networking;
+    private Label progress;
+    private final Networking networking;
 
-    public LoadingScreen() {
+    @Override
+    public void create() {
 	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 	Label loadingLabel = new Label("Loading", labelStyle);
 	progress = new Label("0/0", labelStyle);

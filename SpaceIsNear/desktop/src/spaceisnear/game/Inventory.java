@@ -328,7 +328,7 @@ public class Inventory extends Actor {
 	switch (currentMenu.getSelected()) {
 	    case 0:
 		String description = item.getProperties().getDescription();
-		engine.getCore().chat(new ChatString(description, LogLevel.TALKING));
+		engine.chat(new ChatString(description, LogLevel.TALKING));
 		break;
 	}
     }

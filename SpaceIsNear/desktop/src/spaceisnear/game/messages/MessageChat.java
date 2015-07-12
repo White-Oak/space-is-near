@@ -26,7 +26,7 @@ import spaceisnear.server.*;
 
     @Override
     public void processForClient(GameContext context) {
-	context.getEngine().getCore().chat(getLog());
+	context.getEngine().chat(getLog());
     }
 
 }

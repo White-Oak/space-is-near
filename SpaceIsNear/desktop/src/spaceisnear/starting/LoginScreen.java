@@ -4,7 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import java.util.concurrent.*;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import me.whiteoak.minlog.Log;
 import spaceisnear.game.Networking;
 import spaceisnear.game.messages.service.onceused.MessageLogin;
@@ -20,11 +20,11 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
  *
  * @author LPzhelud
  */
-@RequiredArgsConstructor public final class LoginScreen extends ScreenImprovedGreatly implements ActivationListener {
+public final class LoginScreen extends ScreenImprovedGreatly implements ActivationListener {
 
     private TextField login, password;
     private spaceisnear.game.ui.Button ok;
-    private final Future<Networking> networking;
+    @Setter private Future<Networking> networking;
 
     @Override
     public void create() {
@@ -81,7 +81,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
     }
 
     private boolean isConnected() {
-	return networking.isDone();
+	return networking != null && networking.isDone();
     }
 
     @Override
@@ -89,11 +89,11 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	if (isConnected()) {
 	    try {
 		if (networking.get().isLogined()) {
-		    Lobby lobby = new Lobby();
+		    Lobby lobby = new Lobby(networking.get());
 		    setScreen(lobby);
 		}
 	    } catch (InterruptedException | ExecutionException ex) {
-		Log.error("client", "While trying to switch tp lobby screen", ex);
+		Log.error("client", "While trying to switch to lobby screen", ex);
 	    }
 	}
     }

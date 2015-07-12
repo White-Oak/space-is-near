@@ -11,9 +11,9 @@ import spaceisnear.game.ui.UIElement;
 public class GameConsolev2 {
 
     @Getter private GameConsole console;
-    private final Stage consoleStage;
+    private Stage consoleStage;
 
-    public GameConsolev2(Stage consoleStage) {
+    public void init(Stage consoleStage) {
 	this.consoleStage = consoleStage;
 	initializeConsole(800, 0, 400, 600);
     }

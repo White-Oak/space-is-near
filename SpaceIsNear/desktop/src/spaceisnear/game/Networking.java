@@ -21,8 +21,8 @@ import spaceisnear.server.*;
     private Client client;
     private final static MessageRogered ROGERED = new MessageRogered();
     @Getter @Setter private MessagePlayerInformation mpi;
-    @Getter @Setter private MessageLogin mci;
-    @Setter @Getter private boolean logined, joined, playable;
+    @Getter private MessageLogin mci;
+    @Getter @Setter private boolean logined, joined, playable;
     private final Queue<Message> messages = new ArrayDeque<>(10);
 
     public void connect(String host, int tcpPort) throws IOException {

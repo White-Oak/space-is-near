@@ -19,6 +19,6 @@ public class MessageUnpaused extends Message implements NetworkableMessage {
 
     @Override
     public void processForClient(GameContext context) {
-	context.getCore().unpause();
+	context.getEngine().unpause();
     }
 }
