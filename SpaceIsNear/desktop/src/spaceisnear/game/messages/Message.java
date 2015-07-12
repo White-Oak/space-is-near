@@ -25,4 +25,8 @@ import spaceisnear.server.*;
 
     }
 
+    public boolean isDirected() {
+	return false;
+    }
+
 }

@@ -2,6 +2,7 @@ package spaceisnear.game.messages.service.onceused;
 
 import lombok.*;
 import spaceisnear.game.GameContext;
+import spaceisnear.game.Networking;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.game.ui.console.LogLevel;
@@ -17,9 +18,10 @@ import spaceisnear.game.ui.console.LogLevel;
 
     @Override
     public void processForClient(GameContext context) {
-	context.getCore().getNetworking().setLogined(isAccess());
-	if (!context.getCore().getNetworking().isLogined()) {
-	    context.getCore().chat(new ChatString("Incorrect pair of login/password", LogLevel.WARNING));
+	final Networking networking = context.getEngine().getNetworking();
+	networking.setLogined(isAccess());
+	if (!networking.isLogined()) {
+	    context.getEngine().getCore().chat(new ChatString("Incorrect pair of login/password", LogLevel.WARNING));
 	}
     }
 

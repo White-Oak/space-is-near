@@ -8,7 +8,9 @@ import spaceisnear.abstracts.Context;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.ClientGameObject;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
+import spaceisnear.server.ServerContext;
+import spaceisnear.server.chunks.ChunkManager;
 import spaceisnear.server.objects.ServerGameObject;
 
 /**
@@ -44,9 +46,7 @@ import spaceisnear.server.objects.ServerGameObject;
     }
 
     public AbstractGameObject getOwner() {
-	if (getOwnerId() == -1) {
-	    throw new RuntimeException("Owner id is -1");
-	}
+	assert getOwnerId() != -1 : getClass().getName();
 	return getContext().getObjects().get(getOwnerId());
     }
 
@@ -92,5 +92,10 @@ import spaceisnear.server.objects.ServerGameObject;
 
     public boolean isClient() {
 	return getOwner().isClient();
+    }
+
+    protected ChunkManager getChunkManager() {
+	ServerContext sc = (ServerContext) context;
+	return sc.getNetworking().getChunkManager();
     }
 }

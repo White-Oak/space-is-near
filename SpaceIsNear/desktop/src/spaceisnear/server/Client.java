@@ -24,6 +24,9 @@ import spaceisnear.server.objects.Player;
     public Client(Connection connection) {
 	this.connection = connection;
     }
+    public boolean playerChunkOutdated() {
+        return newChunk != null;
+    }
 
     public void dispose() {
 	connection = null;

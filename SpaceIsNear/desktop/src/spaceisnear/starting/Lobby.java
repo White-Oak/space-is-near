@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import java.util.Random;
-import spaceisnear.game.Corev3;
+import spaceisnear.game.Networking;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
 import spaceisnear.game.ui.*;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
@@ -17,9 +17,9 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
 
     private TextField nickname, profession;
     private Button join;
+    private Networking networking;
 
-    public Lobby(Corev3 corev3) {
-	super(corev3);
+    public Lobby() {
 	init();
     }
 
@@ -56,7 +56,15 @@ public class Lobby extends ScreenImprovedGreatly implements ActivationListener {
     @Override
     public void componentActivated(UIElement actor) {
 	if (actor == join) {
-	    send(new MessagePlayerInformation(nickname.getText(), profession.getText()));
+	    networking.send(new MessagePlayerInformation(nickname.getText(), profession.getText()));
+	}
+    }
+
+    @Override
+    public void update() {
+	if (networking.isJoined()) {
+	    LoadingScreen loadingScreen = new LoadingScreen();
+	    setScreen(loadingScreen);
 	}
     }
 

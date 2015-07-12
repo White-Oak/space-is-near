@@ -2,12 +2,12 @@ package spaceisnear.server.objects.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.esotericsoftware.minlog.Logs;
+import me.whiteoak.minlog.Log;
 import java.io.*;
 import lombok.RequiredArgsConstructor;
 import spaceisnear.Utils;
 import spaceisnear.editor.*;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 import spaceisnear.game.objects.items.ItemBundle;
 import spaceisnear.server.ServerContext;
 
@@ -64,7 +64,7 @@ import spaceisnear.server.ServerContext;
 	    addItem(new Position(sla.getX(), sla.getY()), sla.getItemId(), context, sla.getProperties());
 	}
 	time = System.currentTimeMillis() - time;
-	Logs.info("server", "Map was loaded in " + time + " ms.");
+	Log.info("server", "Map was loaded in " + time + " ms.");
     }
 
 }

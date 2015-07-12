@@ -29,7 +29,6 @@ public class Inventory extends Actor {
     private final static int MAX_DELTA_X = (TILE_WIDTH + TILE_PADDING) * 2;
     @Getter @Setter private boolean minimized;
     private InventoryComponent inventoryComponent;
-    private final GameContext context;
     private final static String[][] itemsPlacement = {{"mask", "head", "ear"},
 						      {"costume", "body", "gloves"},
 						      {"costume slot", "shoes", "belt"},
@@ -45,6 +44,9 @@ public class Inventory extends Actor {
 							  "left hand",
 							  "bag"};
     private int activeHand;
+    //
+    private final Engine engine;
+    private GameContext context;
 
     private void drawTiles(int startingX, int startingY, ShapeRenderer renderer) {
 	Color tileColor = new Color(0, 0, 0, 0.7f);
@@ -185,8 +187,9 @@ public class Inventory extends Actor {
 	batch.begin();
     }
 
-    public Inventory(GameContext context) {
-	this.context = context;
+    public Inventory(Engine engine) {
+	this.engine = engine;
+	this.context = engine.getContext();
 	camera = new OrthographicCamera();
 	camera.setToOrtho(true);
 	camera.update();
@@ -301,22 +304,22 @@ public class Inventory extends Actor {
 
     private void createContextMenuWithItem(int x, int y, StaticItem item) {
 	if (item == null) {
-	    context.getCore().addContextMenu(null);
+	    engine.getCore().addContextMenu(null);
 	    return;
 	}
-	ContextMenu contextMenu = new ContextMenu(null, context.getCore().getStage());
+	ContextMenu contextMenu = new ContextMenu(null, engine.getCore().getStage());
 	contextMenu.setPosition(getX() + x, getY() + y);
 	addSubMenuFor(item, contextMenu);
-	context.getCore().addContextMenu(contextMenu);
+	engine.getCore().addContextMenu(contextMenu);
     }
 
     private void addSubMenuFor(StaticItem item, ContextMenu contextMenu) {
-	ContextMenu contextSubMenu = new ContextMenu(item.getProperties().getName(), context.getCore().getStage());
+	ContextMenu contextSubMenu = new ContextMenu(item.getProperties().getName(), engine.getCore().getStage());
 	contextMenu.add(contextSubMenu);
 	contextSubMenu.add("Learn");
 	contextMenu.setActivationListener((UIElement e) -> {
 	    procDefaultContextActions(e, item);
-	    context.getCore().addContextMenu(null);
+	    engine.getCore().addContextMenu(null);
 	});
     }
 
@@ -325,7 +328,7 @@ public class Inventory extends Actor {
 	switch (currentMenu.getSelected()) {
 	    case 0:
 		String description = item.getProperties().getDescription();
-		context.getCore().chat(new ChatString(description, LogLevel.TALKING));
+		engine.getCore().chat(new ChatString(description, LogLevel.TALKING));
 		break;
 	}
     }

@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.apache.commons.collections4.CollectionUtils;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.components.PositionComponent;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 
 /**
  *
@@ -87,10 +87,11 @@ public class ChunkManager {
     public Collection<Chunk> getChunksNear(Chunk chunk) {
 	ArrayList<Chunk> chunkerino = new ArrayList<>(9);
 	if (chunk != null) {
-	    for (int i = chunk.getX() / Chunk.CHUNK_SIZE - 1; i < 2; i++) {
-		for (int j = chunk.getY() / Chunk.CHUNK_SIZE - 1; j < 2; j++) {
-		    if (i > 0 && j > 0) {
-			chunkerino.add(getChunk(i, j));
+	    for (int i = chunk.getX() - Chunk.CHUNK_SIZE, ic = 0; ic <= 2; i += Chunk.CHUNK_SIZE, ic++) {
+		for (int j = chunk.getY() - Chunk.CHUNK_SIZE, jc = 0; jc <= 2; j += Chunk.CHUNK_SIZE, jc++) {
+		    try {
+			chunkerino.add(getChunkByPosition(i, j));
+		    } catch (ArrayIndexOutOfBoundsException e) {
 		    }
 		}
 	    }

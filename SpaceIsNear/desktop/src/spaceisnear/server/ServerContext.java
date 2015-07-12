@@ -1,6 +1,6 @@
 package spaceisnear.server;
 
-import com.esotericsoftware.minlog.Logs;
+import me.whiteoak.minlog.Log;
 import java.util.*;
 import lombok.Getter;
 import spaceisnear.abstracts.AbstractGameObject;
@@ -12,7 +12,7 @@ import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.server.objects.*;
 import spaceisnear.server.objects.items.ServerItemsArchive;
@@ -31,7 +31,6 @@ public final class ServerContext extends Context {
     @Getter private final List<Player> players = new LinkedList<>();
     @Getter private final ObstaclesLayer obstacles;
     @Getter private final AtmosphericLayer atmosphere;
-    private final ServerLogMessages log = new ServerLogMessages();
     private static final int MAXIMUM_TILES_TO_BE_HEARD = 20, MAXIMUM_TILES_TO_BE_WHISPERED = 2;
     public static final int HIDDEN_SERVER_OBJECTS = 1;
     private final List<AbstractGameObject> timeNeeding = new ArrayList<>();
@@ -165,7 +164,7 @@ public final class ServerContext extends Context {
     }
 
     public void chatLog(final ChatString log) {
-	Logs.info("chat", "[" + log.getLevel() + "] " + log.toString());
+	Log.info("chat", "[" + log.getLevel() + "] " + log.toString());
 	switch (log.getLevel()) {
 	    case TALKING:
 		processIncomingTalkingLogMessage(log);

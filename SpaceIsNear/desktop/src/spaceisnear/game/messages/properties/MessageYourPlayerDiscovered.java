@@ -5,30 +5,23 @@
  */
 package spaceisnear.game.messages.properties;
 
-import com.esotericsoftware.minlog.Logs;
 import lombok.*;
+import me.whiteoak.minlog.Log;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.*;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageYourPlayerDiscovered extends Message implements NetworkableMessage, MessagePropertable {
-
-    @Getter private int playerID;
+@NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageYourPlayerDiscovered extends DirectedMessage implements NetworkableMessage, MessagePropertable {
 
     public MessageYourPlayerDiscovered(int playerID) {
-	super(MessageType.DISCOVERED_PLAYER);
-	this.playerID = playerID;
+	super(MessageType.DISCOVERED_PLAYER, playerID);
     }
 
     @Override
     public void processForClient(GameContext context) {
-	context.setNewGamerPlayer(getPlayerID());
-	Logs.info("client", "Your player discovered at " + getPlayerID());
-	context.getCore().getNetworking().setPlayable(true);
-    }
-
-    @Override
-    public int getId() {
-	return playerID;
+	assert canBeApplied(context);
+	context.setNewGamerPlayer(getId());
+	Log.info("client", "Your player discovered at " + getId());
+	context.getEngine().getNetworking().setPlayable(true);
     }
 
 }

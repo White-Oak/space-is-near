@@ -1,13 +1,9 @@
 package spaceisnear.game.messages.properties;
 
 import lombok.*;
-import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.DirectedMessage;
 import spaceisnear.game.messages.MessageType;
-import spaceisnear.game.messages.properties.MessagePropertable;
-import spaceisnear.game.objects.Position;
-import spaceisnear.server.Client;
-import spaceisnear.server.ServerContext;
+import spaceisnear.game.ui.Position;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessagePositionChanged extends DirectedMessage implements MessagePropertable {
 
@@ -32,7 +28,7 @@ import spaceisnear.server.ServerContext;
 
     @Override
     public String toString() {
-	return "moved to " + p.toString() + " to " + id;
+	return getId() + " moved to " + p.toString();
     }
 
     public boolean isActuallyMovedMessage(int oldX, int oldY) {
@@ -41,14 +37,4 @@ import spaceisnear.server.ServerContext;
 	return dx == 1 || dy == 1;
     }
 
-    @Override
-    public void processForServer(ServerContext context, Client client) {
-	context.sendDirectedMessage(this);
-//	context.sendThemAll(this);
-    }
-
-    @Override
-    public void processForClient(GameContext context) {
-	context.sendDirectedMessage(this);
-    }
 }

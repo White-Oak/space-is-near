@@ -1,6 +1,6 @@
 package spaceisnear.server;
 
-import com.esotericsoftware.minlog.Logs;
+import me.whiteoak.minlog.Log;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
@@ -28,7 +28,7 @@ public final class AccountManager {
 		}
 	    }
 	} catch (IOException ex) {
-	    Logs.error("server", "While trying to read accounts info", ex);
+	    Log.error("server", "While trying to read accounts info", ex);
 	    System.exit(1);
 	}
     }
@@ -44,9 +44,9 @@ public final class AccountManager {
 	    try (FileOutputStream fos = new FileOutputStream(file, false)) {
 		fos.write(toJson.getBytes());
 	    }
-	    Logs.info("server", "Saved accounts' details");
+	    Log.info("server", "Saved accounts' details");
 	} catch (IOException ex) {
-	    Logs.error("server", "While trying to save accounts", ex);
+	    Log.error("server", "While trying to save accounts", ex);
 	}
     }
 

@@ -17,7 +17,7 @@ import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 import spaceisnear.game.objects.items.Size;
 import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.game.ui.console.LogLevel;
@@ -36,8 +36,8 @@ public class Registerer {
 	Message.class,
 	NetworkableMessage.class,
 	DirectedMessage.class,
-	HurtMessage.class,
-	HurtMessage.Type.class,
+	MessageHurt.class,
+	MessageHurt.Type.class,
 	MessageActionChosen.class,
 	MessageActionsOffer.class,
 	ServerContextMenu.class,
@@ -49,7 +49,6 @@ public class Registerer {
 	ChatString.class,
 	Position.class,
 	LogLevel.class,
-	MessageCloned.class,
 	MessageControlledByInput.class,
 	MessageControlledByInput.Type.class,
 	MessageCreated.class,

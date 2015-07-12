@@ -4,20 +4,16 @@ import box2dLight.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.esotericsoftware.minlog.Logs;
-import java.io.*;
 import java.util.*;
 import lombok.*;
-import org.apache.commons.cli.ParseException;
+import me.whiteoak.minlog.Log;
 import org.apache.commons.lang3.ArrayUtils;
-import spaceisnear.*;
 import spaceisnear.abstracts.*;
 import spaceisnear.game.components.server.context.ServerContextMenu;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
-import spaceisnear.game.objects.NetworkingObject;
-import spaceisnear.game.objects.Position;
 import spaceisnear.game.objects.items.*;
+import spaceisnear.game.ui.Position;
 import spaceisnear.game.ui.UIElement;
 import spaceisnear.game.ui.console.*;
 import spaceisnear.game.ui.context.*;
@@ -26,16 +22,16 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 /**
  * @author LPzhelud
  */
-public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
+@RequiredArgsConstructor public final class Corev2 extends ScreenImprovedGreatly {
 
-    @Getter private GameContext context;
-    private final HashMap<Integer, AbstractGameObject> objects = new HashMap<>();
+    private final Map<Integer, AbstractGameObject> objects = Collections.synchronizedMap(new HashMap<>());
     @Setter private int key;
     @Getter private boolean notpaused;
 
-    @Getter private final Networking networking;
+    @Getter private final Engine engine;
+    @Getter private CameraMan cameraMan;
+
     private ContextMenu menu;
-    private final OrthographicCamera camera = new OrthographicCamera(1200, 800);
     private InputCatcher inputCatcher;
     private Inventory inventory;
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
@@ -46,42 +42,28 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     @Getter private PointLight pointLight;
 
     private final FPSLogger logger = new FPSLogger();
+    //
 
-    public Corev2(Corev3 corev3) {
-	super(corev3);
-	networking = new Networking(this);
-	init();
-    }
+    @Override
+    public void create() {
 
-    public void init() {
-	try {
-	    ItemsArchive.itemsArchive = new ItemsArchive(ItemsReader.read());
-	} catch (Exception ex) {
-	    Logs.error("client", "While trying to create ItemsArchive", ex);
-	}
-
-	context = new GameContext(new CameraMan(), this, objects);
-	context.addObject(new NetworkingObject(networking), Context.NETWORKING_ID);
-	context.getCameraMan().setWindowWidth(800);
-	context.getCameraMan().setWindowHeight(600);
-
-	camera.setToOrtho(true);
-	camera.update();
-
+	//camera setup
+	cameraMan = new CameraMan();
+	cameraMan.setWindowWidth(800);
+	cameraMan.setWindowHeight(600);
 	inputCatcher = new InputCatcher(this);
 	inputCatcher.setBounds(0, 0, 800, 600);
 	stage.addActor(inputCatcher);
 	stage.setKeyboardFocus(inputCatcher);
 
-	inventory = new Inventory(context);
+	inventory = new Inventory(engine);
 	inventory.setBounds();
 	stage.addActor(inventory);
 
-	callToConnect();
-	Thread thread = new Thread(this, "Corev2");
-	thread.setPriority(Thread.MAX_PRIORITY);
-	thread.start();
-	thread = new Thread("Animation") {
+//	Thread thread = new Thread(this, "Corev2");
+//	thread.setPriority(Thread.MAX_PRIORITY);
+//	thread.start();
+	Thread thread = new Thread("Animation") {
 
 	    @Override
 	    public void run() {
@@ -90,7 +72,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		    try {
 			Thread.sleep(MessageAnimationStep.STEP);
 		    } catch (InterruptedException ex) {
-			Logs.error("client", "While trying to sleep in Animation thread", ex);
+			Log.error("client", "While trying to sleep in Animation thread", ex);
 		    }
 		}
 	    }
@@ -107,32 +89,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	pointLight.update();
     }
 
-    private void callToConnect() {
-	new Thread("Server starter") {
-	    @Override
-	    public void run() {
-		try {
-		    networking.connect(Main.IP, 54555);
-		} catch (IOException ex) {
-		    try {
-			Main.main(new String[]{"-mode", "host"});
-		    } catch (ParseException ex1) {
-			Logs.error("client", "While trying to start server", ex1);
-		    }
-		    synchronized (Corev2.this) {
-			try {
-			    chat(new ChatString("Couldn't find a host on " + Main.IP, LogLevel.WARNING));
-			    chat(new ChatString("Starting server on " + Main.IP, LogLevel.WARNING));
-			    networking.connect(Main.IP, 54555);
-			} catch (IOException ex1) {
-			    Logs.error("client", "While trying to connect to new server", ex1);
-			}
-		    }
-		}
-	    }
-	}.start();
-    }
-
     public void addContextMenu(ContextMenu conmenu) {
 	if (menu == null) {
 	    if (conmenu == null) {
@@ -147,25 +103,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     }
 
     private void animate() {
-	context.sendAnimationStep();
+	getContext().getAnimateds()
+		.forEach(abstractGameObject -> abstractGameObject.message(MESSAGE_ANIMATION_STEP));
+	cameraMan.animate();
 	inventory.processMessage(MESSAGE_ANIMATION_STEP);
-    }
-
-    public void update(int delta) {
-	if (notpaused) {
-	    checkKeys();
-	    MessageControlledByInput mc = checkMovementDesired();
-	    int playerID = context.getPlayerID();
-	    if (mc != null && playerID != -1) {
-		context.sendDirectedMessage(new MessageToSend(mc));
-	    }
-	    for (AbstractGameObject gameObject : objects.values()) {
-		if (!notpaused) {
-		    break;
-		}
-		gameObject.process();
-	    }
-	}
     }
 
     public void keyPressed(int key, char c) {
@@ -178,44 +119,50 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     private MessageControlledByInput checkMovementDesired() {
 	MessageControlledByInput mc = null;
-	boolean ableToMove = System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE
-		&& !context.getPlayer().getPositionComponent().isAnimated() && !getConsole().hasFocus();
-	if (ableToMove) {
-	    switch (key) {
-		case Input.Keys.UP:
-		    mc = new MessageControlledByInput(MessageControlledByInput.Type.UP, context.getPlayerID());
-		    break;
-		case Input.Keys.DOWN:
-		    mc = new MessageControlledByInput(MessageControlledByInput.Type.DOWN, context.getPlayerID());
-		    break;
-		case Input.Keys.LEFT:
-		    mc = new MessageControlledByInput(MessageControlledByInput.Type.LEFT, context.getPlayerID());
-		    break;
-		case Input.Keys.RIGHT:
-		    mc = new MessageControlledByInput(MessageControlledByInput.Type.RIGHT, context.getPlayerID());
-		    break;
-		case Input.Keys.M:
-		    inventory.setMinimized(!inventory.isMinimized());
+	if (getContext().getPlayer() != null) {
+	    boolean ableToMove = System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE
+		    && !getContext().getPlayer().getPositionComponent().isAnimated() && !getConsole().hasFocus();
+	    if (ableToMove) {
+		switch (key) {
+		    case Input.Keys.UP:
+			mc = new MessageControlledByInput(MessageControlledByInput.Type.UP, getContext().getPlayerID());
+			break;
+		    case Input.Keys.DOWN:
+			mc = new MessageControlledByInput(MessageControlledByInput.Type.DOWN, getContext().getPlayerID());
+			break;
+		    case Input.Keys.LEFT:
+			mc = new MessageControlledByInput(MessageControlledByInput.Type.LEFT, getContext().getPlayerID());
+			break;
+		    case Input.Keys.RIGHT:
+			mc = new MessageControlledByInput(MessageControlledByInput.Type.RIGHT, getContext().getPlayerID());
+			break;
+		    case Input.Keys.M:
+			inventory.setMinimized(!inventory.isMinimized());
+			lastTimeMoved = System.currentTimeMillis();
+			break;
+		    case Input.Keys.R:
+			inventory.changeActiveHand();
+			lastTimeMoved = System.currentTimeMillis();
+			break;
+		}
+		if (mc != null) {
 		    lastTimeMoved = System.currentTimeMillis();
-		    break;
-		case Input.Keys.R:
-		    inventory.changeActiveHand();
-		    lastTimeMoved = System.currentTimeMillis();
-		    break;
-	    }
-	    if (mc != null) {
-		lastTimeMoved = System.currentTimeMillis();
+		}
 	    }
 	}
 	return mc;
     }
 
+    private GameContext getContext() {
+	return engine.getContext();
+    }
+
     private void checkKeys() {
 	switch (key) {
 	    case Input.Keys.ESCAPE:
-		MessagePropertySet messagePropertySet = new MessagePropertySet(((GameContext) context).getPlayerID(), "pull", -1);
+		MessagePropertySet messagePropertySet = new MessagePropertySet(getContext().getPlayerID(), "pull", -1);
 		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-		context.sendDirectedMessage(messageToSend);
+		getContext().sendDirectedMessage(messageToSend);
 		break;
 	    case Input.Keys.ENTER:
 		final boolean focused = getConsole().getTextField().isFocused();
@@ -229,40 +176,27 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     @Override
     public void draw() {
-	context.getCameraMan().moveCamera();
-	batch.setProjectionMatrix(context.getCameraMan().getCamera().combined);
+	cameraMan.moveCamera(getCamera());
+	batch.setProjectionMatrix(getCamera().combined);
 
-	GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getCamera().combined);
-	GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getCamera().combined);
-	pointLight.setPosition((getContext().getPlayer().getPosition().getX() + 0.5f) * GameContext.TILE_WIDTH,
-		(getContext().getPlayer().getPosition().getY() + 0.5f) * GameContext.TILE_HEIGHT);
-
+//	if (getContext().getPlayer() != null) {
+//	    GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getCamera().combined);
+//	    GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getCamera().combined);
+//	    pointLight.setPosition((getContext().getPlayer().getPosition().getX() + 0.5f) * GameContext.TILE_WIDTH,
+//		    (getContext().getPlayer().getPosition().getY() + 0.5f) * GameContext.TILE_HEIGHT);
+//	}
 	batch.begin();
-	context.getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
+	getContext().getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
 	batch.end();
 	GameContext.getRayHandler().updateAndRender();
 
-	context.getCameraMan().unmoveCamera();
+	cameraMan.unmoveCamera(getCamera());
 	logger.log();
     }
 
-    public int getID() {
-	return 3;
-    }
-
-    @Override
-    public void pause() {
-	notpaused = false;
-    }
-
-    public void unpause() {
-	notpaused = true;
-	Logs.info("client", "Client has continued his work");
-    }
-
     public void mouseClicked(int button, int x, int y) {
-	int toAddX = context.getCameraMan().getX();
-	int toAddY = context.getCameraMan().getY();
+	int toAddX = cameraMan.getX();
+	int toAddY = cameraMan.getY();
 	int calculatedX = x / GameContext.TILE_WIDTH;
 	int calculatedY = y / GameContext.TILE_HEIGHT;
 	int tileX = toAddX + calculatedX;
@@ -280,16 +214,16 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		}
 		break;
 	    case 0:
-		final Position position = context.getPlayer().getPosition();
+		final Position position = getContext().getPlayer().getPosition();
 		int dx = Math.abs(position.getX() - tileX);
 		int dy = Math.abs(position.getY() - tileY);
 		if (dx <= 2 && dy <= 2) {
-		    java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
+		    java.util.List<AbstractGameObject> itemsOn = getContext().itemsOn(tileX, tileY);
 		    MessageInteracted messageInteracted;
 		    int interactedWith = inventory.getItemInActiveHand().getItemId();
 		    messageInteracted = new MessageInteracted(itemsOn.get(itemsOn.size() - 1).getId(), interactedWith);
 		    MessageToSend messageToSend = new MessageToSend(messageInteracted);
-		    context.sendDirectedMessage(messageToSend);
+		    getContext().sendDirectedMessage(messageToSend);
 		}
 		break;
 	}
@@ -298,7 +232,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     private void createContextMenuWithItems(int x, int y, int tileX, int tileY) {
 	ContextMenu contextMenu = new ContextMenu(null, stage);
 	contextMenu.setPosition(x, y);
-	java.util.List<AbstractGameObject> itemsOn = context.itemsOn(tileX, tileY);
+	java.util.List<AbstractGameObject> itemsOn = getContext().itemsOn(tileX, tileY);
 	ArrayList<Integer> ids = new ArrayList<>();
 	itemsOn.stream()
 		.map(staticItem -> (StaticItem) staticItem)
@@ -310,7 +244,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 	//sending message to ask for set of actions
 	MessageActionsRequest messageActionsRequest = new MessageActionsRequest(toPrimitive);
 	MessageToSend messageToSend = new MessageToSend(messageActionsRequest);
-	context.sendDirectedMessage(messageToSend);
+	getContext().sendDirectedMessage(messageToSend);
 	//Adding to CONTEXT
 	menu = contextMenu;
 	stage.addActor(menu);
@@ -319,7 +253,7 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 
     public void updateCurrentMenu(ServerContextMenu update) {
 	if (menu != null) {
-	    menu.setItems(update, context);
+	    menu.setItems(update.getLists(), update.getListeners(getContext()));
 	}
     }
 
@@ -349,10 +283,10 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
 		break;
 	    case 1:
 		int id = item.getId();
-		int playerID = context.getPlayerID();
+		int playerID = getContext().getPlayerID();
 		MessagePropertySet messagePropertySet = new MessagePropertySet(playerID, "pull", id);
 		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-		context.sendDirectedMessage(messageToSend);
+		getContext().sendDirectedMessage(messageToSend);
 		break;
 	}
     }
@@ -360,39 +294,6 @@ public final class Corev2 extends ScreenImprovedGreatly implements Runnable {
     public void chat(ChatString log) {
 	if (getConsole() != null) {
 	    getConsole().pushMessage(log);
-	}
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void show() {
-	context.setCameraToPlayer();
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @Override
-    public void run() {
-	while (true) {
-	    update(50);
-	    try {
-		Thread.sleep(50);
-	    } catch (InterruptedException ex) {
-		Logs.error("client", "While trying to sleep in update client thread", ex);
-	    }
 	}
     }
 }

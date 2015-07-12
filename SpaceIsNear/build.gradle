@@ -1,15 +1,12 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
     }
 }
 
 allprojects {
-    apply plugin: "eclipse"
-    apply plugin: "idea"
     version = '0.0.11'
     ext {
         appName = 'space-is-near'
@@ -19,40 +16,103 @@ allprojects {
         ashleyVersion = '1.3.1'
         aiVersion = '1.5.0'
     }
+
     
     repositories {
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
 }
 
 project(":desktop") {
     apply plugin: "java"
 
+    sourceCompatibility = 1.8
+    ext{
+        buildNumberIncremented = false
+	mVersionCode = 1
+    }
+    configurations {
+        provided
+    }
+
+    sourceSets {
+        main {
+            compileClasspath += configurations.provided
+        }
+    }
     
     dependencies {
-        compile project(":core")
+	compile project(":framework")
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-    
-	compile "commons-cli:commons-cli:1.2"
-	compile "org.apache.commons:commons-lang3:3.3"
-	compile "com.google.code.gson:gson:2.3.1"
-	compile "com.esotericsoftware:kryonet:2.22.0-RC1"
-	compile "org.projectlombok:lombok:1.16.2"
-	compile "org.apache.commons:commons-collections4:4.0"
+
+        compile "commons-cli:commons-cli:1.2"
+        compile "org.apache.commons:commons-lang3:3.3"
+        compile "com.google.code.gson:gson:2.3.1"
+        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+        provided "org.projectlombok:lombok:1.16.2"
+        compile "org.apache.commons:commons-collections4:4.0"
     }
 }
 
-project(":core") {
+project(":framework") {
     apply plugin: "java"
+
+    sourceCompatibility = 1.8
+    
+    configurations {
+        provided
+    }
+
+    sourceSets {
+        main {
+            compileClasspath += configurations.provided
+        }
+    }
+    
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
+        compile "commons-cli:commons-cli:1.2"
+        compile "org.apache.commons:commons-lang3:3.3"
+        compile "com.google.code.gson:gson:2.3.1"
+        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+        provided "org.projectlombok:lombok:1.16.2"
+        compile "org.apache.commons:commons-collections4:4.0"
+    }
 }
 
-tasks.eclipse.doLast {
-    delete ".project"
+project(":devlist") {
+    apply plugin: "java"
+
+    sourceCompatibility = 1.8
+    configurations {
+        provided
+    }
+
+    sourceSets {
+        main {
+            compileClasspath += configurations.provided
+        }
+    }
+    
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
+        provided "org.projectlombok:lombok:1.16.2"
+    }
 }

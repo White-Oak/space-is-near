@@ -3,8 +3,8 @@ package spaceisnear.starting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.esotericsoftware.minlog.Logs;
-import spaceisnear.game.Corev3;
+import me.whiteoak.minlog.Log;
+import spaceisnear.game.Networking;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
@@ -14,9 +14,9 @@ public class LoadingScreen extends ScreenImprovedGreatly {
 
     public static int LOADING_AMOUNT, CURRENT_AMOUNT;
     private final Label progress;
+    private Networking networking;
 
-    public LoadingScreen(Corev3 corev3) {
-	super(corev3);
+    public LoadingScreen() {
 	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 	Label loadingLabel = new Label("Loading", labelStyle);
 	progress = new Label("0/0", labelStyle);
@@ -32,10 +32,10 @@ public class LoadingScreen extends ScreenImprovedGreatly {
 	setBackgroundColor(new Color(0xecf0f1ff));
     }
 
+    @Override
     public void update() {
-	if (isCoreNotPaused()) {
-	    Logs.info("client", "Moving to Core...");
-	    setScreen(3);
+	if (networking.isPlayable()) {
+	    Log.info("client", "Moving to Core...");
 	}
     }
 

@@ -5,10 +5,12 @@
  */
 package spaceisnear.game;
 
+import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import lombok.Getter;
 import lombok.Setter;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.objects.GamerPlayer;
+import spaceisnear.game.ui.Position;
 
 /**
  * @author LPzhelud
@@ -20,7 +22,6 @@ public final class CameraMan {
     private int actualX, actualY;
     @Setter private int windowWidth;
     @Setter private int windowHeight;
-    @Getter private final OrthographicCamera camera = new OrthographicCamera();
     @Getter private final int horizontalTilesNumber;
     @Getter private final int verticalTilesNumber;
     private final static int CAMERA_ANIMATION_FACTOR = 3;
@@ -28,8 +29,6 @@ public final class CameraMan {
     public CameraMan() {
 	verticalTilesNumber = GameContext.MAP_WIDTH;
 	horizontalTilesNumber = verticalTilesNumber;
-	camera.setToOrtho(true);
-//	lightsCamera.setToOrtho(true, 1200f / GameContext.TILE_WIDTH, 600f / GameContext.TILE_HEIGHT);
     }
 
     public void animate() {
@@ -62,20 +61,20 @@ public final class CameraMan {
 
     private int savedActualX, savedActualY;
 
-    public void moveCamera() {
+    public void moveCamera(OrthographicCamera camera) {
 	savedActualX = (int) actualX;
 	savedActualY = (int) actualY;
 	camera.translate(savedActualX, savedActualY);
 	camera.update();
     }
 
-    public void unmoveCamera() {
+    public void unmoveCamera(OrthographicCamera camera) {
 	camera.translate(-savedActualX, -savedActualY);
 //	lightsCamera.translate(-savedX, -savedY);
 	camera.update();
     }
 
-    public boolean belongsToCamera(Position p, GameContext context) {
+    public boolean belongsToCamera(Position p, Engine engine) {
 	int px = p.getX();
 	int py = p.getY();
 	if (px < 0 || py < 0) {
@@ -87,17 +86,21 @@ public final class CameraMan {
 	final boolean yBelongs = py + 2 > this.y && py - this.y < getMaxYTiles() + 1;
 	float xx = (px + 0.5f);
 	float yy = (py + 0.5f);
-	boolean lighted = context.getCore().getPointLight().contains(px * GameContext.TILE_WIDTH, py * GameContext.TILE_HEIGHT);
-	Position position = context.getPlayer().getPosition();
-	lighted |= context.getCore().getPointLight().
-		contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
-			yy * GameContext.TILE_HEIGHT);
-	lighted |= context.getCore().getPointLight().
-		contains(xx * GameContext.TILE_WIDTH,
-			(yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
-	lighted |= context.getCore().getPointLight().
-		contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
-			(yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
+	PointLight playerLight = engine.getCore().getPointLight();
+	final GamerPlayer player = engine.getContext().getPlayer();
+	boolean lighted = playerLight.contains(px * GameContext.TILE_WIDTH, py * GameContext.TILE_HEIGHT);
+	if (player != null) {
+	    Position position = player.getPosition();
+	    lighted |= playerLight.
+		    contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
+			    yy * GameContext.TILE_HEIGHT);
+	    lighted |= playerLight.
+		    contains(xx * GameContext.TILE_WIDTH,
+			    (yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
+	    lighted |= playerLight.
+		    contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
+			    (yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
+	}
 	return xBelongs && yBelongs && lighted;
     }
 

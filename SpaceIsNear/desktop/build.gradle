@@ -1,10 +1,12 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 apply plugin: "java"
 
-sourceCompatibility = 1.8
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 
 project.ext.mainClassName = "spaceisnear.Main"
-project.ext.assetsDir = new File("../core/assets");
+project.ext.assetsDir = new File("./assets");
 
 task run(dependsOn: classes, type: JavaExec) {
     enableAssertions = true
@@ -24,23 +26,54 @@ task debug(dependsOn: classes, type: JavaExec) {
     debug = true
 }
 
+task buildNumber {
+    incrementBuildNumber()
+}
+
+int incrementBuildNumber() {
+    def versionCode = project.ext.mVersionCode
+    def file = file("./gradle.properties")
+    if (file.exists()) {
+        def pattern = Pattern.compile("buildNumber = (\\d+)")
+        def text = file.getText()
+        def matcherVersionCode = pattern.matcher(text)
+        def find = matcherVersionCode.find()
+        if (find) {
+            versionCode = Integer.parseInt(matcherVersionCode.group(1))
+	    if (project.ext.buildNumberIncremented) {
+		println(":desktop:buildNumber — already incremented build number")
+            } else {
+		def mNextVersionCode = versionCode + 1
+		def manifestContent = matcherVersionCode.replaceAll("buildNumber = " + mNextVersionCode)
+		println(":desktop:buildNumber — current buildNumber is " + versionCode);
+		println(":desktop:buildNumber — next buildNumber is " + mNextVersionCode);
+		file.write(manifestContent)
+                project.ext.buildNumberIncremented = true
+		project.ext.mVersionCode = versionCode
+	    }
+        } else appendBuildNumber(file)
+    } else appendBuildNumber(file)
+    return versionCode;
+}
+
+void appendBuildNumber(File file) {
+    def versionCode = project.ext.mVersionCode
+    file.append("\nbuildNumber = " + (versionCode + 1))
+    println(":desktop:incrementBuildNumber - current buildNumber is " + versionCode);
+    println(":desktop:incrementBuildNumber - next buildNumber is " +(versionCode + 1));
+}
+
 task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
+    from { configurations.compile.collect { zipTree(it) } }
     from files(project.assetsDir);
     libsDirName = deployFolder
-    archiveName = appName + "-" + version + ".jar"
+
+    archiveName = appName + "-" + version + "-b" + mVersionCode + ".jar"
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
 }
 
-dist.dependsOn classes
-
-eclipse {
-    project {
-        name = appName + "-desktop"
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/core/assets'
-    }
-}
+dist.dependsOn classes, buildNumber

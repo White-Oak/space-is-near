@@ -9,7 +9,7 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePositionChanged;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 
 public class GamePlayerPositionComponent extends PositionComponent {
 
@@ -27,7 +27,7 @@ public class GamePlayerPositionComponent extends PositionComponent {
 	    case TELEPORTED: {
 		MessagePositionChanged messagem = (MessagePositionChanged) message;
 		if (oldX != getX() || oldY != getY()) {
-		    context.getCameraMan().moveCameraToPlayer(messagem.getX(), messagem.getY());
+		    context.getEngine().getCore().getCameraMan().moveCameraToPlayer(messagem.getX(), messagem.getY());
 		}
 		break;
 	    }

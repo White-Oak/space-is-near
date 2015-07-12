@@ -8,6 +8,7 @@ package spaceisnear.game.objects.items;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import java.util.Arrays;
 import lombok.Getter;
 import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.GameContext;
@@ -26,14 +27,10 @@ public class ItemsArchive extends ItemsArchivable {
 	super(bundles);
 	sprites = new Texture(Gdx.files.internal("res/sprites.png"));
 	TextureRegion[][] split = TextureRegion.split(sprites, GameContext.TILE_WIDTH, GameContext.TILE_HEIGHT);
-	regions = new TextureRegion[split.length * split[0].length];
-	int index = 0;
-	for (TextureRegion[] textureRegions : split) {
-	    for (TextureRegion textureRegion : textureRegions) {
-		textureRegion.flip(false, true);
-		regions[index++] = textureRegion;
-	    }
-	}
+	regions = Arrays.stream(split)
+		.flatMap(Arrays::stream)
+		.peek((TextureRegion region) -> region.flip(false, true))
+		.toArray(TextureRegion[]::new);
     }
 
     public TextureRegion getTextureRegion(int id) {

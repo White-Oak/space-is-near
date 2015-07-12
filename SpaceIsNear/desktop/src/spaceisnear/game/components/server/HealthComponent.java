@@ -45,7 +45,7 @@ public class HealthComponent extends Component {
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
 	    case HURT:
-		HurtMessage hurtMessage = (HurtMessage) message;
+		MessageHurt hurtMessage = (MessageHurt) message;
 		changeHealth(hurtMessage.getDamage());
 		final Player player = (Player) getOwner();
 		switch (hurtMessage.getType()) {

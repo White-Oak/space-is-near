@@ -6,6 +6,7 @@ package spaceisnear.game.objects;
 
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.GamePlayerPositionComponent;
+import spaceisnear.game.ui.Position;
 
 public class GamerPlayer extends Player {
 
@@ -21,7 +22,7 @@ public class GamerPlayer extends Player {
 		final Position position = ((PositionComponent) component).getPosition();
 		final GamePlayerPositionComponent newPositionComponent = new GamePlayerPositionComponent(position);
 		getComponents().set(i, newPositionComponent);
-		p.getContext().getCameraMan().moveCameraToPlayer(position.getX(), position.getY());
+		p.getContext().getEngine().getCore().getCameraMan().moveCameraToPlayer(position.getX(), position.getY());
 	    }
 	}
 	setContext(p.getContext());

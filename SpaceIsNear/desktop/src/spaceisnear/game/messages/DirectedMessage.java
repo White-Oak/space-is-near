@@ -14,7 +14,7 @@ import spaceisnear.server.*;
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED) public abstract class DirectedMessage extends Message {
 
-    @Getter protected int id;
+    @Getter private int id;
 
     public DirectedMessage(MessageType messageType, int id) {
 	super(messageType);
@@ -23,12 +23,22 @@ import spaceisnear.server.*;
 
     @Override
     public void processForClient(GameContext context) {
+	assert canBeApplied(context);
 	context.sendDirectedMessage(this);
+    }
+
+    public boolean canBeApplied(GameContext context) {
+	return context.getObjects().containsKey(getId());
     }
 
     @Override
     public void processForServer(ServerContext context, Client client) {
 	context.sendDirectedMessage(this);
+    }
+
+    @Override
+    public boolean isDirected() {
+	return true;
     }
 
 }

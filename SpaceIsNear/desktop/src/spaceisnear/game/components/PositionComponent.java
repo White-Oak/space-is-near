@@ -7,6 +7,7 @@
  */
 package spaceisnear.game.components;
 
+import spaceisnear.game.ui.Position;
 import lombok.Getter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.layer.AtmosphericLayer;

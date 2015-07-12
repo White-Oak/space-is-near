@@ -1,12 +1,12 @@
 package spaceisnear.game.components.server;
 
-import com.esotericsoftware.minlog.Logs;
+import me.whiteoak.minlog.Log;
 import spaceisnear.game.components.*;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageInteracted;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.ServerGameObject;
 import spaceisnear.server.objects.items.StaticItem;
@@ -42,7 +42,7 @@ public class VariablePropertiesComponent extends Component {
 			    scriptFor.script();
 			}
 		    } catch (ClassCastException e) {
-			Logs.error("server", "While trying to get script for changing property", e);
+			Log.error("server", "While trying to get script for changing property", e);
 		    }
 		}
 		if (!isDontProcess()) {
@@ -60,13 +60,13 @@ public class VariablePropertiesComponent extends Component {
 			InteractionScript scriptFor = (InteractionScript) scriptsManager.getScriptFor(
 				ScriptsManager.ScriptType.INTERACTION,
 				owner.getProperties().getName());
-			Logs.debug("server", "Found script interaction");
+			Log.debug("server", "Found script interaction");
 			if (scriptFor != null) {
 			    scriptFor.init(context, owner, (ServerGameObject) context.getObjects().get(mu.getInteractedWith()));
 			    scriptFor.script();
 			}
 		    } catch (ClassCastException e) {
-			Logs.error("server", "While trying to get script for interaction", e);
+			Log.error("server", "While trying to get script for interaction", e);
 		    }
 		}
 	}

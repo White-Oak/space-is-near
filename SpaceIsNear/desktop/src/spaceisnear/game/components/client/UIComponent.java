@@ -4,7 +4,7 @@
  */
 package spaceisnear.game.components.client;
 
-import com.esotericsoftware.minlog.Logs;
+import me.whiteoak.minlog.Log;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
@@ -21,7 +21,7 @@ public class UIComponent extends Component {
 	switch (message.getMessageType()) {
 	    case NETWORK_STATE:
 		MessageNetworkState mns = (MessageNetworkState) message;
-		Logs.info("client", "Message network state: " + mns);
+		Log.info("client", "Message network state: " + mns);
 		break;
 	}
     }

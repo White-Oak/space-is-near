@@ -7,7 +7,7 @@ package spaceisnear.game.messages;
 
 import lombok.Getter;
 
-public class MessageTimePassed extends Message {
+public class MessageTimePassed extends BroadcastMessage {
 
     @Getter private final int timePassed;
 

@@ -10,7 +10,6 @@ import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
-import spaceisnear.game.components.client.PaintableComponent;
 
 /**
  * @author LPzhelud
@@ -43,9 +42,6 @@ import spaceisnear.game.components.client.PaintableComponent;
     public void setContext(GameContext context) {
 	this.context = context;
 	getComponents().forEach(component -> component.setContext(context));
-	getComponents().stream()
-		.filter(component -> (component instanceof PaintableComponent))
-		.forEach(component -> context.addPaintable((PaintableComponent) component));
     }
 
     public boolean isAnimated() {

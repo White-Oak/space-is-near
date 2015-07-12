@@ -7,6 +7,7 @@ package spaceisnear.abstracts;
 
 import java.util.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.GameObjectType;
 
@@ -14,14 +15,10 @@ import spaceisnear.game.objects.GameObjectType;
  *
  * @author White Oak
  */
-public abstract class Context {
+@RequiredArgsConstructor public abstract class Context {
 
-    @Getter protected final HashMap<Integer, AbstractGameObject> objects;
+    @Getter protected final Map<Integer, AbstractGameObject> objects;
     public final static int NETWORKING_ID = -2;
-
-    public Context(HashMap<Integer, AbstractGameObject> objects) {
-	this.objects = objects;
-    }
 
     public abstract void sendThemAll(Message m);
 

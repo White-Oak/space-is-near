@@ -10,5 +10,5 @@ package spaceisnear.game.objects;
  */
 public enum GameObjectType {
 
-    PLAYER, ITEM, GAMER_PLAYER, NETWORKING;
+    PLAYER, ITEM, GAMER_PLAYER, NETWORKING, PATIENCE;
 }

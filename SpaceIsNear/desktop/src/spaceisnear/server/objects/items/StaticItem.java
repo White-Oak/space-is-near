@@ -6,7 +6,7 @@ import spaceisnear.game.components.ItemPropertiesComponent;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.components.server.VariablePropertiesComponent;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.ServerGameObject;
 

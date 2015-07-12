@@ -10,11 +10,12 @@ import spaceisnear.abstracts.Context;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.layer.AtmosphericLayer;
-import spaceisnear.game.messages.HurtMessage;
+import spaceisnear.game.messages.MessageHurt;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.MessageToSend;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 
+//
 public class BreathingComponent extends Component {
 
     public BreathingComponent() {

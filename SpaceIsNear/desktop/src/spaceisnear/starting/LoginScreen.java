@@ -3,27 +3,41 @@ package spaceisnear.starting;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import spaceisnear.game.Corev3;
+import java.util.concurrent.*;
+import lombok.RequiredArgsConstructor;
+import me.whiteoak.minlog.Log;
+import spaceisnear.game.Networking;
 import spaceisnear.game.messages.service.onceused.MessageLogin;
+import spaceisnear.game.objects.items.ItemsArchive;
+import spaceisnear.game.objects.items.ItemsReader;
 import spaceisnear.game.ui.*;
 import spaceisnear.game.ui.TextField;
+import spaceisnear.game.ui.console.ChatString;
+import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
  *
  * @author LPzhelud
  */
-public final class LoginScreen extends ScreenImprovedGreatly implements ActivationListener {
+@RequiredArgsConstructor public final class LoginScreen extends ScreenImprovedGreatly implements ActivationListener {
 
-    public static TextField login, password;
+    private TextField login, password;
     private spaceisnear.game.ui.Button ok;
+    private final Future<Networking> networking;
 
-    public LoginScreen(Corev3 corev3) {
-	super(corev3);
-	init();
+    @Override
+    public void create() {
+	initView();
+	try {
+	    ItemsArchive.itemsArchive = new ItemsArchive(ItemsReader.read());
+	} catch (Exception ex) {
+	    Log.error("client", "While trying to create ItemsArchive", ex);
+	    System.exit(1);
+	}
     }
 
-    public void init() {
+    private void initView() {
 	Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 	Label loginLabel = new Label("Login", labelStyle);
 	Label passwordLabel = new Label("Password", labelStyle);
@@ -53,8 +67,35 @@ public final class LoginScreen extends ScreenImprovedGreatly implements Activati
 
     @Override
     public void componentActivated(UIElement actor) {
-	if (isConnected() && actor == ok) {
-	    send(new MessageLogin(login.getText(), password.getText()));
+	if (isConnected()) {
+	    if (actor == ok) {
+		try {
+		    networking.get().send(new MessageLogin(login.getText(), password.getText()));
+		} catch (InterruptedException | ExecutionException ex) {
+		    Log.error("client", "While trying to connect to server", ex);
+		}
+	    }
+	} else {
+	    getConsole().pushMessage(new ChatString("Wait for the connection to be established!", LogLevel.WARNING));
 	}
     }
+
+    private boolean isConnected() {
+	return networking.isDone();
+    }
+
+    @Override
+    public void update() {
+	if (isConnected()) {
+	    try {
+		if (networking.get().isLogined()) {
+		    Lobby lobby = new Lobby();
+		    setScreen(lobby);
+		}
+	    } catch (InterruptedException | ExecutionException ex) {
+		Log.error("client", "While trying to switch tp lobby screen", ex);
+	    }
+	}
+    }
+
 }

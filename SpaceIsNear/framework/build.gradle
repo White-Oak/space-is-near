@@ -1,0 +1,5 @@
+apply plugin: "java"
+
+sourceSets.main.java.srcDirs = ["src/"]
+
+project.ext.assetsDir = new File("./assets");

@@ -15,7 +15,7 @@ import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePositionChanged;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.chunks.Chunk;
 import spaceisnear.server.objects.items.StaticItem;

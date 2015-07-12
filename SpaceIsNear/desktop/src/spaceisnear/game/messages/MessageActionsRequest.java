@@ -1,6 +1,6 @@
 package spaceisnear.game.messages;
 
-import com.esotericsoftware.minlog.Logs;
+import me.whiteoak.minlog.Log;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import spaceisnear.game.components.server.context.ContextMenuForItems;
@@ -29,7 +29,7 @@ import spaceisnear.server.objects.items.StaticItem;
 	    StaticItem item = (StaticItem) context.getObjects().get(j);
 	    if (item == null) {
 		Exception ex = new NullPointerException("Object " + j + " no longer exists or has been called due to wrong usage.");
-		Logs.error("server", null, ex);
+		Log.error("server", null, ex);
 		return;
 	    }
 	    items[i] = item;

@@ -1,9 +1,11 @@
 package spaceisnear.server;
 
+import spaceisnear.game.ui.Position;
 import com.esotericsoftware.kryonet.*;
-import com.esotericsoftware.minlog.Logs;
+import me.whiteoak.minlog.Log;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 import lombok.*;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.messages.*;
@@ -22,7 +24,8 @@ import spaceisnear.server.objects.items.*;
 /**
  * @author white_oak
  */
-@RequiredArgsConstructor public class ServerNetworking extends Listener {
+@RequiredArgsConstructor
+public class ServerNetworking extends Listener {
 
     public Server server;
     private final ServerCore core;
@@ -37,7 +40,9 @@ import spaceisnear.server.objects.items.*;
     //
     private final List<Client> pendingRogers = new ArrayList<>();
     //
-    private final ChunkManager chunkManager;
+    @Getter private final ChunkManager chunkManager;
+    //
+    private final ExecutorService connectedMessagingPool = Executors.newFixedThreadPool(5);
 
     @Override
     public void received(Connection connection, Object object) {
@@ -53,7 +58,7 @@ import spaceisnear.server.objects.items.*;
 	    }
 	} else {
 	    if (object instanceof String) {
-		Logs.info("server", "Got string over the net: " + object);
+		Log.info("server", "Got string over the net: " + object);
 	    }
 	}
     }
@@ -101,46 +106,44 @@ import spaceisnear.server.objects.items.*;
 	String messageS = mci.getLogin() + " requested access with password " + mci.getPassword();
 	boolean accessible = accountManager.isAccessible(mci.getLogin(), mci.getPassword());
 	messageS += accessible ? " and successfully got it." : " but does not seem to provide legal data.";
-	Logs.info("server", messageS);
+	Log.info("server", messageS);
 	sendToConnection(connection, new MessageAccess(accessible));
 	if (accessible) {
 	    seeIfOldClient(clientByConnection, mci, connection);
-	    Logs.info("server", "Client information received");
+	    Log.info("server", "Client information received");
 	}
     }
 
     private synchronized void seeIfOldClient(final Client clientByConnection, MessageLogin mci, Connection connection) {
-	clients.stream()
-		.filter(client -> clientByConnection != client)//newly created client is still in list
-		.filter(client -> client.getClientInformation().getLogin().equals(mci.getLogin()))
-		.forEach(client -> {
+	clients.stream().filter(client -> clientByConnection != client)//newly created client is still in list
+		.filter(client -> client.getClientInformation().getLogin().equals(mci.getLogin())).forEach(client -> {
 		    client.setConnection(connection);
 		    clients.remove(clientByConnection);
 		    sendToConnection(connection, new MessageJoined());
 		    Runnable runnable = () -> processOldPlayer(client);
 		    new Thread(runnable, "sending world to old player").start();
 		});
-//	for (Client client : clients) {
-//	    //newly created client is still in list
-//	    if (clientByConnection != client) {
-//		MessageLogin clientInformation = client.getClientInformation();
-//		if (clientInformation.getLogin().equals(mci.getLogin())) {
-//		    client.setConnection(connection);
-//		    clients.remove(clientByConnection);
-//		    sendToConnection(connection, new MessageJoined());
-//		    Runnable runnable = () -> processOldPlayer(client);
-//		    new Thread(runnable, "sending world to old player").start();
-//		    break;
-//		}
-//	    }
-//	}
+	//	for (Client client : clients) {
+	//	    //newly created client is still in list
+	//	    if (clientByConnection != client) {
+	//		MessageLogin clientInformation = client.getClientInformation();
+	//		if (clientInformation.getLogin().equals(mci.getLogin())) {
+	//		    client.setConnection(connection);
+	//		    clients.remove(clientByConnection);
+	//		    sendToConnection(connection, new MessageJoined());
+	//		    Runnable runnable = () -> processOldPlayer(client);
+	//		    new Thread(runnable, "sending world to old player").start();
+	//		    break;
+	//		}
+	//	    }
+	//	}
     }
 
     private void processPlayerInformation(Message message, Connection connection) {
 	MessagePlayerInformation mpi = (MessagePlayerInformation) message;
 	final Client client = getClientByConnection(connection);
 	client.setPlayerInformation(mpi);
-	Logs.info("Server", "Player information received");
+	Log.info("Server", "Player information received");
 	sendToConnection(connection, new MessageJoined());
 	connectedWantsPlayer(client);
     }
@@ -220,29 +223,30 @@ import spaceisnear.server.objects.items.*;
 	new Thread(runnable, "New player creating").start();
     }
 
-    private List<ObjectMessaged> createPlayer(Client client) {
-	List<ObjectMessaged> list = new LinkedList<>();
+    private Player createPlayer(Client client) {
+	//		List<ObjectMessaged> list = new LinkedList<>();
 
 	Player player = core.addPlayer();
 	client.setPlayer(player);
 	player.setNickname(client.getPlayerInformation().getDesiredNickname());
 	player.getPosition().setX(1);
 	player.getPosition().setY(1);
-	client.setChunk(chunkManager.getChunkByPosition(player.getPosition()));
-	list.add(getObjectMessaged(player));
+//	playerChunkUpdated(player.getId());
+	//		list.add(getObjectMessaged(player));
 
 	StaticItem ear = addToPlayerItem("ear_radio", "ear", player);
-	list.add(getObjectMessaged(ear));
+	//		list.add(getObjectMessaged(ear));
 
 	StaticItem right_pocket = addToPlayerItem("pda", "right pocket", player);
-	list.add(getObjectMessaged(right_pocket));
+	//		list.add(getObjectMessaged(right_pocket));
 
 	StaticItem id = addToPlayerItem("id", "id", player);
 
 	id.getVariableProperties().setProperty("name", client.getPlayerInformation().getDesiredNickname());
 	id.getVariableProperties().setProperty("profession", client.getPlayerInformation().getDesiredProfession());
-	list.add(getObjectMessaged(id));
-	return list;
+	//		list.add(getObjectMessaged(id));
+	//		return list;
+	return player;
     }
 
     private StaticItem addToPlayerItem(String itemName, String nameOfInventorySlot, Player player) {
@@ -264,7 +268,7 @@ import spaceisnear.server.objects.items.*;
 	server.addListener(this);
 	server.bind(54555);
     }
-//@working REWORK
+    //TODO REWORK
 
     private void processOldPlayer(Client client) {
 	sendToAll(new MessagePaused());
@@ -278,48 +282,31 @@ import spaceisnear.server.objects.items.*;
     }
 
     private void processNewPlayer(final Client client) {
-//	waitForServerToStop();
-	//
 	sendToAll(new MessagePaused());
 
-	List<ObjectMessaged> objectPlayer = createPlayer(client);
-	Collection<ObjectMessaged> world = getWorldNear(client.getChunk());
-	System.out.println(world.size());
-	sendWorldInformation(world, client);
-	sendCreatedsOfWorld(world, client.getConnection());
+	Player objectPlayer = createPlayer(client);
 	sendPlayerDiscovered(client);
-	//rework
-	clients.stream()
-		.filter(client1 -> client1 != client)//to everyone except the asking one
-		.forEach(client1 -> {
-		    objectPlayer.forEach(objectMessaged -> {
-			sendToConnection(client1.getConnection(), objectMessaged.created);
-			sendProperties(objectMessaged.propertables, client1.getConnection());
-		    });
-		});
-	//	
 
 	sendToAll(new MessageUnpaused());
-	sendPropertiesOfWorld(world, client);
-	//@working fix that
+	//TODO fix that
 	Runnable runnable = () -> {
 	    for (int i = 0; i < 15; i++) {
 		waitSomeTime();
 	    }
-	    Player get = client.getPlayer();
-	    String message = get.getNickname() + " has connected to SIN!";
+	    Player player = client.getPlayer();
+	    String message = player.getNickname() + " has connected to SIN!";
 	    core.getContext().chatLog(new ChatString(message, LogLevel.BROADCASTING, "145.9"));
-	    core.getContext().chatLog(new ChatString("Nanotracen welcomes you, " + get.getNickname() + ", and wishes best luck.",
-		    LogLevel.BROADCASTING,
-		    "145.9"));
+	    core.getContext().chatLog(new ChatString("Nanotracen welcomes you, " + player.getNickname() + ", and "
+		    + "wishes best luck.", LogLevel.BROADCASTING, "145.9"));
 	};
-	new Thread(runnable, "Messaging about connected").start();
+	connectedMessagingPool.submit(runnable);
     }
 
     private void orderEveryoneToRogerAndWait() {
 	if (!pendingRogers.isEmpty()) {
 	    server.close();
-	    throw new ConcurrentModificationException("Someone already waited for rogers when another one attempted to wait once again");
+	    throw new ConcurrentModificationException("Someone already waited for rogers when another one attempted "
+		    + "to" + " wait once again");
 	}
 	synchronized (clients) {
 	    clients.stream()
@@ -333,7 +320,7 @@ import spaceisnear.server.objects.items.*;
     private void sortPropertiesByClosestToPlayer(List<MessagePropertable> propertables, Player player) {
 	final Position playerPosition = player.getPosition();
 	propertables.sort((MessagePropertable o1, MessagePropertable o2) -> {
-	    HashMap<Integer, AbstractGameObject> objects = core.getContext().getObjects();
+	    Map<Integer, AbstractGameObject> objects = core.getContext().getObjects();
 	    //
 	    int id = o1.getId();
 	    AbstractGameObject ago = objects.get(id);
@@ -386,7 +373,7 @@ import spaceisnear.server.objects.items.*;
     private void sendPlayerDiscovered(Client client) {
 	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(client.getPlayer().getId());
 	sendToConnection(client.getConnection(), mypd);
-	Logs.info("server", "PlayerDiscovered message has been sent");
+	Log.info("server", "PlayerDiscovered message has been sent");
     }
 
     private Collection<ObjectMessaged> getWorldNear(Chunk chunk) {
@@ -405,6 +392,7 @@ import spaceisnear.server.objects.items.*;
 	Collection<AbstractGameObject> objects = core.getContext().getObjects().values();
 	List<ObjectMessaged> messagesToReturn = new LinkedList<>();
 	objects.stream()
+		.filter(object -> object.getPosition() != null)
 		.filter(object -> chunks.stream().anyMatch(chunk -> chunkManager.isInChunk(chunk, object.getPosition())))
 		.map(object -> getObjectMessaged(object))
 		.filter(objectMessaged -> objectMessaged != null)
@@ -499,34 +487,50 @@ import spaceisnear.server.objects.items.*;
 
     private void waitSomeTime() {
 	try {
-	    Thread.sleep(100L);
+	    TimeUnit.MILLISECONDS.sleep(100L);
 	} catch (InterruptedException ex) {
-	    Logs.error("server", "While trying to sleep in network thread", ex);
+	    Log.error("server", "While trying to sleep in network thread", ex);
 	}
     }
 
+    /**
+     * Call this if player has moved to a new chunk
+     *
+     * @param playerID
+     */
     public void playerChunkUpdated(int playerID) {
-	Client client = null;
-	for (Client clienterino : clients) {
-	    if (clienterino.getPlayer().getId() == playerID) {
-		client = clienterino;
-	    }
-	}
-	assert client != null : "Trying to update chunk for non-player?!!";
-	Chunk newChunk = chunkManager.getChunkByPosition(client.getPlayer().getPosition());
-	client.setNewChunk(newChunk);
+	clients.stream().filter(client -> client.getPlayer().getId() == playerID).findAny().ifPresent(client -> {
+	    assert client != null : "Trying to update chunk for non-player?!!";
+	    Chunk newChunk = chunkManager.getChunkByPosition(client.getPlayer().getPosition());
+	    client.setNewChunk(newChunk);
+	});
     }
 
     private void sendNewChunksToPlayer(Client client) {
 	Chunk oldChunk = client.getChunk();
 	Chunk newChunk = client.getNewChunk();
-	Collection<Chunk> toBeSent = chunkManager.substractEnvironments(newChunk, oldChunk);
-	sendChunksToClient(toBeSent, client);
+	if (oldChunk == null) {
+	    sendChunksToClient(chunkManager.getChunksNear(newChunk), client);
+	} else {
+	    Collection<Chunk> toBeSent = chunkManager.substractEnvironments(newChunk, oldChunk);
+	    sendChunksToClient(toBeSent, client);
+	    client.setChunk(newChunk);
+	    client.setNewChunk(null);
+	}
     }
 
     private void sendChunksToClient(Collection<Chunk> toBeSent, Client client) {
 	Collection<ObjectMessaged> worldIn = getWorldIn(toBeSent);
 	sendCreatedsOfWorld(worldIn, client.getConnection());
 	sendPropertiesOfWorld(worldIn, client);
+    }
+
+    /**
+     * Checks if there are players with outdated chunks. Sends new chunks to all players with outdated chunks.
+     */
+    public void sendNewChunks() {
+	clients.stream()
+		.filter(client -> client.playerChunkOutdated())
+		.forEach(this::sendNewChunksToPlayer);
     }
 }

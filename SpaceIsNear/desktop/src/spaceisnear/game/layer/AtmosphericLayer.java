@@ -9,7 +9,7 @@ import java.util.*;
 import lombok.Getter;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.objects.GameObjectType;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;

@@ -1,6 +1,6 @@
 package spaceisnear.server;
 
-import com.esotericsoftware.minlog.Logs;
+import me.whiteoak.minlog.Log;
 import java.io.IOException;
 import java.util.*;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import spaceisnear.game.components.server.HealthComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
-import spaceisnear.game.objects.Position;
+import spaceisnear.game.ui.Position;
 import spaceisnear.game.objects.items.ItemsReader;
 import spaceisnear.server.chunks.ChunkManager;
 import spaceisnear.server.contexteditors.ContextEditorsManager;
@@ -39,7 +39,7 @@ public class ServerCore implements Runnable {
 	try {
 	    ServerItemsArchive.ITEMS_ARCHIVE = new ServerItemsArchive(ItemsReader.read(), ItemScriptReader.read());
 	} catch (Exception ex) {
-	    Logs.error("server", "While initializating ITEMS_ARCHIVE", ex);
+	    Log.error("server", "While initializating ITEMS_ARCHIVE", ex);
 	}
 	ObstaclesLayer obstacles = new ObstaclesLayer(width, height);
 	AtmosphericLayer atmosphere = new AtmosphericLayer(width, height);
@@ -67,13 +67,15 @@ public class ServerCore implements Runnable {
 			.stream()
 			.filter(gameObject -> gameObject != null)
 			.forEach(gameObject -> gameObject.process());
+		context.getNetworking().sendNewChunks();
 	    }
 	    try {
 		Thread.sleep(QUANT_TIME);
 	    } catch (InterruptedException ex) {
-		Logs.error("server", "While sleeping in server update thread", ex);
+		Log.error("server", "While sleeping in server update thread", ex);
 	    }
-	    sendPressure();
+//	    sendPressure();
+//	    sendPressure();
 	}
     }
 
@@ -92,12 +94,12 @@ public class ServerCore implements Runnable {
 	    Position position = player.getPosition();
 	    final AtmosphericLayer atmosphere = context.getAtmosphere();
 	    if (atmosphere.hardToBreath(position)) {
-		HurtMessage hurtMessage;
+		MessageHurt hurtMessage;
 		if (atmosphere.notEnoughToBreath(position)) {
-		    hurtMessage = new HurtMessage(HealthComponent.SUFFOCATING_DAMAGE, HurtMessage.Type.SUFFOCATING,
+		    hurtMessage = new MessageHurt(HealthComponent.SUFFOCATING_DAMAGE, MessageHurt.Type.SUFFOCATING,
 			    player.getId());
 		} else {
-		    hurtMessage = new HurtMessage(HealthComponent.LIGHT_SUFFOCATING_DAMAGE, HurtMessage.Type.SUFFOCATING,
+		    hurtMessage = new MessageHurt(HealthComponent.LIGHT_SUFFOCATING_DAMAGE, MessageHurt.Type.SUFFOCATING,
 			    player.getId());
 		}
 		getContext().sendDirectedMessage(hurtMessage);
@@ -133,7 +135,7 @@ public class ServerCore implements Runnable {
 		try {
 		    Thread.sleep(ATMOSPHERE_DELAY);
 		} catch (InterruptedException ex) {
-		    Logs.error("server", "While sleeping in atmosphere thread", ex);
+		    Log.error("server", "While sleeping in atmosphere thread", ex);
 		}
 	    }
 	}

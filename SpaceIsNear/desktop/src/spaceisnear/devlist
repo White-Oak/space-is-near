@@ -300,7 +300,6 @@
     -chunks 
     -fixes
 ---
----
 +chat multi-line support fix
 +fix chat keeping resending last message
 +button fixes
@@ -310,6 +309,15 @@
 *chat messages fixed
     +chat help included
 -Spawn points
+---
+-Breathing component should have health component bundled in, to prevent looking for it in components of owner
+-Wide messages refactoring:
+	+Messages are now split into DirectedMessage and BroadcastMessage. Direct extending of a Message class is now prohibited.
+	+Introduced a system for caching messages that don't have a target yet. Each PropertableMessage now has canBeApplied method to check if it can be applied on Client.
+		+If it cannot be applied right now then new MessageNotReadyYet is created and sent to service PatientComponent of a client.  
+		+The component checks every tick if message is 'ready enough' to be sent, if not then it is resent to PatientComponent once again. 
+		+After several (hundreds?) resentages client should stop its work and show an error message.
+
 
 0.1.0
 +editor:

@@ -3,8 +3,11 @@ package spaceisnear.game;
 import com.esotericsoftware.kryonet.*;
 import com.esotericsoftware.kryonet.Client;
 import java.io.*;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import lombok.*;
 import spaceisnear.game.messages.*;
+import spaceisnear.game.messages.properties.MessagePropertable;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.server.*;
@@ -14,12 +17,13 @@ import spaceisnear.server.*;
  */
 @RequiredArgsConstructor public class Networking extends Listener {
 
-    private final Corev2 core;
+    private final Engine engine;
     private Client client;
     private final static MessageRogered ROGERED = new MessageRogered();
     @Getter @Setter private MessagePlayerInformation mpi;
     @Getter @Setter private MessageLogin mci;
     @Setter @Getter private boolean logined, joined, playable;
+    private final Queue<Message> messages = new ArrayDeque<>(10);
 
     public void connect(String host, int tcpPort) throws IOException {
 	client = new Client(ServerNetworking.BUFFER_SIZE, ServerNetworking.O_BUFFER_SIZE);
@@ -49,12 +53,12 @@ import spaceisnear.server.*;
 
     @Override
     public void connected(Connection connection) {
-	core.getContext().sendThemAll(new MessageNetworkState(1));
+//	context.sendThemAll(new MessageNetworkState(1));
     }
 
     @Override
     public void disconnected(Connection connection) {
-	core.getContext().sendThemAll(new MessageNetworkState(2));
+//	context.sendThemAll(new MessageNetworkState(2));
     }
 
     @Override
@@ -65,7 +69,13 @@ import spaceisnear.server.*;
     @Override
     public void received(Connection connection, Object object) {
 	if (object instanceof Message) {
-	    processMessage((Message) object);
+	    messages.add((Message) object);
+	}
+    }
+
+    public void processQueue() {
+	while (!messages.isEmpty()) {
+	    processMessage(messages.poll());
 	}
     }
 
@@ -74,19 +84,26 @@ import spaceisnear.server.*;
 	    MessageType mt = message.getMessageType();
 	    switch (mt) {
 		case ROGER_REQUESTED:
-//		    Context.LOG.log("No time to explain — roger that!");
 		    send(ROGERED);
 		    break;
 		case JOINED:
 		    joined = true;
 		    break;
 		default:
-		    message.processForClient(core.getContext());
+		    final GameContext context = engine.getContext();
+		    if (message instanceof MessagePropertable) {
+			MessagePropertable mp = (MessagePropertable) message;
+			if (mp.canBeApplied(context)) {
+			    mp.processForClient(context);
+			} else {
+			    context.sendDirectedMessage(new MessageNotReadyYet(mp));
+			}
+		    } else {
+			message.processForClient(context);
+		    }
 		    break;
 	    }
 	}
-//	    Context.LOG.log("Message received");
-//	    gameContext.getCore().log(new LogString("Message received", LogLevel.DEBUG));
     }
 
     public void close() {

@@ -1,12 +1,17 @@
 package spaceisnear;
 
 import com.badlogic.gdx.backends.lwjgl.*;
-import com.esotericsoftware.minlog.Logs;
 import java.io.IOException;
+import java.util.concurrent.Future;
+import me.whiteoak.minlog.FileLogger;
+import me.whiteoak.minlog.Log;
 import org.apache.commons.cli.*;
-import spaceisnear.game.Corev3;
-import spaceisnear.log.Logger;
+import spaceisnear.game.Engine;
+import spaceisnear.game.Networking;
 import spaceisnear.server.*;
+import spaceisnear.starting.LoginScreen;
+import spaceisnear.starting.Starter;
+import spaceisnear.starting.ui.Corev3;
 
 /**
  *
@@ -16,10 +21,9 @@ public class Main {
 
     public static String IP;
     public static LwjglApplication lwjglApplication;
-    public static Logger defaultLogger = new Logger();
 
     public static void main(String[] args) throws ParseException {
-	Logs.setLogger(defaultLogger);
+	Log.setLogger(new FileLogger());
 	Options options = prepareOptions();
 	CommandLineParser parser = new BasicParser();
 	CommandLine parse = parser.parse(options, args);
@@ -40,11 +44,28 @@ public class Main {
 		} else {
 		    IP = "127.0.0.1";
 		}
-		defaultLogger.client();
 		LwjglApplicationConfiguration cfg = configureApp();
 		final Corev3 corev3 = new Corev3();
+		final Engine engine = new Engine(corev3);
+		final Starter starter = new Starter(corev3.getConsole(), engine.getNetworking());
+		final Future<Networking> callToConnect = starter.callToConnect(IP);
+		corev3.setStartingScreen(new LoginScreen(callToConnect));
+		corev3.setUpdatable(engine);
 		lwjglApplication = new LwjglApplication(corev3, cfg);
 	    }
+	}
+    }
+
+    private static void testVozvratKaretki() {
+	for (int i = 0; i < 100; i++) {
+	    System.out.print("Loading: " + i + "% ");
+
+	    try {
+		Thread.sleep(200L);
+	    } catch (InterruptedException ex) {
+	    }
+	    System.out.print("\r");
+
 	}
     }
 
@@ -80,17 +101,15 @@ public class Main {
     private static void runSINInWeirdMode(String mode) {
 	switch (mode) {
 	    case "host":
-		defaultLogger.chat();
-		defaultLogger.server();
-		Logs.info("server", "SIN is running in no-GUI mode");
+		Log.info("server", "SIN is running in no-GUI mode");
 		try {
 		    IP = "127.0.0.1";
 		    ServerCore serverCore = new ServerCore();
 		    serverCore.host();
 		    new Thread(serverCore, "SIN Server").start();
-		    Logs.info("server", "Server started");
+		    Log.info("server", "Server started");
 		} catch (IOException ex) {
-		    Logs.error("server", "While trying to start server", ex);
+		    Log.error("server", "While trying to start server", ex);
 		}
 		break;
 	    case "editor":

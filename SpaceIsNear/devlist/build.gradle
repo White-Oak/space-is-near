@@ -1,0 +1,68 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+apply plugin: "java"
+
+sourceSets.main.java.srcDirs = ["src/"]
+
+project.ext.mainClassName = "me.whiteoak.devlist.Main"
+project.ext.assetsDir = new File("./assets");
+
+task run(dependsOn: classes, type: JavaExec) {
+    enableAssertions = true
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+}
+
+task debug(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+    debug = true
+}
+
+def incrementBuildNumber() {
+    def mVersionCode = 100
+    def file = file("./gradle.properties")
+    if (file.exists()) {
+        def pattern = Pattern.compile("buildNumber = (\\d+)")
+        def text = file.getText()
+        def matcherVersionCode = pattern.matcher(text)
+        def find = matcherVersionCode.find()
+        if (find) {
+            mVersionCode = Integer.parseInt(matcherVersionCode.group(1))
+            def mNextVersionCode = mVersionCode + 1
+            def manifestContent = matcherVersionCode.replaceAll("buildNumber = " + mNextVersionCode)
+            println(":desktop:incrementBuildNumber - current buildNumber is " + mVersionCode);
+            println(":desktop:incrementBuildNumber - next buildNumber is " + mNextVersionCode);
+            file.write(manifestContent)
+        } else appendBuildNumber(file)
+    } else appendBuildNumber(file)
+    return mVersionCode;
+}
+
+def appendBuildNumber(File file) {
+    file.append("\nbuildNumber = " + 101)
+    println(":desktop:incrementBuildNumber - current buildNumber is " + 100);
+    println(":desktop:incrementBuildNumber - next buildNumber is " + 101);
+}
+
+task dist(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
+    from { configurations.compile.collect { zipTree(it) } }
+    from files(project.assetsDir);
+    libsDirName = deployFolder
+
+    archiveName = appName + "-" + version + "-b" + incrementBuildNumber() + ".jar"
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+}
+
+dist.dependsOn classes
