@@ -1,18 +1,17 @@
 package spaceisnear.server;
 
-import spaceisnear.game.ui.Position;
 import com.esotericsoftware.kryonet.*;
-import me.whiteoak.minlog.Log;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 import lombok.*;
+import me.whiteoak.minlog.Log;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.*;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
-import spaceisnear.game.objects.*;
+import spaceisnear.game.ui.Position;
 import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.server.Client;
@@ -286,6 +285,7 @@ public class ServerNetworking extends Listener {
 
 	Player objectPlayer = createPlayer(client);
 	sendPlayerDiscovered(client);
+	playerChunkUpdated(objectPlayer.getId());
 
 	sendToAll(new MessageUnpaused());
 	//TODO fix that
@@ -500,13 +500,13 @@ public class ServerNetworking extends Listener {
      */
     public void playerChunkUpdated(int playerID) {
 	clients.stream().filter(client -> client.getPlayer().getId() == playerID).findAny().ifPresent(client -> {
-	    assert client != null : "Trying to update chunk for non-player?!!";
 	    Chunk newChunk = chunkManager.getChunkByPosition(client.getPlayer().getPosition());
 	    client.setNewChunk(newChunk);
 	});
     }
 
     private void sendNewChunksToPlayer(Client client) {
+	System.out.println("There is an outdated player!");
 	Chunk oldChunk = client.getChunk();
 	Chunk newChunk = client.getNewChunk();
 	if (oldChunk == null) {
@@ -514,9 +514,9 @@ public class ServerNetworking extends Listener {
 	} else {
 	    Collection<Chunk> toBeSent = chunkManager.substractEnvironments(newChunk, oldChunk);
 	    sendChunksToClient(toBeSent, client);
-	    client.setChunk(newChunk);
-	    client.setNewChunk(null);
 	}
+	client.setChunk(newChunk);
+	client.setNewChunk(null);
     }
 
     private void sendChunksToClient(Collection<Chunk> toBeSent, Client client) {
