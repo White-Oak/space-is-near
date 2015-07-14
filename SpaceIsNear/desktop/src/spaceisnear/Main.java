@@ -1,6 +1,7 @@
 package spaceisnear;
 
 import com.badlogic.gdx.backends.lwjgl.*;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import java.io.IOException;
 import me.whiteoak.minlog.FileLogger;
 import me.whiteoak.minlog.Log;
@@ -20,6 +21,7 @@ public class Main {
     public static LwjglApplication lwjglApplication;
 
     public static void main(String[] args) throws ParseException {
+	GdxNativesLoader.load();
 	Log.setLogger(new FileLogger());
 	Options options = prepareOptions();
 	CommandLineParser parser = new BasicParser();

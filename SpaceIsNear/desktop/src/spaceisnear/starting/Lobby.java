@@ -61,8 +61,8 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
     @Override
     public void update() {
 	if (networking.isJoined()) {
-	    LoadingScreen loadingScreen = new LoadingScreen(networking);
-	    setScreen(loadingScreen);
+//	    LoadingScreen loadingScreen = new LoadingScreen(networking);
+//	    setScreen(loadingScreen);
 	}
     }
 

@@ -1,17 +1,17 @@
 package spaceisnear.server;
 
-import me.whiteoak.minlog.Log;
 import java.io.IOException;
 import java.util.*;
 import lombok.Getter;
+import me.whiteoak.minlog.Log;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.server.HealthComponent;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
-import spaceisnear.game.ui.Position;
 import spaceisnear.game.objects.items.ItemsReader;
+import spaceisnear.game.ui.Position;
 import spaceisnear.server.chunks.ChunkManager;
 import spaceisnear.server.contexteditors.ContextEditorsManager;
 import spaceisnear.server.objects.Player;
@@ -58,6 +58,7 @@ public class ServerCore implements Runnable {
 	while (unbreakable) {
 	    //networking
 	    context.getNetworking().processReceivedQueue();
+	    context.getNetworking().sendNewChunks();
 	    //game
 	    if (!paused) {
 		MessageTimePassed messageTimePassed = MESSAGE_TIME_PASSED;
@@ -67,7 +68,6 @@ public class ServerCore implements Runnable {
 			.stream()
 			.filter(gameObject -> gameObject != null)
 			.forEach(gameObject -> gameObject.process());
-		context.getNetworking().sendNewChunks();
 	    }
 	    try {
 		Thread.sleep(QUANT_TIME);

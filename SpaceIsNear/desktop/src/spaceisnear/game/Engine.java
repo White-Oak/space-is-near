@@ -46,11 +46,10 @@ public class Engine implements Updatable {
 	    loginScreen.setNetworking(callToConnect);
 	    firstTime = false;
 	} else {
-	    networking.processQueue();
 	    if (!started) {
-		if (networking.isPlayable()) {
-		    started = networking.isPlayable();
-		    corev3.setScreenImproved(core);
+		if (networking.isJoined()) {
+		    started = true;
+		    corev3.setNextScreen(core);
 		}
 	    } else {
 		if (!paused) {
@@ -59,6 +58,7 @@ public class Engine implements Updatable {
 			    .forEach(gameObject -> gameObject.process());
 		}
 	    }
+	    networking.processQueue();
 	}
     }
 

@@ -45,7 +45,10 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
     private final FPSLogger logger = new FPSLogger();
     //
     public static RayHandler rayHandler;
-    public static World world;
+    public static World world = new World(new Vector2(), true);
+
+    //
+    @Getter private boolean created;
 
     @Override
     public void create() {
@@ -94,6 +97,8 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	pointLight.setDistance(500);
 	pointLight.setStaticLight(true);
 	pointLight.update();
+
+	created = true;
     }
 
     public void addContextMenu(ContextMenu conmenu) {
@@ -198,7 +203,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	rayHandler.updateAndRender();
 
 	cameraMan.unmoveCamera(getCamera());
-	logger.log();
+//	logger.log();
     }
 
     public void mouseClicked(int button, int x, int y) {
