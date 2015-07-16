@@ -26,6 +26,7 @@ public class Engine implements Updatable {
     @Getter private final GameContext context;
     @Getter private final Corev2 core;
     private final Corev3 corev3;
+    private final Controller controller;
     private boolean started, paused;
     private boolean firstTime = true;
 
@@ -35,6 +36,7 @@ public class Engine implements Updatable {
 	this.core = new Corev2(this);
 	this.context = new GameContext(this);
 	this.networking = new Networking(this);
+	this.controller = new Controller(this);
     }
 
     @Override
@@ -56,6 +58,10 @@ public class Engine implements Updatable {
 		    queue.forEach(mc -> context.sendDirectedMessage(new MessageToSend(mc)));
 		    objects.values()
 			    .forEach(gameObject -> gameObject.process());
+		    MessageControlledByInput checkMovement = controller.checkMovement();
+		    if (checkMovement != null) {
+			context.sendToNetwork(checkMovement);
+		    }
 		}
 	    }
 	    networking.processQueue();
@@ -72,5 +78,9 @@ public class Engine implements Updatable {
 
     public void chat(ChatString log) {
 	corev3.getConsole().pushMessage(log);
+    }
+
+    public void addControllerToCore() {
+	core.getStage().addActor(controller);
     }
 }

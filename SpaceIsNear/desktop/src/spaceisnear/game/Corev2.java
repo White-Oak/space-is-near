@@ -1,7 +1,6 @@
 package spaceisnear.game;
 
 import box2dLight.*;
-import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -99,6 +98,8 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	pointLight.setStaticLight(true);
 	pointLight.update();
 
+	engine.addControllerToCore();
+
 	created = true;
     }
 
@@ -122,69 +123,8 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	inventory.processMessage(MESSAGE_ANIMATION_STEP);
     }
 
-    public void keyPressed(int key, char c) {
-	this.key = key;
-    }
-
-    public void keyReleased(int key, char c) {
-	this.key = 0;
-    }
-
-    private MessageControlledByInput checkMovementDesired() {
-	MessageControlledByInput mc = null;
-	if (getContext().getPlayer() != null) {
-	    boolean ableToMove = System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE
-		    && !getContext().getPlayer().getPositionComponent().isAnimated() && !getConsole().hasFocus();
-	    if (ableToMove) {
-		switch (key) {
-		    case Input.Keys.UP:
-			mc = new MessageControlledByInput(MessageControlledByInput.Type.UP, getContext().getPlayerID());
-			break;
-		    case Input.Keys.DOWN:
-			mc = new MessageControlledByInput(MessageControlledByInput.Type.DOWN, getContext().getPlayerID());
-			break;
-		    case Input.Keys.LEFT:
-			mc = new MessageControlledByInput(MessageControlledByInput.Type.LEFT, getContext().getPlayerID());
-			break;
-		    case Input.Keys.RIGHT:
-			mc = new MessageControlledByInput(MessageControlledByInput.Type.RIGHT, getContext().getPlayerID());
-			break;
-		    case Input.Keys.M:
-			inventory.setMinimized(!inventory.isMinimized());
-			lastTimeMoved = System.currentTimeMillis();
-			break;
-		    case Input.Keys.R:
-			inventory.changeActiveHand();
-			lastTimeMoved = System.currentTimeMillis();
-			break;
-		}
-		if (mc != null) {
-		    lastTimeMoved = System.currentTimeMillis();
-		}
-	    }
-	}
-	return mc;
-    }
-
     private GameContext getContext() {
 	return engine.getContext();
-    }
-
-    private void checkKeys() {
-	switch (key) {
-	    case Input.Keys.ESCAPE:
-		MessagePropertySet messagePropertySet = new MessagePropertySet(getContext().getPlayerID(), "pull", -1);
-		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-		getContext().sendDirectedMessage(messageToSend);
-		break;
-	    case Input.Keys.ENTER:
-		final boolean focused = getConsole().getTextField().isFocused();
-		if (!focused) {
-		    key = 0;
-		    stage.setKeyboardFocus(getConsole().getTextField());
-		}
-		break;
-	}
     }
 
     @Override
