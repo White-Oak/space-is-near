@@ -23,6 +23,7 @@ public class Main {
     public static void main(String[] args) throws ParseException {
 	GdxNativesLoader.load();
 	Log.setLogger(new FileLogger());
+	Log.DEBUG();
 	Options options = prepareOptions();
 	CommandLineParser parser = new BasicParser();
 	CommandLine parse = parser.parse(options, args);

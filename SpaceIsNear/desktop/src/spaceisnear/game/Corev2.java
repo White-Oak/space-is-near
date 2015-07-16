@@ -11,6 +11,7 @@ import lombok.*;
 import me.whiteoak.minlog.Log;
 import org.apache.commons.lang3.ArrayUtils;
 import spaceisnear.abstracts.*;
+import spaceisnear.game.FPSLogger;
 import spaceisnear.game.components.server.context.ServerContextMenu;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
@@ -203,7 +204,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	rayHandler.updateAndRender();
 
 	cameraMan.unmoveCamera(getCamera());
-//	logger.log();
+	logger.log();
     }
 
     public void mouseClicked(int button, int x, int y) {
