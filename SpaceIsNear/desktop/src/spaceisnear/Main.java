@@ -50,6 +50,7 @@ public class Main {
     }
 
     private static void runSIN() {
+	Log.info("client", "SIN is starting. Version: " + VersionCode.getCode());
 	LwjglApplicationConfiguration cfg = configureApp();
 	final Corev3 corev3 = new Corev3();
 	final Engine engine = new Engine(corev3);
@@ -104,7 +105,7 @@ public class Main {
     private static void runSINInWeirdMode(String mode) {
 	switch (mode) {
 	    case "host":
-		Log.info("server", "SIN is running in no-GUI mode");
+		Log.info("server", "SIN is starting. Version: " + VersionCode.getCode());
 		try {
 		    IP = "127.0.0.1";
 		    ServerCore serverCore = new ServerCore();

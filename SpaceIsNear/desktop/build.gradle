@@ -26,8 +26,23 @@ task debug(dependsOn: classes, type: JavaExec) {
     debug = true
 }
 
-task buildNumber {
-    incrementBuildNumber()
+task buildNumberino {
+    def file = file("./src/spaceisnear/VersionCode.java")
+    def text = file.getText()
+    text = buildNumberRe(text)
+    text = versionRe(text)
+    file.write(text)
+}
+String buildNumberRe(String text){
+    def vc = incrementBuildNumber()
+    def pattern = Pattern.compile("BUILD_NUMBER = (\\d+)")
+    def matcher = pattern.matcher(text)
+    return matcher.replaceAll("BUILD_NUMBER = " + vc)
+}
+String versionRe(String text){
+    def pattern = Pattern.compile("VERSION = (.*);")
+    def matcher = pattern.matcher(text)
+    return matcher.replaceAll("VERSION = \"" + version+"\";")
 }
 
 int incrementBuildNumber() {
@@ -75,5 +90,5 @@ task dist(type: Jar) {
         attributes 'Main-Class': project.mainClassName
     }
 }
-
-dist.dependsOn classes, buildNumber
+classes.dependsOn buildNumberino
+dist.dependsOn classes
