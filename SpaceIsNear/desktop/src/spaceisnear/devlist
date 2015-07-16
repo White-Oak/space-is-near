@@ -319,6 +319,7 @@
 		+After several (hundreds?) resentages client should stop its work and show an error message.
 +Starting system rework: less spaghetti, more crystal process
     +Engine (see scheme.png for reference)
++Keyboard events are proccessed in a separate class: Controller
 
 
 0.1.0

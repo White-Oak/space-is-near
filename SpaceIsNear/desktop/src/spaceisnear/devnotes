@@ -17,3 +17,7 @@ Ha!
 Today I did a big amount of work towards SIN and I honestly do hope it is not the end of my enthusiasm.
 Jeez, I even forgot where I took off.
 I managed to find what I was doing and redid all of the starting system. I'm truly a genius.
+
+16.07.2015
+Moved all of the keyboard code to the separate class. It is not working for now though, but I really like the way it is moving to.
+I think most of the reworking is done already and nowis time to finally fix the thing, haha.
