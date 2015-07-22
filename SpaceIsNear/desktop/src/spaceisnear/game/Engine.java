@@ -81,6 +81,8 @@ public class Engine implements Updatable {
     }
 
     public void addControllerToCore() {
+	controller.setBounds(0, 0, 800, 600);
 	core.getStage().addActor(controller);
+	core.getStage().setKeyboardFocus(controller);
     }
 }

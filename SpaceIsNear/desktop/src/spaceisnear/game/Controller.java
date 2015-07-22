@@ -157,6 +157,7 @@ public class Controller extends Actor {
 
 	    @Override
 	    public boolean keyDown(InputEvent event, int keycode) {
+		System.out.println("Gotcha!");
 		akeyDown(keycode);
 		return true;
 	    }

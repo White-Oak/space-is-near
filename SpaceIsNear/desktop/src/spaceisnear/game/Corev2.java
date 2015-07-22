@@ -57,10 +57,10 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	cameraMan = new CameraMan();
 	cameraMan.setWindowWidth(800);
 	cameraMan.setWindowHeight(600);
-	inputCatcher = new InputCatcher(this);
-	inputCatcher.setBounds(0, 0, 800, 600);
-	stage.addActor(inputCatcher);
-	stage.setKeyboardFocus(inputCatcher);
+//	inputCatcher = new InputCatcher(this);
+//	inputCatcher.setBounds(0, 0, 800, 600);
+//	stage.addActor(inputCatcher);
+//	stage.setKeyboardFocus(inputCatcher);
 
 	inventory = new Inventory(engine);
 	inventory.setBounds();
