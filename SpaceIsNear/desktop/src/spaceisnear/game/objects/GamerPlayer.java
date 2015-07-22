@@ -15,6 +15,7 @@ public class GamerPlayer extends Player {
     }
 
     public GamerPlayer(Player p) {
+	this();
 	setComponents(p.getComponents());
 	for (int i = 0; i < getComponents().size(); i++) {
 	    Component component = getComponents().get(i);
