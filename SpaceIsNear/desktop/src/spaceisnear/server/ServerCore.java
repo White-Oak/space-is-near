@@ -2,6 +2,7 @@ package spaceisnear.server;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import me.whiteoak.minlog.Log;
 import spaceisnear.abstracts.AbstractGameObject;
@@ -61,8 +62,7 @@ public class ServerCore implements Runnable {
 	    context.getNetworking().sendNewChunks();
 	    //game
 	    if (!paused) {
-		MessageTimePassed messageTimePassed = MESSAGE_TIME_PASSED;
-		context.sendTimePassed(messageTimePassed);
+		context.sendTimePassed(MESSAGE_TIME_PASSED);
 		getContext().getObjects()
 			.values()
 			.stream()
@@ -70,12 +70,10 @@ public class ServerCore implements Runnable {
 			.forEach(gameObject -> gameObject.process());
 	    }
 	    try {
-		Thread.sleep(QUANT_TIME);
+		TimeUnit.MILLISECONDS.sleep(QUANT_TIME);
 	    } catch (InterruptedException ex) {
 		Log.error("server", "While sleeping in server update thread", ex);
 	    }
-//	    sendPressure();
-//	    sendPressure();
 	}
     }
 

@@ -7,7 +7,6 @@
  */
 package spaceisnear.game.components;
 
-import spaceisnear.game.ui.Position;
 import lombok.Getter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.layer.AtmosphericLayer;
@@ -15,6 +14,7 @@ import spaceisnear.game.layer.ObstaclesLayer;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePositionChanged;
 import spaceisnear.game.objects.*;
+import spaceisnear.game.ui.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.items.StaticItem;
 
@@ -99,8 +99,8 @@ public class PositionComponent extends Component {
 	ServerContext context = (ServerContext) getContext();
 	//if moved
 	if (oldX != getX() || oldY != getY()) {
-	    //if object is item
 	    if (getOwner().getType() == GameObjectType.ITEM) {
+		//updating obstacle and atmospheric maps
 		checkConsequencesForItem(context, oldX, oldY);
 	    }
 	}

@@ -112,7 +112,7 @@ public class Controller extends Actor {
 		boolean ableToMove = System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE
 			&& !getContext().getPlayer().getPositionComponent().isAnimated();
 		// Need to rework that console focus thing
-//		    && !getContext().getPlayer().getPositionComponent().isAnimated() && !getConsole().hasFocus();
+//		    && !getConsole().hasFocus();
 		if (ableToMove) {
 		    mc = new MessageControlledByInput(type, context.getPlayerID());
 		    lastTimeMoved = System.currentTimeMillis();
