@@ -22,7 +22,7 @@ public final class GameContext extends Context {
     public static final int MAP_HEIGHT = 64;
     public static float SCALING_X = 1f, SCALING_Y = 1f;
     @Getter private final List<AbstractGameObject> animateds = new ArrayList<>();
-    @Getter @Setter private int playerID = -1;
+    @Getter private int playerID = -1;
     public static final int HIDDEN_CLIENT_OBJECTS = 1;
     private final static MessageAnimationStep MESSAGE_ANIMATION_STEP = new MessageAnimationStep();
     //
