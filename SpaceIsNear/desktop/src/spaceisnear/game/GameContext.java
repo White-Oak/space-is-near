@@ -30,9 +30,6 @@ public final class GameContext extends Context {
     //
     @Getter private final Engine engine;
 
-//    public Corev2 getCore() {
-//	return engine.getCore();
-//    }
     public GameContext(Engine engine) {
 	super(engine.getObjects());
 	this.engine = engine;

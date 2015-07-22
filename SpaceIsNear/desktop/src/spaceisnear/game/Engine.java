@@ -34,8 +34,8 @@ public class Engine implements Updatable {
 	this.objects = Collections.synchronizedMap(new HashMap<>());
 	this.corev3 = corev3;
 	this.core = new Corev2(this);
-	this.context = new GameContext(this);
 	this.networking = new Networking(this);
+	this.context = new GameContext(this);
 	this.controller = new Controller(this);
     }
 
