@@ -50,32 +50,26 @@ int incrementBuildNumber() {
     def file = file("./gradle.properties")
     if (file.exists()) {
         def pattern = Pattern.compile("buildNumber = (\\d+)")
-        def text = file.getText()
-        def matcherVersionCode = pattern.matcher(text)
-        def find = matcherVersionCode.find()
-        if (find) {
+        def matcherVersionCode = pattern.matcher(file.getText())
+        if (matcherVersionCode.find()) {
             versionCode = Integer.parseInt(matcherVersionCode.group(1))
 	    if (project.ext.buildNumberIncremented) {
 		println(":desktop:buildNumber — already incremented build number")
             } else {
-		def mNextVersionCode = versionCode + 1
-		def manifestContent = matcherVersionCode.replaceAll("buildNumber = " + mNextVersionCode)
+		def manifestContent = matcherVersionCode.replaceAll("buildNumber = " + (versionCode + 1))
 		println(":desktop:buildNumber — current buildNumber is " + versionCode);
-		println(":desktop:buildNumber — next buildNumber is " + mNextVersionCode);
 		file.write(manifestContent)
                 project.ext.buildNumberIncremented = true
 		project.ext.mVersionCode = versionCode
 	    }
         } else appendBuildNumber(file)
     } else appendBuildNumber(file)
-    return versionCode;
+    return mVersionCode;
 }
 
 void appendBuildNumber(File file) {
-    def versionCode = project.ext.mVersionCode
-    file.append("\nbuildNumber = " + (versionCode + 1))
-    println(":desktop:incrementBuildNumber - current buildNumber is " + versionCode);
-    println(":desktop:incrementBuildNumber - next buildNumber is " +(versionCode + 1));
+    file.append("\nbuildNumber = " + (mVersionCode + 1))
+    println(":desktop:incrementBuildNumber - current buildNumber is " + mVersionCode);
 }
 
 task dist(type: Jar) {
