@@ -105,14 +105,16 @@ public class Controller extends Actor {
 
     public MessageControlledByInput checkMovement() {
 	MessageControlledByInput mc = null;
-	if (getContext().getPlayer() != null) {
-	    boolean ableToMove = System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE
-		    && !getContext().getPlayer().getPositionComponent().isAnimated();
+	MessageControlledByInput.Type type = getType(direction);
+	if (type != null) {
+	    final GameContext context = getContext();
+	    if (context.getPlayer() != null) {
+		boolean ableToMove = System.currentTimeMillis() - lastTimeMoved > MINIMUM_TIME_TO_MOVE
+			&& !getContext().getPlayer().getPositionComponent().isAnimated();
+		// Need to rework that console focus thing
 //		    && !getContext().getPlayer().getPositionComponent().isAnimated() && !getConsole().hasFocus();
-	    if (ableToMove) {
-		MessageControlledByInput.Type type = getType(direction);
-		if (type != null) {
-		    mc = new MessageControlledByInput(type, getContext().getPlayerID());
+		if (ableToMove) {
+		    mc = new MessageControlledByInput(type, context.getPlayerID());
 		    lastTimeMoved = System.currentTimeMillis();
 		}
 	    }
@@ -157,7 +159,6 @@ public class Controller extends Actor {
 
 	    @Override
 	    public boolean keyDown(InputEvent event, int keycode) {
-		System.out.println("Gotcha!");
 		akeyDown(keycode);
 		return true;
 	    }
