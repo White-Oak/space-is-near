@@ -1,9 +1,10 @@
 package spaceisnear.starting;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Random;
 import spaceisnear.Utils;
+import spaceisnear.game.objects.items.ItemsReader;
 
 /**
  *
@@ -12,8 +13,9 @@ import spaceisnear.Utils;
 public class Jobs {
 
     public static String getRandomProfession() {
-	FileHandle internal = Gdx.files.internal("res/professions.json");
-	String[] jobs = Utils.GSON.fromJson(internal.reader(), String[].class);
+	InputStream is = ItemsReader.class.getResourceAsStream("/res/professions.json");
+	InputStreamReader isr = new InputStreamReader(is);
+	String[] jobs = Utils.GSON.fromJson(isr, String[].class);
 	return jobs[new Random().nextInt(jobs.length)];
     }
 

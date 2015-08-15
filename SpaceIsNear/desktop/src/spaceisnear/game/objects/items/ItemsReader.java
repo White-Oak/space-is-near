@@ -5,8 +5,8 @@
  */
 package spaceisnear.game.objects.items;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import spaceisnear.Utils;
 
 /**
@@ -16,8 +16,9 @@ import spaceisnear.Utils;
 public class ItemsReader {
 
     public static ItemBundle[] read() throws Exception {
-	FileHandle internal = Gdx.files.internal("res/items.json");
-	return Utils.GSON.fromJson(internal.reader(), ItemBundle[].class);
+	InputStream is = ItemsReader.class.getResourceAsStream("/res/items.json");
+	InputStreamReader isr = new InputStreamReader(is);
+	return Utils.GSON.fromJson(isr, ItemBundle[].class);
     }
 
 }

@@ -1,14 +1,13 @@
 package spaceisnear.server.objects.items;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import me.whiteoak.minlog.Log;
 import java.io.*;
 import lombok.RequiredArgsConstructor;
+import me.whiteoak.minlog.Log;
 import spaceisnear.Utils;
 import spaceisnear.editor.*;
-import spaceisnear.game.ui.Position;
 import spaceisnear.game.objects.items.ItemBundle;
+import spaceisnear.game.objects.items.ItemsReader;
+import spaceisnear.game.ui.Position;
 import spaceisnear.server.ServerContext;
 
 /**
@@ -57,9 +56,9 @@ import spaceisnear.server.ServerContext;
 
     public void addItems() throws IOException {
 	long time = System.currentTimeMillis();
-	FileHandle fh = Gdx.files.internal("additems.json");
-	assert fh.exists();
-	SaveLoadAction[] slas = Utils.GSON.fromJson(fh.reader(), SaveLoadAction[].class);
+	InputStream is = ItemsReader.class.getResourceAsStream("/additems.json");
+	InputStreamReader isr = new InputStreamReader(is);
+	SaveLoadAction[] slas = Utils.GSON.fromJson(isr, SaveLoadAction[].class);
 	for (SaveLoadAction sla : slas) {
 	    addItem(new Position(sla.getX(), sla.getY()), sla.getItemId(), context, sla.getProperties());
 	}

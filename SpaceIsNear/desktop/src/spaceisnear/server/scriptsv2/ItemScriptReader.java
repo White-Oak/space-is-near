@@ -1,8 +1,9 @@
 package spaceisnear.server.scriptsv2;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import spaceisnear.Utils;
+import spaceisnear.game.objects.items.ItemsReader;
 
 /**
  *
@@ -11,7 +12,8 @@ import spaceisnear.Utils;
 public class ItemScriptReader {
 
     public static ItemScriptBundle[] read() throws Exception {
-	FileHandle internal = Gdx.files.internal("res/scripts/scripts.json");
-	return Utils.GSON.fromJson(internal.reader(), ItemScriptBundle[].class);
+	InputStream is = ItemsReader.class.getResourceAsStream("/res/scripts/scripts.json");
+	InputStreamReader isr = new InputStreamReader(is);
+	return Utils.GSON.fromJson(isr, ItemScriptBundle[].class);
     }
 }

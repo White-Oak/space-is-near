@@ -21,35 +21,37 @@ public class Main {
     public static LwjglApplication lwjglApplication;
 
     public static void main(String[] args) throws ParseException {
-	GdxNativesLoader.load();
 	Log.setLogger(new FileLogger());
 	Log.DEBUG();
-	Options options = prepareOptions();
-	CommandLineParser parser = new BasicParser();
-	CommandLine parse = parser.parse(options, args);
-	String optionValue = parse.getOptionValue("help");
-	if (optionValue != null) {
-	    printHelp(options);
-	} else {
-	    optionValue = parse.getOptionValue("mode");
-	    if (optionValue != null && !optionValue.equals("default")) {
-		if (parse.hasOption("mode")) {
-		    runSINInWeirdMode(optionValue);
-		} else {
-		    printHelp(options);
-		}
-	    } else {
-		if (parse.hasOption("hostip")) {
-		    IP = parse.getOptionValue("hostip");
-		} else {
-		    IP = "127.0.0.1";
-		}
-		runSIN();
-	    }
-	}
+	runSINInWeirdMode("host");
+//	Options options = prepareOptions();
+//	CommandLineParser parser = new BasicParser();
+//	CommandLine parse = parser.parse(options, args);
+//	boolean hasOption = parse.hasOption("help");
+//	String optionValue;
+//	if (hasOption) {
+//	    printHelp(options);
+//	} else {
+//	    optionValue = parse.getOptionValue("mode");
+//	    if (optionValue != null && !optionValue.equals("default")) {
+//		if (parse.hasOption("mode")) {
+//		    runSINInWeirdMode(optionValue);
+//		} else {
+//		    printHelp(options);
+//		}
+//	    } else {
+//		if (parse.hasOption("hostip")) {
+//		    IP = parse.getOptionValue("hostip");
+//		} else {
+//		    IP = "127.0.0.1";
+//		}
+//		//runSIN();
+//	    }
+//	}
     }
 
     private static void runSIN() {
+	GdxNativesLoader.load();
 	Log.info("client", "SIN is starting. Version: " + VersionCode.getCode());
 	LwjglApplicationConfiguration cfg = configureApp();
 	final Corev3 corev3 = new Corev3();

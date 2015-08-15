@@ -1,12 +1,13 @@
 package spaceisnear.server.scriptsv2;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
 import spaceisnear.Utils;
+import spaceisnear.game.objects.items.ItemsReader;
 
 /**
  * This is actually v2.
@@ -122,8 +123,9 @@ public class ScriptsManager {
 	}
 
 	private static Associate[] read() throws Exception {
-	    FileHandle internal = Gdx.files.internal("res/scripts/associates.json");
-	    return Utils.GSON.fromJson(internal.reader(), Associate[].class);
+	    InputStream is = ItemsReader.class.getResourceAsStream("/res/scripts/associates.json");
+	    InputStreamReader isr = new InputStreamReader(is);
+	    return Utils.GSON.fromJson(isr, Associate[].class);
 	}
 
 	class Associate {

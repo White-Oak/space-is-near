@@ -15,6 +15,7 @@ import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePositionChanged;
+import spaceisnear.game.messages.server.MessagePlayerChunkUpdated;
 import spaceisnear.game.ui.Position;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.chunks.Chunk;
@@ -30,29 +31,29 @@ public class PlayerControllableComponent extends Component {
     public void processMessage(Message message) {
 	switch (message.getMessageType()) {
 	    case CONTROLLED:
-		MessageControlledByInput mc = (MessageControlledByInput) message;
-		Position mm = null;
-		Position position = getPosition();
-		int oldX = position.getX();
-		int oldY = position.getY();
+		final MessageControlledByInput mc = (MessageControlledByInput) message;
+		Position newPosition = null;
+		final Position position = getPosition();
+		final int oldX = position.getX();
+		final int oldY = position.getY();
 		switch (mc.getType()) {
 		    case UP:
-			mm = moveCheck(oldX, oldY, 0, -1);
+			newPosition = moveCheck(oldX, oldY, 0, -1);
 			break;
 		    case DOWN:
-			mm = moveCheck(oldX, oldY, 0, 1);
+			newPosition = moveCheck(oldX, oldY, 0, 1);
 			break;
 		    case LEFT:
-			mm = moveCheck(oldX, oldY, -1, 0);
+			newPosition = moveCheck(oldX, oldY, -1, 0);
 			break;
 		    case RIGHT:
-			mm = moveCheck(oldX, oldY, 1, 0);
+			newPosition = moveCheck(oldX, oldY, 1, 0);
 			break;
 		}
-		if (mm != null) {
-		    final MessagePositionChanged messageTeleported = new MessagePositionChanged(position, getOwnerId(), mm);
+		if (newPosition != null) {
+		    final MessagePositionChanged messageTeleported;
+		    messageTeleported = new MessagePositionChanged(position, getOwnerId(), newPosition);
 		    getOwner().message(messageTeleported);
-//		    Context.LOG.log("So we say them to move");
 		    getContext().sendToNetwork(messageTeleported);
 		}
 	}
@@ -78,7 +79,8 @@ public class PlayerControllableComponent extends Component {
 	}
 	if (mm != null) {
 	    if (movedToAnotherChunk(oldx, oldy, x, y)) {
-
+		MessagePlayerChunkUpdated messagePlayerChunkUpdated = new MessagePlayerChunkUpdated(getOwnerId());
+		getContext().sendDirectedMessage(messagePlayerChunkUpdated);
 	    }
 	}
 	return mm;
