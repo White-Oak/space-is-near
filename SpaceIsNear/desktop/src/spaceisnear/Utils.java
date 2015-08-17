@@ -33,4 +33,10 @@ public class Utils {
 	}
 	return null;
     }
+
+    public static <E> E getJson(String resourcePath, Class<E> type) {
+	InputStream is = Utils.class.getResourceAsStream(resourcePath);
+	InputStreamReader isr = new InputStreamReader(is);
+	return Utils.GSON.fromJson(isr, type);
+    }
 }

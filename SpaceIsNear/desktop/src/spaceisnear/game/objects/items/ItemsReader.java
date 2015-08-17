@@ -5,8 +5,6 @@
  */
 package spaceisnear.game.objects.items;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import spaceisnear.Utils;
 
 /**
@@ -16,9 +14,7 @@ import spaceisnear.Utils;
 public class ItemsReader {
 
     public static ItemBundle[] read() throws Exception {
-	InputStream is = ItemsReader.class.getResourceAsStream("/res/items.json");
-	InputStreamReader isr = new InputStreamReader(is);
-	return Utils.GSON.fromJson(isr, ItemBundle[].class);
+	return Utils.getJson("/res/items.json", ItemBundle[].class);
     }
 
 }

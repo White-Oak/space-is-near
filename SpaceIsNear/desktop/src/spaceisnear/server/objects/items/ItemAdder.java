@@ -6,7 +6,6 @@ import me.whiteoak.minlog.Log;
 import spaceisnear.Utils;
 import spaceisnear.editor.*;
 import spaceisnear.game.objects.items.ItemBundle;
-import spaceisnear.game.objects.items.ItemsReader;
 import spaceisnear.game.ui.Position;
 import spaceisnear.server.ServerContext;
 
@@ -56,9 +55,7 @@ import spaceisnear.server.ServerContext;
 
     public void addItems() throws IOException {
 	long time = System.currentTimeMillis();
-	InputStream is = ItemsReader.class.getResourceAsStream("/additems.json");
-	InputStreamReader isr = new InputStreamReader(is);
-	SaveLoadAction[] slas = Utils.GSON.fromJson(isr, SaveLoadAction[].class);
+	SaveLoadAction[] slas = Utils.getJson("/additems.json", SaveLoadAction[].class);
 	for (SaveLoadAction sla : slas) {
 	    addItem(new Position(sla.getX(), sla.getY()), sla.getItemId(), context, sla.getProperties());
 	}

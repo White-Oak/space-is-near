@@ -1,13 +1,10 @@
 package spaceisnear.server.scriptsv2;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
 import spaceisnear.Utils;
-import spaceisnear.game.objects.items.ItemsReader;
 
 /**
  * This is actually v2.
@@ -123,9 +120,7 @@ public class ScriptsManager {
 	}
 
 	private static Associate[] read() throws Exception {
-	    InputStream is = ItemsReader.class.getResourceAsStream("/res/scripts/associates.json");
-	    InputStreamReader isr = new InputStreamReader(is);
-	    return Utils.GSON.fromJson(isr, Associate[].class);
+	    return Utils.getJson("/res/scripts/associates.json", Associate[].class);
 	}
 
 	class Associate {
