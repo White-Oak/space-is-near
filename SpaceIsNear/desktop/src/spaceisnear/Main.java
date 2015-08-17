@@ -23,31 +23,30 @@ public class Main {
     public static void main(String[] args) throws ParseException {
 	Log.setLogger(new FileLogger());
 	Log.DEBUG();
-	runSINInWeirdMode("host");
-//	Options options = prepareOptions();
-//	CommandLineParser parser = new BasicParser();
-//	CommandLine parse = parser.parse(options, args);
-//	boolean hasOption = parse.hasOption("help");
-//	String optionValue;
-//	if (hasOption) {
-//	    printHelp(options);
-//	} else {
-//	    optionValue = parse.getOptionValue("mode");
-//	    if (optionValue != null && !optionValue.equals("default")) {
-//		if (parse.hasOption("mode")) {
-//		    runSINInWeirdMode(optionValue);
-//		} else {
-//		    printHelp(options);
-//		}
-//	    } else {
-//		if (parse.hasOption("hostip")) {
-//		    IP = parse.getOptionValue("hostip");
-//		} else {
-//		    IP = "127.0.0.1";
-//		}
-//		//runSIN();
-//	    }
-//	}
+	Options options = prepareOptions();
+	CommandLineParser parser = new BasicParser();
+	CommandLine parse = parser.parse(options, args);
+	boolean hasOption = parse.hasOption("help");
+	String optionValue;
+	if (hasOption) {
+	    printHelp(options);
+	} else {
+	    optionValue = parse.getOptionValue("mode");
+	    if (optionValue != null && !optionValue.equals("default")) {
+		if (parse.hasOption("mode")) {
+		    runSINInWeirdMode(optionValue);
+		} else {
+		    printHelp(options);
+		}
+	    } else {
+		if (parse.hasOption("hostip")) {
+		    IP = parse.getOptionValue("hostip");
+		} else {
+		    IP = "127.0.0.1";
+		}
+		runSIN();
+	    }
+	}
     }
 
     private static void runSIN() {

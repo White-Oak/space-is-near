@@ -6,14 +6,23 @@ apply plugin: "java"
 sourceSets.main.java.srcDirs = ["src/"]
 
 project.ext.mainClassName = "spaceisnear.Main"
-project.ext.assetsDir = new File("./assets");
+
+sourceSets {
+    main {
+        java {
+            srcDir "src/"
+        }
+        resources {
+            srcDir 'assets/'
+        }
+    }
+}
 
 task run(dependsOn: classes, type: JavaExec) {
     enableAssertions = true
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
-    workingDir = project.assetsDir
     ignoreExitValue = true
 }
 
@@ -21,7 +30,6 @@ task debug(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
-    workingDir = project.assetsDir
     ignoreExitValue = true
     debug = true
 }
@@ -76,7 +84,6 @@ task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from { configurations.compile.collect { zipTree(it) } }
-    from files(project.assetsDir);
     libsDirName = deployFolder
 
     archiveName = appName + "-" + version + "-b" + mVersionCode + ".jar"
