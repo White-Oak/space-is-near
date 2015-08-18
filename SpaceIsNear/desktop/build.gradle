@@ -34,7 +34,7 @@ task debug(dependsOn: classes, type: JavaExec) {
     debug = true
 }
 
-task buildNumberino {
+task versionCodeUpdate {
     def file = file("./src/spaceisnear/VersionCode.java")
     def text = file.getText()
     text = buildNumberRe(text)
@@ -62,10 +62,10 @@ int incrementBuildNumber() {
         if (matcherVersionCode.find()) {
             versionCode = Integer.parseInt(matcherVersionCode.group(1))
 	    if (project.ext.buildNumberIncremented) {
-		println(":desktop:buildNumber — already incremented build number")
+		println(":desktop:versionCodeUpdate — already incremented build number")
             } else {
 		def manifestContent = matcherVersionCode.replaceAll("buildNumber = " + (versionCode + 1))
-		println(":desktop:buildNumber — current buildNumber is " + versionCode);
+		println(":desktop:versionCodeUpdate — current buildNumber is " + versionCode);
 		file.write(manifestContent)
                 project.ext.buildNumberIncremented = true
 		project.ext.mVersionCode = versionCode
@@ -91,5 +91,5 @@ task dist(type: Jar) {
         attributes 'Main-Class': project.mainClassName
     }
 }
-classes.dependsOn buildNumberino
+classes.dependsOn versionCodeUpdate
 dist.dependsOn classes
