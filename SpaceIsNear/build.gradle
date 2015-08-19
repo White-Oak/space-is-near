@@ -29,7 +29,8 @@ project(":desktop") {
     sourceCompatibility = 1.8
     ext{
         buildNumberIncremented = false
-	mVersionCode = 1
+	mBuildNumber = 1
+	mVersion = '0.0.11'
     }
     configurations {
         provided

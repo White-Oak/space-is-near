@@ -1,5 +1,5 @@
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+
+import java.io.FileReader
 
 apply plugin: "java"
 
@@ -34,62 +34,59 @@ task debug(dependsOn: classes, type: JavaExec) {
     debug = true
 }
 
-task versionCodeUpdate {
-    def file = file("./src/spaceisnear/VersionCode.java")
-    def text = file.getText()
-    text = buildNumberRe(text)
-    text = versionRe(text)
-    file.write(text)
-}
-String buildNumberRe(String text){
-    def vc = incrementBuildNumber()
-    def pattern = Pattern.compile("BUILD_NUMBER = (\\d+)")
-    def matcher = pattern.matcher(text)
-    return matcher.replaceAll("BUILD_NUMBER = " + vc)
-}
-String versionRe(String text){
-    def pattern = Pattern.compile("VERSION = (.*);")
-    def matcher = pattern.matcher(text)
-    return matcher.replaceAll("VERSION = \"" + version+"\";")
-}
-
-int incrementBuildNumber() {
-    def versionCode = project.ext.mVersionCode
-    def file = file("./gradle.properties")
-    if (file.exists()) {
-        def pattern = Pattern.compile("buildNumber = (\\d+)")
-        def matcherVersionCode = pattern.matcher(file.getText())
-        if (matcherVersionCode.find()) {
-            versionCode = Integer.parseInt(matcherVersionCode.group(1))
-	    if (project.ext.buildNumberIncremented) {
-		println(":desktop:versionCodeUpdate — already incremented build number")
-            } else {
-		def manifestContent = matcherVersionCode.replaceAll("buildNumber = " + (versionCode + 1))
-		println(":desktop:versionCodeUpdate — current buildNumber is " + versionCode);
-		file.write(manifestContent)
-                project.ext.buildNumberIncremented = true
-		project.ext.mVersionCode = versionCode
-	    }
-        } else appendBuildNumber(file)
-    } else appendBuildNumber(file)
-    return mVersionCode;
-}
-
-void appendBuildNumber(File file) {
-    file.append("\nbuildNumber = " + (mVersionCode + 1))
-    println(":desktop:incrementBuildNumber - current buildNumber is " + mVersionCode);
-}
-
-task dist(type: Jar) {
+task dist(dependsOn: classes, type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from { configurations.compile.collect { zipTree(it) } }
     libsDirName = deployFolder
 
-    archiveName = appName + "-" + version + "-b" + mVersionCode + ".jar"
+    archiveName = appName + "-" + mVersion + "-b" + mBuildNumber + ".jar"
     manifest {
-        attributes 'Main-Class': project.mainClassName
+	attributes 'Main-Class': project.mainClassName
     }
 }
-classes.dependsOn versionCodeUpdate
-dist.dependsOn classes
+task versionCodeUpdate() {
+    def file = file("./version.code")
+    if(file.exists()){
+	file.withReader('UTF-8'){fr ->
+	    project.ext.mBuildNumber = Integer.parseInt(fr.readLine())
+	    project.ext.mVersion = fr.readLine()
+	    if(!project.ext.buildNumberIncremented){
+		project.ext.mBuildNumber++
+		project.ext.buildNumberIncremented = true
+		println(":${project.name}:versionCodeUpdate - current build number is ${project.ext.mBuildNumber}")
+	    }else{
+		println(":${project.name}:versionCodeUpdate - build number has already been incremented in this build -- check your build pipeline.")
+	    }
+	}
+    }
+    overwriteVersionCodeFile(project.ext.mBuildNumber, project.ext.mVersion)
+    createVersionCodeJava(project.ext.mBuildNumber, project.ext.mVersion)
+}
+void createVersionCodeJava(int versionNum, String versionString){
+    def file = file("/src/spaceisnear/VersionCode.java")
+    if(file.exists()) file.delete()
+    def versionCodeJava = """\n\
+package spaceisnear;
+
+public final class VersionCode {
+
+    public static final int BUILD_NUMBER = ${versionNum};
+    public static final String VERSION = "${versionString}";
+
+    public static String getCode() {
+	return VERSION + "-b" + BUILD_NUMBER;
+    }
+}
+"""
+    file.text = versionCodeJava
+}
+void overwriteVersionCodeFile(int num, String version){
+    def file = file("/version.code")
+    if(file.exists()){
+	file.delete()
+    }
+    file.text = "${num}\n${version}"
+}
+
+compileJava.dependsOn versionCodeUpdate
