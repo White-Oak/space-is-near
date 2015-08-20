@@ -1,5 +1,6 @@
 package spaceisnear.game.components.server;
 
+import me.whiteoak.minlog.Log;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
@@ -24,14 +25,16 @@ public class PlayerChunkObserverComponent extends Component {
 	    case CHUNK_OBJECT_UPDATED: {
 		final MessageObjectChangedChunk mocc = (MessageObjectChangedChunk) message;
 		if (checkIfObjectIsNearNow(mocc)) {
-		    final MessagePlayerChunkUpdated mcu = (MessagePlayerChunkUpdated) message;
-		    int playerID = mcu.getId();
-		    ServerContext context = (ServerContext) getContext();
-		    context.getNetworking().playerChunkUpdated(playerID);
+		    Log.error("server", "Nothing here");
+		    assert false : "Nothing here";
 		}
 	    }
 	    break;
 	    case CHUNK_PLAYER_UPDATED: {
+		final MessagePlayerChunkUpdated mcu = (MessagePlayerChunkUpdated) message;
+		int playerID = mcu.getId();
+		ServerContext context = (ServerContext) getContext();
+		context.getNetworking().playerChunkUpdated(playerID);
 	    }
 	    break;
 	}

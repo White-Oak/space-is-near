@@ -8,6 +8,7 @@
 package spaceisnear.game.components;
 
 import lombok.Getter;
+import me.whiteoak.minlog.Log;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
@@ -89,12 +90,12 @@ public class PositionComponent extends Component {
 		}
 		setX(messaget.getX());
 		setY(messaget.getY());
+		if (!isClient()) {
+		    checkConsequnces(oldX, oldY);
+		}
 		break;
 	    case ANIMATION_STEP://client-only message
 		checkAnimation();
-	}
-	if (!isClient()) {
-	    checkConsequnces(oldX, oldY);
 	}
     }
 
@@ -109,6 +110,7 @@ public class PositionComponent extends Component {
 	    } else if (type == GameObjectType.PLAYER) {
 		//updating chunk
 		if (movedToAnotherChunk(oldX, oldY, getX(), getY())) {
+		    Log.debug("server", "Player has moved to a new chunk, thus I'm sendidng this message.");
 		    MessagePlayerChunkUpdated messagePlayerChunkUpdated = new MessagePlayerChunkUpdated(getOwnerId());
 		    getContext().sendDirectedMessage(messagePlayerChunkUpdated);
 		}
