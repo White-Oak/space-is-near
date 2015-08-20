@@ -1,10 +1,11 @@
 package spaceisnear.game.components.server;
 
-import me.whiteoak.minlog.Log;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.messages.server.MessageObjectChangedChunk;
+import spaceisnear.game.messages.server.MessagePlayerChunkUpdated;
+import spaceisnear.server.ServerContext;
 import spaceisnear.server.chunks.Chunk;
 import spaceisnear.server.chunks.ChunkManager;
 
@@ -23,10 +24,10 @@ public class PlayerChunkObserverComponent extends Component {
 	    case CHUNK_OBJECT_UPDATED: {
 		final MessageObjectChangedChunk mocc = (MessageObjectChangedChunk) message;
 		if (checkIfObjectIsNearNow(mocc)) {
-		    //TODO send MessageCreated to player
-		    //and his properties???
-		    Log.error("server", "He was not ready yet.");
-		    assert false : "IM NOT READY YET";
+		    final MessagePlayerChunkUpdated mcu = (MessagePlayerChunkUpdated) message;
+		    int playerID = mcu.getId();
+		    ServerContext context = (ServerContext) getContext();
+		    context.getNetworking().playerChunkUpdated(playerID);
 		}
 	    }
 	    break;

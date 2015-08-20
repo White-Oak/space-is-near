@@ -20,11 +20,15 @@ public class Player extends ServerGameObject {
 	healthComponent = new HealthComponent();
 	addComponents(pc, healthComponent, new BreathingComponent(),
 		new InventoryComponent(), new PlayerControllableComponent(), new NameComponent(),
-		new VariablePropertiesComponent());
+		new VariablePropertiesComponent(), new PlayerChunkObserverComponent());
     }
 
     public String getNickname() {
 	return getNameComponent().getNickname();
+    }
+
+    public void setNickname(String nickname) {
+	getNameComponent().setNickname(nickname);
     }
 
     private NameComponent getNameComponent() {
@@ -43,10 +47,6 @@ public class Player extends ServerGameObject {
 	    }
 	}
 	return null;
-    }
-
-    public void setNickname(String nickname) {
-	getNameComponent().setNickname(nickname);
     }
 
 }

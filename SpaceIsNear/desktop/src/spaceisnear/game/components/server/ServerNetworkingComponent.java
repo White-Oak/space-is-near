@@ -7,7 +7,6 @@ package spaceisnear.game.components.server;
 
 import spaceisnear.game.components.client.NetworkingComponent;
 import spaceisnear.game.messages.*;
-import spaceisnear.game.messages.server.MessagePlayerChunkUpdated;
 import spaceisnear.server.ServerContext;
 import spaceisnear.server.objects.Player;
 import spaceisnear.server.objects.ServerNetworkingObject;
@@ -28,12 +27,6 @@ public class ServerNetworkingComponent extends NetworkingComponent {
 		    context.getNetworking().sendToPlayer(get, mts.getMessage());
 		}
 		break;
-	    case CHUNK_PLAYER_UPDATED: {
-		final MessagePlayerChunkUpdated mcu = (MessagePlayerChunkUpdated) message;
-		int playerID = mcu.getPlayerID();
-		ServerContext context = (ServerContext) getContext();
-		context.getNetworking().playerChunkUpdated(playerID);
-	    }
 	}
     }
 
