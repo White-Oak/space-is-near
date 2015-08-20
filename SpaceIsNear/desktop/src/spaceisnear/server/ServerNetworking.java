@@ -1,10 +1,11 @@
 package spaceisnear.server;
 
 import com.esotericsoftware.kryonet.*;
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import me.whiteoak.minlog.Log;
 import spaceisnear.abstracts.AbstractGameObject;
 import spaceisnear.game.messages.*;
@@ -55,10 +56,8 @@ public class ServerNetworking extends Listener {
 		    connectionsForMessages.add(connection);
 		    messages.add(message);
 	    }
-	} else {
-	    if (object instanceof String) {
-		Log.info("server", "Got string over the net: " + object);
-	    }
+	} else if (object instanceof String) {
+	    Log.info("server", "Got string over the net: " + object);
 	}
     }
 
@@ -116,12 +115,12 @@ public class ServerNetworking extends Listener {
     private synchronized void seeIfOldClient(final Client clientByConnection, MessageLogin mci, Connection connection) {
 	clients.stream().filter(client -> clientByConnection != client)//newly created client is still in list
 		.filter(client -> client.getClientInformation().getLogin().equals(mci.getLogin())).forEach(client -> {
-		    client.setConnection(connection);
-		    clients.remove(clientByConnection);
-		    sendToConnection(connection, new MessageJoined());
-		    Runnable runnable = () -> processOldPlayer(client);
-		    new Thread(runnable, "sending world to old player").start();
-		});
+	    client.setConnection(connection);
+	    clients.remove(clientByConnection);
+	    sendToConnection(connection, new MessageJoined());
+	    Runnable runnable = () -> processOldPlayer(client);
+	    new Thread(runnable, "sending world to old player").start();
+	});
 	//	for (Client client : clients) {
 	//	    //newly created client is still in list
 	//	    if (clientByConnection != client) {
@@ -505,10 +504,11 @@ public class ServerNetworking extends Listener {
 	});
     }
 
-    private void sendNewChunksToPlayer(Client client) {
-	System.out.println("There is an outdated player!");
+    private void checkNewChunksForClient(Client client) {
 	Chunk oldChunk = client.getChunk();
 	Chunk newChunk = client.getNewChunk();
+	assert newChunk != null : "WTF";
+	assert newChunk != oldChunk;
 	if (oldChunk == null) {
 	    sendChunksToClient(chunkManager.getChunksNear(newChunk), client);
 	} else {
@@ -520,6 +520,7 @@ public class ServerNetworking extends Listener {
     }
 
     private void sendChunksToClient(Collection<Chunk> toBeSent, Client client) {
+	Log.debug("server", "Sending chunks to client, size: " + toBeSent.size());
 	Collection<ObjectMessaged> worldIn = getWorldIn(toBeSent);
 	sendCreatedsOfWorld(worldIn, client.getConnection());
 	sendPropertiesOfWorld(worldIn, client);
@@ -531,6 +532,6 @@ public class ServerNetworking extends Listener {
     public void sendNewChunks() {
 	clients.stream()
 		.filter(client -> client.playerChunkOutdated())
-		.forEach(this::sendNewChunksToPlayer);
+		.forEach(this::checkNewChunksForClient);
     }
 }
