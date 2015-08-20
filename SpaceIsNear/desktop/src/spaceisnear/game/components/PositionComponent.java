@@ -11,11 +11,14 @@ import lombok.Getter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.layer.AtmosphericLayer;
 import spaceisnear.game.layer.ObstaclesLayer;
-import spaceisnear.game.messages.*;
+import spaceisnear.game.messages.Message;
+import spaceisnear.game.messages.MessageAnimationStep;
 import spaceisnear.game.messages.properties.MessagePositionChanged;
-import spaceisnear.game.objects.*;
+import spaceisnear.game.messages.server.MessagePlayerChunkUpdated;
+import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.ui.Position;
 import spaceisnear.server.ServerContext;
+import spaceisnear.server.chunks.Chunk;
 import spaceisnear.server.objects.items.StaticItem;
 
 public class PositionComponent extends Component {
@@ -99,11 +102,27 @@ public class PositionComponent extends Component {
 	ServerContext context = (ServerContext) getContext();
 	//if moved
 	if (oldX != getX() || oldY != getY()) {
-	    if (getOwner().getType() == GameObjectType.ITEM) {
+	    final GameObjectType type = getOwner().getType();
+	    if (type == GameObjectType.ITEM) {
 		//updating obstacle and atmospheric maps
 		checkConsequencesForItem(context, oldX, oldY);
+	    } else if (type == GameObjectType.PLAYER) {
+		//updating chunk
+		if (movedToAnotherChunk(oldX, oldY, getX(), getY())) {
+		    MessagePlayerChunkUpdated messagePlayerChunkUpdated = new MessagePlayerChunkUpdated(getOwnerId());
+		    getContext().sendDirectedMessage(messagePlayerChunkUpdated);
+		}
 	    }
+
 	}
+    }
+
+    private boolean movedToAnotherChunk(int oldX, int oldY, int newX, int newY) {
+	oldX /= Chunk.CHUNK_SIZE;
+	oldY /= Chunk.CHUNK_SIZE;
+	newX /= Chunk.CHUNK_SIZE;
+	newY /= Chunk.CHUNK_SIZE;
+	return oldX != newX || oldY != newY;
     }
 
     private void checkConsequencesForItem(ServerContext context, int oldX, int oldY) {
