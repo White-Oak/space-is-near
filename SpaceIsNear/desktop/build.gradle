@@ -45,26 +45,38 @@ task dist(dependsOn: classes, type: Jar) {
 	attributes 'Main-Class': project.mainClassName
     }
 }
-task versionCodeUpdate() {
-    def file = file("./version.code")
-    if(file.exists()){
-	file.withReader('UTF-8'){fr ->
-	    project.ext.mBuildNumber = Integer.parseInt(fr.readLine())
-	    project.ext.mVersion = fr.readLine()
-	    if(!project.ext.buildNumberIncremented){
-		project.ext.mBuildNumber++
-		project.ext.buildNumberIncremented = true
-		println(":${project.name}:versionCodeUpdate - current build number is ${project.ext.mBuildNumber}")
-	    }else{
-		println(":${project.name}:versionCodeUpdate - build number has already been incremented in this build -- check your build pipeline.")
+
+task versionCodeUpdate {
+    def different = fileTree('src'){
+	include '**/*.java'
+	exclude '**/VersionCode.java'
+    }
+    inputs.files  different
+    outputs.file  "./src/me/oak/getstarred/server/VersionCode.java"
+    doLast{
+	def file = file("./version.code")
+	if(file.exists()){
+	    file.withReader('UTF-8'){fr ->
+		project.ext.mBuildNumber = Integer.parseInt(fr.readLine())
+		project.ext.mVersion = fr.readLine()
+		if(!project.ext.buildNumberIncremented){
+		    project.ext.mBuildNumber++
+		    project.ext.buildNumberIncremented = true
+		    println(":${project.name}:versionCodeUpdate - current build number is ${mBuildNumber}")
+		}else{
+		    println(":${project.name}:versionCodeUpdate - build number has already been incremented in this build -- check your build pipeline.")
+		}
 	    }
 	}
+	overwriteVersionCodeFile(mBuildNumber, mVersion)
+	createVersionCodeJava(mBuildNumber, mVersion)
+	jar.baseName = 'get-starred-server'
+	jar.version = "${mVersion}-b${mBuildNumber}"
     }
-    overwriteVersionCodeFile(project.ext.mBuildNumber, project.ext.mVersion)
-    createVersionCodeJava(project.ext.mBuildNumber, project.ext.mVersion)
 }
+
 void createVersionCodeJava(int versionNum, String versionString){
-    def file = file("/src/spaceisnear/VersionCode.java")
+    def file = file("./src/spaceisnear/VersionCode.java")
     if(file.exists()) file.delete()
     def versionCodeJava = """\n\
 package spaceisnear;
@@ -82,7 +94,7 @@ public final class VersionCode {
     file.text = versionCodeJava
 }
 void overwriteVersionCodeFile(int num, String version){
-    def file = file("/version.code")
+    def file = file("./version.code")
     if(file.exists()){
 	file.delete()
     }

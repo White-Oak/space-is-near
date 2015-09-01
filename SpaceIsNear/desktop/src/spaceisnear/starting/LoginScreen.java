@@ -1,17 +1,22 @@
 package spaceisnear.starting;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import java.util.concurrent.*;
+import box2dLight.RayHandler;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import lombok.Setter;
 import me.whiteoak.minlog.Log;
+import static spaceisnear.game.Corev2.rayHandler;
+import static spaceisnear.game.Corev2.world;
 import spaceisnear.game.Networking;
 import spaceisnear.game.messages.service.onceused.MessageLogin;
 import spaceisnear.game.objects.items.ItemsArchive;
 import spaceisnear.game.objects.items.ItemsReader;
 import spaceisnear.game.ui.*;
-import spaceisnear.game.ui.TextField;
 import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.game.ui.console.LogLevel;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
@@ -28,6 +33,11 @@ public final class LoginScreen extends ScreenImprovedGreatly implements Activati
 
     @Override
     public void create() {
+	world = new World(new Vector2(), true);
+	rayHandler = new RayHandler(world);
+	RayHandler.useDiffuseLight(true);
+	rayHandler.setCulling(true);
+	rayHandler.setBlur(true);
 	initView();
 	try {
 	    ItemsArchive.itemsArchive = new ItemsArchive(ItemsReader.read());

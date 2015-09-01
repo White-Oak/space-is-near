@@ -1,8 +1,11 @@
 package spaceisnear.game;
 
 import java.util.*;
-import lombok.*;
-import spaceisnear.abstracts.*;
+import lombok.Getter;
+import me.whiteoak.minlog.Log;
+import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.abstracts.Context;
+import spaceisnear.game.components.Component;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.components.client.PatientComponent;
@@ -62,12 +65,28 @@ public final class GameContext extends Context {
     }
 
     public synchronized void addObject(ClientGameObject gameObject, int id) {
+	assert !objects.containsKey(id) : "";
 	gameObject.setContext(this);
 	gameObject.setId(id);
 	gameObject.getComponents().stream()
-		.filter(component -> component instanceof PaintableComponent)
-		.forEach(component -> addPaintable((PaintableComponent) component));
+		.filter(component -> component.isPaintable())
+		.map(PaintableComponent.class::cast)
+		.forEach(component -> addPaintable(component));
 	objects.put(id, gameObject);
+    }
+
+    public void removeObject(int id) {
+	final AbstractGameObject removed = objects.get(id);
+	if (removed != null) {
+	    removed.setDestroyed(true);
+	    List<Component> components = removed.getComponents();
+	    components.stream()
+		    .filter(component -> component.isPaintable())
+		    .map(PaintableComponent.class::cast)
+		    .forEach(pc -> pc.setOwnerDestroyed(true));
+	    Log.debug("client", "The old object was removed from the map");
+	    objects.remove(id);
+	}
     }
 
     public GamerPlayer getPlayer() {

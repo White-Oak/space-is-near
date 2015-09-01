@@ -6,6 +6,8 @@ package spaceisnear.game.components.client;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import lombok.Getter;
+import lombok.Setter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
@@ -13,6 +15,7 @@ import spaceisnear.game.components.ComponentType;
 public abstract class PaintableComponent extends Component {
 
     private final static OrthographicCamera camera = new OrthographicCamera();
+    @Getter @Setter private boolean ownerDestroyed;
 
     static {
 	camera.setToOrtho(true);
@@ -49,4 +52,10 @@ public abstract class PaintableComponent extends Component {
 	    paintComponent(batch, xto, yto);
 	}
     }
+
+    @Override
+    public boolean isPaintable() {
+	return true;
+    }
+
 }

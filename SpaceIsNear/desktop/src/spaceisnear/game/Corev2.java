@@ -1,24 +1,27 @@
 package spaceisnear.game;
 
-import box2dLight.*;
-import com.badlogic.gdx.graphics.*;
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 import me.whiteoak.minlog.Log;
 import org.apache.commons.lang3.ArrayUtils;
-import spaceisnear.abstracts.*;
-import spaceisnear.game.FPSLogger;
+import spaceisnear.abstracts.AbstractGameObject;
+import spaceisnear.game.components.client.PaintableComponent;
 import spaceisnear.game.components.server.context.ServerContextMenu;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
-import spaceisnear.game.objects.items.*;
+import spaceisnear.game.objects.items.StaticItem;
 import spaceisnear.game.ui.Position;
 import spaceisnear.game.ui.UIElement;
-import spaceisnear.game.ui.console.*;
-import spaceisnear.game.ui.context.*;
+import spaceisnear.game.ui.console.ChatString;
+import spaceisnear.game.ui.console.LogLevel;
+import spaceisnear.game.ui.context.ContextMenu;
 import spaceisnear.starting.ui.ScreenImprovedGreatly;
 
 /**
@@ -85,11 +88,6 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	};
 	thread.start();
 
-	world = new World(new Vector2(), true);
-	rayHandler = new RayHandler(world);
-	RayHandler.useDiffuseLight(true);
-	rayHandler.setCulling(true);
-	rayHandler.setBlur(true);
 	pointLight = new PointLight(rayHandler, 64);
 	pointLight.setColor(new Color(1, 1, 1, 0f));
 	pointLight.setSoft(true);
@@ -139,7 +137,15 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 //		    (getContext().getPlayer().getPosition().getY() + 0.5f) * GameContext.TILE_HEIGHT);
 //	}
 	batch.begin();
-	getContext().getPaintables().forEach(paintableComponent -> paintableComponent.paint(batch));
+	final List<PaintableComponent> paintables = getContext().getPaintables();
+	for (int i = 0; i < paintables.size(); i++) {
+	    PaintableComponent get = paintables.get(i);
+	    if (get.isOwnerDestroyed()) {
+		paintables.remove(i);
+	    } else {
+		get.paint(batch);
+	    }
+	}
 	batch.end();
 	rayHandler.updateAndRender();
 

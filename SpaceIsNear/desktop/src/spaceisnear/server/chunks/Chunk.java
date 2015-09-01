@@ -8,6 +8,6 @@ import lombok.Value;
  */
 @Value public class Chunk {
 
-    public static final int CHUNK_SIZE = 8;
+    public static final int CHUNK_SIZE = 3;
     private int x, y;
 }

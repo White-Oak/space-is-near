@@ -272,7 +272,7 @@ public class ServerNetworking extends Listener {
 	sendToAll(new MessagePaused());
 	Collection<ObjectMessaged> world = getWorldNear(client.getChunk());
 	sendWorldInformation(world, client);
-	sendCreatedsOfWorld(world, client.getConnection());
+	sendCreatedsOfWorld(world, client);
 	orderEveryoneToRogerAndWait();
 	sendPlayerDiscovered(client);
 	sendToAll(new MessageUnpaused());
@@ -341,7 +341,7 @@ public class ServerNetworking extends Listener {
     }
 
     private MessageWorldInformation getWorldInformation(Collection<ObjectMessaged> world) {
-	int propertablesSize = 0;
+	Integer propertablesSize = 0;
 	propertablesSize = world.stream()
 		.map(objectMessaged -> objectMessaged.propertables.size())
 		.reduce(propertablesSize, Integer::sum);
@@ -349,10 +349,15 @@ public class ServerNetworking extends Listener {
 	return mwi;
     }
 
-    private void sendCreatedsOfWorld(Collection<ObjectMessaged> world, Connection connection) {
+    private void sendCreatedsOfWorld(Collection<ObjectMessaged> world, Client client) {
+	Connection connection = client.getConnection();
 	world.stream()
 		.map(objectMessaged -> objectMessaged.created)
-		.forEach(messageCreated -> sendToConnection(connection, messageCreated));
+		.filter(created -> !client.hasObjectAt(created.getId()))
+		.forEach(messageCreated -> {
+		    client.createObjectAt(messageCreated.getId());
+		    sendToConnection(connection, messageCreated);
+		});
     }
 
     private void sendPropertiesOfWorld(Collection<ObjectMessaged> world, Client client) {
@@ -522,7 +527,7 @@ public class ServerNetworking extends Listener {
     private void sendChunksToClient(Collection<Chunk> toBeSent, Client client) {
 	Log.debug("server", "Sending chunks to client, size: " + toBeSent.size());
 	Collection<ObjectMessaged> worldIn = getWorldIn(toBeSent);
-	sendCreatedsOfWorld(worldIn, client.getConnection());
+	sendCreatedsOfWorld(worldIn, client);
 	sendPropertiesOfWorld(worldIn, client);
     }
 

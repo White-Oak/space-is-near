@@ -297,7 +297,7 @@
 
 0.0.11
 -NETWORK
-    -chunks 
+    +chunks 
     -fixes
 ---
 +chat multi-line support fix
@@ -311,7 +311,7 @@
 -Spawn points
 ---
 -Breathing component should have health component bundled in, to prevent looking for it in components of owner
--Wide messages refactoring:
++Wide messages refactoring:
 	+Messages are now split into DirectedMessage and BroadcastMessage. Direct extending of a Message class is now prohibited.
 	+Introduced a system for caching messages that don't have a target yet. Each PropertableMessage now has canBeApplied method to check if it can be applied on Client.
 		+If it cannot be applied right now then new MessageNotReadyYet is created and sent to service PatientComponent of a client.  
@@ -320,6 +320,8 @@
 +Starting system rework: less spaghetti, more crystal process
     +Engine (see scheme.png for reference)
 +Keyboard events are proccessed in a separate class: Controller
+-replaced all Map<Integer, T> with appropriate TIntTMap classes. GC will be happy
++Server won't send MessageCreated for the objects that client already has. Properties still will be sent.
 
 
 0.1.0

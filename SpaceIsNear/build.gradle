@@ -57,6 +57,7 @@ project(":desktop") {
         compile "com.esotericsoftware:kryonet:2.22.0-RC1"
         provided "org.projectlombok:lombok:1.16.2"
         compile "org.apache.commons:commons-collections4:4.0"
+	compile 'net.sf.trove4j:trove4j:3.0.3'
     }
 }
 
