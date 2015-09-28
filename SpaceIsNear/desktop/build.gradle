@@ -1,8 +1,5 @@
 
 import java.io.FileReader
-
-apply plugin: "java"
-
 sourceSets.main.java.srcDirs = ["src/"]
 
 project.ext.mainClassName = "spaceisnear.Main"
