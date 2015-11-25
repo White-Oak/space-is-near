@@ -10,11 +10,13 @@
 package spaceisnear.game.ui.context;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
-import java.util.*;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Getter;
 import spaceisnear.game.ui.ActivationListener;
 import spaceisnear.game.ui.UIElement;
 
@@ -121,7 +123,7 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
     }
 
     public boolean add(ContextMenuItemable e) {
-	int width = (int) font.getBounds((e.getLabel())).width;
+	int width = getLineWidth((e.getLabel()));
 	//Increasing width of this menu if label of new item is too big
 	recalculateWidth(width);
 	//Increasing height by line
@@ -200,7 +202,7 @@ public final class ContextMenu extends UIElement implements ContextMenuItemable 
 
     public void setLabel(String label) {
 	this.label = label;
-	int width = (int) font.getBounds((label)).width;
+	int width = getLineWidth(label);
 	recalculateWidth(width);
     }
 

@@ -1,6 +1,7 @@
 package spaceisnear.game.ui;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Getter;
@@ -34,7 +35,12 @@ public final class MenuItem {
     public void setLabel(String name) {
 	this.label = name;
 	menu.setLabel(name);
-	width = (int) font.getBounds(label).width + HEIGHT_PADDING * 2;
+	width = getLineWidth(label) + HEIGHT_PADDING * 2;
+    }
+
+    protected int getLineWidth(String label) {
+	GlyphLayout glyphLayout = new GlyphLayout(font, label);
+	return (int) glyphLayout.width;
     }
 
     public void setActivationListener(ActivationListener activationListener) {

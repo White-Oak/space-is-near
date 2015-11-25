@@ -3,7 +3,7 @@ package spaceisnear.game.ui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,10 +51,8 @@ public final class Button extends UIElement implements Hoverable {
 	    if (!currentColor.equals(finalColor)) {
 		currentColor.sub(new Color(0x08080800));
 	    }
-	} else {
-	    if (!currentColor.equals(color)) {
-		currentColor.add(new Color(0x08080800));
-	    }
+	} else if (!currentColor.equals(color)) {
+	    currentColor.add(new Color(0x08080800));
 	}
     }
 
@@ -77,7 +75,7 @@ public final class Button extends UIElement implements Hoverable {
 
     @Override
     public float getPrefWidth() {
-	return (font.getBounds(label).width + WIDTH_PADDING * 2);
+	return (getLineWidth(label) + WIDTH_PADDING * 2);
     }
 
     @Override

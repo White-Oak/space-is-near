@@ -97,4 +97,8 @@ public abstract class UIElement extends Actor {
 
     public abstract void paint(Batch batch);
 
+    protected int getLineWidth(CharSequence label) {
+	GlyphLayout glyphLayout = new GlyphLayout(font, label);
+	return (int) glyphLayout.width;
+    }
 }

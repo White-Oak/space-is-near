@@ -110,11 +110,16 @@ import spaceisnear.game.ui.UIElement;
 	return strings.toArray(new String[strings.size()]);
     }
 
+    protected int getLineWidth(CharSequence label) {
+	GlyphLayout glyphLayout = new GlyphLayout(font, label);
+	return (int) glyphLayout.width;
+    }
+
     private List<String> breakIntoLines(String line, BitmapFont font, int maxWidth) {
 	List<String> list = new LinkedList<>();
 	int i = 0;
 	int previousSpace = 0;
-	while (i < line.length() && (int) font.getBounds(line).width > maxWidth) {
+	while (i < line.length() && getLineWidth(line) > maxWidth) {
 	    String before = line.substring(0, i);
 	    if (line.charAt(i) == ' ') {
 		previousSpace = i;
@@ -127,7 +132,7 @@ import spaceisnear.game.ui.UIElement;
 		i = 0;
 		continue;
 	    }
-	    if (font.getBounds(before).width > maxWidth) {
+	    if (getLineWidth(before) > maxWidth) {
 		if (previousSpace != 0) {
 		    String toAdd = line.substring(0, previousSpace);
 		    list.add(toAdd);

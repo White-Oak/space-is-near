@@ -39,10 +39,8 @@ public final class TextField extends UIElement implements Hoverable {
 	    if (!currentColor.equals(finalColor)) {
 		currentColor.add(new Color(0x10));
 	    }
-	} else {
-	    if (!currentColor.equals(borderColor)) {
-		currentColor.sub(new Color(0x10));
-	    }
+	} else if (!currentColor.equals(borderColor)) {
+	    currentColor.sub(new Color(0x10));
 	}
     }
 
@@ -74,7 +72,7 @@ public final class TextField extends UIElement implements Hoverable {
 		currentPosition = 0;
 		while (currentX < x && currentPosition < text.length()) {
 		    currentPosition++;
-		    currentX += font.getBounds(text, 0, currentPosition).width;
+		    currentX += getLineWidth(text.subSequence(0, currentPosition));
 		}
 		return true;
 	    }
@@ -97,9 +95,9 @@ public final class TextField extends UIElement implements Hoverable {
 
 	    @Override
 	    public boolean keyTyped(InputEvent event, char character) {
-		if (font.containsCharacter(character)) {
-		    addCharacter(character);
-		}
+//		if (font.containsCharacter(character)) {
+		addCharacter(character);
+//		}
 		return true;
 	    }
 
@@ -177,13 +175,13 @@ public final class TextField extends UIElement implements Hoverable {
 	int start = 0;
 	int end = text.length();
 	int startingXText = 0;
-	if (font.getBounds(text).width > getWidth() - WIDTH_PADDING * 2) {
+	if (getLineWidth(text) > getWidth() - WIDTH_PADDING * 2) {
 	    end = text.length();
 	    start = end - 1;
-	    while (start > 0 && font.getBounds(text, start, end).width < getWidth() - WIDTH_PADDING * 2) {
+	    while (start > 0 && getLineWidth(text.substring(start, end)) < getWidth() - WIDTH_PADDING * 2) {
 		start--;
 	    }
-	    startingXText = (int) -font.getBounds(text, 0, start).width;
+	    startingXText = (int) -getLineWidth(text.substring(0, start));
 	}
 	//
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
@@ -206,7 +204,7 @@ public final class TextField extends UIElement implements Hoverable {
 	renderer.begin(ShapeRenderer.ShapeType.Line);
 	font.setColor(Color.BLACK);
 	if (focused) {
-	    final float x = 10 + font.getBounds(text, 0, currentPosition).width + startingXText;
+	    final float x = 10 + getLineWidth(text.substring(0, currentPosition)) + startingXText;
 	    renderer.line(x, 3, x, font.getLineHeight() + 2);
 	    renderer.line(x + 1, 3, x + 1, font.getLineHeight() + 2);
 	}
