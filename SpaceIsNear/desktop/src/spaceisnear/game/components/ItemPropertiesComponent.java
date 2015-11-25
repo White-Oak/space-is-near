@@ -62,6 +62,10 @@ public class ItemPropertiesComponent extends Component {
 	return getBundle().description;
     }
 
+    public int getZLevel() {
+	return getBundle().z;
+    }
+
     private static ItemsArchivable getItemsArchive() {
 	if (ItemsArchive.itemsArchive != null) {
 	    return ItemsArchive.itemsArchive;

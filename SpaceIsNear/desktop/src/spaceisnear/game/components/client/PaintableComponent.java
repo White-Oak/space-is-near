@@ -16,6 +16,7 @@ public abstract class PaintableComponent extends Component {
 
     private final static OrthographicCamera camera = new OrthographicCamera();
     @Getter @Setter private boolean ownerDestroyed;
+    @Getter @Setter private int zLayer;
 
     static {
 	camera.setToOrtho(true);

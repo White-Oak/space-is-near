@@ -3,7 +3,6 @@ package spaceisnear;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import java.io.File;
 import java.io.IOException;
 import me.whiteoak.minlog.FileLogger;
 import me.whiteoak.minlog.Log;
@@ -23,7 +22,6 @@ public class Main {
     public static LwjglApplication lwjglApplication;
 
     public static void main(String[] args) throws ParseException {
-	File file = new File("lala");
 	Log.setLogger(new FileLogger());
 	Log.DEBUG();
 	Options options = prepareOptions();

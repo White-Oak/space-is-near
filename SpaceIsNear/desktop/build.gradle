@@ -49,7 +49,7 @@ task versionCodeUpdate {
 	exclude '**/VersionCode.java'
     }
     inputs.files  different
-    outputs.file  "./src/me/oak/getstarred/server/VersionCode.java"
+    outputs.file  "./src/spaceisnear/VersionCode.java"
     doLast{
 	def file = file("./version.code")
 	if(file.exists()){

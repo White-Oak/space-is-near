@@ -59,7 +59,7 @@ public class ServerCore implements Runnable {
 	while (unbreakable) {
 	    //networking
 	    context.getNetworking().processReceivedQueue();
-	    context.getNetworking().sendNewChunks();
+	    context.getNetworking().checkForNewChunks();
 	    //game
 	    if (!paused) {
 		context.sendTimePassed(MESSAGE_TIME_PASSED);

@@ -18,6 +18,7 @@ public class PlayerComponent extends PaintableComponent {
 
     public PlayerComponent() {
 	super(ComponentType.PLAYER);
+	setZLayer(6);
     }
 
     @Override

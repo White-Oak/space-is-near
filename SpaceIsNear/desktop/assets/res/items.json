@@ -9,7 +9,8 @@
 	"imageIds": [1],
 	"stuckedByAddingFromScript": false,
 	"description": "Universal tool.",
-	"defaultProperties": null
+	"defaultProperties": null,
+	"z": 5
     },
     {
 	"name": "plitka",
@@ -21,7 +22,8 @@
 	"imageIds": [0],
 	"stuckedByAddingFromScript": true,
 	"description": "Universal covering for floor.",
-	"defaultProperties": null
+	"defaultProperties": null,
+	"z": 3
     },
     {
 	"name": "plitka_danger",
@@ -33,7 +35,8 @@
 	"imageIds": [4],
 	"stuckedByAddingFromScript": true,
 	"description": "Universal covering for dangerful floor.",
-	"defaultProperties": null
+	"defaultProperties": null,
+	"z": 3
     },
     {
 	"name": "wall",
@@ -45,7 +48,8 @@
 	"imageIds": [1],
 	"stuckedByAddingFromScript": true,
 	"description": "Universal obstacle.",
-	"defaultProperties": null
+	"defaultProperties": null,
+	"z": 4
     },
     {
 	"name": "wall_reinforced",
@@ -57,7 +61,8 @@
 	"imageIds": [3],
 	"stuckedByAddingFromScript": true,
 	"description": "Universal obstacle. Now reinforced.",
-	"defaultProperties": null
+	"defaultProperties": null,
+	"z": 4
     },
     {
 	"name": "wall_glass_reinforced",
@@ -69,7 +74,8 @@
 	"imageIds": [6],
 	"stuckedByAddingFromScript": true,
 	"description": "Universal obstacle with glass. Now reinforced.",
-	"defaultProperties": null
+	"defaultProperties": null,
+	"z": 4
     },
     {
 	"name": "radio",
@@ -87,7 +93,8 @@
 	    }, {
 		"name": "enabled",
 		"value": true
-	    }]
+	    }],
+	"z": 5
     },
     {
 	"name": "ear_radio",
@@ -105,7 +112,8 @@
 	    }, {
 		"name": "enabled",
 		"value": true
-	    }]
+	    }],
+	"z": 5
     },
     {
 	"name": "pda",
@@ -117,7 +125,8 @@
 	"imageIds": [2],
 	"stuckedByAddingFromScript": false,
 	"description": "Universal pda to work with.",
-	"defaultProperties": null
+	"defaultProperties": null,
+	"z": 5
     },
     {
 	"name": "id",
@@ -129,7 +138,8 @@
 	"imageIds": [18],
 	"stuckedByAddingFromScript": false,
 	"description": "Inlined Destructor",
-	"defaultProperties": null
+	"defaultProperties": null,
+	"z": 5
     },
     {
 	"name": "door",
@@ -144,7 +154,8 @@
 	"defaultProperties": [{
 		"name": "allowed",
 		"value": "all"
-	    }]
+	    }],
+	"z": 4
     },
     {
 	"name": "lamp",
@@ -163,7 +174,8 @@
 	    {
 		"name": "lightEnabled",
 		"value": "true"
-	    }]
+	    }],
+	"z": 5
     },
     {
 	"name": "lamp_danger",
@@ -182,7 +194,8 @@
 	    {
 		"name": "lightEnabled",
 		"value": "true"
-	    }]
+	    }],
+	"z": 5
     },
     {
 	"name": "lamp_cheap",
@@ -201,6 +214,7 @@
 	    {
 		"name": "lightEnabled",
 		"value": "true"
-	    }]
+	    }],
+	"z": 5
     }
 ]

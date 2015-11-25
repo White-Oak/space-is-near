@@ -20,6 +20,8 @@ public class ItemBundle {
 
     public Property[] defaultProperties;
 
+    public int z;
+
     @Data public class Property {
 
 	private String name;

@@ -11,7 +11,8 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.*;
 import spaceisnear.game.messages.properties.MessagePropertySet;
-import spaceisnear.game.objects.*;
+import spaceisnear.game.objects.ClientGameObject;
+import spaceisnear.game.objects.GameObjectType;
 import spaceisnear.game.objects.items.ItemBundle.Property;
 import spaceisnear.game.ui.Position;
 
@@ -27,23 +28,10 @@ public class StaticItem extends ClientGameObject {
 	super(GameObjectType.ITEM);
 	PositionComponent pc = new PositionComponent(p);
 	properties = new ItemPropertiesComponent(itemId);
-	addComponents(pc, properties, new ItemPaintableComponent(), new ShadowComponent());
+	final ItemPaintableComponent itemPaintableComponent = new ItemPaintableComponent();
+	addComponents(pc, properties, itemPaintableComponent, new ShadowComponent());
+	itemPaintableComponent.setZLayer(properties.getZLevel());
 	message(new MessagePropertySet(getId(), "blockingLight", ItemsArchive.itemsArchive.getBundle(itemId).blockingLight));
-    }
-
-    @Override
-    public void setContext(GameContext context) {
-	super.setContext(context); //To change body of generated methods, choose Tools | Templates.
-	Property[] propertys = ItemsArchive.itemsArchive.getBundle(getProperties().getId()).defaultProperties;
-	if (propertys != null) {
-	    for (Property property : propertys) {
-		if (property.getName().equals("light")) {
-		    LightComponent.LightProperty lightProp;
-		    lightProp = Utils.GSON.fromJson((String) property.getValue(), LightComponent.LightProperty.class);
-		    addComponents(new LightComponent(lightProp, Corev2.rayHandler));
-		}
-	    }
-	}
     }
 
     public StaticItem(int itemId) {
@@ -63,6 +51,21 @@ public class StaticItem extends ClientGameObject {
 	    }
 	}
 	properties = ipc;
+    }
+
+    @Override
+    public void setContext(GameContext context) {
+	super.setContext(context); //To change body of generated methods, choose Tools | Templates.
+	Property[] propertys = ItemsArchive.itemsArchive.getBundle(getProperties().getId()).defaultProperties;
+	if (propertys != null) {
+	    for (Property property : propertys) {
+		if (property.getName().equals("light")) {
+		    LightComponent.LightProperty lightProp;
+		    lightProp = Utils.GSON.fromJson((String) property.getValue(), LightComponent.LightProperty.class);
+		    addComponents(new LightComponent(lightProp, Corev2.rayHandler));
+		}
+	    }
+	}
     }
 
     public ItemPropertiesComponent getProperties() {

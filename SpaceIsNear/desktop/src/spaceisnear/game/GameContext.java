@@ -18,7 +18,7 @@ import spaceisnear.game.objects.*;
  */
 public final class GameContext extends Context {
 
-    @Getter private final List<PaintableComponent> paintables = Collections.synchronizedList(new ArrayList<>());
+    @Getter private final List<PaintableComponent> paintables = Collections.synchronizedList(new SortedPaintablesList());
     public static final int TILE_HEIGHT = 32;
     public static final int TILE_WIDTH = 32;
     public static final int MAP_WIDTH = 64;

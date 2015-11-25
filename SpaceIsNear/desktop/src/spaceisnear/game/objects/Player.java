@@ -24,6 +24,10 @@ public class Player extends ClientGameObject {
 	return getNameComponent().getNickname();
     }
 
+    public void setNickname(String nickname) {
+	getNameComponent().setNickname(nickname);
+    }
+
     private NameComponent getNameComponent() {
 	for (Component component : getComponents()) {
 	    if (component.getType() == ComponentType.NAME) {
@@ -42,7 +46,4 @@ public class Player extends ClientGameObject {
 	return null;
     }
 
-    public void setNickname(String nickname) {
-	getNameComponent().setNickname(nickname);
-    }
 }

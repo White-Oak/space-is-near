@@ -298,6 +298,7 @@
 0.0.11
 -NETWORK
     +chunks 
+	+Server won't send MessageCreated for the objects that client already has. Properties still will be sent.
     -fixes
 ---
 +chat multi-line support fix
@@ -317,11 +318,11 @@
 		+If it cannot be applied right now then new MessageNotReadyYet is created and sent to service PatientComponent of a client.  
 		+The component checks every tick if message is 'ready enough' to be sent, if not then it is resent to PatientComponent once again. 
 		+After several (hundreds?) resentages client should stop its work and show an error message.
-+Starting system rework: less spaghetti, more crystal process
++Starting system rework: less spaghetti, more clear process
     +Engine (see scheme.png for reference)
 +Keyboard events are proccessed in a separate class: Controller
--replaced all Map<Integer, T> with appropriate TIntTMap classes. GC will be happy
-+Server won't send MessageCreated for the objects that client already has. Properties still will be sent.
+-replaced all Map<Integer, T> with appropriate int-T maps. GC will be happy
++Z-levels for all objects in item definitions
 
 
 0.1.0

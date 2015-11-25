@@ -1,8 +1,8 @@
 package spaceisnear.server;
 
 import com.esotericsoftware.kryonet.Connection;
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntAVLTreeMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import lombok.Data;
 import spaceisnear.game.messages.service.onceused.MessageLogin;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
@@ -22,7 +22,11 @@ import spaceisnear.server.objects.Player;
     private boolean rogered;
     private Chunk chunk;
     private Chunk newChunk;
-    private TIntIntMap hasObjects = new TIntIntHashMap();
+    private Int2IntMap hasObjects = new Int2IntAVLTreeMap();
+
+    {
+	hasObjects.defaultReturnValue(-1);
+    }
 
     public Client(Connection connection) {
 	this.connection = connection;
@@ -37,7 +41,7 @@ import spaceisnear.server.objects.Player;
     }
 
     public boolean removeObjectAt(int id) {
-	return hasObjects.remove(id) != hasObjects.getNoEntryValue();
+	return hasObjects.remove(id) != hasObjects.defaultReturnValue();
     }
 
     public boolean playerChunkOutdated() {

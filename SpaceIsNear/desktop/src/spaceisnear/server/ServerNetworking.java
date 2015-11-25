@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.whiteoak.minlog.Log;
@@ -351,13 +352,23 @@ public class ServerNetworking extends Listener {
 
     private void sendCreatedsOfWorld(Collection<ObjectMessaged> world, Client client) {
 	Connection connection = client.getConnection();
+	final Supplier<Integer> dirtyHack = new Supplier<Integer>() {
+	    int counter = 0;
+
+	    @Override
+	    public Integer get() {
+		return counter++;
+	    }
+	};
 	world.stream()
 		.map(objectMessaged -> objectMessaged.created)
 		.filter(created -> !client.hasObjectAt(created.getId()))
 		.forEach(messageCreated -> {
 		    client.createObjectAt(messageCreated.getId());
 		    sendToConnection(connection, messageCreated);
+		    dirtyHack.get();
 		});
+	System.out.println("Sent " + dirtyHack.get() + " objects to client");
     }
 
     private void sendPropertiesOfWorld(Collection<ObjectMessaged> world, Client client) {
@@ -503,10 +514,13 @@ public class ServerNetworking extends Listener {
      * @param playerID
      */
     public void playerChunkUpdated(int playerID) {
-	clients.stream().filter(client -> client.getPlayer().getId() == playerID).findAny().ifPresent(client -> {
-	    Chunk newChunk = chunkManager.getChunkByPosition(client.getPlayer().getPosition());
-	    client.setNewChunk(newChunk);
-	});
+	clients.stream()
+		.filter(client -> client.getPlayer().getId() == playerID)
+		.findAny()
+		.ifPresent(client -> {
+		    Chunk newChunk = chunkManager.getChunkByPosition(client.getPlayer().getPosition());
+		    client.setNewChunk(newChunk);
+		});
     }
 
     private void checkNewChunksForClient(Client client) {
@@ -514,12 +528,10 @@ public class ServerNetworking extends Listener {
 	Chunk newChunk = client.getNewChunk();
 	assert newChunk != null : "WTF";
 	assert newChunk != oldChunk;
-	if (oldChunk == null) {
-	    sendChunksToClient(chunkManager.getChunksNear(newChunk), client);
-	} else {
-	    Collection<Chunk> toBeSent = chunkManager.substractEnvironments(newChunk, oldChunk);
-	    sendChunksToClient(toBeSent, client);
-	}
+	Collection<Chunk> toBeSent = oldChunk == null
+		? chunkManager.getChunksNear(newChunk)
+		: chunkManager.substractEnvironments(newChunk, oldChunk);
+	sendChunksToClient(toBeSent, client);
 	client.setChunk(newChunk);
 	client.setNewChunk(null);
     }
@@ -534,7 +546,7 @@ public class ServerNetworking extends Listener {
     /**
      * Checks if there are players with outdated chunks. Sends new chunks to all players with outdated chunks.
      */
-    public void sendNewChunks() {
+    public void checkForNewChunks() {
 	clients.stream()
 		.filter(client -> client.playerChunkOutdated())
 		.forEach(this::checkNewChunksForClient);
