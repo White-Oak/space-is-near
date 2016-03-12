@@ -1,0 +1,27 @@
+16.03.15
+So today I remembered about sin. 
+It was a long-long time before this happened, but yeah, I am really excited about me coding again.
+I learned a lot, I saw things and I've come with many refactorings to do.
+As soon as I took a look on the code I fixed the bug that drove me mad back then (when I gave up on commiting things).
+As a part of fixing it I introduced new abstract method isClient() to AbstractGameObject with final realizations in Server and Client Game Objects. 
+This will help to get rid of terribly looking infinite 'instances f's and will aid the code's health.
+As well I took a look on my devlist and considered it may take some reorganizations. First of all, there certainly should be an issue number near each line to relate.
+Secondly, there may be a need to do something about those '+'s and '-'s, what I'm of no aware at the moment. Thirdly, I beleive structural changes, new features and improvements should be separeted.
+I also commented lines that I wondered about even a little while reading through the code .
+Back then (Jule 2014) I decided to go for 0.1 milestone asap, but now I feel more like taking a grasp on things and seeing what can be done to make the code look more healthy, as there are some bad-coded things which I do not like.
+---
+This evening I walked a little bit around my district and brought up all the memories form more than half of year ago. Ah, sweet old nostalgia.
+
+12.07.15
+Ha!
+Today I did a big amount of work towards SIN and I honestly do hope it is not the end of my enthusiasm.
+Jeez, I even forgot where I took off.
+I managed to find what I was doing and redid all of the starting system. I'm truly a genius.
+
+16.07.2015
+Moved all of the keyboard code to the separate class. It is not working for now though, but I really like the way it is moving to.
+I think most of the reworking is done already and nowis time to finally fix the thing, haha.
+
+22.07.2015
+Just a quick note for 10 minutes work -- I finally finished movement rework and after rebuilding it feels so much smoother!
+Feels great to have something working again.
