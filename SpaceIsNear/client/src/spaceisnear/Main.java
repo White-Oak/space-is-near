@@ -3,12 +3,10 @@ package spaceisnear;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import java.io.IOException;
 import me.whiteoak.minlog.FileLogger;
 import me.whiteoak.minlog.Log;
 import org.apache.commons.cli.*;
 import spaceisnear.game.Engine;
-import spaceisnear.server.ServerCore;
 import spaceisnear.starting.LoginScreen;
 import spaceisnear.starting.ui.Corev3;
 
@@ -106,18 +104,6 @@ public class Main {
 
     private static void runSINInWeirdMode(String mode) {
 	switch (mode) {
-	    case "host":
-		Log.info("server", "SIN is starting. Version: " + VersionCode.getCode());
-		try {
-		    IP = "127.0.0.1";
-		    ServerCore serverCore = new ServerCore();
-		    serverCore.host();
-		    new Thread(serverCore, "SIN Server").start();
-		    Log.info("server", "Server started");
-		} catch (IOException ex) {
-		    Log.error("server", "While trying to start server", ex);
-		}
-		break;
 	    case "editor":
 		spaceisnear.editor.Main.main(null);
 		break;

@@ -15,3 +15,22 @@
 00:11 DEBUG: [client] 718 already exists
 00:00  INFO: [client] SIN is starting. Version: 0.0.11-b347
 00:06  INFO: [client] Your player discovered at 1009
+00:00  INFO: [client] SIN is starting. Version: 0.0.11-b352
+00:01 ERROR: [client] While trying to connect to localhost server
+java.io.IOException: Unable to connect to: /127.0.0.1:54555
+	at com.esotericsoftware.kryonet.TcpConnection.connect(TcpConnection.java:92)
+	at com.esotericsoftware.kryonet.Client.connect(Client.java:156)
+	at com.esotericsoftware.kryonet.Client.connect(Client.java:111)
+	at spaceisnear.game.Networking.connect(Networking.java:32)
+	at spaceisnear.starting.Starter.lambda$callToConnect$44(Starter.java:35)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at sun.nio.ch.SocketAdaptor.connect(SocketAdaptor.java:111)
+	at com.esotericsoftware.kryonet.TcpConnection.connect(TcpConnection.java:77)
+	... 8 more
+

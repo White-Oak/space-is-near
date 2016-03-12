@@ -3,7 +3,6 @@ package spaceisnear.game.messages;
 import java.io.Serializable;
 import lombok.*;
 import spaceisnear.game.GameContext;
-import spaceisnear.server.*;
 
 /**
  * @author LPzhelud
@@ -18,10 +17,6 @@ import spaceisnear.server.*;
     }
 
     public void processForClient(GameContext context) {
-
-    }
-
-    public void processForServer(ServerContext context, Client client) {
 
     }
 

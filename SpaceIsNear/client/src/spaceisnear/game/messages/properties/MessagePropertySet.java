@@ -7,7 +7,6 @@ package spaceisnear.game.messages.properties;
 
 import lombok.*;
 import spaceisnear.game.messages.*;
-import spaceisnear.server.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessagePropertySet extends DirectedMessage implements NetworkableMessage, MessagePropertable {
     
@@ -22,12 +21,6 @@ import spaceisnear.server.*;
 	super(type, id);
 	this.name = name;
 	this.value = value;
-    }
-    
-    @Override
-    public void processForServer(ServerContext context, Client client) {
-//	Context.LOG.log(getName() + " " + getValue().getClass().getName());
-	context.sendDirectedMessage(this);
     }
     
 }

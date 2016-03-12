@@ -9,7 +9,6 @@ import lombok.Getter;
 import spaceisnear.abstracts.ItemsArchivable;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.items.*;
-import spaceisnear.server.objects.items.ServerItemsArchive;
 
 public class ItemPropertiesComponent extends Component {
 
@@ -67,10 +66,6 @@ public class ItemPropertiesComponent extends Component {
     }
 
     private static ItemsArchivable getItemsArchive() {
-	if (ItemsArchive.itemsArchive != null) {
-	    return ItemsArchive.itemsArchive;
-	} else {
-	    return ServerItemsArchive.ITEMS_ARCHIVE;
-	}
+	return ItemsArchive.itemsArchive;
     }
 }

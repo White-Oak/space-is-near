@@ -6,7 +6,6 @@ package spaceisnear.game.messages;
 
 import lombok.*;
 import spaceisnear.game.GameContext;
-import spaceisnear.server.*;
 
 /**
  *
@@ -30,12 +29,6 @@ import spaceisnear.server.*;
     public boolean canBeApplied(GameContext context) {
 	return context.getObjects().containsKey(getId());
     }
-
-    @Override
-    public void processForServer(ServerContext context, Client client) {
-	context.sendDirectedMessage(this);
-    }
-
     @Override
     public boolean isDirected() {
 	return true;

@@ -2,7 +2,6 @@ package spaceisnear.game.messages;
 
 import lombok.*;
 import spaceisnear.Utils;
-import spaceisnear.server.*;
 
 /**
  * @author LPzhelud
@@ -35,10 +34,4 @@ import spaceisnear.server.*;
     public String toString() {
 	return "Controlled " + type;
     }
-
-    @Override
-    public void processForServer(ServerContext context, Client client) {
-	context.sendDirectedMessage(this);
-    }
-
 }

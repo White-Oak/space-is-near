@@ -9,9 +9,6 @@ import spaceisnear.game.GameContext;
 import spaceisnear.game.messages.Message;
 import spaceisnear.game.objects.ClientGameObject;
 import spaceisnear.game.ui.Position;
-import spaceisnear.server.ServerContext;
-import spaceisnear.server.chunks.ChunkManager;
-import spaceisnear.server.objects.ServerGameObject;
 
 /**
  * @author LPzhelud
@@ -23,11 +20,9 @@ import spaceisnear.server.objects.ServerGameObject;
     private final ComponentType type;
     @Getter @Setter private int ownerId = -1;
     private boolean animation, needsTime;
-    @Setter @Getter private boolean dontProcess = false;
-
-    public void registerForOneShotTask(Taskable consumer, int ticksToPass) {
-	((ServerGameObject) getOwner()).registerForOneShotTask(consumer, ticksToPass);
-    }
+    @Setter
+    @Getter
+    private boolean dontProcess = false;
 
     public abstract void processMessage(Message message);
 
@@ -88,11 +83,6 @@ import spaceisnear.server.objects.ServerGameObject;
 
     public boolean needsTime() {
 	return needsTime;
-    }
-
-    protected ChunkManager getChunkManager() {
-	ServerContext sc = (ServerContext) context;
-	return sc.getNetworking().getChunkManager();
     }
 
     //

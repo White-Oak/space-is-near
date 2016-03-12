@@ -6,9 +6,7 @@
 package spaceisnear.game.messages;
 
 import lombok.*;
-import spaceisnear.game.GameContext;
 import spaceisnear.game.ui.console.ChatString;
-import spaceisnear.server.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE) public class MessageChat extends Message implements NetworkableMessage {
 
@@ -17,16 +15,6 @@ import spaceisnear.server.*;
     public MessageChat(ChatString log) {
 	super(MessageType.LOG);
 	this.log = log;
-    }
-
-    @Override
-    public void processForServer(ServerContext context, Client client) {
-	context.chatLog(log);
-    }
-
-    @Override
-    public void processForClient(GameContext context) {
-	context.getEngine().chat(getLog());
     }
 
 }

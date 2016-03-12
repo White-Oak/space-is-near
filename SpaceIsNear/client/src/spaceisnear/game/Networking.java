@@ -1,7 +1,6 @@
 package spaceisnear.game;
 
 import com.esotericsoftware.kryonet.*;
-import com.esotericsoftware.kryonet.Client;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -10,7 +9,6 @@ import spaceisnear.game.messages.*;
 import spaceisnear.game.messages.properties.MessagePropertable;
 import spaceisnear.game.messages.service.*;
 import spaceisnear.game.messages.service.onceused.*;
-import spaceisnear.server.*;
 
 /**
  * @author LPzhelud
@@ -25,8 +23,9 @@ import spaceisnear.server.*;
     @Getter @Setter private boolean logined, joined, playable;
     private final Queue<Message> messages = new ArrayDeque<>(10);
 
+    public final static int BUFFER_SIZE = 256 * 512, O_BUFFER_SIZE = 512;
     public void connect(String host, int tcpPort) throws IOException {
-	client = new Client(ServerNetworking.BUFFER_SIZE, ServerNetworking.O_BUFFER_SIZE);
+	client = new Client(BUFFER_SIZE, O_BUFFER_SIZE);
 	Registerer.registerEverything(client);
 	client.start();
 	client.addListener(this);

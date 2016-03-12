@@ -5,15 +5,14 @@
  */
 package spaceisnear.abstracts;
 
-import spaceisnear.game.ui.Position;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.*;
 import spaceisnear.game.components.*;
-import spaceisnear.game.components.VariablePropertiesComponent;
 import spaceisnear.game.messages.*;
 import spaceisnear.game.objects.*;
+import spaceisnear.game.ui.Position;
 
 /**
  *

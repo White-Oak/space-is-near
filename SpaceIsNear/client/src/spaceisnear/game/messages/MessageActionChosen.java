@@ -2,8 +2,6 @@ package spaceisnear.game.messages;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import spaceisnear.server.Client;
-import spaceisnear.server.ServerContext;
 
 /**
  *
@@ -18,10 +16,4 @@ import spaceisnear.server.ServerContext;
 	this.chosen = chosen;
 	this.chosenItemId = chosenItem;
     }
-
-    @Override
-    public void processForServer(ServerContext context, Client client) {
-	context.proccessActionInContext(client, chosenItemId, chosen);
-    }
-
 }
