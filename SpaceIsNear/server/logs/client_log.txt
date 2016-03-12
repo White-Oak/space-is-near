@@ -1,0 +1,17 @@
+00:00  INFO: [client] SIN is starting. Version: 0.0.11-b347
+00:02  INFO: [client] Your player discovered at 1009
+00:09 DEBUG: [client] fps: 60
+00:11 DEBUG: [client] 3 already exists
+00:11 DEBUG: [client] 4 already exists
+00:11 DEBUG: [client] 5 already exists
+00:11 DEBUG: [client] 14 already exists
+00:11 DEBUG: [client] 15 already exists
+00:11 DEBUG: [client] 16 already exists
+00:11 DEBUG: [client] 25 already exists
+00:11 DEBUG: [client] 26 already exists
+00:11 DEBUG: [client] 27 already exists
+00:11 DEBUG: [client] 716 already exists
+00:11 DEBUG: [client] 717 already exists
+00:11 DEBUG: [client] 718 already exists
+00:00  INFO: [client] SIN is starting. Version: 0.0.11-b347
+00:06  INFO: [client] Your player discovered at 1009

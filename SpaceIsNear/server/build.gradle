@@ -1,0 +1,101 @@
+
+import java.io.FileReader
+sourceSets.main.java.srcDirs = ["src/"]
+
+project.ext.mainClassName = "spaceisnear.Main"
+
+sourceSets {
+    main {
+        java {
+            srcDir "src/"
+        }
+        resources {
+            srcDir 'assets/'
+        }
+    }
+}
+
+task run(dependsOn: classes, type: JavaExec) {
+    enableAssertions = true
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    ignoreExitValue = true
+}
+
+task debug(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    ignoreExitValue = true
+    debug = true
+}
+
+task dist(dependsOn: classes, type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
+    from { configurations.compile.collect { zipTree(it) } }
+    libsDirName = deployFolder
+
+    archiveName = appName + "-" + mVersion + "-b" + mBuildNumber + ".jar"
+    manifest {
+	attributes 'Main-Class': project.mainClassName
+    }
+}
+
+task versionCodeUpdate {
+    def different = fileTree('src'){
+	include '**/*.java'
+	exclude '**/VersionCode.java'
+    }
+    inputs.files  different
+    outputs.file  "./src/spaceisnear/VersionCode.java"
+    doLast{
+	def file = file("./version.code")
+	if(file.exists()){
+	    file.withReader('UTF-8'){fr ->
+		project.ext.mBuildNumber = Integer.parseInt(fr.readLine())
+		project.ext.mVersion = fr.readLine()
+		if(!project.ext.buildNumberIncremented){
+		    project.ext.mBuildNumber++
+		    project.ext.buildNumberIncremented = true
+		    println(":${project.name}:versionCodeUpdate - current build number is ${mBuildNumber}")
+		}else{
+		    println(":${project.name}:versionCodeUpdate - build number has already been incremented in this build -- check your build pipeline.")
+		}
+	    }
+	}
+	overwriteVersionCodeFile(mBuildNumber, mVersion)
+	createVersionCodeJava(mBuildNumber, mVersion)
+	jar.baseName = 'get-starred-server'
+	jar.version = "${mVersion}-b${mBuildNumber}"
+    }
+}
+
+void createVersionCodeJava(int versionNum, String versionString){
+    def file = file("./src/spaceisnear/VersionCode.java")
+    if(file.exists()) file.delete()
+    def versionCodeJava = """\n\
+package spaceisnear;
+
+public final class VersionCode {
+
+    public static final int BUILD_NUMBER = ${versionNum};
+    public static final String VERSION = "${versionString}";
+
+    public static String getCode() {
+	return VERSION + "-b" + BUILD_NUMBER;
+    }
+}
+"""
+    file.text = versionCodeJava
+}
+void overwriteVersionCodeFile(int num, String version){
+    def file = file("./version.code")
+    if(file.exists()){
+	file.delete()
+    }
+    file.text = "${num}\n${version}"
+}
+
+compileJava.dependsOn versionCodeUpdate
