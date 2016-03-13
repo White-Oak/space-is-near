@@ -18,7 +18,7 @@ import spaceisnear.game.ui.Position;
 
 /**
  *
- * @author white_oak
+ * @author oak
  */
 public class StaticItem extends ClientGameObject {
 

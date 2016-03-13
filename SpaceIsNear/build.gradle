@@ -1,8 +1,10 @@
 buildscript {
-    repositories {
+    repositories {        
+	maven { url 'http://repo.spring.io/plugins-release' }
         mavenCentral()
-    }
+    }    
     dependencies {
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.6'
     }
 }
 
@@ -10,11 +12,8 @@ allprojects {
     version = '0.0.11'
     ext {
         appName = 'space-is-near'
-        gdxVersion = '1.5.5'
-        roboVMVersion = '1.0.0'
-        box2DLightsVersion = '1.3'
-        ashleyVersion = '1.3.1'
-        aiVersion = '1.5.0'
+        gdxVersion = '1.9.2'
+        box2DLightsVersion = '1.4'
     }
 
     
@@ -26,24 +25,43 @@ allprojects {
     }
     
     apply plugin: "java"
+    apply plugin: "propdeps"
 }
 
-project(":desktop") {
-
+project(":client"){
     sourceCompatibility = 1.8
     ext{
         buildNumberIncremented = false
 	mBuildNumber = 1
 	mVersion = '0.0.11'
     }
-    configurations {
-        provided
+    
+    dependencies {
+	compile project(":framework")
+	compile project(":common")
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+	
+        compile "commons-cli:commons-cli:1.2"
+        compile "org.apache.commons:commons-lang3:3.3"
+        compile "com.google.code.gson:gson:2.3.1"
+        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+        provided "org.projectlombok:lombok:1.16.2"
+        compile "org.apache.commons:commons-collections4:4.0"
+	compile 'it.unimi.dsi:fastutil:7.0.8'
     }
+}
 
-    sourceSets {
-        main {
-            compileClasspath += configurations.provided
-        }
+project(":common"){
+    sourceCompatibility = 1.8
+    ext{
+        buildNumberIncremented = false
+	mBuildNumber = 1
+	mVersion = '0.0.11'
     }
     
     dependencies {
@@ -54,32 +72,48 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-
+	
         compile "commons-cli:commons-cli:1.2"
         compile "org.apache.commons:commons-lang3:3.3"
         compile "com.google.code.gson:gson:2.3.1"
         compile "com.esotericsoftware:kryonet:2.22.0-RC1"
         provided "org.projectlombok:lombok:1.16.2"
         compile "org.apache.commons:commons-collections4:4.0"
-	compile 'net.sf.trove4j:trove4j:3.0.3'
+	compile 'it.unimi.dsi:fastutil:7.0.8'
     }
 }
 
+project(":server"){
+    sourceCompatibility = 1.8
+    ext{
+        buildNumberIncremented = false
+	mBuildNumber = 1
+	mVersion = '0.0.11'
+    }
+    
+    dependencies {
+	compile project(":framework")
+	compile project(":common")
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+	
+        compile "commons-cli:commons-cli:1.2"
+        compile "org.apache.commons:commons-lang3:3.3"
+        compile "com.google.code.gson:gson:2.3.1"
+        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+        provided "org.projectlombok:lombok:1.16.2"
+        compile "org.apache.commons:commons-collections4:4.0"
+	compile 'it.unimi.dsi:fastutil:7.0.8'
+    }
+}
 project(":framework") {
     sourceCompatibility = 1.8
-    
-    configurations {
-        provided
-    }
-
-    sourceSets {
-        main {
-            compileClasspath += configurations.provided
-        }
-    }
-    
     dependencies {
-	compile "me.whiteoak.minlog:oak-minlog:1.0"
+	compile "me.whiteoak.minlog:oak-minlog:1.0.5"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
@@ -96,26 +130,6 @@ project(":framework") {
     }
 }
 
-project(":devlist") {
-    sourceCompatibility = 1.8
-    configurations {
-        provided
-    }
-
-    sourceSets {
-        main {
-            compileClasspath += configurations.provided
-        }
-    }
-    
-    dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-
-        provided "org.projectlombok:lombok:1.16.2"
-    }
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.9'
 }

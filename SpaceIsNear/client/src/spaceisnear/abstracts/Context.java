@@ -19,6 +19,9 @@ import spaceisnear.game.objects.GameObjectType;
 
     @Getter protected final Map<Integer, AbstractGameObject> objects;
     public final static int NETWORKING_ID = -2;
+    public final static int TILE_WIDTH = 32;
+    public final static int TILE_HEIGHT = 32;
+    public final static int MAP_WIDTH = 128;
 
     public abstract void sendThemAll(Message m);
 

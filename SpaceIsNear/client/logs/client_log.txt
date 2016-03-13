@@ -34,3 +34,5 @@ Caused by: java.net.ConnectException: Connection refused: no further information
 	at com.esotericsoftware.kryonet.TcpConnection.connect(TcpConnection.java:77)
 	... 8 more
 
+00:00  INFO: [client] SIN is starting. Version: 0.0.11-b352
+00:04  INFO: [client] Your player discovered at 1009

@@ -1,1 +1,1 @@
-include 'desktop', 'devlist', 'framework'
+include 'client','framework', 'server', 'common'

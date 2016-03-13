@@ -15,12 +15,14 @@ import spaceisnear.game.GameContext;
 
 /**
  *
- * @author White Oak
+ * @author oak
  */
 public class ItemsArchive extends ItemsArchivable {
 
-    @Getter private final Texture sprites;
-    @Getter private final TextureRegion[] regions;
+    @Getter
+    private final Texture sprites;
+    @Getter
+    private final TextureRegion[] regions;
     public static ItemsArchive itemsArchive;
 
     public ItemsArchive(ItemBundle[] bundles) {
