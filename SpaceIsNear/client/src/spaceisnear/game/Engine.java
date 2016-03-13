@@ -31,7 +31,7 @@ public class Engine implements Updatable {
     private boolean firstTime = true;
 
     public Engine(Corev3 corev3) {
-	this.objects = Collections.synchronizedMap(new HashMap<>());
+	this.objects = new HashMap<>();
 	this.corev3 = corev3;
 	this.core = new Corev2(this);
 	this.networking = new Networking(this);
@@ -56,8 +56,9 @@ public class Engine implements Updatable {
 	    } else {
 		if (!paused) {
 		    queue.forEach(mc -> context.sendDirectedMessage(new MessageToSend(mc)));
-		    objects.values()
-			    .forEach(gameObject -> gameObject.process());
+		    for (AbstractGameObject value : objects.values()) {
+			value.process();
+		    }
 		    MessageControlledByInput checkMovement = controller.checkMovement();
 		    if (checkMovement != null) {
 			context.sendToNetwork(checkMovement);

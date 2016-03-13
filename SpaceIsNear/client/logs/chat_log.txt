@@ -1,4 +1,0 @@
-00:03  INFO: [chat] [BROADCASTING] [145.9]: Alf Mozart has connected to SIN!
-00:03  INFO: [chat] [BROADCASTING] [145.9]: Nanotracen welcomes you, Alf Mozart, and wishes best luck.
-00:07  INFO: [chat] [BROADCASTING] [145.9]: Acacia Shady has connected to SIN!
-00:07  INFO: [chat] [BROADCASTING] [145.9]: Nanotracen welcomes you, Acacia Shady, and wishes best luck.

@@ -11,7 +11,7 @@ import spaceisnear.server.ServerCore;
  *
  * @author LPzhelud
  */
-public class Main {
+public class ServerMain {
 
     public static String IP;
     public static LwjglApplication lwjglApplication;

@@ -37,3 +37,6 @@
 00:13  INFO: [Server] Player information received
 00:13  INFO: [server] PlayerDiscovered message has been sent
 00:13 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b349
+00:00  INFO: [server] Map was loaded in 137 ms.
+00:01  INFO: [server] Server started

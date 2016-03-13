@@ -3,7 +3,7 @@ package spaceisnear;
 
 public final class VersionCode {
 
-    public static final int BUILD_NUMBER = 352;
+    public static final int BUILD_NUMBER = 364;
     public static final String VERSION = "0.0.11";
 
     public static String getCode() {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.whiteoak.minlog.Log;
@@ -16,7 +17,6 @@ import spaceisnear.game.messages.service.onceused.*;
 import spaceisnear.game.ui.Position;
 import spaceisnear.game.ui.console.ChatString;
 import spaceisnear.game.ui.console.LogLevel;
-import spaceisnear.server.Client;
 import spaceisnear.server.chunks.Chunk;
 import spaceisnear.server.chunks.ChunkManager;
 import spaceisnear.server.objects.Player;
@@ -270,14 +270,14 @@ public class ServerNetworking extends Listener {
     //TODO REWORK
 
     private void processOldPlayer(Client client) {
-	sendToAll(new MessagePaused());
-	Collection<ObjectMessaged> world = getWorldNear(client.getChunk());
-	sendWorldInformation(world, client);
-	sendCreatedsOfWorld(world, client);
-	orderEveryoneToRogerAndWait();
-	sendPlayerDiscovered(client);
-	sendToAll(new MessageUnpaused());
-	sendPropertiesOfWorld(world, client);
+//	sendToAll(new MessagePaused());
+//	Collection<ObjectMessaged> world = getWorldNear(client.getChunk());
+//	sendWorldInformation(world, client);
+//	sendCreatedsOfWorld(world, client);
+//	orderEveryoneToRogerAndWait();
+//	sendPlayerDiscovered(client);
+//	sendToAll(new MessageUnpaused());
+//	sendPropertiesOfWorld(world, client);
     }
 
     private void processNewPlayer(final Client client) {
@@ -286,6 +286,8 @@ public class ServerNetworking extends Listener {
 	Player objectPlayer = createPlayer(client);
 	sendPlayerDiscovered(client);
 	playerChunkUpdated(objectPlayer.getId());
+	// Send all createds of the world
+	sendCreatedsOfWorld(getAllMessageCreateds(), client);
 
 	sendToAll(new MessageUnpaused());
 	//TODO fix that
@@ -350,8 +352,9 @@ public class ServerNetworking extends Listener {
 	return mwi;
     }
 
-    private void sendCreatedsOfWorld(Collection<ObjectMessaged> world, Client client) {
+    private void sendCreatedsOfWorld(Collection<MessageCreated> world, Client client) {
 	Connection connection = client.getConnection();
+	// Used to count number of objects
 	final Supplier<Integer> dirtyHack = new Supplier<Integer>() {
 	    int counter = 0;
 
@@ -361,8 +364,8 @@ public class ServerNetworking extends Listener {
 	    }
 	};
 	world.stream()
-		.map(objectMessaged -> objectMessaged.created)
 		//.filter(created -> !client.hasObjectAt(created.getId()))
+		.filter(m -> m != null)
 		.forEach(messageCreated -> {
 		    client.createObjectAt(messageCreated.getId());
 		    sendToConnection(connection, messageCreated);
@@ -371,14 +374,9 @@ public class ServerNetworking extends Listener {
 	System.out.println("Sent " + dirtyHack.get() + " objects to client");
     }
 
-    private void sendPropertiesOfWorld(Collection<ObjectMessaged> world, Client client) {
-	//properties
-	List<MessagePropertable> propertables = new ArrayList<>();
-	world.stream()
-		.map(objectMessaged -> objectMessaged.propertables)
-		.forEach(propertable -> propertables.addAll(propertable));
-	sortPropertiesByClosestToPlayer(propertables, client.getPlayer());
-	sendProperties(propertables, client.getConnection());
+    private void sendPropertiesOfWorld(List<MessagePropertable> world, Client client) {
+	sortPropertiesByClosestToPlayer(world, client.getPlayer());
+	sendProperties(world, client.getConnection());
     }
 
     private void sendProperties(List<MessagePropertable> propertable, Connection connection) {
@@ -391,40 +389,24 @@ public class ServerNetworking extends Listener {
 	Log.info("server", "PlayerDiscovered message has been sent");
     }
 
-    private Collection<ObjectMessaged> getWorldNear(Chunk chunk) {
-	ServerContext context = core.getContext();
-	Collection<AbstractGameObject> objects = context.getObjects().values();
-	List<ObjectMessaged> messagesToReturn = new LinkedList<>();
-	objects.stream()
+    private List<MessagePropertable> getWorldNear(Chunk chunk) {
+	return core.getContext().getObjects().values().stream()
 		.filter(object -> chunkManager.isNearChunk(chunk, object))
-		.map(object -> getObjectMessaged(object))
-		.filter(objectMessaged -> objectMessaged != null)
-		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
-	return messagesToReturn;
+		.map(object -> getMessageProperties(object))
+		.flatMap(properties -> properties.stream())
+		.collect(Collectors.toList());
     }
 
-    private Collection<ObjectMessaged> getWorldIn(Collection<Chunk> chunks) {
-	Collection<AbstractGameObject> objects = core.getContext().getObjects().values();
-	List<ObjectMessaged> messagesToReturn = new LinkedList<>();
-	objects.stream()
+    private List<MessagePropertable> getWorldIn(Collection<Chunk> chunks) {
+	return core.getContext().getObjects().values().stream()
 		.filter(object -> object.getPosition() != null)
-		.filter(object -> chunks.stream().anyMatch(chunk -> chunkManager.isInChunk(chunk, object.getPosition())))
-		.map(object -> getObjectMessaged(object))
-		.filter(objectMessaged -> objectMessaged != null)
-		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
-	return messagesToReturn;
-    }
-
-    private ObjectMessaged getObjectMessaged(AbstractGameObject object) {
-	ObjectMessaged objectMessaged = null;
-	if (object != null && object.getId() >= ServerContext.HIDDEN_SERVER_OBJECTS) {
-	    MessageCreated nextMessageCreated = getMessageCreated(object);
-	    if (nextMessageCreated != null) {
-		List<MessagePropertable> messageProperties = getMessageProperties(object);
-		objectMessaged = new ObjectMessaged(nextMessageCreated, messageProperties);
-	    }
-	}
-	return objectMessaged;
+		.filter(object
+			-> //check if object is in any of the specified chunks
+			chunks.stream()
+			.anyMatch(chunk -> chunkManager.isInChunk(chunk, object.getPosition())))
+		.map(object -> getMessageProperties(object))
+		.flatMap(properties -> properties.stream())
+		.collect(Collectors.toList());
     }
 
     private List<MessagePropertable> getMessageProperties(AbstractGameObject object) {
@@ -457,6 +439,12 @@ public class ServerNetworking extends Listener {
 		break;
 	}
 	return propertiesList;
+    }
+
+    private List<MessageCreated> getAllMessageCreateds() {
+	return core.getContext().getObjects().values().stream()
+		.map(object -> getMessageCreated(object))
+		.collect(Collectors.toList());
     }
 
     private MessageCreated getMessageCreated(AbstractGameObject object) {
@@ -538,9 +526,7 @@ public class ServerNetworking extends Listener {
 
     private void sendChunksToClient(Collection<Chunk> toBeSent, Client client) {
 	Log.debug("server", "Sending chunks to client, size: " + toBeSent.size());
-	Collection<ObjectMessaged> worldIn = getWorldIn(toBeSent);
-	sendCreatedsOfWorld(worldIn, client);
-	sendPropertiesOfWorld(worldIn, client);
+	sendPropertiesOfWorld(getWorldIn(toBeSent), client);
     }
 
     /**

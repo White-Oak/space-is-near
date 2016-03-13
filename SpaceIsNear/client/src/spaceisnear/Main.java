@@ -107,6 +107,8 @@ public class Main {
 	    case "editor":
 		spaceisnear.editor.Main.main(null);
 		break;
+	    default:
+		throw new RuntimeException();
 	}
     }
 

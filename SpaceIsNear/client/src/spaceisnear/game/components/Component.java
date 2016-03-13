@@ -40,9 +40,13 @@ import spaceisnear.game.ui.Position;
 	states.put(name, value);
     }
 
+    private AbstractGameObject cachedOwner;
     public AbstractGameObject getOwner() {
 	assert getOwnerId() != -1 : getClass().getName();
-	return getContext().getObjects().get(getOwnerId());
+	if (cachedOwner == null) {
+	    cachedOwner = getContext().getObjects().get(getOwnerId());
+	}
+	return cachedOwner;
     }
 
     protected void addState(String name, Object value) {
@@ -51,6 +55,9 @@ import spaceisnear.game.ui.Position;
 
     public Position getPosition() {
 	AbstractGameObject owner = getOwner();
+	if (owner == null) {
+	    return null;
+	}
 	return owner.getPosition();
     }
 

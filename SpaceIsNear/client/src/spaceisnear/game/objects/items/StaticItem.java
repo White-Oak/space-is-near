@@ -35,7 +35,7 @@ public class StaticItem extends ClientGameObject {
     }
 
     public StaticItem(int itemId) {
-	this(new Position(0, 0), itemId);
+	this(new Position(-1024, -1024), itemId);
     }
 
     private StaticItem(GameContext context, Component[] components) {

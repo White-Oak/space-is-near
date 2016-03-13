@@ -2,7 +2,7 @@
 import java.io.FileReader
 sourceSets.main.java.srcDirs = ["src/"]
 
-project.ext.mainClassName = "spaceisnear.Main"
+project.ext.mainClassName = "spaceisnear.ServerMain"
 
 sourceSets {
     main {

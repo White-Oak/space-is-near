@@ -37,3 +37,607 @@
 00:13  INFO: [Server] Player information received
 00:13  INFO: [server] PlayerDiscovered message has been sent
 00:13 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b349
+00:05  INFO: [server] Map was loaded in 617 ms.
+00:06  INFO: [server] Server started
+01:51  INFO: [server] true requested access with password lel and successfully got it.
+01:51  INFO: [server] Client information received
+01:51  INFO: [Server] Player information received
+01:52  INFO: [server] PlayerDiscovered message has been sent
+01:52 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:00  INFO: [server] Map was loaded in 82 ms.
+00:00  INFO: [server] Server started
+00:13  INFO: [server] true requested access with password lel and successfully got it.
+00:13  INFO: [server] Client information received
+00:14  INFO: [Server] Player information received
+00:14  INFO: [server] PlayerDiscovered message has been sent
+00:14 DEBUG: [server] Sending chunks to client, size: 4
+00:17 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:17 DEBUG: [server] Sending chunks to client, size: 2
+00:20 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:20 DEBUG: [server] Sending chunks to client, size: 2
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:00  INFO: [server] Map was loaded in 129 ms.
+00:01  INFO: [server] Server started
+00:16  INFO: [server] true requested access with password lel and successfully got it.
+00:16  INFO: [server] Client information received
+00:17  INFO: [Server] Player information received
+00:17  INFO: [server] PlayerDiscovered message has been sent
+00:17 DEBUG: [server] Sending chunks to client, size: 4
+00:20 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:20 DEBUG: [server] Sending chunks to client, size: 2
+00:21 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:21 DEBUG: [server] Sending chunks to client, size: 2
+00:22 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:22 DEBUG: [server] Sending chunks to client, size: 2
+00:22 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:22 DEBUG: [server] Sending chunks to client, size: 3
+00:23 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:23 DEBUG: [server] Sending chunks to client, size: 3
+00:23 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:23 DEBUG: [server] Sending chunks to client, size: 3
+00:24 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:24 DEBUG: [server] Sending chunks to client, size: 3
+00:27 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:27 DEBUG: [server] Sending chunks to client, size: 3
+00:28 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:28 DEBUG: [server] Sending chunks to client, size: 3
+00:29 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:29 DEBUG: [server] Sending chunks to client, size: 3
+00:29 DEBUG: [server] Found script interaction
+00:30 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:30 DEBUG: [server] Sending chunks to client, size: 3
+00:31 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:31 DEBUG: [server] Sending chunks to client, size: 3
+00:32 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:32 DEBUG: [server] Sending chunks to client, size: 3
+00:33 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:33 DEBUG: [server] Sending chunks to client, size: 3
+00:33 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:33 DEBUG: [server] Sending chunks to client, size: 0
+00:35 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:35 DEBUG: [server] Sending chunks to client, size: 2
+00:36 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:36 DEBUG: [server] Sending chunks to client, size: 2
+00:36 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:36 DEBUG: [server] Sending chunks to client, size: 2
+00:37 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:37 DEBUG: [server] Sending chunks to client, size: 2
+00:41 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:41 DEBUG: [server] Sending chunks to client, size: 2
+00:41 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:41 DEBUG: [server] Sending chunks to client, size: 3
+00:46 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:46 DEBUG: [server] Sending chunks to client, size: 0
+00:47 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:47 DEBUG: [server] Sending chunks to client, size: 2
+00:48 DEBUG: [server] Found script interaction
+00:48 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:48 DEBUG: [server] Sending chunks to client, size: 2
+00:49 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:49 DEBUG: [server] Sending chunks to client, size: 2
+00:50 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:50 DEBUG: [server] Sending chunks to client, size: 3
+00:50 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:50 DEBUG: [server] Sending chunks to client, size: 3
+00:51 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:51 DEBUG: [server] Sending chunks to client, size: 3
+00:53 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:53 DEBUG: [server] Sending chunks to client, size: 3
+00:54 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:54 DEBUG: [server] Sending chunks to client, size: 3
+00:54 DEBUG: [server] Found script interaction
+00:55 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:55 DEBUG: [server] Sending chunks to client, size: 3
+00:56 DEBUG: [server] Found script interaction
+00:56 DEBUG: [server] Found script interaction
+00:56 DEBUG: [server] Found script interaction
+00:56 DEBUG: [server] Found script interaction
+00:56 DEBUG: [server] Found script interaction
+00:56 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:56 DEBUG: [server] Sending chunks to client, size: 3
+00:57 DEBUG: [server] Found script interaction
+00:57 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:57 DEBUG: [server] Sending chunks to client, size: 3
+00:58 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:58 DEBUG: [server] Sending chunks to client, size: 3
+00:59 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:59 DEBUG: [server] Sending chunks to client, size: 3
+00:59 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:59 DEBUG: [server] Sending chunks to client, size: 3
+01:00 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:00 DEBUG: [server] Sending chunks to client, size: 3
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:00  INFO: [server] Map was loaded in 34 ms.
+00:00  INFO: [server] Server started
+00:15  INFO: [server] true requested access with password lel and successfully got it.
+00:15  INFO: [server] Client information received
+00:16  INFO: [Server] Player information received
+00:16  INFO: [server] PlayerDiscovered message has been sent
+00:16 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:00  INFO: [server] Map was loaded in 29 ms.
+00:00  INFO: [server] Server started
+00:13  INFO: [server] true requested access with password lel and successfully got it.
+00:13  INFO: [server] Client information received
+00:14  INFO: [Server] Player information received
+00:14  INFO: [server] PlayerDiscovered message has been sent
+00:14 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:00  INFO: [server] Map was loaded in 29 ms.
+00:00  INFO: [server] Server started
+00:12  INFO: [server] true requested access with password lel and successfully got it.
+00:12  INFO: [server] Client information received
+00:13  INFO: [Server] Player information received
+00:13  INFO: [server] PlayerDiscovered message has been sent
+00:13 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:00  INFO: [server] Map was loaded in 28 ms.
+00:00  INFO: [server] Server started
+00:24  INFO: [server] true requested access with password lel and successfully got it.
+00:24  INFO: [server] Client information received
+00:24  INFO: [Server] Player information received
+00:24  INFO: [server] PlayerDiscovered message has been sent
+00:24 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:00  INFO: [server] Map was loaded in 34 ms.
+00:00  INFO: [server] Server started
+00:14  INFO: [server] true requested access with password lel and successfully got it.
+00:14  INFO: [server] Client information received
+00:15  INFO: [Server] Player information received
+00:15  INFO: [server] PlayerDiscovered message has been sent
+00:15 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:00  INFO: [server] Map was loaded in 31 ms.
+00:00  INFO: [server] Server started
+00:12  INFO: [server] true requested access with password lel and successfully got it.
+00:12  INFO: [server] Client information received
+00:12  INFO: [Server] Player information received
+00:12  INFO: [server] PlayerDiscovered message has been sent
+00:12 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b350
+00:01  INFO: [server] Map was loaded in 252 ms.
+00:01  INFO: [server] Server started
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b351
+00:01  INFO: [server] Map was loaded in 290 ms.
+00:01  INFO: [server] Server started
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b351
+00:00  INFO: [server] Map was loaded in 70 ms.
+00:00  INFO: [server] Server started
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b351
+00:00  INFO: [server] Map was loaded in 36 ms.
+00:01  INFO: [server] Server started
+00:50  INFO: [server] true requested access with password lel and successfully got it.
+00:50  INFO: [server] Client information received
+00:52  INFO: [Server] Player information received
+00:52  INFO: [server] PlayerDiscovered message has been sent
+00:52 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b351
+00:01  INFO: [server] Map was loaded in 431 ms.
+00:02  INFO: [server] Server started
+00:35  INFO: [server] true requested access with password lel and successfully got it.
+00:35  INFO: [server] Client information received
+00:36  INFO: [Server] Player information received
+00:36  INFO: [server] PlayerDiscovered message has been sent
+00:36 DEBUG: [server] Sending chunks to client, size: 4
+00:39 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:39 DEBUG: [server] Sending chunks to client, size: 2
+00:40 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:40 DEBUG: [server] Sending chunks to client, size: 2
+00:41 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:41 DEBUG: [server] Sending chunks to client, size: 2
+00:42 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:42 DEBUG: [server] Sending chunks to client, size: 3
+00:43 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:43 DEBUG: [server] Sending chunks to client, size: 3
+00:43 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:43 DEBUG: [server] Sending chunks to client, size: 3
+00:44 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:44 DEBUG: [server] Sending chunks to client, size: 3
+00:45 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:45 DEBUG: [server] Sending chunks to client, size: 3
+00:45 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:45 DEBUG: [server] Sending chunks to client, size: 0
+00:46 DEBUG: [server] Found script interaction
+00:47 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:47 DEBUG: [server] Sending chunks to client, size: 2
+00:47 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:47 DEBUG: [server] Sending chunks to client, size: 2
+00:48 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:48 DEBUG: [server] Sending chunks to client, size: 2
+00:49 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:49 DEBUG: [server] Sending chunks to client, size: 2
+00:49 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:49 DEBUG: [server] Sending chunks to client, size: 2
+00:50 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:50 DEBUG: [server] Sending chunks to client, size: 3
+00:51 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:51 DEBUG: [server] Sending chunks to client, size: 3
+00:52 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:52 DEBUG: [server] Sending chunks to client, size: 3
+00:53 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:53 DEBUG: [server] Sending chunks to client, size: 3
+00:54 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:54 DEBUG: [server] Sending chunks to client, size: 3
+00:55 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:55 DEBUG: [server] Sending chunks to client, size: 3
+00:56 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:56 DEBUG: [server] Sending chunks to client, size: 3
+00:56 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:56 DEBUG: [server] Sending chunks to client, size: 3
+00:57 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:57 DEBUG: [server] Sending chunks to client, size: 3
+00:58 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:58 DEBUG: [server] Sending chunks to client, size: 3
+00:58 DEBUG: [server] Found script interaction
+00:59 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:59 DEBUG: [server] Sending chunks to client, size: 3
+00:59 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:59 DEBUG: [server] Sending chunks to client, size: 3
+01:00 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:00 DEBUG: [server] Sending chunks to client, size: 3
+01:00 DEBUG: [server] Found script interaction
+01:00 DEBUG: [server] Found script interaction
+01:00 DEBUG: [server] Found script interaction
+01:00 DEBUG: [server] Found script interaction
+01:01 DEBUG: [server] Found script interaction
+01:01 DEBUG: [server] Found script interaction
+01:01 DEBUG: [server] Found script interaction
+01:01 DEBUG: [server] Found script interaction
+01:01 DEBUG: [server] Found script interaction
+01:02 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:02 DEBUG: [server] Sending chunks to client, size: 3
+01:02 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:02 DEBUG: [server] Sending chunks to client, size: 3
+01:03 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:03 DEBUG: [server] Sending chunks to client, size: 0
+01:04 DEBUG: [server] Found script interaction
+01:04 DEBUG: [server] Found script interaction
+01:04 DEBUG: [server] Found script interaction
+01:04 DEBUG: [server] Found script interaction
+01:04 DEBUG: [server] Found script interaction
+01:04 DEBUG: [server] Found script interaction
+01:05 DEBUG: [server] Found script interaction
+01:05 DEBUG: [server] Found script interaction
+01:05 DEBUG: [server] Found script interaction
+01:05 DEBUG: [server] Found script interaction
+01:05 DEBUG: [server] Found script interaction
+01:05 DEBUG: [server] Found script interaction
+01:05 DEBUG: [server] Found script interaction
+01:06 DEBUG: [server] Found script interaction
+01:06 DEBUG: [server] Found script interaction
+01:06 DEBUG: [server] Found script interaction
+01:06 DEBUG: [server] Found script interaction
+01:06 DEBUG: [server] Found script interaction
+01:06 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:06 DEBUG: [server] Sending chunks to client, size: 3
+01:07 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:07 DEBUG: [server] Sending chunks to client, size: 3
+01:08 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:08 DEBUG: [server] Sending chunks to client, size: 3
+01:08 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:08 DEBUG: [server] Sending chunks to client, size: 3
+01:09 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:09 DEBUG: [server] Sending chunks to client, size: 3
+01:09 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:09 DEBUG: [server] Sending chunks to client, size: 3
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:11 DEBUG: [server] Found script interaction
+01:11 DEBUG: [server] Found script interaction
+01:11 DEBUG: [server] Found script interaction
+01:11 DEBUG: [server] Found script interaction
+01:11 DEBUG: [server] Found script interaction
+01:12 DEBUG: [server] Found script interaction
+01:12 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:12 DEBUG: [server] Sending chunks to client, size: 3
+01:13 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:13 DEBUG: [server] Sending chunks to client, size: 3
+01:14 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:14 DEBUG: [server] Sending chunks to client, size: 3
+01:14 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:14 DEBUG: [server] Sending chunks to client, size: 0
+01:15 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:15 DEBUG: [server] Sending chunks to client, size: 2
+01:15 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:15 DEBUG: [server] Sending chunks to client, size: 0
+01:16 DEBUG: [server] Found script interaction
+01:16 DEBUG: [server] Found script interaction
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b351
+00:01  INFO: [server] Map was loaded in 163 ms.
+00:02  INFO: [server] Server started
+00:34  INFO: [server] true requested access with password lel and successfully got it.
+00:34  INFO: [server] Client information received
+00:37  INFO: [Server] Player information received
+00:37  INFO: [server] PlayerDiscovered message has been sent
+00:37 DEBUG: [server] Sending chunks to client, size: 4
+00:40 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:40 DEBUG: [server] Sending chunks to client, size: 2
+00:40 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:40 DEBUG: [server] Sending chunks to client, size: 2
+00:41 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:41 DEBUG: [server] Sending chunks to client, size: 2
+00:41 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:41 DEBUG: [server] Sending chunks to client, size: 3
+00:42 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:42 DEBUG: [server] Sending chunks to client, size: 3
+00:43 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:43 DEBUG: [server] Sending chunks to client, size: 3
+00:43 DEBUG: [server] Found script interaction
+00:44 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:44 DEBUG: [server] Sending chunks to client, size: 3
+00:45 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:45 DEBUG: [server] Sending chunks to client, size: 3
+00:46 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:46 DEBUG: [server] Sending chunks to client, size: 3
+00:47 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:47 DEBUG: [server] Sending chunks to client, size: 3
+00:47 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:47 DEBUG: [server] Sending chunks to client, size: 0
+00:48 DEBUG: [server] Found script interaction
+00:48 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:48 DEBUG: [server] Sending chunks to client, size: 2
+00:49 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:49 DEBUG: [server] Sending chunks to client, size: 2
+00:50 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:50 DEBUG: [server] Sending chunks to client, size: 2
+00:51 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:51 DEBUG: [server] Sending chunks to client, size: 2
+00:51 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:51 DEBUG: [server] Sending chunks to client, size: 2
+00:52 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:52 DEBUG: [server] Sending chunks to client, size: 2
+00:53 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:53 DEBUG: [server] Sending chunks to client, size: 3
+00:53 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:53 DEBUG: [server] Sending chunks to client, size: 3
+00:54 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:54 DEBUG: [server] Sending chunks to client, size: 3
+00:55 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:55 DEBUG: [server] Sending chunks to client, size: 3
+00:56 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:56 DEBUG: [server] Sending chunks to client, size: 3
+00:56 DEBUG: [server] Found script interaction
+00:56 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:56 DEBUG: [server] Sending chunks to client, size: 3
+00:57 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:57 DEBUG: [server] Sending chunks to client, size: 3
+00:58 DEBUG: [server] Found script interaction
+00:58 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:58 DEBUG: [server] Sending chunks to client, size: 3
+00:59 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:59 DEBUG: [server] Sending chunks to client, size: 3
+00:59 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:59 DEBUG: [server] Sending chunks to client, size: 3
+01:00 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:00 DEBUG: [server] Sending chunks to client, size: 3
+01:00 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:00 DEBUG: [server] Sending chunks to client, size: 3
+01:01 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:01 DEBUG: [server] Sending chunks to client, size: 3
+01:01 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:01 DEBUG: [server] Sending chunks to client, size: 3
+01:02 DEBUG: [server] Found script interaction
+01:02 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:02 DEBUG: [server] Sending chunks to client, size: 3
+01:03 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:03 DEBUG: [server] Sending chunks to client, size: 3
+01:03 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:03 DEBUG: [server] Sending chunks to client, size: 3
+01:03 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:03 DEBUG: [server] Sending chunks to client, size: 3
+01:04 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:04 DEBUG: [server] Sending chunks to client, size: 3
+01:05 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:05 DEBUG: [server] Sending chunks to client, size: 0
+01:05 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:05 DEBUG: [server] Sending chunks to client, size: 2
+01:06 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:06 DEBUG: [server] Sending chunks to client, size: 2
+01:06 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:06 DEBUG: [server] Sending chunks to client, size: 2
+01:07 DEBUG: [server] Found script interaction
+01:07 DEBUG: [server] Found script interaction
+01:07 DEBUG: [server] Found script interaction
+01:07 DEBUG: [server] Found script interaction
+01:07 DEBUG: [server] Found script interaction
+01:07 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:07 DEBUG: [server] Sending chunks to client, size: 2
+01:08 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:08 DEBUG: [server] Sending chunks to client, size: 2
+01:08 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:08 DEBUG: [server] Sending chunks to client, size: 3
+01:09 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:09 DEBUG: [server] Sending chunks to client, size: 3
+01:10 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:10 DEBUG: [server] Sending chunks to client, size: 3
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:10 DEBUG: [server] Found script interaction
+01:11 DEBUG: [server] Found script interaction
+01:11 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:11 DEBUG: [server] Sending chunks to client, size: 3
+01:11 DEBUG: [server] Found script interaction
+01:11 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:11 DEBUG: [server] Sending chunks to client, size: 3
+01:12 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:12 DEBUG: [server] Sending chunks to client, size: 3
+01:12 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:13 DEBUG: [server] Sending chunks to client, size: 3
+01:13 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:13 DEBUG: [server] Sending chunks to client, size: 3
+01:14 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:14 DEBUG: [server] Sending chunks to client, size: 3
+01:14 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:14 DEBUG: [server] Sending chunks to client, size: 3
+01:14 DEBUG: [server] Found script interaction
+01:15 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:15 DEBUG: [server] Sending chunks to client, size: 3
+01:16 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:16 DEBUG: [server] Sending chunks to client, size: 3
+01:17 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:17 DEBUG: [server] Sending chunks to client, size: 3
+01:17 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:17 DEBUG: [server] Sending chunks to client, size: 3
+01:18 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:18 DEBUG: [server] Sending chunks to client, size: 3
+01:18 DEBUG: [server] Found script interaction
+01:19 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:19 DEBUG: [server] Sending chunks to client, size: 3
+01:19 DEBUG: [server] Found script interaction
+01:19 DEBUG: [server] Found script interaction
+01:19 DEBUG: [server] Found script interaction
+01:19 DEBUG: [server] Found script interaction
+01:19 DEBUG: [server] Found script interaction
+01:19 DEBUG: [server] Found script interaction
+01:20 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:20 DEBUG: [server] Sending chunks to client, size: 3
+01:20 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:20 DEBUG: [server] Sending chunks to client, size: 3
+01:21 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:21 DEBUG: [server] Sending chunks to client, size: 3
+01:21 DEBUG: [server] Found script interaction
+01:22 DEBUG: [server] Found script interaction
+01:22 DEBUG: [server] Found script interaction
+01:22 DEBUG: [server] Found script interaction
+01:22 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:22 DEBUG: [server] Sending chunks to client, size: 3
+01:23 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+01:23 DEBUG: [server] Sending chunks to client, size: 0
+01:23 DEBUG: [server] Found script interaction
+01:23 DEBUG: [server] Found script interaction
+01:23 DEBUG: [server] Found script interaction
+01:23 DEBUG: [server] Found script interaction
+01:23 DEBUG: [server] Found script interaction
+01:23 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:24 DEBUG: [server] Found script interaction
+01:25 DEBUG: [server] Found script interaction
+01:25 DEBUG: [server] Found script interaction
+01:25 DEBUG: [server] Found script interaction
+01:25 DEBUG: [server] Found script interaction
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b351
+00:00  INFO: [server] Map was loaded in 26 ms.
+00:00  INFO: [server] Server started
+00:21  INFO: [server] true requested access with password lel and successfully got it.
+00:21  INFO: [server] Client information received
+00:22  INFO: [Server] Player information received
+00:22  INFO: [server] PlayerDiscovered message has been sent
+00:22 DEBUG: [server] Sending chunks to client, size: 4
+00:00  INFO: [server] SIN is starting. Version: 0.0.11-b351
+00:00  INFO: [server] Map was loaded in 28 ms.
+00:00  INFO: [server] Server started
+00:22  INFO: [server] true requested access with password lel and successfully got it.
+00:22  INFO: [server] Client information received
+00:24  INFO: [Server] Player information received
+00:24  INFO: [server] PlayerDiscovered message has been sent
+00:24 DEBUG: [server] Sending chunks to client, size: 4
+00:26 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:26 DEBUG: [server] Sending chunks to client, size: 2
+00:27 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:27 DEBUG: [server] Sending chunks to client, size: 2
+00:28 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:28 DEBUG: [server] Sending chunks to client, size: 2
+00:28 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:28 DEBUG: [server] Sending chunks to client, size: 3
+00:29 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:29 DEBUG: [server] Sending chunks to client, size: 3
+00:30 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:30 DEBUG: [server] Sending chunks to client, size: 3
+00:30 DEBUG: [server] Found script interaction
+00:31 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:31 DEBUG: [server] Sending chunks to client, size: 3
+00:32 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:32 DEBUG: [server] Sending chunks to client, size: 3
+00:33 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:33 DEBUG: [server] Sending chunks to client, size: 3
+00:34 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:34 DEBUG: [server] Sending chunks to client, size: 0
+00:34 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:34 DEBUG: [server] Sending chunks to client, size: 2
+00:34 DEBUG: [server] Found script interaction
+00:35 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:35 DEBUG: [server] Sending chunks to client, size: 2
+00:35 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:35 DEBUG: [server] Sending chunks to client, size: 2
+00:36 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:36 DEBUG: [server] Sending chunks to client, size: 2
+00:36 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:36 DEBUG: [server] Sending chunks to client, size: 2
+00:37 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:37 DEBUG: [server] Sending chunks to client, size: 2
+00:37 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:37 DEBUG: [server] Sending chunks to client, size: 3
+00:38 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:38 DEBUG: [server] Sending chunks to client, size: 3
+00:39 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:39 DEBUG: [server] Sending chunks to client, size: 3
+00:39 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:39 DEBUG: [server] Sending chunks to client, size: 3
+00:39 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:39 DEBUG: [server] Sending chunks to client, size: 3
+00:40 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:40 DEBUG: [server] Sending chunks to client, size: 3
+00:40 DEBUG: [server] Found script interaction
+00:40 DEBUG: [server] Found script interaction
+00:41 DEBUG: [server] Found script interaction
+00:41 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:41 DEBUG: [server] Sending chunks to client, size: 3
+00:42 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:42 DEBUG: [server] Sending chunks to client, size: 3
+00:43 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:43 DEBUG: [server] Sending chunks to client, size: 0
+00:43 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:43 DEBUG: [server] Sending chunks to client, size: 2
+00:44 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:44 DEBUG: [server] Sending chunks to client, size: 2
+00:44 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:44 DEBUG: [server] Sending chunks to client, size: 0
+00:45 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:45 DEBUG: [server] Sending chunks to client, size: 2
+00:46 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:46 DEBUG: [server] Sending chunks to client, size: 2
+00:46 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:46 DEBUG: [server] Sending chunks to client, size: 2
+00:47 DEBUG: [server] Found script interaction
+00:47 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:47 DEBUG: [server] Sending chunks to client, size: 2
+00:48 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:48 DEBUG: [server] Sending chunks to client, size: 2
+00:48 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:48 DEBUG: [server] Sending chunks to client, size: 2
+00:49 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:49 DEBUG: [server] Sending chunks to client, size: 3
+00:49 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:49 DEBUG: [server] Sending chunks to client, size: 3
+00:50 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:50 DEBUG: [server] Sending chunks to client, size: 3
+00:50 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:50 DEBUG: [server] Sending chunks to client, size: 3
+00:51 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:51 DEBUG: [server] Sending chunks to client, size: 3
+00:51 DEBUG: [server] Player has moved to a new chunk, thus I'm sendidng this message.
+00:52 DEBUG: [server] Sending chunks to client, size: 3
+00:52 DEBUG: [server] Found script interaction
+00:52 DEBUG: [server] Found script interaction
+00:52 DEBUG: [server] Found script interaction
+00:53 DEBUG: [server] Found script interaction

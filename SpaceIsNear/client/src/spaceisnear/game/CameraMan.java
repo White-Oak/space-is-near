@@ -86,6 +86,9 @@ public final class CameraMan {
 	final boolean yBelongs = py + 2 > this.y && py - this.y < getMaxYTiles() + 1;
 	float xx = (px + 0.5f);
 	float yy = (py + 0.5f);
+	if (!(xBelongs && yBelongs)) {
+	    return false;
+	}
 	PointLight playerLight = engine.getCore().getPointLight();
 	final GamerPlayer player = engine.getContext().getPlayer();
 	boolean lighted = playerLight.contains(px * GameContext.TILE_WIDTH, py * GameContext.TILE_HEIGHT);
@@ -101,7 +104,7 @@ public final class CameraMan {
 		    contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
 			    (yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
 	}
-	return xBelongs && yBelongs && lighted;
+	return lighted;
     }
 
     public int getMaxXTiles() {

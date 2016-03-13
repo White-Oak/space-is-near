@@ -11,6 +11,7 @@ import lombok.Setter;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.Component;
 import spaceisnear.game.components.ComponentType;
+import spaceisnear.game.ui.Position;
 
 public abstract class PaintableComponent extends Component {
 
@@ -45,12 +46,15 @@ public abstract class PaintableComponent extends Component {
     public abstract void paintComponent(SpriteBatch batch, int x, int y);
 
     public final void paint(SpriteBatch batch) {
-	final GameContext context = (GameContext) getContext();
-	if (context.getEngine().getCore().getCameraMan().belongsToCamera(getPosition(), context.getEngine())) {
-	    int xto, yto;
-	    xto = getX() * GameContext.TILE_WIDTH - getDelayX();
-	    yto = getY() * GameContext.TILE_HEIGHT - getDelayY();
-	    paintComponent(batch, xto, yto);
+	final Position position = getPosition();
+	if (position != null) {
+	    final GameContext context = (GameContext) getContext();
+	    if (context.getEngine().getCore().getCameraMan().belongsToCamera(position, context.getEngine())) {
+		int xto, yto;
+		xto = getX() * GameContext.TILE_WIDTH - getDelayX();
+		yto = getY() * GameContext.TILE_HEIGHT - getDelayY();
+		paintComponent(batch, xto, yto);
+	    }
 	}
     }
 
