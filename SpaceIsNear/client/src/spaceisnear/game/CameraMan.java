@@ -72,36 +72,34 @@ public final class CameraMan {
 //	lightsCamera.translate(-savedX, -savedY);
 	camera.update();
     }
-    private int counter = 0;
+
     public boolean belongsToCamera(Position p, Engine engine) {
 	int px = p.getX();
 	int py = p.getY();
-	if (px < 0 || py < 0) {
-	    return false;
-	}
 //	final boolean xBelongs = px + 1 > this.x + 6 && px - this.x < getMaxXTiles() + 1 - 7;
 //	final boolean yBelongs = py + 1 > this.y + 4 && py - this.y < getMaxYTiles() + 1 - 5;
 	final boolean xBelongs = px + 2 > this.x && px - this.x < getMaxXTiles() + 1;
 	final boolean yBelongs = py + 2 > this.y && py - this.y < getMaxYTiles() + 1;
-	float xx = (px + 0.5f);
-	float yy = (py + 0.5f);
 	if (!(xBelongs && yBelongs)) {
 	    return false;
 	}
+	float xx = (px + 0.5f);
+	float yy = (py + 0.5f);
 	PointLight playerLight = engine.getCore().getPointLight();
-	boolean lighted = playerLight.contains(px * GameContext.TILE_WIDTH, py * GameContext.TILE_HEIGHT);
-	if (playerLight != null) {
-	    lighted |= playerLight.
-		    contains((xx + Math.signum(p.getX() - px)) * GameContext.TILE_WIDTH,
-			    yy * GameContext.TILE_HEIGHT);
-	    lighted |= playerLight.
-		    contains(xx * GameContext.TILE_WIDTH,
-			    (yy + Math.signum(p.getY() - py)) * GameContext.TILE_HEIGHT);
-	    lighted |= playerLight.
-		    contains((xx + Math.signum(p.getX() - px)) * GameContext.TILE_WIDTH,
-			    (yy + Math.signum(p.getY() - py)) * GameContext.TILE_HEIGHT);
-	}
-	return lighted;
+	Position position = engine.getContext().getPlayer().getPosition();
+	return playerLight
+		//if exactly that position is in view
+		.contains(px * GameContext.TILE_WIDTH, py * GameContext.TILE_HEIGHT)
+		|| playerLight
+		//if position slightly more 
+		.contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
+			yy * GameContext.TILE_HEIGHT)
+		|| playerLight
+		.contains(xx * GameContext.TILE_WIDTH,
+			(yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT)
+		|| playerLight
+		.contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
+			(yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
     }
 
     public int getMaxXTiles() {

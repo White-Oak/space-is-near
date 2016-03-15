@@ -298,6 +298,7 @@
 0.0.11
 -NETWORK
     +chunks 
+	+Server sends every messagecreated and destroyed to all clients, but only properties of the nearest items (?)
 	+Server won't send MessageCreated for the objects that client already has. Properties still will be sent. 
 	    (Is it really needed? Maybe it'd better to check it on client's side, since client will need to get rid of very old chunks)
     -fixes
@@ -310,7 +311,6 @@
 +text field hover animation
 *chat messages fixed
     +chat help included
--Spawn points
 ---
 -Breathing component should have health component bundled in, to prevent looking for it in components of owner
 +Wide messages refactoring:
@@ -333,6 +333,7 @@
 
 
 0.1.1
+-Spawn points
 +MessageKnockbacked
     -animation change for player
 +HealthComponent
