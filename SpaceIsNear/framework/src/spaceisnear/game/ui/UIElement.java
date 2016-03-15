@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.*;
 
 /**
@@ -33,27 +31,19 @@ public abstract class UIElement extends Actor {
 
 	    @Override
 	    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-		hovered = true;
+		if (hoverable != null) {
+		    hoverable.hovered();
+		}
 	    }
 
 	    @Override
 	    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-		hovered = false;
+		if (hoverable != null) {
+		    hoverable.unhovered();
+		}
 	    }
 
 	});
-	new Thread(() -> {
-	    while (true) {
-		if (hoverable != null) {
-		    hoverable.hoverAnimation(hovered);
-		}
-		try {
-		    Thread.sleep(10L);
-		} catch (InterruptedException ex) {
-		    Logger.getLogger(UIElement.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	    }
-	}).start();
     }
 
     protected void activated() {

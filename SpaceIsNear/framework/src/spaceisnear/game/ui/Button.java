@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,14 +18,11 @@ public final class Button extends UIElement implements Hoverable {
     @Getter @Setter private String label;
     private static final int WIDTH_PADDING = 20, HEIGHT_PADDING = 15;
     private Color color = new Color(0xdce0e1ff);
-    volatile private Color currentColor = color.cpy();
     private Color finalColor = new Color(0xacb0b1ff);
-    private boolean entered = true, animation;
 
     @Override
     public void setColor(Color color) {
 	this.color = color;
-	currentColor = color;
 	finalColor = color.cpy().sub(new Color(0x30303000));
     }
 
@@ -46,14 +44,13 @@ public final class Button extends UIElement implements Hoverable {
     }
 
     @Override
-    public void hoverAnimation(boolean hovered) {
-	if (hovered) {
-	    if (!currentColor.equals(finalColor)) {
-		currentColor.sub(new Color(0x08080800));
-	    }
-	} else if (!currentColor.equals(color)) {
-	    currentColor.add(new Color(0x08080800));
-	}
+    public void hovered() {
+	addAction(Actions.color(finalColor, 0.25f));
+    }
+
+    @Override
+    public void unhovered() {
+	addAction(Actions.color(color, 0.25f));
     }
 
     @Override
@@ -63,7 +60,7 @@ public final class Button extends UIElement implements Hoverable {
 //	renderer.setColor(Color.BLACK);
 //	renderer.rect(0, 0, getWidth(), getHeight());
 //	renderer.end();
-	renderer.setColor(currentColor);
+	renderer.setColor(getColor());
 	renderer.begin(ShapeRenderer.ShapeType.Filled);
 	renderer.rect(0, 0, getWidth(), getHeight());
 	renderer.end();

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import lombok.Getter;
 
 /**
@@ -30,23 +31,20 @@ public final class TextField extends UIElement implements Hoverable {
     private long lastTimeActed;
     private final static long DELTA_ACTED = 100L;
     private Color borderColor = new Color(0x0);
-    volatile private Color currentColor = borderColor.cpy();
     private Color finalColor = new Color(0xff);
 
     @Override
-    public void hoverAnimation(boolean hovered) {
-	if (hovered) {
-	    if (!currentColor.equals(finalColor)) {
-		currentColor.add(new Color(0x10));
-	    }
-	} else if (!currentColor.equals(borderColor)) {
-	    currentColor.sub(new Color(0x10));
-	}
+    public void hovered() {
+	addAction(Actions.color(finalColor, 0.25f));
+    }
+
+    @Override
+    public void unhovered() {
+	addAction(Actions.color(borderColor, 0.25f));
     }
 
     public void setBorderColor(Color color) {
 	this.borderColor = color;
-	currentColor = color;
 	finalColor = color.cpy().sub(new Color(0x30303000));
     }
 
@@ -196,7 +194,7 @@ public final class TextField extends UIElement implements Hoverable {
 	Gdx.gl.glEnable(GL20.GL_BLEND);
 	Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 	renderer.begin(ShapeRenderer.ShapeType.Line);
-	renderer.setColor(currentColor);
+	renderer.setColor(getColor());
 	renderer.rect(0, 0, getWidth() + 1, getHeight());
 	renderer.end();
 	Gdx.gl.glDisable(GL20.GL_BLEND);

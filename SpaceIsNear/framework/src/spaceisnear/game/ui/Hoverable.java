@@ -6,5 +6,7 @@ package spaceisnear.game.ui;
  */
 public interface Hoverable {
 
-    public void hoverAnimation(boolean hovered);
+    public void hovered();
+
+    public void unhovered();
 }
