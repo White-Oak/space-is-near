@@ -130,12 +130,11 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
 	cameraMan.moveCamera(getCamera());
 	batch.setProjectionMatrix(getCamera().combined);
 
-//	if (getContext().getPlayer() != null) {
-//	    GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getCamera().combined);
-//	    GameContext.getRayHandler().setCombinedMatrix(context.getCameraMan().getCamera().combined);
-//	    pointLight.setPosition((getContext().getPlayer().getPosition().getX() + 0.5f) * GameContext.TILE_WIDTH,
-//		    (getContext().getPlayer().getPosition().getY() + 0.5f) * GameContext.TILE_HEIGHT);
-//	}
+	if (getContext().getPlayer() != null) {
+	    rayHandler.setCombinedMatrix(getCamera());
+	    pointLight.setPosition((getContext().getPlayer().getPosition().getX() + 0.5f) * GameContext.TILE_WIDTH,
+		    (getContext().getPlayer().getPosition().getY() + 0.5f) * GameContext.TILE_HEIGHT);
+	}
 	batch.begin();
 	final List<PaintableComponent> paintables = getContext().getPaintables();
 	for (int i = 0; i < paintables.size(); i++) {

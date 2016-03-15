@@ -9,7 +9,6 @@ import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import lombok.Getter;
 import lombok.Setter;
-import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.ui.Position;
 
 /**
@@ -73,7 +72,7 @@ public final class CameraMan {
 //	lightsCamera.translate(-savedX, -savedY);
 	camera.update();
     }
-
+    private int counter = 0;
     public boolean belongsToCamera(Position p, Engine engine) {
 	int px = p.getX();
 	int py = p.getY();
@@ -90,19 +89,17 @@ public final class CameraMan {
 	    return false;
 	}
 	PointLight playerLight = engine.getCore().getPointLight();
-	final GamerPlayer player = engine.getContext().getPlayer();
 	boolean lighted = playerLight.contains(px * GameContext.TILE_WIDTH, py * GameContext.TILE_HEIGHT);
-	if (player != null) {
-	    Position position = player.getPosition();
+	if (playerLight != null) {
 	    lighted |= playerLight.
-		    contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
+		    contains((xx + Math.signum(p.getX() - px)) * GameContext.TILE_WIDTH,
 			    yy * GameContext.TILE_HEIGHT);
 	    lighted |= playerLight.
 		    contains(xx * GameContext.TILE_WIDTH,
-			    (yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
+			    (yy + Math.signum(p.getY() - py)) * GameContext.TILE_HEIGHT);
 	    lighted |= playerLight.
-		    contains((xx + Math.signum(position.getX() - px)) * GameContext.TILE_WIDTH,
-			    (yy + Math.signum(position.getY() - py)) * GameContext.TILE_HEIGHT);
+		    contains((xx + Math.signum(p.getX() - px)) * GameContext.TILE_WIDTH,
+			    (yy + Math.signum(p.getY() - py)) * GameContext.TILE_HEIGHT);
 	}
 	return lighted;
     }

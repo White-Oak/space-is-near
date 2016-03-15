@@ -26,3 +26,9 @@
 00:39  INFO: [chat] [BROADCASTING] [145.9]: Nanotracen welcomes you, Amadeus Settle, and wishes best luck.
 00:26  INFO: [chat] [BROADCASTING] [145.9]: Aaron Mozart has connected to SIN!
 00:26  INFO: [chat] [BROADCASTING] [145.9]: Nanotracen welcomes you, Aaron Mozart, and wishes best luck.
+00:11  INFO: [chat] [BROADCASTING] [145.9]: Azura Shield has connected to SIN!
+00:11  INFO: [chat] [BROADCASTING] [145.9]: Nanotracen welcomes you, Azura Shield, and wishes best luck.
+00:39  INFO: [chat] [BROADCASTING] [145.9]: Abbey Sherwin has connected to SIN!
+00:39  INFO: [chat] [BROADCASTING] [145.9]: Nanotracen welcomes you, Abbey Sherwin, and wishes best luck.
+00:18  INFO: [chat] [BROADCASTING] [145.9]: Aden Sherwin has connected to SIN!
+00:18  INFO: [chat] [BROADCASTING] [145.9]: Nanotracen welcomes you, Aden Sherwin, and wishes best luck.
