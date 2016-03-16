@@ -24,6 +24,7 @@ import spaceisnear.game.messages.service.onceused.*;
     private final Queue<Message> messages = new ArrayDeque<>(10);
 
     public final static int BUFFER_SIZE = 256 * 512, O_BUFFER_SIZE = 512;
+
     public void connect(String host, int tcpPort) throws IOException {
 	client = new Client(BUFFER_SIZE, O_BUFFER_SIZE);
 	Registerer.registerEverything(client);
@@ -84,9 +85,6 @@ import spaceisnear.game.messages.service.onceused.*;
 	    switch (mt) {
 		case ROGER_REQUESTED:
 		    send(ROGERED);
-		    break;
-		case JOINED:
-		    joined = true;
 		    break;
 		default:
 		    final GameContext context = engine.getContext();

@@ -4,6 +4,9 @@
  */
 package spaceisnear.game.objects;
 
+import lombok.NonNull;
+import spaceisnear.game.CameraMan;
+import spaceisnear.game.GameContext;
 import spaceisnear.game.components.*;
 import spaceisnear.game.components.client.GamePlayerPositionComponent;
 import spaceisnear.game.ui.Position;
@@ -14,16 +17,19 @@ public class GamerPlayer extends Player {
 	super(GameObjectType.GAMER_PLAYER);
     }
 
-    public GamerPlayer(Player p) {
+    public GamerPlayer(@NonNull Player p) {
 	this();
 	setComponents(p.getComponents());
 	for (int i = 0; i < getComponents().size(); i++) {
 	    Component component = getComponents().get(i);
 	    if (component.getType() == ComponentType.POSITION) {
-		final Position position = ((PositionComponent) component).getPosition();
+		final Position position = getPosition();
 		final GamePlayerPositionComponent newPositionComponent = new GamePlayerPositionComponent(position);
 		getComponents().set(i, newPositionComponent);
-		p.getContext().getEngine().getCore().getCameraMan().moveCameraToPlayer(position.getX(), position.getY());
+		final GameContext context = p.getContext();
+		@NonNull final CameraMan cameraMan = context.getEngine().getCore().getCameraMan();
+		assert cameraMan != null;
+		cameraMan.moveCameraToPlayer(position.getX(), position.getY());
 	    }
 	}
 	setContext(p.getContext());

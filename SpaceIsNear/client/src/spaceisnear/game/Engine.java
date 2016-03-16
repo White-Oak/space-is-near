@@ -48,21 +48,16 @@ public class Engine implements Updatable {
 	    loginScreen.setNetworking(callToConnect);
 	    firstTime = false;
 	} else {
-	    if (!started) {
+	    if (corev3.getScreen() != core) {
 		if (networking.isJoined()) {
-		    started = true;
 		    corev3.setNextScreen(core);
 		}
-	    } else {
-		if (!paused) {
-		    queue.forEach(mc -> context.sendDirectedMessage(new MessageToSend(mc)));
-		    for (AbstractGameObject value : objects.values()) {
-			value.process();
-		    }
-		    MessageControlledByInput checkMovement = controller.checkMovement();
-		    if (checkMovement != null) {
-			context.sendToNetwork(checkMovement);
-		    }
+	    } else if (!paused) {
+		queue.forEach(mc -> context.sendDirectedMessage(new MessageToSend(mc)));
+		objects.values().forEach(value -> value.process());
+		MessageControlledByInput checkMovement = controller.checkMovement();
+		if (checkMovement != null) {
+		    context.sendToNetwork(checkMovement);
 		}
 	    }
 	    networking.processQueue();

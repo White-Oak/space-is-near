@@ -23,7 +23,7 @@ public class PositionComponent extends Component {
     private static final int STEP = 8;
 
     public PositionComponent(Position p) {
-	super(ComponentType.POSITION);
+	this();
 	addState("position", p);
     }
 
@@ -87,6 +87,7 @@ public class PositionComponent extends Component {
 		checkAnimation();
 	}
     }
+
     private void checkAnimation() {
 	if (animation) {
 	    int timePassed = MessageAnimationStep.STEP;

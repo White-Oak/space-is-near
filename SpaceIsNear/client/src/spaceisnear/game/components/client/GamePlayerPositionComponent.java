@@ -5,6 +5,7 @@
  */
 package spaceisnear.game.components.client;
 
+import lombok.NonNull;
 import spaceisnear.game.GameContext;
 import spaceisnear.game.components.PositionComponent;
 import spaceisnear.game.messages.*;
@@ -13,7 +14,7 @@ import spaceisnear.game.ui.Position;
 
 public class GamePlayerPositionComponent extends PositionComponent {
 
-    public GamePlayerPositionComponent(Position p) {
+    public GamePlayerPositionComponent(@NonNull Position p) {
 	super(p);
     }
 

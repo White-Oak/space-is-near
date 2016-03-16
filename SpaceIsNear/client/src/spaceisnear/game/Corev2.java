@@ -33,7 +33,7 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
     @Getter private boolean notpaused;
 
     @Getter private final Engine engine;
-    @Getter private CameraMan cameraMan;
+    @Getter private final CameraMan cameraMan = new CameraMan();
 
     private ContextMenu menu;
     private InputCatcher inputCatcher;
@@ -57,7 +57,6 @@ import spaceisnear.starting.ui.ScreenImprovedGreatly;
     public void create() {
 	batch = new SpriteBatch();
 	//camera setup
-	cameraMan = new CameraMan();
 	cameraMan.setWindowWidth(800);
 	cameraMan.setWindowHeight(600);
 //	inputCatcher = new InputCatcher(this);

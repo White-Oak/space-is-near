@@ -11,8 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import spaceisnear.game.ui.console.GameConsole;
 import spaceisnear.game.ui.console.GameConsolev2;
-import spaceisnear.starting.ui.ScreenImprovedGreatly;
-import spaceisnear.starting.ui.Updatable;
 
 /**
  * @author White Oak
@@ -29,6 +27,11 @@ public final class Corev3 extends com.badlogic.gdx.Game {
     private Batch savedBatch;
     //
     @Setter private ScreenImprovedGreatly nextScreen;
+
+    @Override
+    public ScreenImprovedGreatly getScreen() {
+	return (ScreenImprovedGreatly) super.getScreen(); //To change body of generated methods, choose Tools | Templates.
+    }
 
     public GameConsole getConsole() {
 	return consolev2.getConsole();
