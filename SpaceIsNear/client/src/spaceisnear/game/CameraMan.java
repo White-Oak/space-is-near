@@ -9,6 +9,7 @@ import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import lombok.Getter;
 import lombok.Setter;
+import spaceisnear.game.objects.GamerPlayer;
 import spaceisnear.game.ui.Position;
 
 /**
@@ -86,7 +87,11 @@ public final class CameraMan {
 	float xx = (px + 0.5f);
 	float yy = (py + 0.5f);
 	PointLight playerLight = engine.getCore().getPointLight();
-	Position position = engine.getContext().getPlayer().getPosition();
+	final GamerPlayer player = engine.getContext().getPlayer();
+	if (player == null) {
+	    return false;
+	}
+	Position position = player.getPosition();
 	return playerLight
 		//if exactly that position is in view
 		.contains(px * GameContext.TILE_WIDTH, py * GameContext.TILE_HEIGHT)

@@ -114,28 +114,23 @@ public class ServerNetworking extends Listener {
     }
 
     private synchronized void seeIfOldClient(final Client clientByConnection, MessageLogin mci, Connection connection) {
-	clients.stream().filter(client -> clientByConnection != client)//newly created client is still in list
-		.filter(client -> client.getClientInformation().getLogin().equals(mci.getLogin())).forEach(client -> {
-	    client.setConnection(connection);
-	    clients.remove(clientByConnection);
-	    sendToConnection(connection, new MessageJoined());
-	    Runnable runnable = () -> processOldPlayer(client);
-	    new Thread(runnable, "sending world to old player").start();
-	});
-	//	for (Client client : clients) {
-	//	    //newly created client is still in list
-	//	    if (clientByConnection != client) {
-	//		MessageLogin clientInformation = client.getClientInformation();
-	//		if (clientInformation.getLogin().equals(mci.getLogin())) {
-	//		    client.setConnection(connection);
-	//		    clients.remove(clientByConnection);
-	//		    sendToConnection(connection, new MessageJoined());
-	//		    Runnable runnable = () -> processOldPlayer(client);
-	//		    new Thread(runnable, "sending world to old player").start();
-	//		    break;
-	//		}
-	//	    }
-	//	}
+	clients.stream()
+		.filter(client -> clientByConnection != client)//newly created client is still in list
+		.filter(client -> {
+		    final String login = mci.getLogin();
+		    final MessageLogin clientInformation = client.getClientInformation();
+		    final String oldLogin = clientInformation.getLogin();
+		    return oldLogin.equals(login);
+		})
+		.findAny()
+		.ifPresent(client -> {
+		    client.setConnection(connection);
+		    clients.remove(clientByConnection);
+		    sendToConnection(connection, new MessageJoined());
+//		    Runnable runnable = () -> processOldPlayer(client);
+		    processOldPlayer(client);
+//		    new Thread(runnable, "sending world to old player").start();
+		});
     }
 
     private void processPlayerInformation(Message message, Connection connection) {
@@ -198,6 +193,8 @@ public class ServerNetworking extends Listener {
 	    MessageLogin clientInformation = clientByConnection.getClientInformation();
 	    if (clientInformation != null) {
 		accountManager.disconnect(clientInformation.getLogin());
+	    } else {
+		clients.remove(clientByConnection);
 	    }
 	    clientByConnection.setConnection(null);
 	}
@@ -223,39 +220,11 @@ public class ServerNetworking extends Listener {
     }
 
     private Player createPlayer(Client client) {
-	//		List<ObjectMessaged> list = new LinkedList<>();
-
 	Player player = core.addPlayer();
 	client.setPlayer(player);
-	player.setNickname(client.getPlayerInformation().getDesiredNickname());
-	player.getPosition().setX(1);
-	player.getPosition().setY(1);
-//	playerChunkUpdated(player.getId());
-	//		list.add(getObjectMessaged(player));
-
-	StaticItem ear = addToPlayerItem("ear_radio", "ear", player);
-	//		list.add(getObjectMessaged(ear));
-
-	StaticItem right_pocket = addToPlayerItem("pda", "right pocket", player);
-	//		list.add(getObjectMessaged(right_pocket));
-
-	StaticItem id = addToPlayerItem("id", "id", player);
-
-	id.getVariableProperties().setProperty("name", client.getPlayerInformation().getDesiredNickname());
-	id.getVariableProperties().setProperty("profession", client.getPlayerInformation().getDesiredProfession());
-	//		list.add(getObjectMessaged(id));
-	//		return list;
+	MessagePlayerInformation playerInformation = client.getPlayerInformation();
+	player.initPlayer(playerInformation.getDesiredNickname(), playerInformation.getDesiredProfession());
 	return player;
-    }
-
-    private StaticItem addToPlayerItem(String itemName, String nameOfInventorySlot, Player player) {
-	final ServerContext context = core.getContext();
-	final ServerItemsArchive itemsArchive = ServerItemsArchive.ITEMS_ARCHIVE;
-	int idByName = itemsArchive.getIdByName(itemName);
-	StaticItem item = ItemAdder.addItem(new Position(-1, -1), idByName, context, null);
-	item.setPlayerId(player.getId());
-	player.getInventoryComponent().getSlots().get(nameOfInventorySlot).setItemId(item.getId());
-	return item;
     }
 
     public final static int BUFFER_SIZE = 256 * 512, O_BUFFER_SIZE = 512;
@@ -270,14 +239,12 @@ public class ServerNetworking extends Listener {
     //TODO REWORK
 
     private void processOldPlayer(Client client) {
-//	sendToAll(new MessagePaused());
-//	Collection<ObjectMessaged> world = getWorldNear(client.getChunk());
-//	sendWorldInformation(world, client);
-//	sendCreatedsOfWorld(world, client);
-//	orderEveryoneToRogerAndWait();
-//	sendPlayerDiscovered(client);
-//	sendToAll(new MessageUnpaused());
-//	sendPropertiesOfWorld(world, client);
+	sendToAll(new MessagePaused());
+	// To initiate a process of sending a chunk to client
+	client.setChunk(null);
+	sendPlayerDiscovered(client);
+	playerChunkUpdated(client.getPlayer().getId());
+	sendToAll(new MessageUnpaused());
     }
 
     private void processNewPlayer(final Client client) {
@@ -287,7 +254,6 @@ public class ServerNetworking extends Listener {
 	sendPlayerDiscovered(client);
 	playerChunkUpdated(objectPlayer.getId());
 	// Send all createds of the world
-	sendCreatedsOfWorld(getAllMessageCreateds(), client);
 
 	sendToAll(new MessageUnpaused());
 	//TODO fix that
@@ -352,9 +318,8 @@ public class ServerNetworking extends Listener {
 	return mwi;
     }
 
-    private void sendCreatedsOfWorld(Collection<MessageCreated> world, Client client) {
+    private void sendCreatedsOfWorld(Collection<ObjectMessaged> world, Client client) {
 	Connection connection = client.getConnection();
-	// Used to count number of objects
 	final Supplier<Integer> dirtyHack = new Supplier<Integer>() {
 	    int counter = 0;
 
@@ -364,8 +329,8 @@ public class ServerNetworking extends Listener {
 	    }
 	};
 	world.stream()
+		.map(objectMessaged -> objectMessaged.created)
 		//.filter(created -> !client.hasObjectAt(created.getId()))
-		.filter(m -> m != null)
 		.forEach(messageCreated -> {
 		    client.createObjectAt(messageCreated.getId());
 		    sendToConnection(connection, messageCreated);
@@ -374,9 +339,14 @@ public class ServerNetworking extends Listener {
 	System.out.println("Sent " + dirtyHack.get() + " objects to client");
     }
 
-    private void sendPropertiesOfWorld(List<MessagePropertable> world, Client client) {
-	sortPropertiesByClosestToPlayer(world, client.getPlayer());
-	sendProperties(world, client.getConnection());
+    private void sendPropertiesOfWorld(Collection<ObjectMessaged> world, Client client) {
+	//properties
+	List<MessagePropertable> propertables = new ArrayList<>();
+	world.stream()
+		.map(objectMessaged -> objectMessaged.propertables)
+		.forEach(propertable -> propertables.addAll(propertable));
+	sortPropertiesByClosestToPlayer(propertables, client.getPlayer());
+	sendProperties(propertables, client.getConnection());
     }
 
     private void sendProperties(List<MessagePropertable> propertable, Connection connection) {
@@ -389,24 +359,40 @@ public class ServerNetworking extends Listener {
 	Log.info("server", "PlayerDiscovered message has been sent");
     }
 
-    private List<MessagePropertable> getWorldNear(Chunk chunk) {
-	return core.getContext().getObjects().values().stream()
+    private Collection<ObjectMessaged> getWorldNear(Chunk chunk) {
+	ServerContext context = core.getContext();
+	Collection<AbstractGameObject> objects = context.getObjects().values();
+	List<ObjectMessaged> messagesToReturn = new LinkedList<>();
+	objects.stream()
 		.filter(object -> chunkManager.isNearChunk(chunk, object))
-		.map(object -> getMessageProperties(object))
-		.flatMap(properties -> properties.stream())
-		.collect(Collectors.toList());
+		.map(object -> getObjectMessaged(object))
+		.filter(objectMessaged -> objectMessaged != null)
+		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
+	return messagesToReturn;
     }
 
-    private List<MessagePropertable> getWorldIn(Collection<Chunk> chunks) {
-	return core.getContext().getObjects().values().stream()
+    private Collection<ObjectMessaged> getWorldIn(Collection<Chunk> chunks) {
+	Collection<AbstractGameObject> objects = core.getContext().getObjects().values();
+	List<ObjectMessaged> messagesToReturn = new LinkedList<>();
+	objects.stream()
 		.filter(object -> object.getPosition() != null)
-		.filter(object
-			-> //check if object is in any of the specified chunks
-			chunks.stream()
-			.anyMatch(chunk -> chunkManager.isInChunk(chunk, object.getPosition())))
-		.map(object -> getMessageProperties(object))
-		.flatMap(properties -> properties.stream())
-		.collect(Collectors.toList());
+		.filter(object -> chunks.stream().anyMatch(chunk -> chunkManager.isInChunk(chunk, object.getPosition())))
+		.map(object -> getObjectMessaged(object))
+		.filter(objectMessaged -> objectMessaged != null)
+		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
+	return messagesToReturn;
+    }
+
+    private ObjectMessaged getObjectMessaged(AbstractGameObject object) {
+	ObjectMessaged objectMessaged = null;
+	if (object != null && object.getId() >= ServerContext.HIDDEN_SERVER_OBJECTS) {
+	    MessageCreated nextMessageCreated = getMessageCreated(object);
+	    if (nextMessageCreated != null) {
+		List<MessagePropertable> messageProperties = getMessageProperties(object);
+		objectMessaged = new ObjectMessaged(nextMessageCreated, messageProperties);
+	    }
+	}
+	return objectMessaged;
     }
 
     private List<MessagePropertable> getMessageProperties(AbstractGameObject object) {
@@ -526,11 +512,14 @@ public class ServerNetworking extends Listener {
 
     private void sendChunksToClient(Collection<Chunk> toBeSent, Client client) {
 	Log.debug("server", "Sending chunks to client, size: " + toBeSent.size());
-	sendPropertiesOfWorld(getWorldIn(toBeSent), client);
+	Collection<ObjectMessaged> worldIn = getWorldIn(toBeSent);
+	sendCreatedsOfWorld(worldIn, client);
+	sendPropertiesOfWorld(worldIn, client);
     }
 
     /**
-     * Checks if there are players with outdated chunks. Sends new chunks to all players with outdated chunks.
+     * Checks if there are players with outdated chunks. Sends new chunks to all
+     * players with outdated chunks.
      */
     public void checkForNewChunks() {
 	clients.stream()

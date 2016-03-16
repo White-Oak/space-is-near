@@ -297,10 +297,7 @@
 
 0.0.11
 +NETWORK
-    +chunks 
-	+Server sends every messagecreated and destroyed to all clients, but only properties of the nearest items (do we need this?)
-	    (It allows server to pause for more at connections, but if I'd cache created objects at start is it really needed?)
-	    -Temporarly removed the way for old players to reconnect.
+    +chunks
 	-Server won't send MessageCreated for the objects that client already has. Properties still will be sent. 
 	    (Is it really needed? Maybe it'd better to check it on client's side, since client will need to get rid of very old chunks)
 	    (I think I removed it for now)

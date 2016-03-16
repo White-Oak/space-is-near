@@ -19,7 +19,6 @@ public abstract class UIElement extends Actor {
     @Getter(AccessLevel.PROTECTED) private final static ShapeRenderer renderer = new ShapeRenderer();
     private final OrthographicCamera camera = new OrthographicCamera(1200, 600);
     @Setter private Hoverable hoverable;
-    private boolean hovered;
 
     @Getter @Setter private ActivationListener activationListener;
 

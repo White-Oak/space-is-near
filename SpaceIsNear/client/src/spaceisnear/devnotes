@@ -26,8 +26,11 @@ I think most of the reworking is done already and nowis time to finally fix the 
 Just a quick note for 10 minutes work -- I finally finished movement rework and after rebuilding it feels so much smoother!
 Feels great to have something working again.
 
-15.03.2015
+15.03.2016
 Wow, that was nice, I repaired old bugs (fps drop and bugged lighting)
 and reworked the way server sends messages, not sure if this is the best way, but time will tell only.
 
 Now, fix the editor and seems like 0.0.11 is ready!
+
+16.03.2016
+Jeez, I was stupid, reverted the change from yesterday and fixed a pair of old bugs again.
