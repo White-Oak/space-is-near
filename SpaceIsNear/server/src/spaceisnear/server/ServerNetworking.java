@@ -27,15 +27,15 @@ import spaceisnear.server.objects.items.*;
  */
 @RequiredArgsConstructor
 public class ServerNetworking extends Listener {
-    
+
     public Server server;
     private final ServerCore core;
-    
+
     private final List<Client> clients = new ArrayList<>();
-    
+
     private final Queue<Message> messages = new LinkedList<>();
     private final Queue<Connection> connectionsForMessages = new LinkedList<>();
-    
+
     private final AccountManager accountManager = new AccountManager();
 
     //
@@ -44,7 +44,7 @@ public class ServerNetworking extends Listener {
     @Getter private final ChunkManager chunkManager;
     //
     private final ExecutorService connectedMessagingPool = Executors.newFixedThreadPool(5);
-    
+
     @Override
     public void received(Connection connection, Object object) {
 	if (object instanceof Message) {
@@ -61,13 +61,13 @@ public class ServerNetworking extends Listener {
 	    Log.info("server", "Got string over the net: " + object);
 	}
     }
-    
+
     public void processReceivedQueue() {
 	while (!messages.isEmpty()) {
 	    processBundle(messages.poll(), connectionsForMessages.poll());
 	}
     }
-    
+
     private int getClientIDByConnection(Connection connection) {
 	for (int i = 0; i < clients.size(); i++) {
 	    Client client = clients.get(i);
@@ -77,12 +77,12 @@ public class ServerNetworking extends Listener {
 	}
 	return -1;
     }
-    
+
     private Client getClientByConnection(Connection connection) {
 	final int clientIDByConnection = getClientIDByConnection(connection);
 	return clientIDByConnection >= 0 ? clients.get(clientIDByConnection) : null;
     }
-    
+
     private void processBundle(Message message, Connection connection) {
 	MessageType mt = message.getMessageType();
 	final Client clientByConnection = getClientByConnection(connection);
@@ -98,7 +98,7 @@ public class ServerNetworking extends Listener {
 		break;
 	}
     }
-    
+
     private void processLoginInformation(Message message, final Client clientByConnection, Connection connection) {
 	MessageLogin mci = (MessageLogin) message;
 	clientByConnection.setClientInformation(mci);
@@ -112,7 +112,7 @@ public class ServerNetworking extends Listener {
 	    Log.info("server", "Client information received");
 	}
     }
-    
+
     private synchronized void seeIfOldClient(final Client clientByConnection, MessageLogin mci, Connection connection) {
 	clients.stream()
 		.filter(client -> clientByConnection != client)//newly created client is still in list
@@ -133,7 +133,7 @@ public class ServerNetworking extends Listener {
 //		    new Thread(runnable, "sending world to old player").start();
 		});
     }
-    
+
     private void processPlayerInformation(Message message, Connection connection) {
 	MessagePlayerInformation mpi = (MessagePlayerInformation) message;
 	final Client client = getClientByConnection(connection);
@@ -142,11 +142,11 @@ public class ServerNetworking extends Listener {
 	sendToConnection(connection, new MessageJoined());
 	connectedWantsPlayer(client);
     }
-    
+
     public void sendToAll(NetworkableMessage message) {
 	server.sendToAllTCP(message);
     }
-    
+
     public void sendToConnection(Connection connection, NetworkableMessage message) {
 	if (messagesSent == MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING) {
 	    server.sendToTCP(connection.getID(), new MessageRogerRequested());
@@ -156,7 +156,7 @@ public class ServerNetworking extends Listener {
 	server.sendToTCP(connection.getID(), message);
 	messagesSent++;
     }
-    
+
     public void sendToConnectionID(int id, NetworkableMessage message) {
 	Connection connection = null;
 	for (Client client : clients) {
@@ -169,11 +169,11 @@ public class ServerNetworking extends Listener {
 	}
 	sendToConnection(connection, message);
     }
-    
+
     public void sendToClientID(int id, NetworkableMessage message) {
 	sendToConnection(clients.get(id).getConnection(), message);
     }
-    
+
     public void sendToPlayer(Player player, NetworkableMessage message) {
 	for (int i = 0; i < clients.size(); i++) {
 	    Client client = clients.get(i);
@@ -183,10 +183,10 @@ public class ServerNetworking extends Listener {
 	    break;
 	}
     }
-    
+
     private int messagesSent;
     private final int MESSAGES_TO_SEND_BEFORE_REQUESTING_ROGERING = 255;
-    
+
     @Override
     public void disconnected(Connection connection) {//Possibly should rewrite this shit
 	synchronized (clients) {
@@ -200,7 +200,7 @@ public class ServerNetworking extends Listener {
 	    clientByConnection.setConnection(null);
 	}
     }
-    
+
     @Override
     public synchronized void connected(Connection connection) {
 	//Possibly should rewrite this shit
@@ -214,12 +214,12 @@ public class ServerNetworking extends Listener {
 	    }
 	}
     }
-    
+
     private synchronized void connectedWantsPlayer(final Client client) {
 	Runnable runnable = () -> processNewPlayer(client);
 	new Thread(runnable, "New player creating").start();
     }
-    
+
     private Player createPlayer(Client client) {
 	Player player = core.addPlayer();
 	client.setPlayer(player);
@@ -227,9 +227,9 @@ public class ServerNetworking extends Listener {
 	player.initPlayer(playerInformation.getDesiredNickname(), playerInformation.getDesiredProfession());
 	return player;
     }
-    
+
     public final static int BUFFER_SIZE = 256 * 512, O_BUFFER_SIZE = 512;
-    
+
     public void host() throws IOException {
 	server = new Server(BUFFER_SIZE, O_BUFFER_SIZE);
 	Registerer.registerEverything(server);
@@ -244,19 +244,20 @@ public class ServerNetworking extends Listener {
 
 	// To initiate a process of sending a chunk to client
 	client.setChunk(null);
+	client.clearCreatedCache();
 	playerChunkUpdated(client.getPlayer().getId());
 	sendPlayerDiscovered(client);
-	
+
 	sendToAll(new MessageUnpaused());
     }
-    
+
     private void processNewPlayer(final Client client) {
 	sendToAll(new MessagePaused());
-	
+
 	Player objectPlayer = createPlayer(client);
 	playerChunkUpdated(objectPlayer.getId());
 	sendPlayerDiscovered(client);
-	
+
 	sendToAll(new MessageUnpaused());
 	//TODO fix that
 	Runnable runnable = () -> {
@@ -271,7 +272,7 @@ public class ServerNetworking extends Listener {
 	};
 	connectedMessagingPool.submit(runnable);
     }
-    
+
     private void orderEveryoneToRogerAndWait() {
 	if (!pendingRogers.isEmpty()) {
 	    server.close();
@@ -286,7 +287,7 @@ public class ServerNetworking extends Listener {
 	server.sendToAllTCP(new MessageRogerRequested());
 	waitForAllToRoger();
     }
-    
+
     private void sortPropertiesByClosestToPlayer(List<MessagePropertable> propertables, Player player) {
 	final Position playerPosition = player.getPosition();
 	propertables.sort((MessagePropertable o1, MessagePropertable o2) -> {
@@ -305,12 +306,12 @@ public class ServerNetworking extends Listener {
 	    return Integer.compare(distanceTo1, distanceTo2);
 	});
     }
-    
+
     private void sendWorldInformation(Collection<ObjectMessaged> world, Client client) {
 	MessageWorldInformation mwi = getWorldInformation(world);
 	sendToConnection(client.getConnection(), mwi);
     }
-    
+
     private MessageWorldInformation getWorldInformation(Collection<ObjectMessaged> world) {
 	Integer propertablesSize = 0;
 	propertablesSize = world.stream()
@@ -319,12 +320,12 @@ public class ServerNetworking extends Listener {
 	MessageWorldInformation mwi = new MessageWorldInformation(world.size(), propertablesSize);
 	return mwi;
     }
-    
+
     private void sendCreatedsOfWorld(Collection<ObjectMessaged> world, Client client) {
 	Connection connection = client.getConnection();
 	final Supplier<Integer> dirtyHack = new Supplier<Integer>() {
 	    int counter = 0;
-	    
+
 	    @Override
 	    public Integer get() {
 		return counter++;
@@ -332,7 +333,7 @@ public class ServerNetworking extends Listener {
 	};
 	world.stream()
 		.map(objectMessaged -> objectMessaged.created)
-		//.filter(created -> !client.hasObjectAt(created.getId()))
+		.filter(created -> !client.hasObjectAt(created.getId()))
 		.forEach(messageCreated -> {
 		    client.createObjectAt(messageCreated.getId());
 		    sendToConnection(connection, messageCreated);
@@ -340,7 +341,7 @@ public class ServerNetworking extends Listener {
 		});
 	System.out.println("Sent " + dirtyHack.get() + " objects to client");
     }
-    
+
     private void sendPropertiesOfWorld(Collection<ObjectMessaged> world, Client client) {
 	//properties
 	List<MessagePropertable> propertables = new ArrayList<>();
@@ -350,17 +351,17 @@ public class ServerNetworking extends Listener {
 	sortPropertiesByClosestToPlayer(propertables, client.getPlayer());
 	sendProperties(propertables, client.getConnection());
     }
-    
+
     private void sendProperties(List<MessagePropertable> propertable, Connection connection) {
 	propertable.forEach(messagePropertable -> sendToConnection(connection, messagePropertable));
     }
-    
+
     private void sendPlayerDiscovered(Client client) {
 	MessageYourPlayerDiscovered mypd = new MessageYourPlayerDiscovered(client.getPlayer().getId());
 	sendToConnection(client.getConnection(), mypd);
 	Log.info("server", "PlayerDiscovered message has been sent");
     }
-    
+
     private Collection<ObjectMessaged> getWorldNear(Chunk chunk) {
 	ServerContext context = core.getContext();
 	Collection<AbstractGameObject> objects = context.getObjects().values();
@@ -372,7 +373,7 @@ public class ServerNetworking extends Listener {
 		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
 	return messagesToReturn;
     }
-    
+
     private Collection<ObjectMessaged> getWorldIn(Collection<Chunk> chunks) {
 	Collection<AbstractGameObject> objects = core.getContext().getObjects().values();
 	List<ObjectMessaged> messagesToReturn = new LinkedList<>();
@@ -384,7 +385,7 @@ public class ServerNetworking extends Listener {
 		.forEach(objectMessaged -> messagesToReturn.add(objectMessaged));
 	return messagesToReturn;
     }
-    
+
     private ObjectMessaged getObjectMessaged(AbstractGameObject object) {
 	ObjectMessaged objectMessaged = null;
 	if (object != null && object.getId() >= ServerContext.HIDDEN_SERVER_OBJECTS) {
@@ -396,7 +397,7 @@ public class ServerNetworking extends Listener {
 	}
 	return objectMessaged;
     }
-    
+
     private List<MessagePropertable> getMessageProperties(AbstractGameObject object) {
 	List<MessagePropertable> propertiesList = new LinkedList<>();
 	final Position position = object.getPosition();
@@ -428,13 +429,13 @@ public class ServerNetworking extends Listener {
 	}
 	return propertiesList;
     }
-    
+
     private List<MessageCreated> getAllMessageCreateds() {
 	return core.getContext().getObjects().values().stream()
 		.map(object -> getMessageCreated(object))
 		.collect(Collectors.toList());
     }
-    
+
     private MessageCreated getMessageCreated(AbstractGameObject object) {
 	MessageCreated nextMessageCreated = null;
 	switch (object.getType()) {
@@ -450,7 +451,7 @@ public class ServerNetworking extends Listener {
 	}
 	return nextMessageCreated;
     }
-    
+
     private void waitForAllToRoger() {
 	while (!pendingRogers.isEmpty()) {
 	    waitSomeTime();
@@ -463,19 +464,19 @@ public class ServerNetworking extends Listener {
 	    }
 	}
     }
-    
+
     private void waitForToRoger(Connection connection) {
 	Client clientByConnection = getClientByConnection(connection);
 	waitForToRoger(clientByConnection);
     }
-    
+
     private void waitForToRoger(Client client) {
 	while (!client.isRogered()) {
 	    waitSomeTime();
 	}
 	client.setRogered(false);
     }
-    
+
     private void waitSomeTime() {
 	try {
 	    TimeUnit.MILLISECONDS.sleep(100L);
@@ -498,7 +499,7 @@ public class ServerNetworking extends Listener {
 		    client.setNewChunk(newChunk);
 		});
     }
-    
+
     private void checkNewChunksForClient(Client client) {
 	Chunk oldChunk = client.getChunk();
 	Chunk newChunk = client.getNewChunk();
@@ -511,7 +512,7 @@ public class ServerNetworking extends Listener {
 	client.setChunk(newChunk);
 	client.setNewChunk(null);
     }
-    
+
     private void sendChunksToClient(Collection<Chunk> toBeSent, Client client) {
 	Log.debug("server", "Sending chunks to client, size: " + toBeSent.size());
 	Collection<ObjectMessaged> worldIn = getWorldIn(toBeSent);

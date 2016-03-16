@@ -43,6 +43,10 @@ import spaceisnear.server.objects.Player;
 	return newChunk != null;
     }
 
+    public void clearCreatedCache() {
+	hasObjects.clear();
+    }
+
     public void dispose() {
 	connection = null;
 	clientInformation = null;

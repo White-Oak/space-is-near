@@ -6,6 +6,7 @@
 package spaceisnear.abstracts;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import spaceisnear.game.messages.*;
@@ -36,7 +37,7 @@ import spaceisnear.game.objects.GameObjectType;
 	getObjects().values().stream()
 		.filter(abstractGameObject
 			-> (abstractGameObject.getType() == GameObjectType.ITEM && abstractGameObject.getPosition().equals(x, y)))
-		.forEach(abstractGameObject -> items.add(abstractGameObject));
+		.collect(Collectors.toList());
 	return items;
     }
 

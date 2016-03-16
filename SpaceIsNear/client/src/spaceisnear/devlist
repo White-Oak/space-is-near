@@ -298,9 +298,8 @@
 0.0.11
 +NETWORK
     +chunks
-	-Server won't send MessageCreated for the objects that client already has. Properties still will be sent. 
+	+Server won't send MessageCreated for the objects that client already has. Properties still will be sent. 
 	    (Is it really needed? Maybe it'd better to check it on client's side, since client will need to get rid of very old chunks)
-	    (I think I removed it for now)
     +fixes
 ---
 +chat multi-line support fix
@@ -312,7 +311,6 @@
 *chat messages fixed
     +chat help included
 ---
--Breathing component should have health component bundled in, to prevent looking for it in components of owner
 +Wide messages refactoring:
 	+Messages are now split into DirectedMessage and BroadcastMessage. Direct extending of a Message class is now prohibited.
 	+Introduced a system for caching messages that don't have a target yet. Each PropertableMessage now has canBeApplied method to check if it can be applied on Client.
@@ -322,7 +320,7 @@
 +Starting system rework: less spaghetti, more clear process
     +Engine (see scheme.png for reference)
 +Keyboard events are proccessed in a separate class: Controller
--replaced all Map<Integer, T> with appropriate int-T maps. GC will be happy
++replaced all Map<Integer, T> with appropriate int-T maps. GC will be happy
 +Z-levels for all objects in item definitions
 
 
@@ -333,6 +331,7 @@
 
 
 0.1.1
+-Breathing component should have health component bundled in, to prevent looking for it in components of owner
 -Spawn points
 +MessageKnockbacked
     -animation change for player
