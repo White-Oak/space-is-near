@@ -1,8 +1,7 @@
 package spaceisnear.server;
 
+import com.badlogic.gdx.utils.IntSet;
 import com.esotericsoftware.kryonet.Connection;
-import it.unimi.dsi.fastutil.ints.Int2IntAVLTreeMap;
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import lombok.Data;
 import spaceisnear.game.messages.service.onceused.MessageLogin;
 import spaceisnear.game.messages.service.onceused.MessagePlayerInformation;
@@ -22,26 +21,22 @@ import spaceisnear.server.objects.Player;
     private boolean rogered;
     private Chunk chunk;
     private Chunk newChunk;
-    private Int2IntMap hasObjects = new Int2IntAVLTreeMap();
-
-    {
-	hasObjects.defaultReturnValue(-1);
-    }
+    private IntSet hasObjects = new IntSet();
 
     public Client(Connection connection) {
 	this.connection = connection;
     }
 
     public void createObjectAt(int id) {
-	hasObjects.put(id, 1);
+	hasObjects.add(id);
     }
 
     public boolean hasObjectAt(int id) {
-	return hasObjects.containsKey(id);
+	return hasObjects.contains(id);
     }
 
     public boolean removeObjectAt(int id) {
-	return hasObjects.remove(id) != hasObjects.defaultReturnValue();
+	return hasObjects.remove(id);
     }
 
     public boolean playerChunkOutdated() {

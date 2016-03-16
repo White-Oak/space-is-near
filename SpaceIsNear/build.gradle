@@ -14,6 +14,9 @@ allprojects {
         appName = 'space-is-near'
         gdxVersion = '1.9.2'
         box2DLightsVersion = '1.4'
+        buildNumberIncremented = false
+	mBuildNumber = 1
+	mVersion = version
     }
 
     
@@ -26,15 +29,19 @@ allprojects {
     
     apply plugin: "java"
     apply plugin: "propdeps"
+    
+    configurations {
+	excluded
+    }
+    sourceSets {
+	main {
+	    compileClasspath += configurations.excluded
+	}
+    }
 }
 
 project(":client"){
     sourceCompatibility = 1.8
-    ext{
-        buildNumberIncremented = false
-	mBuildNumber = 1
-	mVersion = '0.0.11'
-    }
     
     dependencies {
 	compile project(":framework")
@@ -50,54 +57,37 @@ project(":client"){
         compile "org.apache.commons:commons-lang3:3.3"
         compile "com.google.code.gson:gson:2.3.1"
         compile "com.esotericsoftware:kryonet:2.22.0-RC1"
-        provided "org.projectlombok:lombok:1.16.2"
+        excluded "org.projectlombok:lombok:1.16.2"
         compile "org.apache.commons:commons-collections4:4.0"
-	compile 'it.unimi.dsi:fastutil:7.0.8'
     }
 }
 
 project(":common"){
     sourceCompatibility = 1.8
-    ext{
-        buildNumberIncremented = false
-	mBuildNumber = 1
-	mVersion = '0.0.11'
-    }
     
     dependencies {
-        compile "org.apache.commons:commons-lang3:3.3"
         compile "com.google.code.gson:gson:2.3.1"
-        provided "org.projectlombok:lombok:1.16.2"
-        compile "org.apache.commons:commons-collections4:4.0"
-	compile 'it.unimi.dsi:fastutil:7.0.8'
+        excluded "org.projectlombok:lombok:1.16.2"
     }
 }
 
 project(":server"){
     sourceCompatibility = 1.8
     ext{
-        buildNumberIncremented = false
-	mBuildNumber = 1
-	mVersion = '0.0.11'
+        appName = 'space-is-near-server'
     }
     
     dependencies {
 	compile project(":framework")
 	compile project(":common")
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 	
         compile "commons-cli:commons-cli:1.2"
         compile "org.apache.commons:commons-lang3:3.3"
         compile "com.google.code.gson:gson:2.3.1"
         compile "com.esotericsoftware:kryonet:2.22.0-RC1"
-        provided "org.projectlombok:lombok:1.16.2"
+        excluded "org.projectlombok:lombok:1.16.2"
         compile "org.apache.commons:commons-collections4:4.0"
-	compile 'it.unimi.dsi:fastutil:7.0.8'
     }
 }
 project(":framework") {
@@ -105,18 +95,9 @@ project(":framework") {
     dependencies {
 	compile "me.whiteoak.minlog:oak-minlog:1.0.5"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
         compile "commons-cli:commons-cli:1.2"
-        compile "org.apache.commons:commons-lang3:3.3"
-        compile "com.google.code.gson:gson:2.3.1"
-        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
-        provided "org.projectlombok:lombok:1.16.2"
-        compile "org.apache.commons:commons-collections4:4.0"
+        excluded "org.projectlombok:lombok:1.16.2"
     }
 }
 

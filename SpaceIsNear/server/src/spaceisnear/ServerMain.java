@@ -1,6 +1,5 @@
 package spaceisnear;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import java.io.IOException;
 import me.whiteoak.minlog.FileLogger;
 import me.whiteoak.minlog.Log;
@@ -14,7 +13,6 @@ import spaceisnear.server.ServerCore;
 public class ServerMain {
 
     public static String IP;
-    public static LwjglApplication lwjglApplication;
 
     public static void main(String[] args) throws ParseException {
 	Log.setLogger(new FileLogger());
