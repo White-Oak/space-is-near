@@ -38,10 +38,6 @@ public class Main {
 		    printHelp(options);
 		}
 	    } else {
-		if (true) {
-		    main(new String[]{"-mode", "editor"});
-		    return;
-		}
 		if (parse.hasOption("hostip")) {
 		    IP = parse.getOptionValue("hostip");
 		} else {
