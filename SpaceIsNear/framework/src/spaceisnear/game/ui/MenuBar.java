@@ -18,7 +18,7 @@ public class MenuBar extends UIElement {
     @Setter private Color textColor = Color.BLACK;
 
     public MenuBar() {
-	addCaptureListener(new InputListener() {
+	addListener(new InputListener() {
 
 	    @Override
 	    public boolean mouseMoved(InputEvent event, float x, float y) {
@@ -121,10 +121,8 @@ public class MenuBar extends UIElement {
 	activated = !activated;
 	if (activated) {
 	    mouseMoved(x);
-	} else {
-	    if (selected != null) {
-		selected.unselect();
-	    }
+	} else if (selected != null) {
+	    selected.unselect();
 	}
     }
 }

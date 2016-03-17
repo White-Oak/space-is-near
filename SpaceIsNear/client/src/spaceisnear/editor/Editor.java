@@ -27,7 +27,7 @@ public class Editor implements Screen {
     private final SpriteBatch batch;
     private final OrthographicCamera camera;
     private final FPSLogger fps = new FPSLogger();
-    private final Stage stage = new Stage();
+    private final Stage stage;
     private final ItemsHandler handler = ItemsHandler.HANDLER;
     private final MenuBar menuBar;
     private final StatusBar statusBar;
@@ -41,7 +41,9 @@ public class Editor implements Screen {
 	sprites = new Texture(Gdx.files.classpath("res").child("sprites.png"));
 	camera = new OrthographicCamera();
 	camera.setToOrtho(true);
+	final ScreenViewport screenViewport = new ScreenViewport(camera);
 	batch = new SpriteBatch();
+	stage = new Stage(screenViewport, batch);
 	rightTab = new RightTab();
 	rightTab.setPosition(Gdx.graphics.getWidth() - RightTab.TAB_WIDTH, 0);
 	rightTab.setSize(Gdx.graphics.getWidth() - rightTab.getX(), Gdx.graphics.getHeight());
@@ -57,13 +59,14 @@ public class Editor implements Screen {
 	itemAdder = new ItemRenderer(rightTab);
 	itemAdder.setBounds(0, menuBar.getHeight(), Gdx.graphics.getWidth() - RightTab.TAB_WIDTH,
 		Gdx.graphics.getHeight() - menuBar.getHeight());
+	itemAdder.init();
 
 	stage.addActor(itemAdder);
 	stage.addActor(menuBar);
 	stage.addActor(statusBar);
 	stage.addActor(rightTab);
-	stage.setViewport(new ScreenViewport(camera));
 	stage.setKeyboardFocus(itemAdder);
+	stage.setDebugAll(true);
 	Gdx.input.setInputProcessor(stage);
     }
 

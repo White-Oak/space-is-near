@@ -12,7 +12,6 @@ package spaceisnear.editor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -30,10 +29,10 @@ public class ItemRenderer extends Actor {
 
     final ItemsHandler handler = ItemsHandler.HANDLER;
     @Getter @Setter private MapAction.Type mode = MapAction.Type.ADD;
-    private final OrthographicCamera camera;
     private boolean blocked;
     private PropertiesWindow propertiesWindow;
     @Getter private int currentX, currentY;
+    private final RightTab tab;
 
     private MapAction setCurrentActionWith(Item item) {
 	MapAction mapAction = new MapAction(mode, item);
@@ -42,7 +41,11 @@ public class ItemRenderer extends Actor {
     }
 
     public ItemRenderer(final RightTab tab) {
-	addCaptureListener(new InputListener() {
+	this.tab = tab;
+    }
+
+    public void init() {
+	addListener(new InputListener() {
 	    private int pressedX, pressedY;
 
 	    private int getTilesX(float realx) {
@@ -168,8 +171,6 @@ public class ItemRenderer extends Actor {
 
 	}
 	);
-	camera = new OrthographicCamera(getWidth(), getHeight());
-	camera.setToOrtho(true);
     }
 
     public void move(int x, int y) {
@@ -197,12 +198,14 @@ public class ItemRenderer extends Actor {
 	if (handler.getCurrentAction() != null) {
 	    handler.getCurrentAction().draw(batch, posX, (int) (posY + getY()));
 	}
+	batch.end();
 	renderer.setProjectionMatrix(batch.getProjectionMatrix());
 	renderer.setTransformMatrix(batch.getTransformMatrix());
 	renderer.begin(ShapeRenderer.ShapeType.Line);
 	renderer.setColor(Color.RED);
 	renderer.rect(posX, posY + getY(), 64 * GameContext.TILE_WIDTH, 64 * GameContext.TILE_HEIGHT);
 	renderer.end();
+	batch.begin();
 //	ScissorStack.popScissors();
     }
     private final ShapeRenderer renderer = new ShapeRenderer();
