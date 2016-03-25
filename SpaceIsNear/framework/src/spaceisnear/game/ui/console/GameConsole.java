@@ -96,6 +96,7 @@ public class GameConsole extends Actor {
     public void processInputedMessage() {
 	if (consoleListener != null) {
 	    String text = textField.getText();
+	    System.out.println("heya");
 	    consoleListener.processInputMessage(text, this);
 	}
 

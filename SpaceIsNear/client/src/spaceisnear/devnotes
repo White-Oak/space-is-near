@@ -34,3 +34,7 @@ Now, fix the editor and seems like 0.0.11 is ready!
 
 16.03.2016
 Jeez, I was stupid, reverted the change from yesterday and fixed a pair of old bugs again.
+
+36.03.2016
+Fixed messaging. Well, fixed. I discovered I simply forgot to add already written methods to listener.
+Also, need to rewrite thee code for control sequences in chat.

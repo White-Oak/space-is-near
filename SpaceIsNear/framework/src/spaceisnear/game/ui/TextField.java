@@ -61,7 +61,6 @@ public final class TextField extends UIElement implements Hoverable {
 	addListener(new InputListener() {
 	    @Override
 	    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		System.out.println("EBAX!");
 		Stage stage = getStage();
 		if (stage != null) {
 		    stage.setKeyboardFocus(TextField.this);

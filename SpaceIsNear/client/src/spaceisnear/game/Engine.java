@@ -46,6 +46,7 @@ public class Engine implements Updatable {
 	    final Future<Networking> callToConnect = starter.callToConnect(IP);
 	    LoginScreen loginScreen = (LoginScreen) corev3.getScreen();
 	    loginScreen.setNetworking(callToConnect);
+	    corev3.getConsole().setConsoleListener(new ConsoleListenerImpl(this));
 	    firstTime = false;
 	} else {
 	    if (corev3.getScreen() != core) {

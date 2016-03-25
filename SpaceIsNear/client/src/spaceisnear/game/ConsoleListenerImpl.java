@@ -99,7 +99,8 @@ public class ConsoleListenerImpl implements ConsoleListener {
 
     private void processControlSequence(String text, GameConsole console) {
 	String substring = text.substring(1);
-	StringTokenizer stringTokenizer = new StringTokenizer(text, " ");
+	//TODO rework
+	StringTokenizer stringTokenizer = new StringTokenizer(substring, " ");
 	if (stringTokenizer.hasMoreTokens()) {
 	    String query = stringTokenizer.nextToken();
 	    switch (query) {
@@ -134,7 +135,8 @@ public class ConsoleListenerImpl implements ConsoleListener {
 		    break;
 		case "help":
 		    byte[] contents = Utils.getContents(getClass().getResourceAsStream("/res/chatHelp"));
-		    console.pushMessage(new ChatString(new String(contents), LogLevel.PRIVATE));
+		    System.out.println(contents);
+		    console.pushMessage(new ChatString(new String(contents), LogLevel.WARNING));
 		    break;
 	    }
 	}
