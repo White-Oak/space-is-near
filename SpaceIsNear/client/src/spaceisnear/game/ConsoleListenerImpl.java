@@ -1,6 +1,8 @@
 package spaceisnear.game;
 
-import java.util.StringTokenizer;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import me.whiteoak.minlog.Log;
 import spaceisnear.Utils;
 import spaceisnear.game.messages.MessageChat;
@@ -25,7 +27,7 @@ public class ConsoleListenerImpl implements ConsoleListener {
 	if (context.isLogined()) {
 	    if (context.isPlayable()) {
 		if (text.startsWith("-")) {
-		    processControlSequence(text, console);
+		    processControlSequence(text.substring(1), console);
 		} else {
 		    sendMessageFromPlayer(text);
 		}
@@ -38,7 +40,7 @@ public class ConsoleListenerImpl implements ConsoleListener {
     }
 
     private boolean isGoodFrequency(String frequency) {
-	return frequency.matches("[0-9]{3}[.][0-9]");
+	return frequency.matches("[1-9][0-9]{2}(?:\\.[0-9])?");
     }
 
     private void processDebugRequestMessage(String split, GameConsole console) {
@@ -60,13 +62,8 @@ public class ConsoleListenerImpl implements ConsoleListener {
 	sendLogString(logString);
     }
 
-    private CharSequence construct(StringTokenizer tokenizer) {
-	StringBuilder sb = new StringBuilder();
-	while (tokenizer.hasMoreElements()) {
-	    Object nextElement = tokenizer.nextElement();
-	    sb.append(nextElement);
-	}
-	return sb;
+    private CharSequence construct(String[] tokens, int start) {
+	return Stream.of(Arrays.copyOfRange(tokens, start, tokens.length)).collect(Collectors.joining(" "));
     }
 
     private void processBroadcastingMessageFromPlayer(String frequency, CharSequence message) {
@@ -98,47 +95,48 @@ public class ConsoleListenerImpl implements ConsoleListener {
     }
 
     private void processControlSequence(String text, GameConsole console) {
-	String substring = text.substring(1);
-	//TODO rework
-	StringTokenizer stringTokenizer = new StringTokenizer(substring, " ");
-	if (stringTokenizer.hasMoreTokens()) {
-	    String query = stringTokenizer.nextToken();
-	    switch (query) {
-		case "d":
-		case "debug":
-		    if (stringTokenizer.hasMoreTokens()) {
-			processDebugRequestMessage(stringTokenizer.nextToken(), console);
-		    }
-		    break;
-		case "stoppull":
-		    MessagePropertySet messagePropertySet = new MessagePropertySet(context.getPlayerID(), "pull", -1);
-		    MessageToSend messageToSend = new MessageToSend(messagePropertySet);
-		    context.sendDirectedMessage(messageToSend);
-		    break;
-		case "broadcast":
-		case "h":
-		    if (stringTokenizer.hasMoreTokens()) {
-			processBroadcastingMessageFromPlayer(stringTokenizer.nextToken(), construct(stringTokenizer));
-		    }
-		    break;
-		case "ooc":
-		    sendOOC(construct(stringTokenizer));
-		    break;
-		case "w":
-		case "whisper":
-		    sendWhisper(construct(stringTokenizer));
-		    break;
-		case "pm":
-		    if (stringTokenizer.hasMoreTokens()) {
-			sendPM(stringTokenizer.nextToken(), construct(stringTokenizer), console);
-		    }
-		    break;
-		case "help":
-		    byte[] contents = Utils.getContents(getClass().getResourceAsStream("/res/chatHelp"));
-		    System.out.println(contents);
-		    console.pushMessage(new ChatString(new String(contents), LogLevel.WARNING));
-		    break;
-	    }
+	String[] tokens = text.trim().split(" ");
+	String query = tokens[0];
+	switch (query) {
+	    case "d":
+	    case "debug":
+		if (tokens.length > 1) {
+		    processDebugRequestMessage(tokens[1], console);
+		} else {
+		    console.pushMessage(ChatString.warning("you need to specify on/off. For more info try -help"));
+		}
+		break;
+	    case "stoppull":
+		MessagePropertySet messagePropertySet = new MessagePropertySet(context.getPlayerID(), "pull", -1);
+		MessageToSend messageToSend = new MessageToSend(messagePropertySet);
+		context.sendDirectedMessage(messageToSend);
+		break;
+	    case "broadcast":
+	    case "h":
+		if (tokens.length > 2) {
+		    processBroadcastingMessageFromPlayer(tokens[1], construct(tokens, 2));
+		} else {
+		    console.pushMessage(ChatString.warning("you need to specify frequency and a text. For more info try -help"));
+		}
+		break;
+	    case "ooc":
+		sendOOC(construct(tokens, 1));
+		break;
+	    case "w":
+	    case "whisper":
+		sendWhisper(construct(tokens, 1));
+		break;
+	    case "pm":
+		if (tokens.length > 2) {
+		    sendPM(tokens[1], construct(tokens, 2), console);
+		} else {
+		    console.pushMessage(ChatString.warning("you need to specify receiver and a text. For more info try -help"));
+		}
+		break;
+	    case "help":
+		byte[] contents = Utils.getContents(getClass().getResourceAsStream("/res/chatHelp"));
+		console.pushMessage(ChatString.warning(new String(contents)));
+		break;
 	}
     }
 

@@ -70,4 +70,8 @@ public class ChatString implements Serializable {
     public void increaseTimes() {
 	timesMessaged++;
     }
+
+    public static ChatString warning(String text) {
+	return new ChatString(text, LogLevel.WARNING);
+    }
 }
